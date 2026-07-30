@@ -1,0 +1,233 @@
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { hasSupabaseEnv } from "../setup";
+
+/**
+ * RLS boundary tests.
+ *
+ * Every test here ATTEMPTS THE VIOLATION and asserts it fails. A test that only
+ * proves the happy path proves nothing about a security boundary.
+ *
+ * These hit the real Supabase project and clean up after themselves.
+ */
+
+const URL_ = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const ANON = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const SVC = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+const d = hasSupabaseEnv ? describe : describe.skip;
+
+type Learner = { id: string; email: string; client: SupabaseClient };
+
+let admin: SupabaseClient;
+let alice: Learner;
+let bob: Learner;
+let parentOfAlice: Learner;
+let strangerParent: Learner;
+let chapterId: string;
+let conceptId: string;
+let questionId: string;
+
+async function makeUser(role: "student" | "parent"): Promise<Learner> {
+  const email = `rls_${role}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}@example.com`;
+  const password = "test-password-12345";
+
+  const { data: created, error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  if (error || !created.user) throw error ?? new Error("no user");
+
+  await admin.from("profiles").insert({
+    id: created.user.id,
+    role,
+    display_name: role,
+    grade: role === "student" ? 6 : null,
+  });
+
+  const client = createClient(URL_, ANON);
+  await client.auth.signInWithPassword({ email, password });
+  return { id: created.user.id, email, client };
+}
+
+d("RLS boundaries", () => {
+  beforeAll(async () => {
+    admin = createClient(URL_, SVC, { auth: { persistSession: false } });
+
+    [alice, bob, parentOfAlice, strangerParent] = await Promise.all([
+      makeUser("student"),
+      makeUser("student"),
+      makeUser("parent"),
+      makeUser("parent"),
+    ]);
+
+    // Curriculum + one question with a known answer key.
+    const { data: ch } = await admin
+      .from("chapters")
+      .insert({ grade: 6, number: 999, title: "__rls__", slug: `__rls_ch_${Date.now()}` })
+      .select()
+      .single();
+    chapterId = ch!.id;
+
+    const { data: cn } = await admin
+      .from("concepts")
+      .insert({ chapter_id: chapterId, name: "__rls__", slug: `__rls_cn_${Date.now()}` })
+      .select()
+      .single();
+    conceptId = cn!.id;
+
+    const { data: q } = await admin
+      .from("questions")
+      .insert({
+        concept_id: conceptId,
+        chapter_id: chapterId,
+        kind: "practice",
+        difficulty: 1,
+        stem_md: "1/2 + 1/4 = ?",
+        answer_type: "fraction",
+        answer_value: "3/4",
+        solution_md: "the secret working",
+      })
+      .select()
+      .single();
+    questionId = q!.id;
+
+    // Alice has an attempt. Bob must never see it.
+    await admin.from("attempts").insert({
+      student_id: alice.id,
+      question_id: questionId,
+      concept_id: conceptId,
+      given_answer: "3/4",
+      is_correct: true,
+      session_kind: "practice",
+    });
+
+    // parentOfAlice is linked and active; strangerParent is not linked at all.
+    await admin.from("parent_links").insert({
+      student_id: alice.id,
+      parent_id: parentOfAlice.id,
+      link_code: Math.random().toString(36).slice(2, 8).toUpperCase(),
+      status: "active",
+      claimed_at: new Date().toISOString(),
+    });
+  }, 60_000);
+
+  afterAll(async () => {
+    if (!admin) return;
+    await admin.from("chapters").delete().eq("id", chapterId);
+    for (const u of [alice, bob, parentOfAlice, strangerParent]) {
+      if (u?.id) await admin.auth.admin.deleteUser(u.id);
+    }
+  }, 60_000);
+
+  // ─── the answer key ────────────────────────────────────────────────────────
+
+  it("a learner cannot read questions.answer_value", async () => {
+    const { data } = await alice.client.from("questions").select("answer_value");
+    expect(data ?? []).toHaveLength(0);
+  });
+
+  it("a learner reading the base table gets nothing, though the row exists", async () => {
+    const { data: asLearner } = await alice.client.from("questions").select("*");
+    expect(asLearner ?? []).toHaveLength(0);
+
+    const { data: asAdmin } = await admin.from("questions").select("*").eq("id", questionId);
+    expect(asAdmin ?? []).toHaveLength(1); // it is definitely there
+  });
+
+  it("questions_public serves the question WITHOUT the answer key", async () => {
+    const { data } = await alice.client
+      .from("questions_public")
+      .select("*")
+      .eq("id", questionId);
+
+    expect(data ?? []).toHaveLength(1);
+    const row = data![0] as Record<string, unknown>;
+    expect(row).not.toHaveProperty("answer_value");
+    expect(row).not.toHaveProperty("solution_md");
+    expect(row.stem_md).toBe("1/2 + 1/4 = ?");
+  });
+
+  // ─── learner ↔ learner ─────────────────────────────────────────────────────
+
+  it("student B cannot read student A's attempts", async () => {
+    const { data } = await bob.client.from("attempts").select("*").eq("student_id", alice.id);
+    expect(data ?? []).toHaveLength(0);
+  });
+
+  it("student B cannot write a row belonging to student A", async () => {
+    const { error } = await bob.client.from("attempts").insert({
+      student_id: alice.id, // impersonation attempt
+      question_id: questionId,
+      concept_id: conceptId,
+      given_answer: "3/4",
+      is_correct: true,
+      session_kind: "practice",
+    });
+    expect(error).not.toBeNull(); // RLS with-check must reject this
+
+    const { count } = await admin
+      .from("attempts")
+      .select("id", { count: "exact", head: true })
+      .eq("student_id", alice.id);
+    expect(count).toBe(1); // still just the one we seeded
+  });
+
+  it("student B cannot read student A's profile", async () => {
+    const { data } = await bob.client.from("profiles").select("*").eq("id", alice.id);
+    expect(data ?? []).toHaveLength(0);
+  });
+
+  // ─── parent boundary ───────────────────────────────────────────────────────
+
+  it("a linked parent CAN read their child's attempts", async () => {
+    const { data } = await parentOfAlice.client
+      .from("attempts")
+      .select("*")
+      .eq("student_id", alice.id);
+    expect((data ?? []).length).toBeGreaterThan(0);
+  });
+
+  it("an UNLINKED parent cannot read that child's attempts", async () => {
+    const { data } = await strangerParent.client
+      .from("attempts")
+      .select("*")
+      .eq("student_id", alice.id);
+    expect(data ?? []).toHaveLength(0);
+  });
+
+  it("a linked parent cannot WRITE learner data", async () => {
+    const { error } = await parentOfAlice.client.from("attempts").insert({
+      student_id: alice.id,
+      question_id: questionId,
+      concept_id: conceptId,
+      given_answer: "9/9",
+      is_correct: true,
+      session_kind: "practice",
+    });
+    expect(error).not.toBeNull(); // there is no parent write policy anywhere
+  });
+
+  it("a linked parent cannot modify their child's profile", async () => {
+    const { data } = await parentOfAlice.client
+      .from("profiles")
+      .update({ display_name: "hacked" })
+      .eq("id", alice.id)
+      .select();
+    expect(data ?? []).toHaveLength(0);
+
+    const { data: check } = await admin.from("profiles").select("display_name").eq("id", alice.id).single();
+    expect(check!.display_name).toBe("student");
+  });
+
+  // ─── anon ──────────────────────────────────────────────────────────────────
+
+  it("an anonymous visitor cannot read any learner data", async () => {
+    const anon = createClient(URL_, ANON);
+    for (const table of ["profiles", "attempts", "lesson_progress", "tutor_messages"]) {
+      const { data } = await anon.from(table).select("*");
+      expect(data ?? []).toHaveLength(0);
+    }
+  });
+});
