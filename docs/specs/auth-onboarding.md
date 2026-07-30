@@ -13,9 +13,13 @@
 
 Full diagram in `SCREENS.md` Flow 1. The load-bearing property:
 
-> **Locale is chosen before a user row exists.** Hold it in `localStorage` under
-> `saathi.locale`, then write it to `profiles.locale` at profile creation. Do not
-> build the picker behind auth — that silently reverses D16.
+> **Locale is chosen before a user row exists.** Hold it in the `saathi_locale`
+> **cookie**, then write it to `profiles.locale` at profile creation. Do not build
+> the picker behind auth — that silently reverses D16.
+
+A cookie, not `localStorage` (which this spec originally said): the locale must be
+readable during a **server** render, or `/login` paints in English and flips to Hindi
+on hydration. Full rationale and the sync table in `docs/specs/i18n.md` §3.
 
 ---
 
@@ -115,7 +119,7 @@ Settings as the same one they used at onboarding.
 | Case | Required behaviour |
 |---|---|
 | **Auth succeeds, profile creation fails** | The learner has an `auth.users` row and no profile — the dangerous one. On next load, no profile ⇒ route to `/onboarding/grade`, not `/learn`. Never dead-end into an empty dashboard. |
-| **Learner abandons after picking language** | `localStorage` persists. Returning goes to `/login` in the chosen language, not back to `/welcome`. |
+| **Learner abandons after picking language** | The cookie persists (1 year). Returning goes to `/login` in the chosen language, not back to `/welcome`. |
 | **Google account already registered** | Not an error. OAuth signs them in; the callback routes on profile presence. |
 | **Shared phone, parent already signed in** | Sign-out must be reachable in ≤2 taps from any screen. This is the common case for this audience, not an edge case. |
 | **Parent signs in at `/login` instead of `/parent/claim`** | On callback, `role: "parent"` → `/parent`, not `/learn`. Route on role, never assume student. |

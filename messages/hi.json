@@ -32,6 +32,7 @@
     "emailOption": "ईमेल से आगे बढ़ो",
     "emailLabel": "ईमेल",
     "passwordLabel": "पासवर्ड",
+    "passwordTooShort": "कम से कम 8 अक्षर लिखो",
     "submit": "आगे बढ़ो",
     "createAccount": "नया अकाउंट बनाओ",
     "haveAccount": "मेरा अकाउंट पहले से है",

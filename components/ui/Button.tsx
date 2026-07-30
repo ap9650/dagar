@@ -21,6 +21,31 @@ const VARIANTS: Record<Variant, string> = {
   danger: "bg-error text-white hover:brightness-110 active:brightness-95",
 };
 
+/**
+ * The button's look, without the `<button>`.
+ *
+ * Needed because some actions must be a real navigation rather than a click
+ * handler — `/api/auth/google` answers with a redirect to Google, so it has to be
+ * an `<a>` the browser follows. Rather than a second set of button styles
+ * drifting out of sync, both share this.
+ */
+export function buttonClasses(
+  variant: Variant = "primary",
+  fullWidth = true,
+  className?: string,
+) {
+  return cn(
+    "inline-flex items-center justify-center gap-sm",
+    "min-h-12 min-w-11 px-lg rounded-(--radius-control)",
+    "text-label font-medium",
+    "transition-[background-color,filter] duration-150 ease-out",
+    "disabled:opacity-50 disabled:pointer-events-none",
+    VARIANTS[variant],
+    fullWidth ? "w-full" : "w-auto",
+    className,
+  );
+}
+
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
@@ -45,16 +70,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       disabled={disabled || loading}
       aria-busy={loading || undefined}
-      className={cn(
-        "inline-flex items-center justify-center gap-sm",
-        "min-h-12 min-w-11 px-lg rounded-(--radius-control)",
-        "text-label font-medium",
-        "transition-[background-color,filter] duration-150 ease-out",
-        "disabled:opacity-50 disabled:pointer-events-none",
-        VARIANTS[variant],
-        fullWidth ? "w-full" : "w-auto",
-        className,
-      )}
+      className={buttonClasses(variant, fullWidth, className)}
       {...props}
     >
       {loading && (

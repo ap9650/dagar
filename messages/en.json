@@ -32,6 +32,7 @@
     "emailOption": "Use email instead",
     "emailLabel": "Email",
     "passwordLabel": "Password",
+    "passwordTooShort": "Use at least 8 characters",
     "submit": "Continue",
     "createAccount": "Create an account",
     "haveAccount": "I already have an account",
