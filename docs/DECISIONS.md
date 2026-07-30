@@ -547,6 +547,21 @@ support, voice-first interaction, offline learning.
 | Data retention | Tutor transcripts 90 days, then aggregate-only |
 | Secrets | Server-side only. No `NEXT_PUBLIC_` on any AI or Twilio key. Ever. |
 | Tutor rate limit | 30 messages/hour/learner, server-side. Normal usage cannot overspend; a retry loop can. |
+| **Daily spend ceiling** | **₹150/day across all learners.** Before each AI call, sum `cost_inr` from `ai_calls` for today; over the ceiling → skip the call and return the tutor-unavailable state. |
+
+### Two layers of cost protection (2026-07-30)
+
+| Layer | Protects | Fails |
+|---|---|---|
+| **Anthropic prepaid credits, auto-reload OFF** | Your card. Spend cannot exceed what you loaded | **Hard** — balance hits zero, every AI call dies with no warning |
+| **App-side daily ceiling (above)** | The demo | **Soft** — the tutor degrades to its existing unavailable state, lessons and practice keep working, and `/admin/metrics` shows why |
+
+**Claude Pro (claude.ai) gives zero API credits** — the two are separate products with
+separate billing. An API key never draws on a claude.ai subscription.
+
+The app-side ceiling is nearly free because `ai_calls.cost_inr` is already written on
+every call for observability. It reuses the tutor-unavailable path from
+`docs/specs/ai-tutor.md`, so there is no new UI state to design.
 
 **Caching gotcha:** Sonnet 5 will not cache a prefix under **1024 tokens** — it fails
 silently, with no error and no discount. Keep system prompt + lesson grounding above

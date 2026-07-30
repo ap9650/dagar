@@ -51,7 +51,7 @@ System prompt must state, positively and early:
 
 | Route | Behaviour |
 |---|---|
-| `POST /api/tutor` | Zod `{ lesson_id, message }`. Rate-limited 30/hr/learner → `429`. Loads grounding, streams the response, persists **both** turns to `tutor_messages`, writes one `ai_calls` row, evaluates D6 trigger 3. Emits `ai_question_asked`. |
+| `POST /api/tutor` | Zod `{ lesson_id, message }`. Rate-limited 30/hr/learner → `429`. **Daily spend ceiling (D11): if today's summed `ai_calls.cost_inr` exceeds ₹150, skip the model call and return the tutor-unavailable state.** Loads grounding, streams the response, persists **both** turns to `tutor_messages`, writes one `ai_calls` row, evaluates D6 trigger 3. Emits `ai_question_asked`. |
 | `POST /api/hints` | Zod `{ question_id, tier }`. Returns tier 1/2/3 hint, grounded in the question and concept. **Never returns `answer_value`.** |
 | `POST /api/tutor/feedback` | Zod `{ tutor_message_id, helpful }`. Writes `tutor_feedback`. Emits `tutor_feedback_given`. |
 
@@ -96,6 +96,7 @@ log and swallow.
 - [ ] The thinking indicator appears immediately on send, before any token arrives
 - [ ] `usage.cache_read_input_tokens > 0` on the second and later turns of a conversation — **if this is 0, caching is silently broken and cost is ~40% higher**
 - [ ] The 31st message in an hour returns `429` with a friendly in-locale message, not a crash
+- [ ] With today's `ai_calls` cost forced above ₹150, the tutor returns the unavailable state and **lessons, practice and quiz still work** — the ceiling degrades the tutor, never the app
 - [ ] One `ai_calls` row per call with real token counts and `cost_inr`
 - [ ] Forcing a logging failure does not break the tutor response
 

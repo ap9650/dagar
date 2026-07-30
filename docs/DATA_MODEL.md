@@ -99,12 +99,20 @@ Grading and solutions come from a server route using the service role.
 ## Migration order
 
 ```
-0001_identity.sql        profiles, parent_links, RLS
-0002_curriculum.sql      chapters, concepts, lessons, questions (+ i18n jsonb), questions_public view
-0003_learner_state.sql   lesson_progress, attempts, quiz_sessions, concept_mastery, streaks, milestones
-0004_tutor.sql           tutor_messages
-0005_support.sql         mentor_requests, parent_summaries
-0006_analytics.sql       events + indexes
-0006b_observability.sql  ai_calls, tutor_feedback + indexes
-0007_functions.sql       recompute_concept_mastery(), extend_streak(), award_milestones()
+0001_identity.sql            profiles, parent_links, RLS
+0002_curriculum.sql          chapters, concepts, lessons, questions (+ i18n jsonb, ncert_ref),
+                             questions_public view
+0003_learner_state.sql       lesson_progress, attempts, quiz_sessions, concept_mastery,
+                             streaks, milestones
+0004_tutor.sql               tutor_messages
+0005_support.sql             mentor_requests, parent_summaries
+0006_analytics.sql           events + indexes
+0007_observability.sql       ai_calls, tutor_feedback, ai_spend_today()
+0008_functions.sql           recompute_concept_mastery(), extend_streak(), award_milestones()
+0009_fix_award_milestones.sql  fixes 22P02 in award_milestones (array append)
 ```
+
+**Applied to the remote database 2026-07-30.** Filenames must be `NNNN_name.sql` with
+**digits only** — the Supabase CLI silently *skips* a file with a letter in the number
+(an early `0006b_observability.sql` was skipped without failing the push, which then
+broke the migration that depended on it).
