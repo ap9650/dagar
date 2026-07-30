@@ -37,6 +37,28 @@ not a test being administered to you.
 
 ---
 
+## Implementation notes (Tailwind 4)
+
+Tokens live in `@theme` inside `app/globals.css`. **There is no `tailwind.config.ts`**
+— Tailwind 4 is CSS-first.
+
+> **The syntax trap:** referencing a CSS variable in an arbitrary value uses
+> **parentheses**, not brackets.
+>
+> ```
+> rounded-(--radius-control)   ✅  resolves to 10px
+> rounded-[--radius-control]   ❌  silently computes to 0px
+> ```
+>
+> The bracket form does not error, does not warn, and does not appear in the
+> build output — it just renders square corners. Caught on Day 0 only by reading
+> `getComputedStyle` in a browser. **If a token looks like it is being ignored,
+> check the brackets first.**
+
+There is also deliberately **no `prefers-color-scheme: dark` block**. Dark mode is
+out of MVP scope, and the Next scaffold's default one would invert the app on any
+phone set to dark mode, silently breaking every contrast ratio verified below.
+
 ## Colours
 
 Every value below is contrast-verified. Ratios are against white unless stated.
