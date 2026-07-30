@@ -493,8 +493,61 @@ invert when you change that premise.
 |---|---|
 | **Leagues / leaderboards** | Ranks learners against each other. Saathi's learners are selected for being behind — ranking them is demotivating for exactly the people we serve. Already design rule 12. |
 | **Hearts / lives** | Makes mistakes scarce and stops the lesson. A learner who is getting things wrong is the learner who needs *more* practice, not a locked door. Directly contradicts amber-not-red. |
-| **Guilt-based notifications** | The passive-aggressive-owl pattern. Wrong for a child, and worse on a shared phone where a parent sees it. Notifications, when added, encourage — they never shame. |
+| **Guilt-based notifications** | The passive-aggressive-owl pattern. Wrong for a child, and worse on a shared phone where a parent sees it. Notifications, when added, encourage — they never shame. **See D17b: encouraging reminders are in scope; countdowns are not.** |
 | **XP / points / levels** | Adds a second scoring system competing with concept mastery, which is the score that actually means something. |
+
+## D17b — Reminder notifications **are** in scope, as encouragement
+
+**Decision (2026-07-30):** Saathi sends a **daily reminder notification**, opt-in,
+worded as an invitation. This does not contradict D17 — D17 rejects *guilt*
+notifications and says explicitly that notifications, when added, encourage.
+
+**Why it earns its place:** learners and parents genuinely forget, and they forget
+most in the **first weeks**, before the habit exists. Pull-only mechanics (the
+streak flame, the goal ring) work on someone who already opened the app. A learner
+who forgets never sees them. That is a real gap, not a motivational failure.
+
+### The line between a reminder and a guilt trip
+
+| Ship | Never ship |
+|---|---|
+| "Ready for today's lesson?" | "Your streak dies in 3 hours" |
+| Timed to a **routine** — after school | Timed to a **deadline** — midnight |
+| One a day, maximum | Escalating nags |
+| Silent if the goal is already done | Fires regardless |
+| Safe for a parent to read over a shoulder | Anything that reads as a reproach |
+
+**Shared phones make this a hard constraint, not a preference.** The notification
+lands on whoever is holding the handset, often a parent. Copy that shames the
+learner is delivered to the person whose opinion they care about most.
+
+### Design specifics
+
+- **Opt-in, asked at the right moment** — after a first completed lesson, never on
+  first load. A permission prompt before any value is delivered is how an app gets
+  permission denied permanently.
+- **Skipped when the daily goal is already met** (D17). An app that reminds you to
+  do something you have done is an app you stop trusting.
+- **Tapers.** Daily through the first 7 days, when forgetting is most likely; less
+  often after the habit forms.
+- **In the learner's locale**, via the same dictionary as the UI.
+- No countdown, no streak-loss language, ever.
+
+### Channel
+
+**Web Push through the service worker we already ship** (D15) — no new platform.
+
+| Platform | Works |
+|---|---|
+| Android Chrome | ✅ directly |
+| Desktop Chrome | ✅ |
+| **iOS Safari** | ⚠️ **only once the PWA is installed to the home screen**, iOS 16.4+ |
+
+The iOS limitation is real and must be said plainly in the demo rather than
+discovered by a judge on an iPhone.
+
+SMS remains DLT-blocked and WhatsApp sandbox cannot carry a scheduled cadence
+(D4), so Web Push is the only learner channel available in this build.
 
 ### The line
 
