@@ -87,7 +87,31 @@ Do this before breakfast if you can. Day 1 starts the moment it is done, **same 
 | 0.3 | Supabase project | Create at supabase.com → copy URL, anon key, service role key into `.env.local` |
 | 0.4 | Anthropic key | console.anthropic.com → `ANTHROPIC_API_KEY` in `.env.local` |
 | 0.5 | Git | `git init && git add -A && git commit -m "scaffold"` |
-| 0.6 | **First deploy** | `vercel --prod` — barely-working is fine. Then add **every** env var in the Vercel dashboard and redeploy. Confirm the live URL loads. |
+| 0.6 | **First deploy** | ✅ **Done 30 Jul.** Live: **https://saathi-ap19.vercel.app** (scope `ap19`, project `saathi`). See below. |
+
+### Deployment facts (0.6, 30 Jul)
+
+**Live URL: https://saathi-ap19.vercel.app** — the stable production alias. Use this
+one everywhere: the deck, Supabase redirect config, Google OAuth origins. The URL
+`vercel --prod` prints (`saathi-<hash>-ap19.vercel.app`) is **per-deployment** and
+changes on every push; find the stable aliases with `vercel inspect <url>`.
+
+Env vars go in with `bash scripts/vercel-env.sh`, which pipes values from `.env.local`
+into `vercel env add` on stdin so nothing is echoed to the terminal. It skips
+`TWILIO_*` (empty until Day 3) and `NEXT_PUBLIC_SITE_URL` (unknowable before the first
+deploy). **`NEXT_PUBLIC_` values are inlined at build time — changing one needs a
+redeploy, not just a save.**
+
+Two things that cost time and would have cost more on demo day:
+
+- **Vercel Deployment Protection is ON by default.** *Standard Protection* covers
+  generated `.vercel.app` URLs and exempts only custom domains — so production
+  returned `302 → vercel.com/sso-api` and was visible only to the team. Turn
+  **Require Log In** off at Project Settings → Deployment Protection. Nothing is lost:
+  the boundary that protects learner data is Supabase Auth plus RLS, never Vercel's
+  wall.
+- **`CRON_SECRET` was still the `.env.example` placeholder.** Regenerated with
+  `openssl rand -hex 32`. Check the others are real before a public deploy.
 
 **Prompts to run in Claude Code, in order:**
 > 1. Use the saathi-db skill. Write migrations 0001–0007 exactly per docs/DATA_MODEL.md, with RLS enabled and policies on every table. Then set up lib/supabase/{server,client,admin}.ts.
