@@ -133,6 +133,61 @@ body:lang(hi) {
   --text-body--line-height: 1.6;
 }
 
+/* ── Lesson body maths ─────────────────────────────────────────────────────
+   KaTeX's own stylesheet is imported by the lesson route, not here, so the 23KB
+   is paid for only on screens that actually show maths.
+
+   Display maths is the one thing in a lesson that can be wider than a 360px
+   phone — a long equation has no wrap point. It scrolls INSIDE ITS OWN BOX so
+   the page body never scrolls sideways (design rule 8). */
+.lesson-body .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: var(--spacing-sm);
+  /* Design says display maths gets vertical breathing room. */
+  margin-block: var(--spacing-lg);
+}
+
+/* Display maths renders two points larger than body copy: a mis-read exponent is
+   a wrong answer, and this audience is often reading on a scratched screen.
+
+   INLINE maths deliberately does NOT get the bump. A stacked fraction is already
+   about twice the height of a line of text, and enlarging it too made numerators
+   collide with the line above — the maths became harder to read, not easier,
+   which is the opposite of what the rule is for. */
+.lesson-body .katex-display .katex {
+  font-size: var(--text-math);
+}
+
+/* Give any line that contains maths room for a stacked fraction. Scoped with
+   :has() so ordinary prose keeps its 1.6 rhythm — loosening every paragraph to
+   fit the few with fractions would make the whole lesson harder to read. */
+.lesson-body p:has(.katex),
+.lesson-body li:has(.katex) {
+  line-height: 2.1;
+}
+
+/* Celebration is the ONE place motion may be playful, and it is capped at 400ms
+   (saathi-design § Motion). Under reduced motion the toast still appears — it
+   just appears, rather than sliding. The reward is never removed, because the
+   learners most affected by motion are named in the PRD vision. */
+@media (prefers-reduced-motion: no-preference) {
+  .celebrate-enter {
+    animation: celebrate-enter 400ms ease-out;
+  }
+}
+
+@keyframes celebrate-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Visible focus everywhere (D10). */
 :focus-visible {
   outline: 2px solid var(--color-primary);
