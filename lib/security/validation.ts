@@ -74,6 +74,13 @@ export const tutorMessageSchema = z.object({
   message: z.string().trim().min(1).max(1000),
 });
 
+export const hintSchema = z.object({
+  question_id: zUuid,
+  // Tiers are 1-3 (lib/learning/hints.ts). A client asking for tier 9 gets a
+  // 400 rather than a deeper hint than the ladder has.
+  tier: z.number().int().min(1).max(3),
+});
+
 export const tutorFeedbackSchema = z.object({
   tutor_message_id: zUuid,
   helpful: z.boolean(),

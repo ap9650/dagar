@@ -9,7 +9,7 @@ import { track } from "@/lib/analytics/track";
 import { gradeDetailed, type AnswerType } from "@/lib/learning/grading";
 import { ladderFrom } from "@/lib/learning/adaptivity";
 import { detectStruggle } from "@/lib/learning/struggle";
-import { HINT_TIERS, methodHint } from "@/lib/learning/hints";
+import { HINT_TIERS } from "@/lib/learning/hints";
 import { PRACTICE_QUESTIONS_FOR_GOAL } from "@/lib/learning/dailyGoal";
 import { istDate, istDayStart } from "@/lib/learning/dates";
 import { t as tContent } from "@/lib/i18n/content";
@@ -279,10 +279,9 @@ export async function POST(request: Request) {
     is_correct: isCorrect,
     reason: result.reason,
     solution_md: revealSolution ? solutionLocalised : null,
-    // Tier 1 (`hints.ts`): shown only after a wrong answer, never before the
-    // first attempt — the opening line of a worked solution sometimes carries the
-    // answer inside it.
-    hint: isPractice && !isCorrect ? methodHint(solutionLocalised) : null,
+    // No hint here. Hints are requested tier by tier from `POST /api/hints`
+    // (slice 2.3) so the learner controls how much help they take — and so a
+    // hint is only ever generated for someone who actually asked for one.
     next_difficulty: nextDifficulty,
     mastery: {
       score: masteryScore,

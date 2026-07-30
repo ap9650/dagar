@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { t as tContent, tChoices } from "@/lib/i18n/content";
 import { PRACTICE_SET_SIZE, type PracticeQuestion } from "@/lib/learning/practiceSet";
+import { HINT_TIERS } from "@/lib/learning/hints";
 import type { Locale } from "@/i18n/config";
 import { MarkdownBody } from "./MarkdownBody";
 import { AnswerInput } from "./AnswerInput";
@@ -39,7 +40,6 @@ import { MilestoneToast } from "./MilestoneToast";
 type GradeResponse = {
   is_correct: boolean;
   solution_md: string | null;
-  hint: string | null;
   milestonesEarned: string[];
   showMentorCta: boolean;
   mentorTrigger: string | null;
@@ -68,9 +68,11 @@ export function PracticeSession({
   const [phase, setPhase] = useState<Phase>("answering");
   const [result, setResult] = useState<GradeResponse | null>(null);
 
-  // Hints taken on THIS question. Reset per question, sent with the attempt, and
-  // what D6 rule 2 counts.
-  const [hintsUsed, setHintsUsed] = useState(0);
+  // Hints the learner ASKED FOR on this question, in tier order. The count is
+  // sent with the attempt and is what D6 rule 2 counts; the text stays on
+  // screen so a learner can read the whole ladder together.
+  const [hints, setHints] = useState<string[]>([]);
+  const [hintBusy, setHintBusy] = useState(false);
   const [busy, setBusy] = useState(false);
   const [emptyAnswer, setEmptyAnswer] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -119,7 +121,7 @@ export function PracticeSession({
         body: JSON.stringify({
           question_id: question.id,
           given_answer: answer,
-          hints_used: hintsUsed,
+          hints_used: hints.length,
           session_kind: "practice",
           submission_id: submissionId.current,
         }),
@@ -148,9 +150,30 @@ export function PracticeSession({
     }
   }
 
-  /** Same question, second go — after the hint has been read. */
+  /** Ask for the next rung of the ladder (2.3). */
+  async function askForHint() {
+    if (hintBusy || hints.length >= HINT_TIERS) return;
+    setHintBusy(true);
+    try {
+      const response = await fetch("/api/hints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question_id: question.id, tier: hints.length + 1 }),
+      });
+      if (!response.ok) return;
+      const body = (await response.json()) as { hint: string };
+      // The route falls back to a deterministic hint when the model call fails,
+      // so an empty string here means there was genuinely nothing to say.
+      if (body.hint?.trim()) setHints((prev) => [...prev, body.hint]);
+    } catch {
+      /* Silent: the learner still has "try again" and "next question". */
+    } finally {
+      setHintBusy(false);
+    }
+  }
+
+  /** Same question, another go — keeping the hints they have read. */
   function tryAgain() {
-    setHintsUsed(1);
     setResult(null);
     setPhase("answering");
     setFailed(false);
@@ -202,7 +225,7 @@ export function PracticeSession({
       setQuestion(body.question);
       setQuestionNumber((number) => number + 1);
       setAnswer("");
-      setHintsUsed(0);
+      setHints([]);
       setResult(null);
       setPhase("answering");
       submissionId.current = crypto.randomUUID();
@@ -273,7 +296,7 @@ export function PracticeSession({
       {phase === "graded" && result && (
         <FeedbackPanel
           isCorrect={result.is_correct}
-          hint={result.hint}
+          hints={hints}
           solutionMd={result.solution_md}
         />
       )}
@@ -294,9 +317,16 @@ export function PracticeSession({
 
         {phase === "graded" && result && (
           <>
-            {/* Wrong, hint shown, solution not yet given: one more go. This is the
-                escalation — hint first, worked method only if it is still not
-                landing (spec §8). */}
+            {/* The ladder (2.3): the learner chooses how much help to take, one
+                rung at a time, and the worked solution only arrives once all
+                three are spent. Help they asked for teaches; help pushed at
+                them does not. */}
+            {!result.is_correct && !result.solution_md && hints.length < HINT_TIERS && (
+              <Button variant="secondary" onClick={askForHint} loading={hintBusy}>
+                {t("practice.showHint")}
+              </Button>
+            )}
+
             {!result.is_correct && !result.solution_md && (
               <Button onClick={tryAgain}>{t("feedback.tryAgain")}</Button>
             )}

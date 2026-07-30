@@ -2,13 +2,16 @@
  * The hint ladder.
  *
  * ─────────────────────────────────────────────────────────────────────────────
- * WHERE THIS SITS RIGHT NOW (slice 2.2)
+ * THE LADDER, as of slice 2.3
  *
- * One deterministic rung, taken from the seeded `solution_md`. Slice 2.3 replaces
- * it with three AI-generated tiers from `POST /api/hints` (see `ai-tutor.md`), at
- * which point `HINT_TIERS` becomes 3 and `methodHint` becomes the offline
- * fallback. Nothing else has to change: `hints_used` is already plumbed through
- * the attempt contract and already feeds D6 rule 2.
+ *   tier 1  nudge        — name the idea they need, or ask what they tried
+ *   tier 2  method       — one step of the working, not all of it
+ *   tier 3  worked step  — that step actually done, arithmetic shown
+ *   then    the full solution from `solution_md`
+ *
+ * Tiers 1–3 are AI-generated and grounded in the question (`POST /api/hints`).
+ * `methodHint` below is the DETERMINISTIC FALLBACK for when that call fails: a
+ * learner on a dropped connection still gets a next step instead of a dead end.
  * ─────────────────────────────────────────────────────────────────────────────
  *
  * THE RULE THAT DECIDES *WHEN* A HINT IS OFFERED, and it is not cosmetic:
@@ -29,11 +32,12 @@
 /**
  * How many hint rungs exist before the full worked solution.
  *
- * D6 rule 2 ("all hints exhausted") compares `hints_used` against this, so it is
- * exported rather than written as a literal anywhere else. Slice 2.3 raises it to
- * 3 and the struggle trigger follows automatically.
+ * D6 rule 2 ("all hints exhausted") compares `hints_used` against this, and the
+ * attempts route uses it to decide when the worked solution is released. It is
+ * exported rather than written as a literal anywhere else, which is why raising
+ * it from 1 to 3 in this slice moved both of those behaviours in step.
  */
-export const HINT_TIERS = 1;
+export const HINT_TIERS = 3;
 
 /**
  * The first rung: the opening move of the worked solution, without the rest of it.

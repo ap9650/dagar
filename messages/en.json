@@ -102,7 +102,12 @@
     "suggestionsTitle": "Not sure what to ask?",
     "limitReached": "That is a lot of questions today. Saathi will be back tomorrow.",
     "offTopic": "Let us stay with this chapter for now.",
-    "failed": "Saathi could not answer just now. Try again?"
+    "failed": "Saathi could not answer just now. Try again?",
+    "youSaid": "You said",
+    "saathiSaid": "Saathi said",
+    "helpful": "This helped",
+    "notHelpful": "This did not help",
+    "unavailable": "Saathi is resting right now. Your lesson and practice still work."
   },
   "practice": {
     "title": "Practice",

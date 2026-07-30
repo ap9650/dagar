@@ -7,10 +7,9 @@
  *   2. 2 attempts on the same concept where all hints were exhausted
  *   3. >= 4 AI Tutor turns on one lesson with no practice attempt started
  *
- * Rules 1 and 2 live here — they are attempt-shaped and the practice route has
- * everything they need. **Rule 3 is evaluated in the tutor slice (2.3)**, where the
- * turn count exists; it is named in the type so the mentor request records which
- * trigger fired, and so the gap is visible rather than silently missing.
+ * Rules 1 and 2 are attempt-shaped and evaluated by the practice route; rule 3
+ * is turn-shaped and evaluated by the tutor route. Both live here so the three
+ * D6 triggers can be read in one place rather than inferred from two callers.
  *
  * Pure: takes attempt rows, returns a trigger or null. No database, no copy.
  *
@@ -25,11 +24,12 @@ import { HINT_TIERS } from "./hints";
 export type StruggleTrigger =
   | "three_consecutive_incorrect"
   | "hints_exhausted_twice"
-  /** D6 rule 3. Detected in the tutor slice, not here. */
   | "tutor_turns_no_practice";
 
 export const CONSECUTIVE_INCORRECT = 3;
 export const HINTS_EXHAUSTED_ATTEMPTS = 2;
+/** D6 rule 3: this many tutor turns on one lesson with nothing attempted. */
+export const TUTOR_TURNS_WITHOUT_PRACTICE = 4;
 
 /**
  * How far back rule 2 looks. Deliberately short, and matched to the mastery
@@ -81,4 +81,30 @@ export function detectStruggle(
   }
 
   return null;
+}
+
+/**
+ * D6 rule 3 — four or more tutor turns on one lesson with no practice attempted.
+ *
+ * The signal is a learner who keeps asking and never tries. That is a specific,
+ * recognisable kind of stuck: they are engaged (they are still here, still
+ * asking) but something is stopping them from attempting the maths, and more
+ * explanation has already failed to move them. A person can find out what in a
+ * minute; the tutor has had four goes.
+ *
+ * `practiceAttempts` is the learner's attempts **anywhere**, not just on this
+ * concept. Someone who practises elsewhere in the app is not frozen — they are
+ * reading carefully before starting, which is a good habit and not a trigger.
+ */
+export function detectTutorStruggle({
+  tutorTurns,
+  practiceAttempts,
+}: {
+  /** Learner turns in this lesson's tutor conversation. */
+  tutorTurns: number;
+  practiceAttempts: number;
+}): StruggleTrigger | null {
+  if (practiceAttempts > 0) return null;
+  if (tutorTurns < TUTOR_TURNS_WITHOUT_PRACTICE) return null;
+  return "tutor_turns_no_practice";
 }

@@ -24,13 +24,13 @@ import { MarkdownBody } from "./MarkdownBody";
  */
 export function FeedbackPanel({
   isCorrect,
-  hint,
+  hints,
   solutionMd,
 }: {
   isCorrect: boolean;
-  /** Tier 1. Present only after a wrong answer. */
-  hint: string | null;
-  /** The full worked method. Arrives once the learner has re-engaged. */
+  /** Hints the learner has ASKED for, in tier order. Often empty. */
+  hints: string[];
+  /** The full worked method. Arrives once the ladder is exhausted. */
   solutionMd: string | null;
 }) {
   const t = useTranslations();
@@ -67,11 +67,19 @@ export function FeedbackPanel({
         {t("feedback.notQuite")}
       </p>
 
-      {hint && !solutionMd && (
-        <div className="text-body-sm text-ink">
-          <MarkdownBody markdown={hint} />
+      {/* Each rung stays on screen as the next arrives — a learner who worked
+          through three hints should be able to read them together, not watch
+          the earlier ones vanish. */}
+      {hints.map((hint, tier) => (
+        <div key={tier} className="flex flex-col gap-xs">
+          <p className="text-caption font-medium text-hint">
+            {t("feedback.hintTitle")} {tier + 1}
+          </p>
+          <div className="text-body-sm text-ink">
+            <MarkdownBody markdown={hint} />
+          </div>
         </div>
-      )}
+      ))}
 
       {solutionMd && (
         <div className="flex flex-col gap-sm">

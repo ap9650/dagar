@@ -10,6 +10,7 @@ import { t as tContent } from "@/lib/i18n/content";
 import { LessonBody } from "@/components/learn/LessonBody";
 import { LessonProgress } from "@/components/learn/LessonProgress";
 import { LessonCompleteButton } from "@/components/learn/LessonCompleteButton";
+import { TutorSheet } from "@/components/learn/TutorSheet";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -36,7 +37,7 @@ export default async function LessonPage({
   } = await supabase.auth.getUser();
   const studentId = user!.id;
 
-  const [{ data: lessons }, { data: progress }] = await Promise.all([
+  const [{ data: lessons }, { data: progress }, { data: tutorHistory }] = await Promise.all([
     // The whole chapter's lessons, because the progress dots need to know where
     // this one sits. One query, not one per dot.
     supabase
@@ -48,6 +49,15 @@ export default async function LessonPage({
       .from("lesson_progress")
       .select("lesson_id, status")
       .eq("student_id", studentId),
+    // Rendered on the server so reopening a lesson shows the conversation
+    // already there, with no fetch and no flash of an empty sheet.
+    supabase
+      .from("tutor_messages")
+      .select("id, role, content, created_at")
+      .eq("student_id", studentId)
+      .eq("lesson_id", lessonId)
+      .order("created_at", { ascending: true })
+      .limit(40),
   ]);
 
   const ordered = lessons ?? [];
@@ -99,6 +109,19 @@ export default async function LessonPage({
       {/* Falls back to the English body when Hindi is absent — a learner sees
           content, never a blank (D16). Slice 1.6 fills the Hindi in. */}
       <LessonBody markdown={tContent(lesson, "body_md", locale)} />
+
+      {/* The tutor sits WITH the lesson, not on a route of its own: a learner
+          who taps it is confused about the paragraph in front of them, and
+          navigating away loses that paragraph. */}
+      <TutorSheet
+        lessonId={lesson.id}
+        conceptId={lesson.concept_id}
+        initialMessages={(tutorHistory ?? []).map((turn) => ({
+          id: turn.id,
+          role: turn.role as "user" | "assistant",
+          content: turn.content,
+        }))}
+      />
 
       <LessonCompleteButton
         lessonId={lesson.id}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { detectStruggle } from "@/lib/learning/struggle";
+import { detectStruggle, detectTutorStruggle } from "@/lib/learning/struggle";
 import { HINT_TIERS, methodHint } from "@/lib/learning/hints";
 
 /**
@@ -97,7 +97,35 @@ describe("precedence and quiet cases", () => {
   });
 });
 
-describe("methodHint — tier 1", () => {
+describe("rule 3 — tutor turns with no practice", () => {
+  it("fires at four turns with nothing attempted", () => {
+    expect(detectTutorStruggle({ tutorTurns: 4, practiceAttempts: 0 })).toBe(
+      "tutor_turns_no_practice",
+    );
+  });
+
+  it("does not fire at three", () => {
+    expect(detectTutorStruggle({ tutorTurns: 3, practiceAttempts: 0 })).toBeNull();
+  });
+
+  it("does not fire for a learner who HAS practised", () => {
+    // Someone reading carefully before starting is not frozen — that is a good
+    // habit, and offering them a mentor for it would be noise.
+    expect(detectTutorStruggle({ tutorTurns: 10, practiceAttempts: 1 })).toBeNull();
+  });
+
+  it("keeps firing past the threshold", () => {
+    expect(detectTutorStruggle({ tutorTurns: 9, practiceAttempts: 0 })).toBe(
+      "tutor_turns_no_practice",
+    );
+  });
+
+  it("stays quiet for a learner who has not asked anything", () => {
+    expect(detectTutorStruggle({ tutorTurns: 0, practiceAttempts: 0 })).toBeNull();
+  });
+});
+
+describe("methodHint — the deterministic fallback", () => {
   it("takes the first paragraph, not the whole solution", () => {
     const solution = "First find $\\frac{1}{3}$ of ₹60.\n\n$$60 \\div 3 = 20$$\n\nSo ₹40 is left.";
     expect(methodHint(solution)).toBe("First find $\\frac{1}{3}$ of ₹60.");
