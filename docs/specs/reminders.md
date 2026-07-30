@@ -59,12 +59,19 @@ Sending goes through the **existing channel-agnostic notify interface** (D4) —
 
 ## 5. When it fires
 
-- **Once a day, maximum.** One row per learner per day, no retries.
-- **Skipped entirely if today's goal is already met.** An app that reminds you to do
-  something you have already done is one you stop trusting.
-- **Daily for the first 7 days**, then tapers — that is when forgetting is most
-  likely and the habit least formed.
-- Fired at a fixed IST hour chosen for after school, not late evening.
+- **19:00 IST, one notification, every day — no tapering.** A learner in week 3
+  forgets as easily as one in week 1, and an app that quietly stops reminding has
+  decided on the learner's behalf that they no longer need help.
+- **Skipped entirely if today's goal is already met.** This, not frequency, is what
+  controls fatigue: an engaged learner naturally gets fewer notifications, and an
+  app that reminds you to do something you have already done is one you stop
+  trusting.
+- **19:00 carries the urgency so the copy does not have to.** It lands after school
+  with roughly five hours of the day left — real time to act — without ever telling
+  the learner a clock is running. D7's grace day means one missed day does not break
+  a streak anyway, so there is nothing genuinely expiring.
+- **One a day, never two.** A "last chance" follow-up is the precise point where a
+  reminder becomes a nag.
 
 ## 6. Permission
 
@@ -84,8 +91,9 @@ Declining is not an error state and is never asked again.
 | Desktop Chrome | ✅ |
 | **iOS Safari** | ⚠️ **only after the PWA is installed to the home screen**, iOS 16.4+ |
 
-The iOS limitation is real. State it plainly rather than letting a judge discover it
-on an iPhone.
+iOS is **not a scope concern** — it is rare in the communities Saathi serves, and
+the product owner has confirmed it is not worth building around. Kept here only so
+there is a straight answer if a judge opens the demo on an iPhone.
 
 ---
 
@@ -94,7 +102,7 @@ on an iPhone.
 - [ ] Permission is requested only after a first lesson is completed
 - [ ] Declining is remembered and never re-prompted
 - [ ] A learner who has met today's goal receives **no** notification
-- [ ] At most one notification per learner per day
+- [ ] Exactly one notification per learner per day, at 19:00 IST, with no tapering by tenure
 - [ ] The notification body renders in the learner's chosen locale
 - [ ] No string contains a countdown, a deadline, or streak-loss language
 - [ ] Tapping the notification opens `/learn`, not a marketing page

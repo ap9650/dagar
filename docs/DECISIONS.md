@@ -528,10 +528,34 @@ learner is delivered to the person whose opinion they care about most.
   permission denied permanently.
 - **Skipped when the daily goal is already met** (D17). An app that reminds you to
   do something you have done is an app you stop trusting.
-- **Tapers.** Daily through the first 7 days, when forgetting is most likely; less
-  often after the habit forms.
+- **Every day, indefinitely — no tapering.** Revised 2026-07-30 on the product
+  owner's call, and it is the right one: a learner in week 3 forgets exactly as
+  easily as a learner in week 1, and an app that quietly stops reminding you is an
+  app that decides on your behalf that you no longer need help.
+
+  Fatigue is controlled by the **skip rule, not by frequency**: on any day the goal
+  is already met, nothing is sent. So an engaged learner naturally receives fewer
+  notifications, without the schedule ever having to guess whether they still need
+  one.
 - **In the learner's locale**, via the same dictionary as the UI.
 - No countdown, no streak-loss language, ever.
+
+### Why 19:00 IST
+
+The product owner's instinct was to fire it when four or five hours of the day
+remain. That is right, and 19:00 IST delivers it **without** the countdown framing:
+
+- after school and after the evening meal is under way — when homework actually happens
+- roughly five hours before the day rolls over, so there is real time to act
+- not so late that it reaches a child at bedtime
+
+So the *timing* carries the urgency and the *copy* stays an invitation. The learner
+gets a nudge with the evening still ahead of them; they are never told a clock is
+running. D7's grace day already means one missed day does not break a streak, so
+there is nothing genuinely expiring to warn about.
+
+**One notification per day, not two.** A "last chance" second message is the exact
+point at which a reminder becomes a nag.
 
 ### Channel
 
