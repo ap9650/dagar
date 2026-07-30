@@ -1,0 +1,225 @@
+/**
+ * npm run seed — load curriculum content into Supabase.
+ *
+ * IDEMPOTENT. Every row is upserted on its slug, so running this twice produces
+ * the same database, not a duplicate set of questions. That matters more than it
+ * sounds: `attempts.question_id` points at these rows, so a duplicate question
+ * bank would split one learner's mastery across two copies of the same concept.
+ *
+ * Uses the SERVICE ROLE. Curriculum tables are readable by every authenticated
+ * user but writable by nobody through the anon key — content is authored here, in
+ * version control, and never through the app.
+ *
+ * Node 24 strips TypeScript types natively, so this runs with no build step and no
+ * extra dependency. That is also why the imports carry explicit `.ts` extensions.
+ */
+import { readFileSync } from "node:fs";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "../lib/supabase/database.types.ts";
+import { chapters } from "../supabase/seed/index.ts";
+
+// ─── env ─────────────────────────────────────────────────────────────────────
+// Read .env.local directly: this is a plain node script, not Next, so nothing
+// has loaded it for us.
+function loadEnv(): Record<string, string> {
+  const out: Record<string, string> = {};
+  let raw: string;
+  try {
+    raw = readFileSync(new URL("../.env.local", import.meta.url), "utf8");
+  } catch {
+    return process.env as Record<string, string>;
+  }
+
+  for (const line of raw.split("\n")) {
+    if (!/^[A-Z]/.test(line)) continue;
+    const eq = line.indexOf("=");
+    if (eq === -1) continue;
+    out[line.slice(0, eq)] = line
+      .slice(eq + 1)
+      .replace(/\s+#.*$/, "")
+      .trim();
+  }
+  return { ...out, ...process.env } as Record<string, string>;
+}
+
+const env = loadEnv();
+const url = env.NEXT_PUBLIC_SUPABASE_URL;
+const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!url || !serviceKey) {
+  console.error(
+    "✗ Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env.local",
+  );
+  process.exit(1);
+}
+
+const db = createClient<Database>(url, serviceKey, {
+  auth: { autoRefreshToken: false, persistSession: false },
+});
+
+// ─── seed ────────────────────────────────────────────────────────────────────
+
+let failed = false;
+
+for (const chapter of chapters) {
+  console.log(`\n▸ Class ${chapter.grade} — ${chapter.title}`);
+
+  const { data: chapterRow, error: chapterError } = await db
+    .from("chapters")
+    .upsert(
+      {
+        slug: chapter.slug,
+        grade: chapter.grade,
+        number: chapter.number,
+        title: chapter.title,
+        summary: chapter.summary,
+        ncert_ref: chapter.ncert_ref,
+        order_index: chapter.order_index,
+      },
+      { onConflict: "slug" },
+    )
+    .select("id")
+    .single();
+
+  if (chapterError || !chapterRow) {
+    console.error(`  ✗ chapter: ${chapterError?.message}`);
+    failed = true;
+    continue;
+  }
+  console.log(`  ✓ chapter`);
+
+  // ── concepts ──
+  const { data: conceptRows, error: conceptError } = await db
+    .from("concepts")
+    .upsert(
+      chapter.concepts.map((concept) => ({
+        chapter_id: chapterRow.id,
+        slug: concept.slug,
+        name: concept.name,
+        order_index: concept.order_index,
+      })),
+      { onConflict: "slug" },
+    )
+    .select("id, slug");
+
+  if (conceptError || !conceptRows) {
+    console.error(`  ✗ concepts: ${conceptError?.message}`);
+    failed = true;
+    continue;
+  }
+  console.log(`  ✓ ${conceptRows.length} concepts`);
+
+  const conceptIdBySlug = new Map(conceptRows.map((c) => [c.slug, c.id]));
+
+  /** A typo in a concept_slug would otherwise insert a row with a null concept —
+   *  and an untagged question is invisible to mastery and adaptivity entirely. */
+  function resolveConcept(slug: string, owner: string): string | null {
+    const id = conceptIdBySlug.get(slug);
+    if (!id) {
+      console.error(`  ✗ ${owner}: unknown concept_slug "${slug}"`);
+      failed = true;
+      return null;
+    }
+    return id;
+  }
+
+  // ── lessons ──
+  const lessonRows = chapter.lessons
+    .map((lesson) => {
+      const conceptId = resolveConcept(lesson.concept_slug, `lesson ${lesson.slug}`);
+      if (!conceptId) return null;
+      return {
+        slug: lesson.slug,
+        chapter_id: chapterRow.id,
+        concept_id: conceptId,
+        order_index: lesson.order_index,
+        title: lesson.title,
+        body_md: lesson.body_md,
+        est_minutes: lesson.est_minutes,
+      };
+    })
+    .filter((row) => row !== null);
+
+  if (lessonRows.length > 0) {
+    const { error } = await db
+      .from("lessons")
+      .upsert(lessonRows, { onConflict: "slug" });
+    if (error) {
+      console.error(`  ✗ lessons: ${error.message}`);
+      failed = true;
+    } else {
+      console.log(`  ✓ ${lessonRows.length} lessons`);
+    }
+  }
+
+  // ── questions ──
+  const questionRows = chapter.questions
+    .map((question) => {
+      const conceptId = resolveConcept(
+        question.concept_slug,
+        `question ${question.slug}`,
+      );
+      if (!conceptId) return null;
+      return {
+        slug: question.slug,
+        chapter_id: chapterRow.id,
+        concept_id: conceptId,
+        kind: question.kind,
+        difficulty: question.difficulty,
+        stem_md: question.stem_md,
+        answer_type: question.answer_type,
+        answer_value: question.answer_value,
+        choices: question.choices ?? null,
+        solution_md: question.solution_md,
+      };
+    })
+    .filter((row) => row !== null);
+
+  if (questionRows.length > 0) {
+    const { error } = await db
+      .from("questions")
+      .upsert(questionRows, { onConflict: "slug" });
+    if (error) {
+      console.error(`  ✗ questions: ${error.message}`);
+      failed = true;
+    } else {
+      console.log(`  ✓ ${questionRows.length} questions`);
+    }
+  }
+
+  // ── coverage check ──
+  // Adaptivity (D3) steps difficulty up after 2 correct and down after 2 wrong.
+  // A concept missing a difficulty dead-ends the learner there, and it fails
+  // silently — practice just stops feeling adaptive. So it is checked here.
+  for (const concept of chapter.concepts) {
+    for (const difficulty of [1, 2, 3]) {
+      const count = chapter.questions.filter(
+        (q) =>
+          q.concept_slug === concept.slug &&
+          q.kind === "practice" &&
+          q.difficulty === difficulty,
+      ).length;
+      if (count < 2) {
+        console.error(
+          `  ✗ coverage: ${concept.slug} has ${count} practice question(s) at difficulty ${difficulty}, needs 2`,
+        );
+        failed = true;
+      }
+    }
+  }
+}
+
+// ─── duplicate-slug check across all chapters ────────────────────────────────
+const allSlugs = chapters.flatMap((c) => [
+  ...c.lessons.map((l) => l.slug),
+  ...c.questions.map((q) => q.slug),
+]);
+const duplicates = allSlugs.filter((s, i) => allSlugs.indexOf(s) !== i);
+if (duplicates.length > 0) {
+  // Two rows sharing a slug means the second silently overwrites the first.
+  console.error(`\n✗ duplicate slugs: ${[...new Set(duplicates)].join(", ")}`);
+  failed = true;
+}
+
+console.log(failed ? "\n✗ Seed finished with errors" : "\n✓ Seed complete");
+process.exit(failed ? 1 : 0);

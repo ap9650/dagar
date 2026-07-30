@@ -364,6 +364,7 @@ export type Database = {
           i18n: Json
           id: string
           order_index: number
+          slug: string | null
           title: string
         }
         Insert: {
@@ -374,6 +375,7 @@ export type Database = {
           i18n?: Json
           id?: string
           order_index?: number
+          slug?: string | null
           title: string
         }
         Update: {
@@ -384,6 +386,7 @@ export type Database = {
           i18n?: Json
           id?: string
           order_index?: number
+          slug?: string | null
           title?: string
         }
         Relationships: [
@@ -620,6 +623,7 @@ export type Database = {
           i18n: Json
           id: string
           kind: string
+          slug: string | null
           solution_md: string
           stem_md: string
         }
@@ -634,6 +638,7 @@ export type Database = {
           i18n?: Json
           id?: string
           kind: string
+          slug?: string | null
           solution_md: string
           stem_md: string
         }
@@ -648,6 +653,7 @@ export type Database = {
           i18n?: Json
           id?: string
           kind?: string
+          slug?: string | null
           solution_md?: string
           stem_md?: string
         }
@@ -845,6 +851,7 @@ export type Database = {
           i18n: Json | null
           id: string | null
           kind: string | null
+          slug: string | null
           stem_md: string | null
         }
         Insert: {
@@ -857,6 +864,7 @@ export type Database = {
           i18n?: Json | null
           id?: string | null
           kind?: string | null
+          slug?: string | null
           stem_md?: string | null
         }
         Update: {
@@ -869,6 +877,7 @@ export type Database = {
           i18n?: Json | null
           id?: string | null
           kind?: string | null
+          slug?: string | null
           stem_md?: string | null
         }
         Relationships: [

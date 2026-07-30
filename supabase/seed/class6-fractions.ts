@@ -1,0 +1,1011 @@
+import type { SeedChapter } from "./types.ts";
+
+/**
+ * Class 6 · Fractions · slice 1.2
+ *
+ * Concept order follows how the textbook TEACHES the material, not the chapter
+ * numbering — the sequence is stable across editions, the numbering is not (D1):
+ *
+ *   parts of a whole → fractional units → number line → mixed fractions
+ *   → EQUIVALENT FRACTIONS → simplest form → comparing → addition → subtraction
+ *
+ * Four concepts cannot hold nine sections. **Mixed fractions is the deliberate
+ * cut** — it is the only one nothing else here depends on. Equivalent fractions
+ * and simplest form are paired because NCERT teaches them back to back and
+ * simplest form has no gradeable question type of its own (see the note at the
+ * bottom of this file).
+ *
+ * Coverage: 2 practice questions at each difficulty for every concept, so
+ * adaptivity (D3: 2 right → step up, 2 wrong → step down) always has somewhere to
+ * go. Plus 8 quiz questions, 2 per concept.
+ *
+ * English only. Hindi goes into the `i18n` jsonb in slice 1.6 — and when an
+ * English `body_md` changes, the Hindi changes in the SAME commit or the two drift.
+ */
+export const class6Fractions: SeedChapter = {
+  slug: "class6-fractions",
+  grade: 6,
+  number: 7,
+  title: "Fractions",
+  summary:
+    "What fractions mean, how to spot equal fractions, how to compare them, and how to add and subtract them.",
+  ncert_ref:
+    "Ganita Prakash Class 6 Ch 7 (Fractions) · old NCERT Class 6 Ch 7 (Fractions)",
+  order_index: 1,
+
+  concepts: [
+    { slug: "fraction-basics", name: "Fraction Basics", order_index: 1 },
+    { slug: "equivalent-fractions", name: "Equivalent Fractions", order_index: 2 },
+    { slug: "comparing-fractions", name: "Comparing Fractions", order_index: 3 },
+    {
+      slug: "adding-subtracting-fractions",
+      name: "Adding and Subtracting Fractions",
+      order_index: 4,
+    },
+  ],
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // LESSONS — one idea each. If a lesson needs "and also", it is two lessons.
+  // ═══════════════════════════════════════════════════════════════════════════
+  lessons: [
+    {
+      slug: "c6-fractions-l1",
+      concept_slug: "fraction-basics",
+      order_index: 1,
+      title: "What a Fraction Really Means",
+      est_minutes: 4,
+      body_md: [
+        "Two rotis, four people. Nobody gets a whole roti — so how do you say how much each person gets?",
+        "",
+        "That is what fractions are for. A fraction names **a part of a whole**.",
+        "",
+        "Cut one roti into 4 equal pieces and take 1 piece. You have taken $\\frac{1}{4}$ of the roti.",
+        "",
+        "The two numbers do different jobs:",
+        "",
+        "- The **bottom** number (the *denominator*) says how many equal parts the whole was cut into.",
+        "- The **top** number (the *numerator*) says how many of those parts you took.",
+        "",
+        "So in $\\frac{3}{8}$, the whole was cut into 8 equal parts and you have 3 of them.",
+        "",
+        "**The word *equal* is doing real work here.** If you break a roti into 4 pieces and one is huge and three are tiny, no piece is $\\frac{1}{4}$. The parts must be the same size.",
+        "",
+        "### Worked example",
+        "",
+        "A bottle holds 5 glasses of water when it is full. You pour out 2 glasses.",
+        "",
+        "The whole is 5 equal parts, and you took 2 of them:",
+        "",
+        "$$\\frac{2}{5} \\text{ of the bottle}$$",
+        "",
+        "And what is left in the bottle? 3 parts out of 5, so $\\frac{3}{5}$.",
+        "",
+        "Notice that $\\frac{2}{5}$ and $\\frac{3}{5}$ together make the whole bottle — all 5 parts.",
+        "",
+        "Try a few in practice, then come back for the number line.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fractions-l2",
+      concept_slug: "fraction-basics",
+      order_index: 2,
+      title: "Fractions on the Number Line",
+      est_minutes: 4,
+      body_md: [
+        "Fractions are not only pieces of roti. They are **numbers**, and every number has a place on the number line.",
+        "",
+        "$\\frac{1}{2}$ is not a piece of something. It is a number that sits exactly halfway between 0 and 1.",
+        "",
+        "### How to find a fraction on the line",
+        "",
+        "To place $\\frac{3}{5}$:",
+        "",
+        "1. Look at the **bottom** number, 5. Cut the gap from 0 to 1 into 5 equal parts.",
+        "2. Look at the **top** number, 3. Count 3 parts along from 0.",
+        "3. You have landed on $\\frac{3}{5}$.",
+        "",
+        "```",
+        "0 ....|....|....|....|....| 1",
+        "     1/5  2/5  3/5  4/5",
+        "```",
+        "",
+        "The bottom number tells you **how big each step is**. The top number tells you **how many steps to take**.",
+        "",
+        "### Something worth noticing",
+        "",
+        "The bigger the bottom number, the *smaller* each step. Cutting the same gap into 8 parts makes smaller steps than cutting it into 3.",
+        "",
+        "So $\\frac{1}{8}$ sits closer to 0 than $\\frac{1}{3}$ does — even though 8 is a bigger number than 3.",
+        "",
+        "This is the single most common place learners slip, and it is worth holding on to. A bigger bottom number means more parts, and more parts means each one is smaller.",
+        "",
+        "$$\\frac{5}{5} = 1 \\qquad \\frac{0}{5} = 0$$",
+        "",
+        "When the top and bottom are the same, you have taken every part — the whole thing.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fractions-l3",
+      concept_slug: "equivalent-fractions",
+      order_index: 3,
+      title: "Equal Fractions and Simplest Form",
+      est_minutes: 5,
+      body_md: [
+        "Cut a roti in half and eat one half. Now cut the same roti into 4 pieces and eat 2. Did you eat more the second time?",
+        "",
+        "No — exactly the same amount. So:",
+        "",
+        "$$\\frac{1}{2} = \\frac{2}{4}$$",
+        "",
+        "Different numbers, same amount. These are called **equivalent fractions**.",
+        "",
+        "### The one rule",
+        "",
+        "> Multiply the top **and** the bottom by the same number, and the fraction does not change.",
+        "",
+        "$$\\frac{1}{2} = \\frac{1 \\times 3}{2 \\times 3} = \\frac{3}{6}$$",
+        "",
+        "It works going down as well, by dividing:",
+        "",
+        "$$\\frac{6}{8} = \\frac{6 \\div 2}{8 \\div 2} = \\frac{3}{4}$$",
+        "",
+        "**Adding does not work.** $\\frac{1}{2}$ and $\\frac{2}{3}$ are not equal, even though you added 1 to the top and 1 to the bottom. Only multiplying and dividing keep the value the same.",
+        "",
+        "### Simplest form",
+        "",
+        "A fraction is in its **simplest form** when the top and bottom have no common factor left to divide out.",
+        "",
+        "$$\\frac{12}{18} = \\frac{6}{9} = \\frac{2}{3}$$",
+        "",
+        "$\\frac{2}{3}$ is as far as it goes — 2 and 3 share nothing. All three of those fractions are the same amount; $\\frac{2}{3}$ is just the tidiest way to write it.",
+        "",
+        "### Worked example",
+        "",
+        "Fill the box: $\\frac{2}{5} = \\frac{\\square}{15}$",
+        "",
+        "The bottom went from 5 to 15, so it was multiplied by 3. Do the same on top: $2 \\times 3 = 6$.",
+        "",
+        "$$\\frac{2}{5} = \\frac{6}{15}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fractions-l4",
+      concept_slug: "comparing-fractions",
+      order_index: 4,
+      title: "Which Fraction Is Bigger?",
+      est_minutes: 4,
+      body_md: [
+        "Anil ate $\\frac{3}{4}$ of his roti. Bina ate $\\frac{5}{8}$ of hers. Same size rotis. Who ate more?",
+        "",
+        "You cannot tell by looking, because the pieces are different sizes. Here is how to decide.",
+        "",
+        "### Case 1 — same bottom number",
+        "",
+        "Easy. The pieces are the same size, so just count them.",
+        "",
+        "$$\\frac{5}{7} > \\frac{3}{7}$$",
+        "",
+        "### Case 2 — same top number",
+        "",
+        "Compare the **bottom** numbers, and remember the rule from the number line: a bigger bottom means smaller pieces.",
+        "",
+        "$$\\frac{1}{4} > \\frac{1}{6}$$",
+        "",
+        "One piece out of 4 is bigger than one piece out of 6. This feels backwards, and it catches almost everybody the first time.",
+        "",
+        "### Case 3 — nothing matches",
+        "",
+        "Make the bottoms the same, using equivalent fractions. Back to Anil and Bina:",
+        "",
+        "$$\\frac{3}{4} = \\frac{6}{8}$$",
+        "",
+        "Now both are in eighths, so count: $\\frac{6}{8}$ against $\\frac{5}{8}$.",
+        "",
+        "$$\\frac{6}{8} > \\frac{5}{8}$$",
+        "",
+        "**Anil ate more.**",
+        "",
+        "### The trap",
+        "",
+        "It is tempting to say Bina ate more because both her numbers are bigger — 5 beats 3 and 8 beats 4. But a fraction is not two separate numbers. It is one amount, and the only way to compare amounts is to make the pieces the same size first.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fractions-l5",
+      concept_slug: "adding-subtracting-fractions",
+      order_index: 5,
+      title: "Adding and Subtracting Fractions",
+      est_minutes: 5,
+      body_md: [
+        "You drink $\\frac{1}{5}$ of a bottle in the morning and $\\frac{2}{5}$ at lunch. How much have you drunk?",
+        "",
+        "The pieces are all fifths, so just count them: 1 fifth plus 2 fifths is 3 fifths.",
+        "",
+        "$$\\frac{1}{5} + \\frac{2}{5} = \\frac{3}{5}$$",
+        "",
+        "### The bottom number does not change",
+        "",
+        "> Same bottom number: add or subtract the tops, and keep the bottom as it is.",
+        "",
+        "$$\\frac{4}{7} - \\frac{1}{7} = \\frac{3}{7}$$",
+        "",
+        "The bottom is not telling you *how much* — it is telling you **what size piece** you are counting. Counting 3 fifths does not turn them into tenths.",
+        "",
+        "**This is the mistake to avoid:**",
+        "",
+        "$$\\frac{1}{5} + \\frac{2}{5} \\neq \\frac{3}{10}$$",
+        "",
+        "### Different bottom numbers",
+        "",
+        "You cannot add fifths to quarters any more than you can add 3 apples to 2 mangoes and call the answer 5 apples. Make the pieces the same size first, using equivalent fractions.",
+        "",
+        "$$\\frac{1}{2} + \\frac{1}{4}$$",
+        "",
+        "Rewrite $\\frac{1}{2}$ in quarters: $\\frac{1}{2} = \\frac{2}{4}$. Now they match.",
+        "",
+        "$$\\frac{2}{4} + \\frac{1}{4} = \\frac{3}{4}$$",
+        "",
+        "### Worked example",
+        "",
+        "A jug has $\\frac{3}{4}$ litre of milk. Amma pours $\\frac{1}{3}$ litre into the tea. How much is left?",
+        "",
+        "Quarters and thirds do not match. Twelfths work for both:",
+        "",
+        "$$\\frac{3}{4} = \\frac{9}{12} \\qquad \\frac{1}{3} = \\frac{4}{12}$$",
+        "",
+        "$$\\frac{9}{12} - \\frac{4}{12} = \\frac{5}{12}$$",
+        "",
+        "So $\\frac{5}{12}$ litre of milk is left in the jug.",
+      ].join("\n"),
+    },
+  ],
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // QUESTIONS
+  // ═══════════════════════════════════════════════════════════════════════════
+  questions: [
+    // ─────────────────────────────────────────────────────────────────────────
+    // CONCEPT 1 — fraction-basics
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c6-fb-d1-q1",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "mcq",
+      stem_md:
+        "A roti is cut into 4 equal pieces. Riya eats 1 piece.\n\nWhat fraction of the roti did she eat?",
+      choices: [
+        { id: "a", label: "$\\frac{1}{4}$" },
+        { id: "b", label: "$\\frac{3}{4}$" }, // the fraction LEFT, not eaten
+        { id: "c", label: "$\\frac{1}{3}$" }, // counted the 3 remaining pieces as the whole
+        { id: "d", label: "$\\frac{4}{1}$" }, // top and bottom swapped
+      ],
+      answer_value: "a",
+      solution_md: [
+        "The whole roti was cut into **4** equal parts, so 4 goes on the bottom.",
+        "",
+        "Riya took **1** of those parts, so 1 goes on top.",
+        "",
+        "$$\\frac{1}{4}$$",
+        "",
+        "$\\frac{3}{4}$ is the fraction that is *left over* — a good thing to notice, but not what was asked.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d1-q2",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md:
+        "A water bottle is $\\frac{4}{7}$ full.\n\nInto how many equal parts has the bottle been divided?",
+      answer_value: "7",
+      solution_md: [
+        "The **bottom** number tells you how many equal parts the whole was divided into.",
+        "",
+        "In $\\frac{4}{7}$ the bottom number is **7**, so the bottle is thought of as 7 equal parts — and 4 of them have water in.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d2-q1",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md:
+        "A bag has 12 laddoos. Meera eats $\\frac{1}{4}$ of them.\n\nHow many laddoos did she eat?",
+      answer_value: "3",
+      solution_md: [
+        "$\\frac{1}{4}$ means the 12 laddoos are split into **4 equal groups**, and Meera eats **1** group.",
+        "",
+        "$$12 \\div 4 = 3$$",
+        "",
+        "So Meera ate **3** laddoos.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d2-q2",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "mcq",
+      stem_md:
+        "Sunita has ₹60. She spends $\\frac{1}{3}$ of it on a notebook.\n\nHow much money does she have **left**?",
+      choices: [
+        { id: "a", label: "₹40" },
+        { id: "b", label: "₹20" }, // the amount SPENT
+        { id: "c", label: "₹30" }, // treated 1/3 as a half
+        { id: "d", label: "₹57" }, // subtracted 3 instead of a third
+      ],
+      answer_value: "a",
+      solution_md: [
+        "First find $\\frac{1}{3}$ of ₹60 — split it into 3 equal parts:",
+        "",
+        "$$60 \\div 3 = 20$$",
+        "",
+        "She spent ₹20. The question asks what is **left**:",
+        "",
+        "$$60 - 20 = 40$$",
+        "",
+        "So ₹40 is left. Another way to see it: she spent one third, so two thirds are left, and $\\frac{2}{3}$ of 60 is 40.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d3-q1",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md:
+        "Ravi ate $\\frac{2}{5}$ of a packet of biscuits. That was 8 biscuits.\n\nHow many biscuits were in the full packet?",
+      answer_value: "20",
+      solution_md: [
+        "This one runs backwards — you know the part and you need the whole.",
+        "",
+        "$\\frac{2}{5}$ of the packet is 8 biscuits. So **2 parts = 8 biscuits**.",
+        "",
+        "One part is therefore $8 \\div 2 = 4$ biscuits.",
+        "",
+        "The whole packet is 5 parts:",
+        "",
+        "$$5 \\times 4 = 20$$",
+        "",
+        "So the packet had **20** biscuits.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d3-q2",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md:
+        "A tank holds 40 litres when full. Right now it is $\\frac{3}{4}$ full.\n\nHow many **more** litres are needed to fill it?",
+      answer_value: "10",
+      solution_md: [
+        "Two steps here.",
+        "",
+        "**Step 1 — how much is in the tank now?** Find $\\frac{3}{4}$ of 40:",
+        "",
+        "$$40 \\div 4 = 10, \\qquad 10 \\times 3 = 30$$",
+        "",
+        "**Step 2 — how much is missing?**",
+        "",
+        "$$40 - 30 = 10$$",
+        "",
+        "So **10** more litres are needed.",
+        "",
+        "Shortcut: if the tank is $\\frac{3}{4}$ full then $\\frac{1}{4}$ is empty, and $\\frac{1}{4}$ of 40 is 10.",
+      ].join("\n"),
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CONCEPT 2 — equivalent-fractions
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c6-eqf-d1-q1",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "mcq",
+      stem_md: "Which fraction is equal to $\\frac{1}{2}$?",
+      choices: [
+        { id: "a", label: "$\\frac{2}{3}$" }, // added 1 to top AND bottom
+        { id: "b", label: "$\\frac{2}{4}$" },
+        { id: "c", label: "$\\frac{1}{4}$" }, // doubled only the bottom
+        { id: "d", label: "$\\frac{2}{2}$" }, // doubled only the top
+      ],
+      answer_value: "b",
+      solution_md: [
+        "To make an equal fraction, multiply the top and the bottom by the **same** number.",
+        "",
+        "$$\\frac{1}{2} = \\frac{1 \\times 2}{2 \\times 2} = \\frac{2}{4}$$",
+        "",
+        "Adding to the top and bottom does not work. $\\frac{2}{3}$ is not the same as $\\frac{1}{2}$ — half of 3 is 1.5, not 2.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d1-q2",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "$\\frac{1}{3} = \\frac{\\square}{9}$\n\nWhat number goes in the box?",
+      answer_value: "3",
+      solution_md: [
+        "The bottom went from 3 to 9, so it was multiplied by 3.",
+        "",
+        "Do the same to the top: $1 \\times 3 = 3$.",
+        "",
+        "$$\\frac{1}{3} = \\frac{3}{9}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d2-q1",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "$\\frac{4}{5} = \\frac{12}{\\square}$\n\nWhat number goes in the box?",
+      answer_value: "15",
+      solution_md: [
+        "The top went from 4 to 12, so it was multiplied by 3.",
+        "",
+        "The bottom must be multiplied by 3 too: $5 \\times 3 = 15$.",
+        "",
+        "$$\\frac{4}{5} = \\frac{12}{15}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d2-q2",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "mcq",
+      stem_md:
+        "Sita says $\\frac{3}{4}$ and $\\frac{9}{12}$ are equal fractions.\n\nIs she right?",
+      choices: [
+        { id: "a", label: "Yes — because $3 \\times 3 = 9$ and $4 \\times 3 = 12$" },
+        { id: "b", label: "Yes — because $9 - 3 = 6$ and $12 - 4 = 8$" }, // right answer, wrong reason
+        { id: "c", label: "No — the numbers are all different" },
+        { id: "d", label: "No — $\\frac{9}{12}$ is bigger because 9 is bigger than 3" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Sita is right, and the reason matters.",
+        "",
+        "Both the top and the bottom were multiplied by the **same** number, 3:",
+        "",
+        "$$\\frac{3}{4} = \\frac{3 \\times 3}{4 \\times 3} = \\frac{9}{12}$$",
+        "",
+        "Option (d) is a common trap — a bigger top number does not mean a bigger fraction, because the bottom number grew too.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d3-q1",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md: "$\\frac{18}{24} = \\frac{3}{\\square}$\n\nWhat number goes in the box?",
+      answer_value: "4",
+      solution_md: [
+        "This one goes the other way — the fraction is being made *simpler*, not bigger.",
+        "",
+        "The top went from 18 to 3. $18 \\div 6 = 3$, so it was divided by 6.",
+        "",
+        "Divide the bottom by 6 as well: $24 \\div 6 = 4$.",
+        "",
+        "$$\\frac{18}{24} = \\frac{3}{4}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d3-q2",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md: [
+        "A cricket team played 20 matches and won 15 of them.",
+        "",
+        "Another team played 8 matches and won the same **fraction** of their matches.",
+        "",
+        "How many matches did the second team win?",
+      ].join("\n"),
+      answer_value: "6",
+      solution_md: [
+        "The first team won $\\frac{15}{20}$ of their matches. In its simplest form:",
+        "",
+        "$$\\frac{15}{20} = \\frac{3}{4}$$",
+        "",
+        "The second team won $\\frac{3}{4}$ of 8 matches.",
+        "",
+        "$$8 \\div 4 = 2, \\qquad 2 \\times 3 = 6$$",
+        "",
+        "So the second team won **6** matches.",
+      ].join("\n"),
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CONCEPT 3 — comparing-fractions
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c6-cmp-d1-q1",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "mcq",
+      stem_md: "Which is bigger?",
+      choices: [
+        { id: "a", label: "$\\frac{5}{7}$" },
+        { id: "b", label: "$\\frac{3}{7}$" },
+        { id: "c", label: "They are equal" },
+        { id: "d", label: "You cannot compare them" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Both fractions are in **sevenths**, so the pieces are exactly the same size. All you have to do is count them.",
+        "",
+        "5 pieces is more than 3 pieces:",
+        "",
+        "$$\\frac{5}{7} > \\frac{3}{7}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d1-q2",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "mcq",
+      stem_md: "Which is bigger, $\\frac{1}{4}$ or $\\frac{1}{6}$?",
+      choices: [
+        { id: "a", label: "$\\frac{1}{4}$" },
+        { id: "b", label: "$\\frac{1}{6}$, because 6 is bigger than 4" }, // THE classic error
+        { id: "c", label: "They are equal — both have 1 on top" },
+        { id: "d", label: "You cannot compare them" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Picture two rotis of the same size. Cut one into **4** pieces and the other into **6**.",
+        "",
+        "Which single piece is bigger? The one from the roti cut into fewer pieces.",
+        "",
+        "$$\\frac{1}{4} > \\frac{1}{6}$$",
+        "",
+        "This feels backwards, and it catches nearly everyone the first time. A bigger bottom number means **more** parts, and more parts means each one is **smaller**.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d2-q1",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "mcq",
+      stem_md: "Which is bigger, $\\frac{2}{3}$ or $\\frac{3}{5}$?",
+      choices: [
+        { id: "a", label: "$\\frac{2}{3}$" },
+        { id: "b", label: "$\\frac{3}{5}$, because both its numbers are bigger" },
+        { id: "c", label: "They are equal" },
+        { id: "d", label: "You cannot compare them" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Nothing matches here, so make the bottoms the same. Both 3 and 5 divide into **15**:",
+        "",
+        "$$\\frac{2}{3} = \\frac{10}{15} \\qquad \\frac{3}{5} = \\frac{9}{15}$$",
+        "",
+        "Now the pieces are the same size, so count them: 10 fifteenths beats 9 fifteenths.",
+        "",
+        "$$\\frac{2}{3} > \\frac{3}{5}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d2-q2",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: [
+        "$$\\frac{\\square}{5} > \\frac{2}{5}$$",
+        "",
+        "What is the **smallest** whole number that can go in the box?",
+      ].join("\n"),
+      answer_value: "3",
+      solution_md: [
+        "Both fractions are in fifths, so the box just has to beat 2.",
+        "",
+        "The whole numbers bigger than 2 are 3, 4, 5, … and the **smallest** of those is **3**.",
+        "",
+        "$$\\frac{3}{5} > \\frac{2}{5}$$",
+        "",
+        "2 itself does not work, because $\\frac{2}{5}$ is *equal* to $\\frac{2}{5}$, not bigger than it.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d3-q1",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "mcq",
+      stem_md: [
+        "Anil ate $\\frac{3}{4}$ of his roti. Bina ate $\\frac{5}{8}$ of hers.",
+        "",
+        "The rotis were the same size. Who ate more?",
+      ].join("\n"),
+      choices: [
+        { id: "a", label: "Anil" },
+        { id: "b", label: "Bina, because 5 is more than 3 and 8 is more than 4" },
+        { id: "c", label: "They ate the same amount" },
+        { id: "d", label: "You cannot tell without knowing the size of the roti" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Quarters and eighths are different sized pieces, so make them match. 4 divides into 8:",
+        "",
+        "$$\\frac{3}{4} = \\frac{6}{8}$$",
+        "",
+        "Now compare eighths with eighths:",
+        "",
+        "$$\\frac{6}{8} > \\frac{5}{8}$$",
+        "",
+        "**Anil ate more.**",
+        "",
+        "Option (b) is the trap. A fraction is one amount, not two separate numbers — you cannot compare the tops and bottoms separately.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d3-q2",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md: [
+        "$$\\frac{\\square}{9} < \\frac{2}{3}$$",
+        "",
+        "What is the **largest** whole number that can go in the box?",
+      ].join("\n"),
+      answer_value: "5",
+      solution_md: [
+        "First put both fractions in ninths. The bottom of $\\frac{2}{3}$ goes from 3 to 9, so multiply by 3:",
+        "",
+        "$$\\frac{2}{3} = \\frac{6}{9}$$",
+        "",
+        "So the box must make a fraction **smaller than** $\\frac{6}{9}$ — the number in it has to be less than 6.",
+        "",
+        "The largest whole number less than 6 is **5**.",
+        "",
+        "$$\\frac{5}{9} < \\frac{6}{9}$$",
+        "",
+        "6 itself does not work: $\\frac{6}{9}$ is equal to $\\frac{2}{3}$, not less than it.",
+      ].join("\n"),
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // CONCEPT 4 — adding-subtracting-fractions
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c6-add-d1-q1",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "$$\\frac{1}{5} + \\frac{2}{5}$$",
+      answer_value: "3/5",
+      solution_md: [
+        "Both fractions are in fifths, so the pieces are the same size. Add the tops and keep the bottom:",
+        "",
+        "$$\\frac{1}{5} + \\frac{2}{5} = \\frac{3}{5}$$",
+        "",
+        "The bottom number stays 5. It is not telling you how much — it is telling you **what size piece** you are counting.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d1-q2",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "$$\\frac{4}{7} - \\frac{1}{7}$$",
+      answer_value: "3/7",
+      solution_md: [
+        "Same bottom number, so subtract the tops and keep the bottom:",
+        "",
+        "$$\\frac{4}{7} - \\frac{1}{7} = \\frac{3}{7}$$",
+        "",
+        "Four sevenths take away one seventh leaves three sevenths — you are just counting pieces of the same size.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d2-q1",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "fraction",
+      stem_md: "$$\\frac{1}{2} + \\frac{1}{4}$$",
+      answer_value: "3/4",
+      solution_md: [
+        "Halves and quarters are different sized pieces, so make them match first.",
+        "",
+        "$$\\frac{1}{2} = \\frac{2}{4}$$",
+        "",
+        "Now both are quarters:",
+        "",
+        "$$\\frac{2}{4} + \\frac{1}{4} = \\frac{3}{4}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d2-q2",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "mcq",
+      stem_md: [
+        "Rahul worked out $\\frac{1}{2} + \\frac{1}{3}$ and got $\\frac{2}{5}$.",
+        "",
+        "What went wrong?",
+      ].join("\n"),
+      choices: [
+        {
+          id: "a",
+          label:
+            "He added the tops and the bottoms. The bottoms must be made the same first",
+        },
+        { id: "b", label: "Nothing — $\\frac{2}{5}$ is correct" },
+        { id: "c", label: "He should have multiplied instead of adding" },
+        { id: "d", label: "He should have got $\\frac{2}{6}$" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Rahul added straight across: $1 + 1 = 2$ on top and $2 + 3 = 5$ on the bottom. That is the most common fraction mistake there is.",
+        "",
+        "You cannot add halves to thirds any more than you can add apples to mangoes. Make the pieces the same size first — sixths work for both:",
+        "",
+        "$$\\frac{1}{2} = \\frac{3}{6} \\qquad \\frac{1}{3} = \\frac{2}{6}$$",
+        "",
+        "$$\\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}$$",
+        "",
+        "One quick check: $\\frac{1}{2}$ on its own is already bigger than $\\frac{2}{5}$, so adding something to it could not possibly give $\\frac{2}{5}$.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d3-q1",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "fraction",
+      stem_md: "$$\\frac{5}{6} - \\frac{1}{4}$$",
+      answer_value: "7/12",
+      solution_md: [
+        "Sixths and quarters do not match. Find a bottom number both go into — **12** works:",
+        "",
+        "$$\\frac{5}{6} = \\frac{10}{12} \\qquad \\frac{1}{4} = \\frac{3}{12}$$",
+        "",
+        "Now subtract the tops:",
+        "",
+        "$$\\frac{10}{12} - \\frac{3}{12} = \\frac{7}{12}$$",
+        "",
+        "7 and 12 share no common factor, so $\\frac{7}{12}$ is already in its simplest form.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d3-q2",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 3,
+      answer_type: "fraction",
+      stem_md: [
+        "A jug has $\\frac{3}{4}$ litre of milk. Amma pours $\\frac{1}{3}$ litre into the tea.",
+        "",
+        "How much milk is left in the jug?",
+      ].join("\n"),
+      answer_value: "5/12",
+      solution_md: [
+        "This is a subtraction: what was there, minus what was poured out.",
+        "",
+        "Quarters and thirds do not match, but twelfths work for both:",
+        "",
+        "$$\\frac{3}{4} = \\frac{9}{12} \\qquad \\frac{1}{3} = \\frac{4}{12}$$",
+        "",
+        "$$\\frac{9}{12} - \\frac{4}{12} = \\frac{5}{12}$$",
+        "",
+        "So **$\\frac{5}{12}$ litre** of milk is left in the jug.",
+      ].join("\n"),
+    },
+
+    // ═════════════════════════════════════════════════════════════════════════
+    // CHAPTER QUIZ — 2 per concept, no hints shown at quiz time (SCREENS.md).
+    // Fresh questions, not a replay of practice: a quiz that reuses the practice
+    // set measures memory of those items, not understanding of the concept.
+    // ═════════════════════════════════════════════════════════════════════════
+    {
+      slug: "c6-quiz-fb-1",
+      concept_slug: "fraction-basics",
+      kind: "quiz",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md:
+        "A class has 30 students. $\\frac{2}{5}$ of them are girls.\n\nHow many girls are in the class?",
+      answer_value: "12",
+      solution_md: [
+        "Split the 30 students into **5** equal groups:",
+        "",
+        "$$30 \\div 5 = 6$$",
+        "",
+        "Each group is 6 students. Take **2** of those groups:",
+        "",
+        "$$2 \\times 6 = 12$$",
+        "",
+        "So there are **12** girls.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-fb-2",
+      concept_slug: "fraction-basics",
+      kind: "quiz",
+      difficulty: 3,
+      answer_type: "integer",
+      stem_md:
+        "$\\frac{3}{8}$ of a rope is 12 metres long.\n\nHow long is the whole rope, in metres?",
+      answer_value: "32",
+      solution_md: [
+        "3 parts of the rope measure 12 m, so one part is:",
+        "",
+        "$$12 \\div 3 = 4 \\text{ m}$$",
+        "",
+        "The whole rope is 8 parts:",
+        "",
+        "$$8 \\times 4 = 32 \\text{ m}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-eqf-1",
+      concept_slug: "equivalent-fractions",
+      kind: "quiz",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "$\\frac{2}{5} = \\frac{\\square}{20}$\n\nWhat number goes in the box?",
+      answer_value: "8",
+      solution_md: [
+        "The bottom went from 5 to 20, so it was multiplied by 4.",
+        "",
+        "Do the same on top: $2 \\times 4 = 8$.",
+        "",
+        "$$\\frac{2}{5} = \\frac{8}{20}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-eqf-2",
+      concept_slug: "equivalent-fractions",
+      kind: "quiz",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "$\\frac{20}{35} = \\frac{4}{\\square}$\n\nWhat number goes in the box?",
+      answer_value: "7",
+      solution_md: [
+        "The top went from 20 to 4, so it was **divided** by 5.",
+        "",
+        "Divide the bottom by 5 as well:",
+        "",
+        "$$35 \\div 5 = 7$$",
+        "",
+        "$$\\frac{20}{35} = \\frac{4}{7}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-cmp-1",
+      concept_slug: "comparing-fractions",
+      kind: "quiz",
+      difficulty: 1,
+      answer_type: "mcq",
+      stem_md: "Which is **smaller**, $\\frac{2}{9}$ or $\\frac{2}{7}$?",
+      choices: [
+        { id: "a", label: "$\\frac{2}{9}$" },
+        { id: "b", label: "$\\frac{2}{7}$" },
+        { id: "c", label: "They are equal — both have 2 on top" },
+        { id: "d", label: "You cannot compare them" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Both have 2 on top, so compare the bottoms. Cutting a whole into **9** parts makes smaller pieces than cutting it into 7.",
+        "",
+        "Two of the smaller pieces is less than two of the bigger ones:",
+        "",
+        "$$\\frac{2}{9} < \\frac{2}{7}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-cmp-2",
+      concept_slug: "comparing-fractions",
+      kind: "quiz",
+      difficulty: 2,
+      answer_type: "mcq",
+      stem_md: "Which is bigger, $\\frac{5}{6}$ or $\\frac{7}{9}$?",
+      choices: [
+        { id: "a", label: "$\\frac{5}{6}$" },
+        { id: "b", label: "$\\frac{7}{9}$, because 7 is bigger than 5" },
+        { id: "c", label: "They are equal" },
+        { id: "d", label: "You cannot compare them" },
+      ],
+      answer_value: "a",
+      solution_md: [
+        "Make the bottoms the same. Both 6 and 9 divide into **18**:",
+        "",
+        "$$\\frac{5}{6} = \\frac{15}{18} \\qquad \\frac{7}{9} = \\frac{14}{18}$$",
+        "",
+        "Now count eighteenths:",
+        "",
+        "$$\\frac{15}{18} > \\frac{14}{18}$$",
+        "",
+        "So $\\frac{5}{6}$ is bigger — only just.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-add-1",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "quiz",
+      difficulty: 2,
+      answer_type: "fraction",
+      stem_md: "$$\\frac{2}{3} + \\frac{1}{6}$$",
+      answer_value: "5/6",
+      solution_md: [
+        "Thirds and sixths do not match, but 3 divides into 6, so rewrite the first fraction:",
+        "",
+        "$$\\frac{2}{3} = \\frac{4}{6}$$",
+        "",
+        "Now add the tops:",
+        "",
+        "$$\\frac{4}{6} + \\frac{1}{6} = \\frac{5}{6}$$",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-quiz-add-2",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "quiz",
+      difficulty: 3,
+      answer_type: "fraction",
+      stem_md: [
+        "Ria read $\\frac{1}{3}$ of a book on Monday and $\\frac{2}{5}$ of it on Tuesday.",
+        "",
+        "What fraction of the book has she read altogether?",
+      ].join("\n"),
+      answer_value: "11/15",
+      solution_md: [
+        "Thirds and fifths do not match. Both 3 and 5 divide into **15**:",
+        "",
+        "$$\\frac{1}{3} = \\frac{5}{15} \\qquad \\frac{2}{5} = \\frac{6}{15}$$",
+        "",
+        "$$\\frac{5}{15} + \\frac{6}{15} = \\frac{11}{15}$$",
+        "",
+        "So Ria has read $\\frac{11}{15}$ of the book — not quite three quarters.",
+      ].join("\n"),
+    },
+  ],
+};
+
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * WHY EVERY FILL-IN-THE-BOX HERE IS `integer` AND NOT `fraction`
+ *
+ * D3's grader reduces fractions to lowest terms, so `2/4`, `1/2` and `0.5` all
+ * grade correct against `1/2`. That rule is right — a learner who writes `2/4`
+ * understood the maths.
+ *
+ * But it silently destroys a whole category of NCERT question:
+ *
+ *   "Write 6/8 in its lowest terms."  →  learner types 6/8  →  graded CORRECT
+ *
+ * Reducing IS the skill being tested, and the grader reduces for them. The
+ * question becomes impossible to fail.
+ *
+ * Fix, at no cost: ask for the missing NUMBER, not the fraction. `18/24 = 3/□`
+ * with answer_type `integer` tests the identical skill and grades exactly.
+ *
+ * RULE: never author a question whose point is producing lowest terms with
+ * answer_type `fraction`. Use an `integer` fill-in-the-box instead.
+ *
+ * The `fraction` answers that DO appear here (`3/5`, `7/12`, `11/15`) are all
+ * arithmetic results, where any equivalent form the learner writes is genuinely a
+ * correct answer. That is the grader working as intended, not a hole.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */

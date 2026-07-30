@@ -11,6 +11,11 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    // The seed and key-check scripts run under Node 24's native type stripping,
+    // which resolves imports at runtime and therefore needs the real `.ts`
+    // extension. Safe with noEmit: nothing is compiled, so nothing ships a
+    // dangling .ts import. It keeps `npm run seed` free of a build step and of tsx.
+    "allowImportingTsExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [

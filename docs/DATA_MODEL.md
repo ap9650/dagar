@@ -24,12 +24,18 @@ touches the grading path.
 
 **`concepts`** — `id` · `chapter_id` (FK) · `name` · `slug` · `order_index` · `i18n` (jsonb)
 
-**`lessons`** — `id` · `chapter_id` (FK) · `concept_id` (FK) · `order_index` · `title` · `body_md` (KaTeX allowed) · `est_minutes` · `i18n` (jsonb)
+**`lessons`** — `id` · `slug` (unique, nullable — seed key) · `chapter_id` (FK) · `concept_id` (FK) · `order_index` · `title` · `body_md` (KaTeX allowed) · `est_minutes` · `i18n` (jsonb)
 
-**`questions`** — `id` · `concept_id` (FK) · `chapter_id` (FK) · `kind` (`practice`|`quiz`) · `difficulty` (1–3) · `stem_md` · `answer_type` (`mcq`|`integer`|`fraction`|`decimal`|`expression`) · `answer_value` (text, canonical) · `choices` (jsonb, mcq only) · `solution_md` · `i18n` (jsonb — `stem_md`/`solution_md`/`choices` only, **never `answer_value`**)
+**`questions`** — `id` · `slug` (unique, nullable — seed key) · `concept_id` (FK) · `chapter_id` (FK) · `kind` (`practice`|`quiz`) · `difficulty` (1–3) · `stem_md` · `answer_type` (`mcq`|`integer`|`fraction`|`decimal`|`expression`) · `answer_value` (text, canonical) · `choices` (jsonb, mcq only) · `solution_md` · `i18n` (jsonb — `stem_md`/`solution_md`/`choices` only, **never `answer_value`**)
 
 > `answer_value` is **never** sent to the client before an attempt is graded.
 > Grade server-side in a route handler. See `docs/DECISIONS.md` D3.
+
+`slug` on `lessons` and `questions` is the **upsert target for `npm run seed`** (0010).
+Without it a second seed run duplicates every lesson and question, which splits one
+learner's mastery across two copies of the same concept. Nullable because it is a
+seed key, not a user-facing identifier — and `unique` treats NULLs as distinct, so
+content created any other way is unaffected.
 
 ## Learner state
 
@@ -110,6 +116,8 @@ Grading and solutions come from a server route using the service role.
 0007_observability.sql       ai_calls, tutor_feedback, ai_spend_today()
 0008_functions.sql           recompute_concept_mastery(), extend_streak(), award_milestones()
 0009_fix_award_milestones.sql  fixes 22P02 in award_milestones (array append)
+0010_seed_slugs.sql          slug on lessons + questions (idempotent seed),
+                             questions_public rebuilt to expose slug
 ```
 
 **Applied to the remote database 2026-07-30.** Filenames must be `NNNN_name.sql` with
