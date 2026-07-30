@@ -1,0 +1,277 @@
+# Saathi — Build Plan
+
+## Calendar — revised 2026-07-29 for a Thursday start
+
+| Date | Day | Focus | Hours |
+|---|---|---|---|
+| **Thu 30 Jul** | Day 0 **+** Day 1 | Setup, **first deploy**, auth, content, dashboard, lesson | **long — 10–12h** |
+| **Fri 31 Jul** | Day 2 | Intelligence layer — grading, practice, tutor, quiz | full |
+| **Sat 1 Aug** | Day 3 | Parent, observability, security, Hindi · **feature freeze at end of day** | full |
+| **Sun 2 Aug** | Day 4 | Finish slips, Hindi read-through, **rehearse**, demo | until demo |
+
+### What changed
+
+The original plan started Day 0 on **Wed 29 Jul**. Starting Thursday compresses the
+build by a day — but the deadline is **Sunday 2 Aug, 11pm**, which makes Sunday a
+full working day rather than a demo morning. Thursday absorbs Day 0 + Day 1; the
+rest shifts intact.
+
+**Nothing is cut.** Full scope stands: three chapters, **Hindi for all three classes**,
+chapter quiz, mentor request, WhatsApp, full metrics page, Playwright E2E. The cut
+list at the bottom is a **contingency, not a plan** — it exists so that if Saturday
+night goes badly you cut with a plan instead of panicking.
+
+## Two deliverables, not one
+
+| Due Sun 2 Aug 11pm | Where the content already exists |
+|---|---|
+| **Working deployed app** | This plan |
+| **Deck** | Mostly written already — see below |
+
+The deck is **assembly, not authoring**. Almost every slide already exists:
+
+| Slide | Source |
+|---|---|
+| Problem, persona | `PRD.md` §2, §7 |
+| Solution, MVP scope | `PRD.md` §3 · `DECISIONS.md` D1 |
+| Architecture | `docs/architecture.png` — already generated |
+| Market, TAM/SAM/SOM | `MARKET_AND_PRICING.md` |
+| Monetisation | `DECISIONS.md` D14 |
+| Hypotheses + how we measure | `DECISIONS.md` D12 |
+| What we'd do next | D16 / D4 Phase 2 sections |
+
+Budget **~90 minutes**, not half a day. Build it Saturday evening after feature
+freeze while the app settles, so Sunday stays free for polish and rehearsal.
+
+## Three rules that protect what is left
+
+**1. Deploy on Thursday, not Saturday.** Push a barely-working app to Vercel on the
+first day with every environment variable set. The classic buildathon failure is
+discovering on demo day that `ANTHROPIC_API_KEY` was never added to Vercel — five
+minutes to find on Day 0, fatal on Sunday. Redeploy every slice, so "it works on
+Vercel" is continuously true rather than a Sunday gamble.
+
+**2. Feature freeze at the end of Saturday.** Unchanged, and now load-bearing. After
+that: bug fixes, Hindi review and rehearsal only. Work expands to fill the time
+available — the freeze is the only thing keeping Sunday from becoming another build
+day and leaving you demoing something you have never practised.
+
+**3. Never leave a half-built vertical slice overnight.** A finished lesson flow
+beats four half-wired screens. This matters more with no buffer: a half-slice at
+midnight Saturday is a broken demo on Sunday.
+
+> **Sunday is not for features.** Three timed run-throughs, a finished deck and a
+> working fallback plan raise the score more than anything you could still build.
+
+## If Saturday night arrives and you are behind
+
+Do not push into Sunday. Cut in this order and protect the rehearsal:
+
+1. Chapter quiz (2.4) → practice alone still proves the learning loop
+2. Mentor request (2.6) → the struggle triggers can be described, not shown
+3. WhatsApp delivery (3.2) → fall back to the in-app parent view and say the adapter
+   is one config change from live (true, and an architecture strength)
+
+Cutting on Saturday with a plan beats discovering on Sunday without one.
+
+---
+
+## Day 0 — Thu 30 Jul, first ~1 hour — Setup
+
+Do this before breakfast if you can. Day 1 starts the moment it is done, **same day**.
+
+| # | Step | Command / prompt |
+|---|---|---|
+| 0.1 | Bootstrap Next.js | ✅ **Done 30 Jul.** Next 16.2.12. Note: `create-next-app .` fails here because the folder is `Saathi` (npm names must be lowercase) — scaffolded to a temp dir named `saathi` and rsynced in, excluding its own `CLAUDE.md`. |
+| 0.2 | Install deps | `npm i @supabase/supabase-js @supabase/ssr @anthropic-ai/sdk zod katex react-katex twilio next-intl` |
+| 0.3 | Supabase project | Create at supabase.com → copy URL, anon key, service role key into `.env.local` |
+| 0.4 | Anthropic key | console.anthropic.com → `ANTHROPIC_API_KEY` in `.env.local` |
+| 0.5 | Git | `git init && git add -A && git commit -m "scaffold"` |
+| 0.6 | **First deploy** | `vercel --prod` — barely-working is fine. Then add **every** env var in the Vercel dashboard and redeploy. Confirm the live URL loads. |
+
+**Prompts to run in Claude Code, in order:**
+> 1. Use the saathi-db skill. Write migrations 0001–0007 exactly per docs/DATA_MODEL.md, with RLS enabled and policies on every table. Then set up lib/supabase/{server,client,admin}.ts.
+
+> 2. Use the saathi-security skill. Produce docs/security/security-plan.md, add **proxy.ts** (Next 16 renamed middleware → proxy) for session-cookie refresh and an optimistic redirect only, and set up lib/security/ with rate limiting and input validation. **The real auth boundary is the (learn)/(parent) layout server components and every route handler — Next 16 docs explicitly say proxy must not be used as a session-management or authorization solution.**
+
+> 3. Use the saathi-test skill. Set up Vitest and Playwright with the tests/unit, tests/integration and e2e folders, and add the test scripts to package.json.
+
+> 4. Use the saathi-design skill. Put the colour, type and spacing tokens into tailwind.config.ts and app/globals.css, load Inter + Noto Sans Devanagari, and build the shared ui/ primitives (Button, Card, Input, ProgressBar, Badge) against them.
+
+> 5. Use the saathi-feature skill. Set up next-intl with en + hi locale files and the t(row, field, locale) helper for i18n jsonb resolution per D16. Every UI string goes through the dictionary from the very first screen — retrofitting hardcoded strings later is the expensive path.
+
+Security and tests are scaffolded on Day 0 **on purpose**. Retrofitting either into
+a finished app costs more than building around them from the start.
+
+---
+
+## Day 1 — Thu 30 Jul, straight after Day 0 — Curriculum spine + learning loop
+
+**The heavy day.** Everything below lands today. Start early.
+
+The goal by end of day: **a learner can sign up, pick a chapter, read a lesson, and
+the app remembers.**
+
+| # | Slice | Prompt |
+|---|---|---|
+| 1.1 | Auth + profiles | *Use the saathi-design and saathi-feature skills. Build the onboarding flow exactly as specified in docs/SCREENS.md Flow 1 — /welcome language picker, then /login (Google via Supabase OAuth primary, email fallback), then /onboarding/grade. Locale is chosen before there is a user row, so hold it in localStorage and write it to profiles.locale when the profile is created. Emit learner_registered.* **Spec: `docs/specs/auth-onboarding.md`** |
+| 1.1a | **Settings screen** | *Use the saathi-design and saathi-feature skills. Build /settings with the language toggle (same picker component as onboarding), grade, display name and sign-out. Small screen, but without it a learner who picks the wrong language at onboarding is stuck.* **Spec: `docs/specs/auth-onboarding.md`** |
+| 1.1b | PWA shell | *Use the saathi-feature skill. Add manifest.json with icons and display:standalone, a service worker for the app shell, and an Add-to-Home-Screen prompt per D15.* **Spec: `docs/specs/pwa-shell.md`** |
+| 1.2 | Seed content | *Use the saathi-content skill. Author Class 6 Fractions — 4 concepts, 4 micro-lessons, and a question bank with 2 questions per difficulty per concept. Verify every answer key.* |
+| 1.3 | Curriculum dashboard | *Use the saathi-design and saathi-feature skills. Build the curriculum dashboard as a **journey/path layout** per D17 (not a flat list): chapters for the learner's grade, visible you-are-here, lesson progress, and the recommended next lesson from lib/learning/adaptivity.ts.* **Spec: `docs/specs/curriculum-dashboard.md`** |
+| 1.4 | Micro-lesson screen | *Use the saathi-design and saathi-feature skills. Build the micro-lesson screen with KaTeX rendering, in-lesson progress dots (D17), mark-complete, lesson_started/lesson_completed events, and streak update.* **Spec: `docs/specs/micro-lesson.md`** |
+| 1.5 | Seed remaining 2 chapters | *Use the saathi-content skill. Author Class 7 Integers and Class 8 Solving Linear Equations to the same standard. Set `ncert_ref` on every chapter citing both NCERT editions per D1.* |
+| 1.6 | **Hindi content** | *Use the saathi-content skill. Translate **all three chapters — Classes 6, 7 and 8** — into the i18n jsonb with Claude, then verify every one by reading — NCERT maths terms, Arabic numerals, KaTeX intact. Never translate answer_value.* **Spec: `docs/specs/i18n.md`** |
+| 1.6b | **Hindi mechanical check** | *Use the saathi-content skill. Write `scripts/check-hindi.ts`: for every row with an `i18n.hi` entry, flag Devanagari numerals (१२३), KaTeX blocks that differ from the English source, Latin script mid-sentence, and missing NCERT maths terms. Print a table. Exit non-zero on any hit.* ~20 min. Catches everything mechanical so the Day 4 read-through is about **tone only**. |
+
+**End-of-day check:** sign up as a Class 6 learner, complete a lesson, reload — progress persisted, streak = 1.
+
+---
+
+## Day 2 — Fri 31 Jul — Intelligence layer (the differentiator)
+
+By end of day: **the full demo path works end to end.**
+
+| # | Slice | Prompt |
+|---|---|---|
+| 2.1 | Grading engine | *Use the saathi-feature skill. Build lib/learning/grading.ts per DECISIONS D3 — fraction/decimal/integer/mcq/expression equivalence. `2/4`, `1/2` and `0.5` all grade correct against `1/2`.* **Spec: `docs/specs/guided-practice.md`** |
+| 2.1b | **Grading tests** | *Use the saathi-test skill. Write Vitest unit tests for grading covering every answer_type, the equivalence cases, and the invalid inputs.* **Do not skip this one.** A grading bug fails silently and tells a learner they are wrong when they are right. **Spec: `docs/specs/guided-practice.md`** |
+| 2.1c | **Verify answer keys** | *Use the saathi-content skill. Write `scripts/verify-answer-keys.ts`: for every seeded question, send only the stem to Claude Haiku to solve cold, compare its answer to the stored `answer_value` through `lib/learning/grading.ts`, and print a table of disagreements. Never send the stored answer in the prompt.* Runs here, not Day 1, because it needs `grade()`. Review only what it flags. |
+| 2.2 | Guided practice | *Use the saathi-feature skill. Build guided practice: server-side grading, hint escalation, difficulty stepping (2 right up / 2 wrong down), instant feedback. Answer keys never reach the client.* **Spec: `docs/specs/guided-practice.md`** |
+| 2.3 | AI Tutor | *Use the saathi-ai skill. Build the AI Tutor: streaming Claude Sonnet 5, grounded in the current lesson body and concept mastery, hints before answers, persist both turns, emit ai_question_asked.* **Spec: `docs/specs/ai-tutor.md`** |
+| 2.4 | Mastery + chapter quiz | *Use the saathi-feature skill. Build lib/learning/mastery.ts per D5 and the chapter quiz: fixed set, no hints, mastery band on submit, recompute concept_mastery.* **Spec: `docs/specs/chapter-quiz.md`** |
+| 2.5 | Progress, streaks, milestones + **daily goal** | *Use the saathi-feature skill. Build the progress screen, lib/learning/streaks.ts per D7 (Asia/Kolkata, one grace day per rolling 7, server-side only), and lib/learning/milestones.ts per D7b — award server-side and idempotently, show earned and unearned, emit milestone_earned. Add the daily goal ring per D17 — same completion rule as the streak, closable in one session.* **Spec: `docs/specs/progress-streaks.md`** |
+| 2.6 | Struggle → mentor request | *Use the saathi-feature skill. Implement the three D6 struggle triggers and the mentor request flow capturing full learner context.* **Spec: `docs/specs/mentor-request.md`** |
+
+**End-of-day check:** full journey — dashboard → lesson → tutor → practice → quiz → progress — works on a phone.
+
+---
+
+## Day 3 — Sat 1 Aug — Parent, polish · **feature freeze at end of day**
+
+| # | Slice | Prompt |
+|---|---|---|
+| 3.1 | Parent link | *Use the saathi-feature skill. Build the 6-char parent link code flow and the read-only parent view per D2. Parent locale defaults to the learner's on claim and is switchable in the parent view (D16). Verify a parent cannot write and cannot read an unlinked student.* |
+| 3.2 | Notify layer | *Use the saathi-feature skill. Build lib/notify with the channel-agnostic sendParentSummary interface, a Twilio WhatsApp sandbox adapter, an in-app adapter, and an SMS stub documented as DLT-blocked.* |
+| 3.3 | Weekly summary | *Use the saathi-ai skill. Generate the weekly parent summary with Haiku 4.5 from real progress data — lead with any milestones earned that week (D7b) — in the **parent's** locale, delivered on a Vercel cron, with the tracking token for parent_summary_viewed.* |
+| 3.4 | Metrics + health page | *Use the saathi-analytics and saathi-observe skills. Build /admin/metrics from the events table (MVP success criteria) plus a health panel from ai_calls — cost/day, tutor TTFT p75, cache-read ratio, error rate.* |
+| 3.5 | AI logging + feedback | *Use the saathi-observe skill. Add lib/analytics/ai-log.ts writing one ai_calls row per model call (never failing the request), and a thumbs up/down control on every tutor response writing to tutor_feedback.* |
+| 3.6 | Security + RLS tests | *Use the saathi-security skill to review every route and table, then the saathi-test skill to write integration tests that attempt the RLS violations and assert they fail.* |
+| 3.7 | Hindi pass | *Use the saathi-design skill. Walk every screen in Hindi at 360px — Devanagari at 18px/1.75, no clipped buttons (Hindi runs 10–20% longer), no untranslated strings. Verify the tutor and the parent summary both reply in Hindi.* |
+| 3.8 | E2E + a11y + mobile | *Use the saathi-test skill for one Playwright test covering the demo path, then the saathi-ship skill gates 3 and 4.* |
+| 3.9 | **Draft the deck** | *~90 min, after feature freeze. Assemble from PRD §2/§3/§7, docs/architecture.png, MARKET_AND_PRICING.md, DECISIONS D12 and D14. Do not write new content — it already exists.* |
+| 3.10 | Demo data + deploy | *Use the saathi-ship skill. Seed demo accounts with realistic partial progress, run all gates, deploy to Vercel.* |
+
+---
+
+## Day 4 — Sun 2 Aug — Finish, rehearse, demo
+
+A full working day — deadline is **11pm**. Catch-up, Hindi, rehearsal, deck and
+submission. Work 4.1–4.8 **in order** and stop adding features.
+
+**Feature freeze is in effect.** No new features. In order:
+
+| # | Task | Notes |
+|---|---|---|
+| 4.1 | **Finish whatever slipped** | Most builds need this. **Hard stop at 4pm** — after that, cut it and demo around it rather than debugging into the submission window. |
+| 4.2 | **Hindi read-through** — the one manual content task | Run `npm run check:hindi` first so everything mechanical is already fixed, then read every lesson and question stem for **tone only**: does this sound like the NCERT textbook, and would a 12-year-old read it easily? ~65–80 min for all three chapters. **Show it to one Hindi-speaking child or parent if you can** — ten minutes of that beats every rule in the guide. |
+| 4.3 | Full journey on a real phone against the **live** URL | Signup → lesson → tutor → practice → quiz → progress → parent link, in **both languages**. Deploy itself is routine by now — you have been deploying since Day 0. |
+| 4.4 | Seed demo accounts | Realistic partial progress: a 4-day streak, one chapter part-done, two weak concepts |
+| 4.5 | **Rehearse the demo three times, out loud, timed** | Most under-valued hour of the build — and the first thing that gets skipped when a buffer disappears. Do not skip it. |
+| 4.6 | Write the fallback plan | What you say and show if wifi dies or the tutor times out mid-demo |
+| 4.7 | **Finish the deck** | Drafted Saturday (3.6b). Add real screenshots from the deployed app and the actual metrics numbers. |
+| 4.8 | **Submit — app URL + deck** | Deadline **Sun 2 Aug, 11pm**. Submit by 9pm; the last two hours are for the thing that goes wrong. |
+
+If Sunday runs ahead of schedule, **rehearse again and polish the deck**. Do not start anything new on the last day — an untested feature added hours before submission is how a working demo breaks.
+
+---
+
+## Cut list — contingency only, nothing is pre-cut
+
+**Do not cut anything preemptively.** This list exists so that *if* Saturday night
+goes badly you cut with a plan rather than panicking. Sacrifice in this order:
+
+| Order | Cut | What you still have |
+|---|---|---|
+| 1 | `/admin/metrics` (3.4) | Nice demo asset, zero user value — the events still record |
+| 2 | Playwright E2E (3.8) | Vitest unit tests, which catch more per minute |
+| 3 | WhatsApp delivery (3.2) | In-app parent view; the adapter is one config change from live |
+| 4 | Chapter quiz (2.4) | Practice alone proves the learning loop |
+| 5 | Class 8 content entirely (1.5) | Two grades — costs the "full range" story, nothing else |
+
+**Never cut, at any point:**
+
+- Dashboard, micro-lesson, AI tutor, guided practice — that four-step loop *is* the
+  product. Everything else is evidence for it.
+- **Hindi UI strings and the Hindi tutor.** ~2.5h combined, and they are the
+  accessibility story. Cutting them contradicts the product's premise.
+
+## After the demo — the first real week
+
+The build plan ends at deploy; the product doesn't. In priority order:
+
+1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
+   rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
+   an untested deploy.
+2. **Check the health queries daily** — cache-read ratio and cost/learner first.
+   Caching silently not working is the single most likely cost surprise.
+3. **Read the thumbs-down responses.** Ten of them will teach you more about the
+   tutor than any dashboard.
+4. **Find the lesson generating the most tutor questions.** It is usually a badly
+   written lesson, not a hard concept.
+5. **Start DLT registration.** Multi-day, needs a registered business entity, and it
+   gates both parent SMS and phone-OTP login. Nothing in the code changes when it
+   clears — start the clock early (D4 Phase 2).
+
+Then the two Phase 2 workstreams already decided: **WhatsApp Cloud API** off the
+sandbox (D4), and **natively authored Hindi lessons** with the content-model change
+that requires (D16). Neither is a demo-week task.
+
+## Demo narrative (5 min)
+
+1. **Problem, 30s** — underserved learner, no tutor, parent can't help.
+2. **Learner journey, 2 min** — dashboard → lesson → ask the tutor a genuinely
+   confused question → tutor hints instead of answering → practice adapts → quiz
+   shows mastery.
+3. **The differentiator, 1 min** — show the tutor *knowing* which concept is weak.
+   This is what separates Saathi from ChatGPT with a syllabus.
+4. **Parent, 1 min** — WhatsApp summary arriving on a real phone, live.
+   > **Setup, not optional:** the demo phone must send `join <code>` to the Twilio
+   > sandbox **on the day**. The sandbox session expires after 3 days and free-form
+   > sends need the 24h reply window (D4) — a phone that joined on Friday will
+   > silently fail on Sunday. Re-join immediately before you present, and keep the
+   > in-app `/parent` view open in a second tab as the fallback.
+5. **Validation, 30s** — the metrics page. You built the measurement, not just the features.
+
+## Constraints worth naming out loud
+
+Judges rate "understood the constraint" far above "avoided the topic." Each of these
+is a real limit we hit, researched, and designed around — say them as decisions, not
+apologies. Two or three is plenty; do not recite the list.
+
+**WhatsApp** — *"WhatsApp is where these parents are, so that's what we built for.
+We're on Twilio's sandbox, which expires a parent's session after three days and
+won't allow custom templates — fine for this demo, structurally unable to carry a
+weekly summary. So the in-app parent view is the real channel for our pilot, and
+WhatsApp Business is gated on Meta verification, which is paperwork, not
+engineering. The notify layer is channel-agnostic: in-app, WhatsApp and SMS are
+three adapters behind one interface."*
+
+**SMS and phone login** — *"India's TRAI mandates DLT registration for any automated
+SMS. That blocks both parent SMS and phone OTP login, so Google Sign-In is primary —
+on a shared Android phone it's already signed in. The SMS adapter is written and
+stubbed; it's one config change when DLT clears."*
+
+**Distribution** — *"It's an installable PWA, not an APK. Play Store needs a 14-day
+closed test with 12 testers — longer than the build. The same PWA wraps into a
+Trusted Web Activity for the store later, with no rewrite."*
+
+**Curriculum** — *"NCERT is mid-rollout of Ganita Prakash, and Class 8's linear
+equations chapter no longer exists as a chapter. Both editions are in schools right
+now, and underserved schools get new books last — so we anchored content to the
+concept and cite both editions."*
+
+**Grading** — *"Our grader treats 2/4, 1/2 and 0.5 as the same answer, because a
+learner who writes 2/4 understood it. That breaks any question whose point is
+reducing a fraction — so we changed the question design rather than weakening the
+grader."*
