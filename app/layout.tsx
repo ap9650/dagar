@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Devanagari } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import "./globals.css";
 
 /**
@@ -19,11 +21,15 @@ const notoDevanagari = Noto_Sans_Devanagari({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Saathi",
-  description:
-    "Your learning companion — NCERT mathematics for Classes 6 to 8, in English and Hindi.",
-};
+/**
+ * Metadata goes through the dictionary too. A learner sharing the app over
+ * WhatsApp — which is how this spreads — gets a link preview in the language
+ * they actually read.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("meta");
+  return { title: t("title"), description: t("description") };
+}
 
 export const viewport: Viewport = {
   themeColor: "#0F766E",
@@ -34,17 +40,28 @@ export const viewport: Viewport = {
   // 200% zoom.
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Resolved in i18n/request.ts from the locale cookie. Server-rendered, so a
+  // Hindi learner never sees a flash of English on first paint.
+  const locale = await getLocale();
+
   return (
     <html
-      lang="en"
+      // `lang` is doing real work here, not just accessibility: globals.css hangs
+      // the whole Devanagari type scale (18px / 1.75) off `:lang(hi)`, and the
+      // browser needs it for correct shaping. Both scripts are LTR, so no `dir`.
+      lang={locale}
       className={`${inter.variable} ${notoDevanagari.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {/* No props needed: rendered from a Server Component, the provider
+            inherits locale, messages and time zone from i18n/request.ts. */}
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }

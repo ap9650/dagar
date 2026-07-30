@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "title": "साथी",
+    "description": "तुम्हारा पढ़ाई का साथी — कक्षा 6 से 8 तक का एनसीईआरटी गणित।"
+  },
+
+  "common": {
+    "appName": "साथी",
+    "tagline": "तुम्हारा पढ़ाई का साथी",
+    "continue": "आगे बढ़ो",
+    "back": "पीछे",
+    "cancel": "रहने दो",
+    "close": "बंद करो",
+    "next": "अगला",
+    "done": "हो गया",
+    "skip": "छोड़ो",
+    "save": "सेव करो",
+    "loading": "लोड हो रहा है",
+    "tryAgain": "फिर से कोशिश करो"
+  },
+
+  "welcome": {
+    "chooseLanguage": "अपनी भाषा चुनो",
+    "selected": "चुना गया"
+  },
+
+  "login": {
+    "title": "साथी में स्वागत है",
+    "subtitle": "कक्षा 6 से 8 तक का एनसीईआरटी गणित",
+    "google": "गूगल से आगे बढ़ो",
+    "divider": "या",
+    "emailOption": "ईमेल से आगे बढ़ो",
+    "emailLabel": "ईमेल",
+    "passwordLabel": "पासवर्ड",
+    "submit": "आगे बढ़ो",
+    "createAccount": "नया अकाउंट बनाओ",
+    "haveAccount": "मेरा अकाउंट पहले से है",
+    "firstNameLabel": "तुम्हें क्या बुलाएँ?",
+    "firstNameHint": "बस पहला नाम काफ़ी है। चाहो तो छोड़ दो।",
+    "checkEmail": "अपना ईमेल देखो — साइन इन का लिंक भेजा है।",
+    "failed": "यह नहीं चला। ईमेल और पासवर्ड देखकर फिर से कोशिश करो।"
+  },
+
+  "onboarding": {
+    "gradeTitle": "तुम किस कक्षा में हो?",
+    "gradeOption": "कक्षा {grade}",
+    "gradeHelp": "बाद में सेटिंग्स में बदल सकते हो।"
+  },
+
+  "nav": {
+    "learn": "सीखो",
+    "practice": "प्रैक्टिस",
+    "progress": "प्रगति",
+    "parent": "माता-पिता"
+  },
+
+  "dashboard": {
+    "greeting": "नमस्ते {name}",
+    "greetingNoName": "नमस्ते",
+    "dailyGoalTitle": "आज का लक्ष्य",
+    "dailyGoalHint": "एक लेसन, या पाँच प्रैक्टिस सवाल",
+    "dailyGoalProgress": "{total} में से {done} हो गए",
+    "dailyGoalComplete": "आज का काम पूरा!",
+    "chaptersTitle": "तुम्हारे चैप्टर",
+    "startHere": "यहाँ से शुरू करो",
+    "continueLesson": "आगे बढ़ो",
+    "lessonsProgress": "{total} में से {done} लेसन",
+    "locked": "आगे यह आएगा"
+  },
+
+  "streak": {
+    "days": "{days, plural, =0 {अभी कोई स्ट्रीक नहीं} one {# दिन की स्ट्रीक} other {# दिन की स्ट्रीक}}",
+    "broken": "आज से नया शुरू करते हैं",
+    "grace": "एक दिन का आराम — स्ट्रीक बची हुई है",
+    "extended": "{days, plural, one {लगातार # दिन} other {लगातार # दिन}}"
+  },
+
+  "chapter": {
+    "lessonsTitle": "लेसन",
+    "quizTitle": "चैप्टर क्विज़",
+    "quizStart": "चैप्टर क्विज़ दो",
+    "quizLocked": "पहले लेसन पूरे करो",
+    "lessonNode": "लेसन {number}"
+  },
+
+  "lesson": {
+    "stepOf": "{total} में से {step} स्टेप",
+    "askTutor": "साथी से पूछो",
+    "complete": "समझ गया — आगे बढ़ो",
+    "completed": "लेसन पूरा हुआ",
+    "practiceNext": "इसकी प्रैक्टिस करो",
+    "backToChapter": "चैप्टर पर वापस"
+  },
+
+  "tutor": {
+    "title": "साथी से पूछो",
+    "placeholder": "इस लेसन के बारे में पूछो",
+    "send": "भेजो",
+    "thinking": "साथी सोच रहा है",
+    "suggestionsTitle": "समझ नहीं आ रहा क्या पूछें?",
+    "limitReached": "आज बहुत सवाल हो गए। साथी कल फिर मिलेगा।",
+    "offTopic": "अभी इसी चैप्टर पर रहते हैं।",
+    "failed": "साथी अभी जवाब नहीं दे पाया। फिर से कोशिश करो?"
+  },
+
+  "practice": {
+    "title": "प्रैक्टिस",
+    "questionOf": "{total} में से {number} सवाल",
+    "answerLabel": "तुम्हारा जवाब",
+    "answerHintFraction": "ऐसे लिखो — 1/2",
+    "answerHintInteger": "पूरी संख्या, जैसे 12 या -7",
+    "check": "जवाब जाँचो",
+    "showHint": "एक हिंट देखो",
+    "nextQuestion": "अगला सवाल",
+    "finish": "प्रैक्टिस खत्म करो",
+    "summary": "{total} में से {correct} सही हुए",
+    "summaryEncourage": "हर सवाल की प्रैक्टिस काम आती है।"
+  },
+
+  "feedback": {
+    "correct": "सही! 🎉",
+    "notQuite": "अरे, थोड़ा सा रह गया — ये देखो",
+    "hintTitle": "हिंट",
+    "solutionTitle": "ऐसे होता है",
+    "emptyAnswer": "पहले जवाब लिखो",
+    "tryAgain": "फिर से कोशिश करो"
+  },
+
+  "quiz": {
+    "title": "चैप्टर क्विज़",
+    "intro": "क्विज़ में हिंट नहीं मिलते। आराम से करो — बाद में फिर दे सकते हो।",
+    "start": "क्विज़ शुरू करो",
+    "submit": "क्विज़ जमा करो",
+    "confirmSubmit": "जवाब जमा कर दें?",
+    "result": "{total} में से {correct} सही हुए",
+    "resultEncourage": "इससे साथी को पता चलता है कि तुम्हें किसकी और प्रैक्टिस चाहिए।",
+    "retake": "फिर से दो",
+    "backToChapter": "चैप्टर पर वापस"
+  },
+
+  "progress": {
+    "title": "तुम्हारी प्रगति",
+    "conceptsTitle": "तुम्हारे टॉपिक",
+    "streakTitle": "स्ट्रीक",
+    "milestonesTitle": "बैज",
+    "milestoneLocked": "अभी नहीं",
+    "empty": "एक लेसन पूरा करो, फिर यहाँ तुम्हारी प्रगति दिखेगी।"
+  },
+
+  "mastery": {
+    "needs_revision": "और प्रैक्टिस करो",
+    "developing": "बस थोड़ा और",
+    "mastered": "पक्का हो गया"
+  },
+
+  "milestone": {
+    "earned": "नया बैज!",
+    "first_lesson": "पहला लेसन पूरा",
+    "first_practice": "पहली प्रैक्टिस पूरी",
+    "streak_3": "लगातार 3 दिन",
+    "streak_7": "लगातार 7 दिन",
+    "concept_mastered": "पहला टॉपिक पक्का",
+    "chapter_complete": "चैप्टर पूरा",
+    "chapter_mastered": "चैप्टर पक्का"
+  },
+
+  "mentor": {
+    "ctaTitle": "कोई इंसान समझाए तो?",
+    "ctaBody": "हम यह किसी मेंटर तक पहुँचा सकते हैं।",
+    "ctaAction": "मदद माँगो",
+    "dismiss": "अभी नहीं",
+    "requested": "पहुँचा दिया। कोई जल्दी ही बात करेगा।"
+  },
+
+  "settings": {
+    "title": "सेटिंग्स",
+    "languageTitle": "भाषा",
+    "gradeTitle": "कक्षा",
+    "nameTitle": "तुम्हारा नाम",
+    "inviteTitle": "माता-पिता को जोड़ो",
+    "inviteBody": "यह कोड घर पर दो, ताकि वे देख सकें कि तुम कैसा कर रहे हो।",
+    "inviteCodeLabel": "तुम्हारा कोड",
+    "inviteGenerate": "कोड लो",
+    "inviteExpires": "यह कोड {hours} घंटे चलेगा।",
+    "signOut": "साइन आउट",
+    "signOutConfirm": "साथी से साइन आउट करें?"
+  },
+
+  "parent": {
+    "claimTitle": "अपने बच्चे का कोड डालिए",
+    "claimBody": "उनसे कहिए कि सेटिंग्स में जाकर माता-पिता को जोड़ो चुनें।",
+    "claimCodeLabel": "6 अक्षरों का कोड",
+    "claimSubmit": "जोड़िए",
+    "claimInvalid": "यह कोड नहीं चला। एक बार देखकर फिर कोशिश कीजिए।",
+    "claimExpired": "इस कोड की मियाद खत्म हो गई। नया कोड मँगवाइए।",
+    "title": "{name} का हफ़्ता",
+    "readOnly": "यह सिर्फ़ देखने के लिए है।",
+    "lessonsDone": "{count, plural, =0 {अभी कोई लेसन नहीं} one {# लेसन} other {# लेसन}}",
+    "practiceDone": "{count, plural, =0 {अभी कोई प्रैक्टिस नहीं} one {# प्रैक्टिस सवाल} other {# प्रैक्टिस सवाल}}",
+    "empty": "इस हफ़्ते अभी कोई गतिविधि नहीं",
+    "emptyHelp": "जैसे ही वे कोई लेसन पूरा करेंगे, यहाँ दिख जाएगा।",
+    "languageTitle": "भाषा"
+  },
+
+  "errors": {
+    "generic": "कुछ गड़बड़ हो गई। फिर से कोशिश करो?",
+    "offline": "तुम ऑफलाइन हो। जुड़ते ही साथी इसे सेव कर देगा।",
+    "notFound": "यह पेज नहीं मिला।",
+    "rateLimited": "एक साथ बहुत हो गया। थोड़ा रुककर फिर कोशिश करो।",
+    "backHome": "सीखो पर वापस"
+  }
+}

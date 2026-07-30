@@ -41,7 +41,7 @@ Learner routes live under `app/(learn)/`, parent under `app/(parent)/`.
   │  /welcome   │   LANGUAGE PICKER
   │             │   English  |  हिंदी
   └──────┬──────┘   No text above it that requires reading either language
-         │          Writes locale to localStorage (no account yet)
+         │          Writes locale to the `saathi_locale` cookie (no account yet)
          ▼
   ┌─────────────┐
   │   /login    │   [ Continue with Google ]   ← primary
@@ -67,9 +67,13 @@ reach the language picker (D16). This is the single most important ordering deci
 in the product and the easiest one to get backwards.
 
 **Consequence for implementation:** the picker runs *before* there is a user row, so
-locale lives in `localStorage` first and is written to `profiles.locale` at the
-moment the profile is created. Do not build the picker as a
+locale lives in the `saathi_locale` **cookie** first and is written to
+`profiles.locale` at the moment the profile is created. Do not build the picker as a
 "profile settings" screen that requires auth.
+
+A cookie rather than `localStorage`: the locale has to be known on the **server**, or
+the first paint is English and then flips to Hindi on hydration. `localStorage` cannot
+be read during a server render. See `docs/specs/i18n.md` §3.
 
 ### Screen detail
 

@@ -59,6 +59,33 @@ There is also deliberately **no `prefers-color-scheme: dark` block**. Dark mode 
 out of MVP scope, and the Next scaffold's default one would invert the app on any
 phone set to dark mode, silently breaking every contrast ratio verified below.
 
+### The `:lang()` trap — how the Devanagari scale is applied
+
+`<html lang>` is set from the learner's locale, so **`:lang(hi)` matches the root
+element**. Two consequences, both found on Day 0 by measuring in a browser:
+
+> **Never put `font-size` on `:lang(hi)`.** It changes the rem base, and every
+> `rem` token in `@theme` inflates 12.5% the moment a learner picks Hindi — the
+> H1 rendered at 20px instead of 26px, and all spacing grew with it.
+>
+> Set the *token* instead, on `body`:
+> ```css
+> :lang(hi)      { font-family: var(--font-devanagari); }  /* script only */
+> body:lang(hi)  { --text-body: 1.125rem; --text-body--line-height: 1.75; }
+> ```
+> Tailwind 4 utilities compile to `font-size: var(--text-body)`, so overriding the
+> variable moves body copy to 18px/1.75 and leaves the heading scale alone.
+
+> **`:lang()` matches by *inherited* language, so it hits the whole subtree**, and
+> the rule is unlayered — it beats every Tailwind `text-*` utility inside it. Put
+> only `font-family` and custom properties in a `:lang()` rule. A `line-height`
+> there silently overrode `text-h3` on every nested element.
+
+A Latin island inside a Hindi page — the `English` card in the language picker —
+needs its own `:lang(en)` rule, or it inherits Noto Sans Devanagari. That font has
+Latin glyphs, so the failure renders perfectly and is only visible in
+`getComputedStyle`.
+
 ## Colours
 
 Every value below is contrast-verified. Ratios are against white unless stated.

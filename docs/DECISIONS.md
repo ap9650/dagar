@@ -182,6 +182,20 @@ The weekly WhatsApp summary uses the *parent's* locale.
 parent's, not the learner's. Device locale may pre-select the picker default; it
 never skips the picker.
 
+**Where the locale is read from at render time (added 2026-07-30, Day 0 prompt 5).**
+`profiles.locale` is the durable record, but the value a page actually renders with
+comes from the `saathi_locale` **cookie**. Two reasons, both structural:
+
+1. The picker runs before a profile exists, so on that screen there is nothing else
+   to read.
+2. Saathi has **no `[locale]` route segment** — `/learn`, not `/hi/learn` — so the URL
+   carries no locale either, and a Server Component cannot read `localStorage`.
+   Without a cookie the first paint is English and flips to Hindi on hydration.
+
+The two are synchronised in `i18n/actions.ts`: the Settings toggle writes both, profile
+creation writes the profile from the cookie, and sign-in on a fresh device rewrites the
+cookie from the profile. Full table in `docs/specs/i18n.md` §3.
+
 ### Authoring workflow
 
 Author in English, translate with Claude (Haiku — near-zero cost), then **verify by

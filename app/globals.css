@@ -99,12 +99,38 @@ body {
 }
 
 /* Devanagari is not Latin at a different size: it renders taller, carries the
-   shirorekha plus stacked matras, and matras collide below 1.7 line-height. */
+   shirorekha plus stacked matras, and matras collide below 1.7 line-height.
+
+   Script switching, not size switching. `:lang(hi)` also matches <html> — so a
+   `font-size` here would change the REM BASE and silently inflate every rem
+   token in @theme by 12.5% the moment a learner picks Hindi. Set the family and
+   tracking here; set sizes below, as token overrides. */
 :lang(hi) {
   font-family: var(--font-devanagari);
-  font-size: 1.125rem; /* 18px */
-  line-height: 1.75;
   letter-spacing: normal; /* negative tracking breaks conjuncts */
+}
+
+/* The two body scales, kept side by side so they cannot drift apart.
+   Overriding the TOKEN rather than `font-size` means `text-body` utilities and
+   inherited body copy both move, while headings keep their own scale. */
+body:lang(hi) {
+  --text-body: 1.125rem; /* 18px — 17px Devanagari reads visibly smaller */
+  --text-body--line-height: 1.75; /* matras collide below 1.7 */
+  line-height: 1.75;
+}
+
+/* A Latin island inside a Hindi page — the `English` card in the language
+   picker — carries lang="en". Without this it inherits Noto Sans Devanagari
+   from <body>, which has Latin glyphs and so fails silently: it renders, just
+   not in Inter and not at the Latin scale.
+
+   `:lang()` matches by INHERITED language, so this rule hits the whole subtree.
+   Only font-family and custom properties belong here — a `line-height` would be
+   unlayered and would therefore beat every Tailwind text-* utility inside it. */
+:lang(en) {
+  font-family: var(--font-sans);
+  --text-body: 1.0625rem; /* 17px — must match the @theme default above */
+  --text-body--line-height: 1.6;
 }
 
 /* Visible focus everywhere (D10). */

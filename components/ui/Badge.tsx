@@ -28,15 +28,16 @@ const TONES: Record<Tone, string> = {
   neutral: "bg-surface text-body border-border",
 };
 
-/** The learner-facing label for each mastery band. Never render the enum. */
-export const MASTERY_LABEL: Record<
-  "mastered" | "developing" | "needs_revision",
-  string
-> = {
-  mastered: "Mastered",
-  developing: "Getting there",
-  needs_revision: "Keep practising",
-};
+/**
+ * Mastery labels live in the message dictionary under `mastery.*`, keyed by the
+ * same enum values — `t("mastery.needs_revision")` → "Keep practising" /
+ * "और प्रैक्टिस करो".
+ *
+ * They were briefly a constant in this file. That constant was an English-only
+ * dictionary: it would have rendered "Mastered" to a Hindi learner on a screen
+ * where everything else was in Hindi. Do not reintroduce it — a component never
+ * carries copy.
+ */
 
 export function Badge({
   tone = "neutral",
