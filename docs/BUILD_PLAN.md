@@ -186,6 +186,21 @@ By end of day: **the full demo path works end to end.**
 | 2.5 | Progress, streaks, milestones + **daily goal** | *Use the saathi-feature skill. Build the progress screen, lib/learning/streaks.ts per D7 (Asia/Kolkata, one grace day per rolling 7, server-side only), and lib/learning/milestones.ts per D7b — award server-side and idempotently, show earned and unearned, emit milestone_earned. Add the daily goal ring per D17 — same completion rule as the streak, closable in one session.* **Spec: `docs/specs/progress-streaks.md`** |
 | 2.6 | Struggle → mentor request | *Use the saathi-feature skill. Implement the three D6 struggle triggers and the mentor request flow capturing full learner context.* **Spec: `docs/specs/mentor-request.md`** |
 
+### Content verification — both checks are green (31 Jul)
+
+| Check | Covers | Result |
+|---|---|---|
+| `npm run check:keys` | 26 arithmetic stems, re-derived exactly, free | 0 disagreements |
+| `npm run verify:answers` | **all 96**, solved cold by Haiku, compared through `grade()` | **96 agreed, 0 disagreed** |
+
+The stored answer is never sent to the model — a model shown the answer agrees with
+it, which would make the whole check theatre.
+
+100% agreement is better than the 5–10% first-pass flag rate `saathi-content`
+predicts, so both checks were **proved able to fail** before being believed:
+corrupting an integer key and an MCQ key was caught in each case, and each script
+exits non-zero.
+
 **End-of-day check:** full journey — dashboard → lesson → tutor → practice → quiz → progress — works on a phone.
 
 ---
