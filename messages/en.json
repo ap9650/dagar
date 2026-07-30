@@ -3,7 +3,6 @@
     "title": "Saathi",
     "description": "Your learning companion — NCERT mathematics for Classes 6 to 8."
   },
-
   "common": {
     "appName": "Saathi",
     "tagline": "Your learning companion",
@@ -18,12 +17,10 @@
     "loading": "Loading",
     "tryAgain": "Try again"
   },
-
   "welcome": {
     "chooseLanguage": "Choose your language",
     "selected": "Selected"
   },
-
   "login": {
     "title": "Welcome to Saathi",
     "subtitle": "NCERT mathematics for Classes 6 to 8",
@@ -41,20 +38,17 @@
     "checkEmail": "Check your email for a link to sign in.",
     "failed": "That did not work. Check your email and password and try again."
   },
-
   "onboarding": {
     "gradeTitle": "Which class are you in?",
     "gradeOption": "Class {grade}",
     "gradeHelp": "You can change this later in Settings."
   },
-
   "nav": {
     "learn": "Learn",
     "practice": "Practise",
     "progress": "Progress",
     "parent": "Parent"
   },
-
   "dashboard": {
     "greeting": "Hi {name}",
     "greetingNoName": "Hi there",
@@ -72,7 +66,6 @@
     "changeClass": "Change your class",
     "conceptsTitle": "What this chapter covers"
   },
-
   "nextAction": {
     "startHere": "This is where you begin",
     "continue": "Continue where you left off",
@@ -80,14 +73,12 @@
     "revise": "You have finished this chapter — revise anything you like",
     "noContent": "Your class is coming soon"
   },
-
   "streak": {
     "days": "{days, plural, =0 {No streak yet} one {# day streak} other {# day streak}}",
     "broken": "Start again today",
     "grace": "Rest day used — your streak is safe",
     "extended": "{days, plural, one {# day in a row} other {# days in a row}}"
   },
-
   "chapter": {
     "lessonsTitle": "Lessons",
     "quizTitle": "Chapter quiz",
@@ -95,7 +86,6 @@
     "quizLocked": "Finish the lessons first",
     "lessonNode": "Lesson {number}"
   },
-
   "lesson": {
     "stepOf": "Step {step} of {total}",
     "askTutor": "Ask Saathi",
@@ -104,7 +94,6 @@
     "practiceNext": "Practise this",
     "backToChapter": "Back to the chapter"
   },
-
   "tutor": {
     "title": "Ask Saathi",
     "placeholder": "Ask about this lesson",
@@ -115,7 +104,6 @@
     "offTopic": "Let us stay with this chapter for now.",
     "failed": "Saathi could not answer just now. Try again?"
   },
-
   "practice": {
     "title": "Practice",
     "questionOf": "Question {number} of {total}",
@@ -129,7 +117,6 @@
     "summary": "You got {correct} of {total} right",
     "summaryEncourage": "Every one of these is practice that counts."
   },
-
   "feedback": {
     "correct": "Correct!",
     "notQuite": "Not quite — here is a hint",
@@ -138,7 +125,6 @@
     "emptyAnswer": "Type your answer first",
     "tryAgain": "Try again"
   },
-
   "quiz": {
     "title": "Chapter quiz",
     "intro": "No hints in the quiz. Take your time — you can retake it later.",
@@ -150,7 +136,6 @@
     "retake": "Take it again",
     "backToChapter": "Back to the chapter"
   },
-
   "progress": {
     "title": "Your progress",
     "conceptsTitle": "Your concepts",
@@ -159,13 +144,11 @@
     "milestoneLocked": "Not yet",
     "empty": "Finish a lesson and your progress shows up here."
   },
-
   "mastery": {
     "needs_revision": "Keep practising",
     "developing": "Getting there",
     "mastered": "Mastered"
   },
-
   "milestone": {
     "earned": "New badge!",
     "first_lesson": "First lesson done",
@@ -176,7 +159,6 @@
     "chapter_complete": "Chapter finished",
     "chapter_mastered": "Chapter mastered"
   },
-
   "mentor": {
     "ctaTitle": "Want a person to explain this?",
     "ctaBody": "We can pass this on to a mentor.",
@@ -184,7 +166,6 @@
     "dismiss": "Not now",
     "requested": "Passed on. Someone will get back to you."
   },
-
   "settings": {
     "title": "Settings",
     "languageTitle": "Language",
@@ -198,7 +179,13 @@
     "signOut": "Sign out",
     "signOutConfirm": "Sign out of Saathi?"
   },
-
+  "install": {
+    "title": "Add Saathi to your home screen",
+    "body": "It opens like an app, with its own icon. No download needed.",
+    "action": "Add to home screen",
+    "notNow": "Not now",
+    "iosSteps": "Tap Share, then Add to Home Screen."
+  },
   "parent": {
     "claimTitle": "Enter your child's code",
     "claimBody": "Ask them to open Settings and tap Invite a parent.",
@@ -214,12 +201,13 @@
     "emptyHelp": "Once they finish a lesson, you will see it here.",
     "languageTitle": "Language"
   },
-
   "errors": {
+    "offlineTitle": "You are offline",
     "generic": "Something went wrong on our side. Try again?",
     "offline": "You are offline. Saathi will save this when you are back.",
     "notFound": "We could not find that page.",
     "rateLimited": "That was a lot at once. Wait a moment and try again.",
-    "backHome": "Back to Learn"
+    "backHome": "Back to Learn",
+    "offlineBody": "Saathi needs a connection right now. Your progress is safe."
   }
 }

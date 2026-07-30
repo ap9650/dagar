@@ -17,7 +17,8 @@
     "check:keys": "node --no-warnings scripts/check-arithmetic-keys.ts",
     "db:types": "npx supabase gen types typescript --linked > lib/supabase/database.types.ts",
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
-    "check:hindi": "node --no-warnings scripts/check-hindi.ts"
+    "check:hindi": "node --no-warnings scripts/check-hindi.ts",
+    "icons": "node --no-warnings scripts/generate-icons.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

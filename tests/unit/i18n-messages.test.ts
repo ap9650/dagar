@@ -90,9 +90,21 @@ describe("message dictionaries", () => {
   });
 
   it("keeps Latin script out of Hindi copy (HINDI_STYLE.md)", () => {
+    /**
+     * Keys allowed to contain Latin, with the reason.
+     *
+     * `install.iosSteps` quotes iOS's own menu item, which reads "Add to Home
+     * Screen" on an English-language iPhone. Translating the quote would send a
+     * learner hunting for Devanagari words that are not on their screen — the
+     * rule exists to stop lazy untranslated English, not to stop us naming a
+     * button that exists in another app.
+     */
+    const QUOTES_FOREIGN_UI = new Set(["install.iosSteps"]);
+
     // "फिर से try करो" is the failure mode. Placeholder names like {name} and
     // ICU keywords like `plural` are structural, not copy, so strip them first.
     const offenders = hiKeys.filter((key) => {
+      if (QUOTES_FOREIGN_UI.has(key)) return false;
       const value = key
         .split(".")
         .reduce<unknown>((acc, part) => (acc as Record<string, unknown>)[part], hi) as string;

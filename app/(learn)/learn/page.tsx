@@ -13,6 +13,7 @@ import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { StreakBadge } from "@/components/learn/StreakBadge";
 import { JourneyPath, type JourneyNode } from "@/components/learn/JourneyPath";
 import { NextLessonCard } from "@/components/learn/NextLessonCard";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -233,6 +234,11 @@ export default async function LearnPage() {
       <DailyGoalRing goal={goal} />
 
       {nextCard}
+
+      {/* Only after a first lesson is completed (D15). A learner who has not yet
+          got anything out of Saathi has no reason to install it, and asking then
+          teaches them to dismiss prompts without reading. */}
+      <InstallPrompt show={completedIds.size > 0} />
 
       <section className="flex flex-col gap-lg">
         <div className="flex flex-col gap-xs">
