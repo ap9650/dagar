@@ -99,7 +99,94 @@ function derive(stem: string): string | null {
     return String((b * c) / a);
   }
 
+  // Plain integer arithmetic: (-7) + 3, (-2) \times 3 \times (-5), (-48) \div (-4) \div (-3).
+  // This is most of Class 7, so teaching the checker to evaluate it moves a large
+  // block of answer keys from "trust me" to "proved".
+  const arithmetic = s
+    .replace(/\\times/g, "*")
+    .replace(/\\div/g, "/")
+    .replace(/\\cdot/g, "*")
+    .replace(/\\left|\\right/g, "")
+    .trim();
+
+  if (/^[-+*/()\d\s]+$/.test(arithmetic) && /\d/.test(arithmetic)) {
+    try {
+      return show(evaluate(arithmetic));
+    } catch {
+      return null;
+    }
+  }
+
   return null;
+}
+
+/**
+ * A tiny recursive-descent evaluator over integers.
+ *
+ * Hand-written rather than `eval` or `new Function`: this runs over seeded
+ * content, and a checker that executes its own input is a checker that can be
+ * made to lie. It is also exact — every intermediate value stays a rational, so
+ * there is no floating-point drift to explain away.
+ */
+function evaluate(input: string): Rational {
+  let pos = 0;
+  const peek = () => {
+    while (input[pos] === " ") pos++;
+    return input[pos];
+  };
+
+  function parseExpression(): Rational {
+    let left = parseTerm();
+    for (;;) {
+      const op = peek();
+      if (op !== "+" && op !== "-") return left;
+      pos++;
+      const right = parseTerm();
+      left = op === "+" ? add(left, right) : sub(left, right);
+    }
+  }
+
+  function parseTerm(): Rational {
+    let left = parseFactor();
+    for (;;) {
+      const op = peek();
+      if (op !== "*" && op !== "/") return left;
+      pos++;
+      const right = parseFactor();
+      left =
+        op === "*"
+          ? rational(left.n * right.n, left.d * right.d)
+          : rational(left.n * right.d, left.d * right.n);
+    }
+  }
+
+  function parseFactor(): Rational {
+    const ch = peek();
+    if (ch === "-") {
+      pos++;
+      const value = parseFactor();
+      return rational(-value.n, value.d);
+    }
+    if (ch === "+") {
+      pos++;
+      return parseFactor();
+    }
+    if (ch === "(") {
+      pos++;
+      const value = parseExpression();
+      if (peek() !== ")") throw new Error("unbalanced");
+      pos++;
+      return value;
+    }
+    const digits = /^\d+/.exec(input.slice(pos));
+    if (!digits) throw new Error("expected a number");
+    pos += digits[0].length;
+    return rational(Number(digits[0]), 1);
+  }
+
+  const result = parseExpression();
+  if (peek() !== undefined) throw new Error("trailing input");
+  return result;
 }
 
 /** Same-value comparison, so 6/8 and 3/4 are not reported as a disagreement. */

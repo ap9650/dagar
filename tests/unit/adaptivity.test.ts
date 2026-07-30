@@ -59,6 +59,22 @@ describe("selectNextAction", () => {
     expect(action).toMatchObject({ lessonId: "l1", reason: "startHere" });
   });
 
+  it("says startHere when the completed lessons belong to ANOTHER chapter", () => {
+    // A learner who changes grade in Settings keeps their old progress. If that
+    // history counted here, a chapter they had never opened would greet them
+    // with "Continue where you left off".
+    const action = selectNextAction({
+      lessons,
+      progress: [
+        { lesson_id: "other-chapter-l1", status: "completed" },
+        { lesson_id: "other-chapter-l2", status: "completed" },
+      ],
+      mastery: [],
+      concepts,
+    });
+    expect(action).toEqual({ kind: "lesson", lessonId: "l1", reason: "startHere" });
+  });
+
   it("skips a gap — completing lesson 2 first still points at lesson 1", () => {
     const action = selectNextAction({
       lessons,

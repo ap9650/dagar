@@ -62,12 +62,18 @@ export function selectNextAction({
   const nextLesson = ordered.find((lesson) => !completed.has(lesson.id));
 
   if (nextLesson) {
+    // Count completions among THESE lessons only. `progress` is the learner's
+    // whole history, including other grades — a learner who switches grade in
+    // Settings keeps their old progress, and counting it here told them to
+    // "continue where you left off" in a chapter they had never opened.
+    const completedHere = ordered.filter((lesson) => completed.has(lesson.id)).length;
+
     return {
       kind: "lesson",
       lessonId: nextLesson.id,
       // "Start here" vs "Continue where you left off" — a brand-new learner is
       // not "continuing" anything, and being told they are is disorienting.
-      reason: completed.size === 0 ? "startHere" : "continue",
+      reason: completedHere === 0 ? "startHere" : "continue",
     };
   }
 

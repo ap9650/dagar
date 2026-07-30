@@ -1,5 +1,6 @@
 import Markdown from "react-markdown";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 
 /**
@@ -28,7 +29,9 @@ export function LessonBody({ markdown }: { markdown: string }) {
   return (
     <div className="lesson-body flex flex-col gap-lg text-body text-ink">
       <Markdown
-        remarkPlugins={[remarkMath]}
+        // gfm is needed for the sign-rule and phrase TABLES in the Class 7 and
+        // Class 8 lessons — without it they render as rows of literal pipes.
+        remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[
           [
             rehypeKatex,
@@ -74,6 +77,23 @@ export function LessonBody({ markdown }: { markdown: string }) {
           ),
           code: (props) => (
             <code className="font-mono text-body-sm" {...withoutNode(props)} />
+          ),
+          // Tables scroll inside their own box rather than widening the page
+          // (design rule 8) — a two-column sign-rule table still overflows 360px
+          // once the maths is rendered.
+          table: (props) => (
+            <div className="overflow-x-auto">
+              <table className="w-full text-body-sm border-collapse" {...withoutNode(props)} />
+            </div>
+          ),
+          th: (props) => (
+            <th
+              className="text-start font-medium text-ink border-b border-border py-sm pe-lg"
+              {...withoutNode(props)}
+            />
+          ),
+          td: (props) => (
+            <td className="text-body border-b border-border py-sm pe-lg" {...withoutNode(props)} />
           ),
         }}
       >

@@ -171,6 +171,13 @@ export default async function LearnPage() {
   const completedIds = new Set(
     (progress ?? []).filter((p) => p.status === "completed").map((p) => p.lesson_id),
   );
+
+  // Count only THIS chapter's lessons. `progress` holds every lesson the learner
+  // has ever finished, including other grades — a learner who changes grade in
+  // Settings keeps their old progress (spec §7), and counting it here showed
+  // "2 of 5" on a chapter they had not opened.
+  const completedInChapter = lessons.filter((l) => completedIds.has(l.id)).length;
+
   const currentLessonId = action.kind === "lesson" ? action.lessonId : null;
 
   const nodes: JourneyNode[] = lessons.map((lesson) => ({
@@ -232,7 +239,7 @@ export default async function LearnPage() {
           <h2 className="text-h3 text-ink">{tContent(chapter, "title", locale)}</h2>
           <p className="text-body-sm text-muted">
             {t("dashboard.lessonsProgress", {
-              done: completedIds.size,
+              done: completedInChapter,
               total: lessons.length,
             })}
           </p>
