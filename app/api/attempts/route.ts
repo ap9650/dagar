@@ -17,12 +17,18 @@ import type { Locale } from "@/i18n/config";
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * POST /api/attempts — THE ONLY PLACE IN SAATHI THAT READS AN ANSWER KEY.
+ * POST /api/attempts — WHERE PRACTICE IS GRADED, AGAINST THE ANSWER KEY.
+ *
+ * Three modules in Saathi read the base `questions` table, and they are the
+ * complete list: this one, `POST /api/hints` (which needs the worked solution to
+ * keep a hint mathematically honest), and `lib/learning/quiz.ts` (which grades a
+ * submitted chapter quiz). All three are server-side, all three use the service
+ * role, and none is reachable from a browser.
  *
  * Every other question read in the product goes through `questions_public`,
- * which has no `answer_value` column. Here, and only here, the service-role
- * client reads the base table — after the learner has committed to an answer,
- * server-side, in a route the browser cannot inspect.
+ * which has no `answer_value` column. Here the service-role client reads the
+ * base table — after the learner has committed to an answer, server-side, in a
+ * route the browser cannot inspect.
  *
  * `is_correct` is NEVER accepted from the request. `attemptSchema` has no such
  * field and zod strips unknown keys, so a client POSTing `is_correct: true` is

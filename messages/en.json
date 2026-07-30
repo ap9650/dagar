@@ -140,7 +140,23 @@
     "result": "You got {correct} of {total}",
     "resultEncourage": "This shows Saathi what to give you more of.",
     "retake": "Take it again",
-    "backToChapter": "Back to the chapter"
+    "backToChapter": "Back to the chapter",
+    "questionCount": "{count, plural, one {# question} other {# questions}}",
+    "questionNumber": "Question {number}",
+    "answeredCount": "{done} of {total} answered",
+    "next": "Next question",
+    "previous": "Back a question",
+    "answersTitle": "Your answers",
+    "notQuite": "Not quite",
+    "skipped": "You skipped this one",
+    "practiseConcept": "Practise {concept}",
+    "lastResult": "Last time: {correct} of {total}",
+    "comingSoon": "The quiz for this chapter is on its way. Try some practice in the meantime.",
+    "band": {
+      "needs_revision": "Let us go over a few things again",
+      "developing": "You are getting there",
+      "mastered": "You have got this chapter"
+    }
   },
   "progress": {
     "title": "Your progress",

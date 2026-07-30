@@ -43,7 +43,13 @@ content created any other way is unaffected.
 
 **`attempts`** — `id` · `student_id` · `question_id` · `concept_id` (denormalised for fast mastery queries) · `given_answer` · `is_correct` · `hints_used` · `ms_taken` · `session_kind` (`practice`|`quiz`) · `quiz_session_id` (nullable) · `created_at`
 
-**`quiz_sessions`** — `id` · `student_id` · `chapter_id` · `score` · `total` · `mastery_band` (`needs_revision`|`developing`|`mastered`) · `started_at` · `submitted_at`
+**`quiz_sessions`** — `id` · `student_id` · `chapter_id` · `question_ids` (uuid[], the fixed set in served order) · `score` · `total` · `mastery_band` (`needs_revision`|`developing`|`mastered`) · `started_at` · `submitted_at`
+
+> `question_ids` is written when the session opens and never changed: a learner who
+> abandons a quiz and returns resumes **that** set, not whatever the bank holds now
+> (chapter-quiz.md §6). A partial unique index on `(student_id, chapter_id) where
+> submitted_at is null` keeps at most one quiz open per chapter, and `submitted_at`
+> is claimed by a conditional update, which is what makes a double submit idempotent.
 
 **`concept_mastery`** — derived, recomputed on attempt write
 `student_id` · `concept_id` · `score` (numeric 0–1) · `attempts_count` · `is_mastered` (bool) · `updated_at` — PK(`student_id`,`concept_id`)
@@ -118,9 +124,14 @@ Grading and solutions come from a server route using the service role.
 0009_fix_award_milestones.sql  fixes 22P02 in award_milestones (array append)
 0010_seed_slugs.sql          slug on lessons + questions (idempotent seed),
                              questions_public rebuilt to expose slug
+0011_attempt_idempotency.sql attempts.submission_id + partial unique index
+0012_questions_public_strip_i18n_solution.sql
+                             SECURITY: strips solution_md out of every locale
+                             inside the i18n jsonb (it was leaking the answer)
+0013_quiz_fixed_set.sql      quiz_sessions.question_ids + one-open-quiz index
 ```
 
-**Applied to the remote database 2026-07-30.** Filenames must be `NNNN_name.sql` with
+**Applied to the remote database 2026-07-31.** Filenames must be `NNNN_name.sql` with
 **digits only** — the Supabase CLI silently *skips* a file with a letter in the number
 (an early `0006b_observability.sql` was skipped without failing the push, which then
 broke the migration that depended on it).

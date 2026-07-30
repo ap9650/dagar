@@ -682,6 +682,7 @@ export type Database = {
           chapter_id: string
           id: string
           mastery_band: string | null
+          question_ids: string[] | null
           score: number | null
           started_at: string
           student_id: string
@@ -692,6 +693,7 @@ export type Database = {
           chapter_id: string
           id?: string
           mastery_band?: string | null
+          question_ids?: string[] | null
           score?: number | null
           started_at?: string
           student_id: string
@@ -702,6 +704,7 @@ export type Database = {
           chapter_id?: string
           id?: string
           mastery_band?: string | null
+          question_ids?: string[] | null
           score?: number | null
           started_at?: string
           student_id?: string
@@ -864,7 +867,7 @@ export type Database = {
           concept_id?: string | null
           created_at?: string | null
           difficulty?: number | null
-          i18n?: Json | null
+          i18n?: never
           id?: string | null
           kind?: string | null
           slug?: string | null
@@ -877,7 +880,7 @@ export type Database = {
           concept_id?: string | null
           created_at?: string | null
           difficulty?: number | null
-          i18n?: Json | null
+          i18n?: never
           id?: string | null
           kind?: string | null
           slug?: string | null

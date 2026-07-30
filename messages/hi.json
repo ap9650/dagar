@@ -140,7 +140,23 @@
     "result": "{total} में से {correct} सही हुए",
     "resultEncourage": "इससे साथी को पता चलता है कि तुम्हें किसकी और प्रैक्टिस चाहिए।",
     "retake": "फिर से दो",
-    "backToChapter": "चैप्टर पर वापस"
+    "backToChapter": "चैप्टर पर वापस",
+    "questionCount": "{count, plural, one {# सवाल} other {# सवाल}}",
+    "questionNumber": "सवाल {number}",
+    "answeredCount": "{total} में से {done} के जवाब दिए",
+    "next": "अगला सवाल",
+    "previous": "पिछला सवाल",
+    "answersTitle": "तुम्हारे जवाब",
+    "notQuite": "थोड़ा सा रह गया",
+    "skipped": "ये छोड़ दिया था",
+    "practiseConcept": "{concept} की प्रैक्टिस करो",
+    "lastResult": "पिछली बार: {total} में से {correct}",
+    "comingSoon": "इस चैप्टर की क्विज़ आ रही है। तब तक थोड़ी प्रैक्टिस कर लो।",
+    "band": {
+      "needs_revision": "चलो कुछ चीज़ें फिर से देखते हैं",
+      "developing": "तुम आगे बढ़ रहे हो",
+      "mastered": "ये चैप्टर तुम्हें आ गया"
+    }
   },
   "progress": {
     "title": "तुम्हारी प्रगति",

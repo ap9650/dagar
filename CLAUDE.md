@@ -56,8 +56,11 @@ server-only. Never prefix with `NEXT_PUBLIC_`. Never import `lib/supabase/admin.
 into a client component.
 
 **Answer keys never reach the client.** Read questions through the
-`questions_public` view. Grade in `app/api/attempts/route.ts` with the service role.
-A client-side `if (answer === correct)` is a bug, not a shortcut.
+`questions_public` view. Grade server-side with the service role — practice in
+`app/api/attempts/route.ts`, the quiz in `lib/learning/quiz.ts`. Those two plus
+`app/api/hints/route.ts` are the only readers of the base `questions` table, and
+that list should stay short. A client-side `if (answer === correct)` is a bug,
+not a shortcut.
 
 **Grading is deterministic code, not AI.** `lib/learning/grading.ts` owns it.
 `1/2`, `2/4` and `0.5` must all grade correct against `1/2`. AI writes hints and

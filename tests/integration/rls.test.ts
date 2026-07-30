@@ -214,6 +214,97 @@ d("RLS boundaries", () => {
     expect(data ?? []).toHaveLength(0);
   });
 
+  // ─── the chapter quiz (2.4) ────────────────────────────────────────────────
+
+  it("student B cannot read or submit student A's quiz session", async () => {
+    // The session id is the only thing standing between one learner and another
+    // learner's quiz, and it travels in a URL. So it must not be enough on its own.
+    const { data: aliceSession } = await admin
+      .from("quiz_sessions")
+      .insert({ student_id: alice.id, chapter_id: chapterId, question_ids: [questionId] })
+      .select("id")
+      .single();
+
+    const { data: read } = await bob.client
+      .from("quiz_sessions")
+      .select("*")
+      .eq("id", aliceSession!.id);
+    expect(read ?? []).toHaveLength(0);
+
+    // Scoring it for her is the more damaging move: it would close her quiz and
+    // write a score she never earned.
+    const { data: updated } = await bob.client
+      .from("quiz_sessions")
+      .update({ score: 8, total: 8, mastery_band: "mastered" })
+      .eq("id", aliceSession!.id)
+      .select("id");
+    expect(updated ?? []).toHaveLength(0);
+
+    const { data: after } = await admin
+      .from("quiz_sessions")
+      .select("score, mastery_band, submitted_at")
+      .eq("id", aliceSession!.id)
+      .single();
+    expect(after!.score).toBeNull();
+    expect(after!.mastery_band).toBeNull();
+    expect(after!.submitted_at).toBeNull();
+  });
+
+  it("a learner cannot open a quiz session in someone else's name", async () => {
+    const { error } = await bob.client.from("quiz_sessions").insert({
+      student_id: alice.id, // impersonation attempt
+      chapter_id: chapterId,
+      question_ids: [questionId],
+    });
+    expect(error).not.toBeNull();
+  });
+
+  it("quiz questions are as answer-key-free as practice ones", async () => {
+    // `kind` changes nothing about the boundary — `questions_public` is one view
+    // over one table — but the quiz is the screen where a leaked key is worth the
+    // most to a learner, so it is checked rather than assumed.
+    const { data: quizQ } = await admin
+      .from("questions")
+      .insert({
+        concept_id: conceptId,
+        chapter_id: chapterId,
+        kind: "quiz",
+        difficulty: 2,
+        stem_md: "__rls quiz stem__",
+        answer_type: "integer",
+        answer_value: "42",
+        solution_md: "the quiz working",
+        i18n: { hi: { stem_md: "__rls quiz stem hi__", solution_md: "the quiz working, translated" } },
+      })
+      .select("id")
+      .single();
+
+    const { data } = await alice.client
+      .from("questions_public")
+      .select("*")
+      .eq("id", quizQ!.id);
+
+    expect(data ?? []).toHaveLength(1);
+
+    const serialised = JSON.stringify(data![0]);
+    expect(serialised).not.toContain("the quiz working");
+    expect(serialised).not.toContain("answer_value");
+    expect(serialised).toContain("__rls quiz stem hi__"); // the Hindi stem survives
+
+    // The answer VALUE is checked by walking the row rather than by searching
+    // the serialised string: "42" is two hex characters and turns up inside a
+    // uuid roughly half the time, which made the string search fail on a row
+    // that was perfectly clean. A false alarm on a security test is not free —
+    // it is how people learn to skip the security test.
+    const values: unknown[] = [];
+    const walk = (node: unknown) => {
+      if (node === null || typeof node !== "object") return values.push(node);
+      for (const child of Object.values(node as Record<string, unknown>)) walk(child);
+    };
+    walk(data![0]);
+    expect(values).not.toContain("42");
+  });
+
   // ─── parent boundary ───────────────────────────────────────────────────────
 
   it("a linked parent CAN read their child's attempts", async () => {

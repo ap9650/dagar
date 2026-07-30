@@ -59,6 +59,25 @@ export function masteryBand(score: number): MasteryBand {
 }
 
 /**
+ * The band for a quiz score of `correct` out of `total` (D5, slice 2.4).
+ *
+ * Integer arithmetic rather than `masteryBand(correct / total)` on purpose. The
+ * boundaries are exact — 80% is `mastered`, 79.9% is not — and floating-point
+ * division does not respect exact boundaries: some `a / b` that is 0.8 in decimal
+ * lands one ulp below the nearest double to 0.8 and silently bands a learner down
+ * from Mastered. `correct * 100 >= 80 * total` cannot do that.
+ *
+ * `total === 0` is not a real quiz and never reaches a learner — the screen shows
+ * "coming soon" instead. It returns `needs_revision` rather than dividing by zero.
+ */
+export function quizBand(correct: number, total: number): MasteryBand {
+  if (total <= 0) return "needs_revision";
+  if (correct * 100 >= 80 * total) return "mastered";
+  if (correct * 100 >= 50 * total) return "developing";
+  return "needs_revision";
+}
+
+/**
  * Mastery from a concept's attempt history.
  *
  * `results` is chronological, oldest first — the last `MASTERY_WINDOW` are taken.

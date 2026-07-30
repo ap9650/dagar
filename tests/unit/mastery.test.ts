@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeMastery, masteryBand } from "@/lib/learning/mastery";
+import { computeMastery, masteryBand, quizBand } from "@/lib/learning/mastery";
 
 /**
  * D5 mastery. The boundary cases are the point: 0.8 exactly, 3 attempts exactly,
@@ -107,5 +107,48 @@ describe("masteryBand — D5 quiz bands", () => {
     const twoCorrect = computeMastery([T, T]);
     expect(twoCorrect.band).toBe("mastered");
     expect(twoCorrect.isMastered).toBe(false);
+  });
+});
+
+describe("quizBand — the band a learner is shown after a quiz", () => {
+  it("bands the spec's exact examples: 49% revise, 50% developing, 80% mastered", () => {
+    // chapter-quiz.md §5, stated as percentages, checked as the fractions a real
+    // quiz actually produces.
+    expect(quizBand(49, 100)).toBe("needs_revision");
+    expect(quizBand(50, 100)).toBe("developing");
+    expect(quizBand(79, 100)).toBe("developing");
+    expect(quizBand(80, 100)).toBe("mastered");
+  });
+
+  it("bands the real 8-question chapter quiz", () => {
+    // The set that exists today. 3/8 is 37.5%, 4/8 is 50%, 6/8 is 75%, 7/8 is 87.5%.
+    expect(quizBand(0, 8)).toBe("needs_revision");
+    expect(quizBand(3, 8)).toBe("needs_revision");
+    expect(quizBand(4, 8)).toBe("developing");
+    expect(quizBand(6, 8)).toBe("developing");
+    expect(quizBand(7, 8)).toBe("mastered");
+    expect(quizBand(8, 8)).toBe("mastered");
+  });
+
+  it("holds the 80% boundary on totals where floating point does not", () => {
+    // The reason this is integer arithmetic rather than masteryBand(correct/total).
+    // Every one of these is exactly 80% and every one must be Mastered — a single
+    // ulp of division error here bands a learner down from Mastered on a quiz
+    // they aced, and nothing would ever report it.
+    for (const total of [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]) {
+      expect(quizBand((total * 4) / 5, total)).toBe("mastered");
+    }
+  });
+
+  it("does not divide by zero on a quiz with no questions", () => {
+    // Unreachable by design — the screen shows "coming soon" instead of a quiz of
+    // zero questions (spec §6) — so this is about failing quietly if it ever is.
+    expect(quizBand(0, 0)).toBe("needs_revision");
+  });
+
+  it("agrees with masteryBand wherever both are defined", () => {
+    for (let correct = 0; correct <= 20; correct++) {
+      expect(quizBand(correct, 20)).toBe(masteryBand(correct / 20));
+    }
   });
 });

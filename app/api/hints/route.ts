@@ -41,9 +41,10 @@ export async function POST(request: Request) {
   const locale = (await getLocale()) as Locale;
   const admin = createAdminClient();
 
-  // Service role: this is the second and last place in the product that reads
-  // the base `questions` table (the first is grading). Everything else goes
-  // through `questions_public`, which has no answer columns at all.
+  // Service role: one of the three places in the product that read the base
+  // `questions` table — the others being practice grading in `/api/attempts` and
+  // quiz grading in `lib/learning/quiz.ts`. Everything else goes through
+  // `questions_public`, which has no answer columns at all.
   const { data: question } = await admin
     .from("questions")
     .select("id, concept_id, stem_md, answer_value, solution_md, choices, i18n")

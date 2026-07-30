@@ -67,6 +67,29 @@ export const attemptSchema = z.object({
  * remember to write.
  */
 
+/**
+ * A whole quiz, submitted at once (slice 2.4).
+ *
+ * Note what is missing, exactly as in `attemptSchema`: `score`, `total`, `band`,
+ * `is_correct`. Zod strips unknown keys, so a client POSTing its own score has it
+ * dropped here — every answer is regraded from `answer_value` server-side. That
+ * is chapter-quiz.md §5's "a client-submitted score is ignored", enforced by the
+ * shape of this object rather than by a check someone has to remember to write.
+ *
+ * `.max(50)` bounds the work one request can ask for. Chapter quizzes are 8
+ * questions; 50 is generous headroom and still not a lever.
+ */
+export const quizSubmitSchema = z.object({
+  answers: z
+    .array(
+      z.object({
+        question_id: zUuid,
+        given_answer: z.string().max(200),
+      }),
+    )
+    .max(50),
+});
+
 export const tutorMessageSchema = z.object({
   lesson_id: zUuid,
   // Cap input length BEFORE the model call, not after — the whole point is to
