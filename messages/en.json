@@ -62,11 +62,23 @@
     "dailyGoalHint": "One lesson, or five practice questions",
     "dailyGoalProgress": "{done} of {total} done",
     "dailyGoalComplete": "Done for today!",
+    "dailyGoalDoneHelp": "Come back tomorrow to keep your streak.",
     "chaptersTitle": "Your chapters",
     "startHere": "Start here",
     "continueLesson": "Continue",
     "lessonsProgress": "{done} of {total} lessons",
-    "locked": "Coming up next"
+    "locked": "Coming up next",
+    "comingSoonHelp": "Class 6 Fractions is ready now, if you would like to look.",
+    "changeClass": "Change your class",
+    "conceptsTitle": "What this chapter covers"
+  },
+
+  "nextAction": {
+    "startHere": "This is where you begin",
+    "continue": "Continue where you left off",
+    "strengthen": "Let us strengthen {concept}",
+    "revise": "You have finished this chapter — revise anything you like",
+    "noContent": "Your class is coming soon"
   },
 
   "streak": {

@@ -62,11 +62,23 @@
     "dailyGoalHint": "एक लेसन, या पाँच प्रैक्टिस सवाल",
     "dailyGoalProgress": "{total} में से {done} हो गए",
     "dailyGoalComplete": "आज का काम पूरा!",
+    "dailyGoalDoneHelp": "कल फिर आना, स्ट्रीक बनी रहेगी।",
     "chaptersTitle": "तुम्हारे चैप्टर",
     "startHere": "यहाँ से शुरू करो",
     "continueLesson": "आगे बढ़ो",
     "lessonsProgress": "{total} में से {done} लेसन",
-    "locked": "आगे यह आएगा"
+    "locked": "आगे यह आएगा",
+    "comingSoonHelp": "कक्षा 6 की भिन्न अभी तैयार है, देखना चाहो तो देख लो।",
+    "changeClass": "अपनी कक्षा बदलो",
+    "conceptsTitle": "इस चैप्टर में क्या है"
+  },
+
+  "nextAction": {
+    "startHere": "शुरुआत यहीं से है",
+    "continue": "जहाँ छोड़ा था वहाँ से आगे बढ़ो",
+    "strengthen": "{concept} को थोड़ा पक्का करते हैं",
+    "revise": "यह चैप्टर पूरा हो गया — जो चाहो फिर से देख लो",
+    "noContent": "तुम्हारी कक्षा जल्दी आ रही है"
   },
 
   "streak": {
