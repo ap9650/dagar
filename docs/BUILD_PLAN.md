@@ -150,6 +150,25 @@ the app remembers.**
 
 **End-of-day check:** sign up as a Class 6 learner, complete a lesson, reload — progress persisted, streak = 1.
 
+### Day 1 outcome (30 Jul)
+
+✅ **All of 1.1–1.6b landed.** 3 chapters · 12 concepts · 15 lessons · 96 questions,
+bilingual. End-of-day check passed: completed a lesson, streak went to 1, the
+`first_lesson` badge fired, and progress survived a reload.
+
+Two content-safety scripts now gate the curriculum, and both are proven to fail on
+bad input rather than merely existing:
+
+- `npm run check:keys` — re-derives answer keys from the STEM ONLY using exact
+  rationals. 26 of 96 are pure arithmetic and all agree; the rest wait for the
+  model-based cold solve in 2.1c.
+- `npm run check:hindi` — maths spans, Arabic numerals, Latin script, NCERT
+  vocabulary, leaked prompt scaffolding. 332 fields, 0 findings.
+
+Hindi lives in `supabase/seed/translations/hi.json`, **in git**, and is merged into
+each row's `i18n` jsonb by `npm run seed`. A translation that existed only in
+Supabase would be lost on a project reset and could not be reviewed in a diff.
+
 ---
 
 ## Day 2 — Fri 31 Jul — Intelligence layer (the differentiator)
