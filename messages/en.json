@@ -115,7 +115,8 @@
     "nextQuestion": "Next question",
     "finish": "Finish practice",
     "summary": "You got {correct} of {total} right",
-    "summaryEncourage": "Every one of these is practice that counts."
+    "summaryEncourage": "Every one of these is practice that counts.",
+    "noQuestions": "Practice for this part is on its way. Try a lesson in the meantime."
   },
   "feedback": {
     "correct": "Correct!",

@@ -88,6 +88,15 @@ d("RLS boundaries", () => {
         answer_type: "fraction",
         answer_value: "3/4",
         solution_md: "the secret working",
+        // The Hindi translation carries its OWN copy of the solution (D16 stores
+        // every translation in `i18n`). This is the shape that leaked in 0012 —
+        // the column list was clean and the answer travelled inside the jsonb.
+        i18n: {
+          hi: {
+            stem_md: "1/2 + 1/4 = ?",
+            solution_md: "the secret working, translated",
+          },
+        },
       })
       .select()
       .single();
@@ -147,6 +156,32 @@ d("RLS boundaries", () => {
     expect(row).not.toHaveProperty("answer_value");
     expect(row).not.toHaveProperty("solution_md");
     expect(row.stem_md).toBe("1/2 + 1/4 = ?");
+  });
+
+  it("questions_public does not leak the solution INSIDE the i18n blob", async () => {
+    // ── The regression test for migration 0012. ──
+    //
+    // The assertion above passed for weeks while the answer was shipping to every
+    // learner, because `not.toHaveProperty("solution_md")` only inspects the top
+    // level and the leak was one level down, inside a jsonb column that looked
+    // like harmless translation data. It was found by reading a real response
+    // body, which is why guided-practice.md §7 demands exactly that.
+    //
+    // So this searches the WHOLE serialised row for the solution text, rather
+    // than naming the place it is expected not to be.
+    const { data } = await alice.client
+      .from("questions_public")
+      .select("*")
+      .eq("id", questionId);
+
+    const serialised = JSON.stringify(data![0]);
+    expect(serialised).not.toContain("the secret working");
+    expect(serialised).not.toContain("solution_md");
+
+    // …and the translated stem still comes through, because stripping the
+    // solution must not cost a Hindi learner their question.
+    const i18n = (data![0] as { i18n: Record<string, Record<string, string>> }).i18n;
+    expect(i18n.hi.stem_md).toBe("1/2 + 1/4 = ?");
   });
 
   // ─── learner ↔ learner ─────────────────────────────────────────────────────

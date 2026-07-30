@@ -115,7 +115,8 @@
     "nextQuestion": "अगला सवाल",
     "finish": "प्रैक्टिस खत्म करो",
     "summary": "{total} में से {correct} सही हुए",
-    "summaryEncourage": "हर सवाल की प्रैक्टिस काम आती है।"
+    "summaryEncourage": "हर सवाल की प्रैक्टिस काम आती है।",
+    "noQuestions": "इस हिस्से के सवाल अभी तैयार हो रहे हैं। तब तक कोई पाठ देख लो।"
   },
   "feedback": {
     "correct": "सही! 🎉",

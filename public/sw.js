@@ -95,12 +95,20 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static build output only. Next fingerprints these paths, so a cached copy
-  // can never be stale — a new build produces new URLs.
+  // Static build output only. Next fingerprints these paths in a production
+  // build, so a cached copy can never be stale — a new build produces new URLs.
   const isStaticAsset =
     url.pathname.startsWith("/_next/static/") || url.pathname.startsWith("/icons/");
 
   if (!isStaticAsset) return;
+
+  // …but that fingerprinting guarantee does NOT hold in `next dev`, where
+  // Turbopack reuses chunk names and rewrites their contents in place. Caching
+  // there serves the previous edit's JavaScript against the current server
+  // render: the page hydrates into stale components, React reports a hydration
+  // mismatch, and the actual code change appears to have had no effect. That is
+  // an expensive thing to debug and it is entirely an artefact of the cache.
+  if (url.hostname === "localhost" || url.hostname === "127.0.0.1") return;
 
   event.respondWith(
     (async () => {

@@ -96,3 +96,144 @@ export function selectNextAction({
 
   return { kind: "revise", reason: "revise" };
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * DIFFICULTY STEPPING (D3)
+ *
+ *   2 correct in a row → step up (max 3)
+ *   2 wrong in a row   → step down (min 1), and the UI serves a worked example
+ *
+ * Adaptivity in Saathi is SELECTION FROM THE SEEDED BANK, never generation. Every
+ * question a learner sees was authored by a person and had its answer key verified
+ * (`npm run verify:answers`). A generated question is an unverified question, and
+ * an unverified question can mark a correct learner wrong.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+export type Difficulty = 1 | 2 | 3;
+
+export const MIN_DIFFICULTY: Difficulty = 1;
+export const MAX_DIFFICULTY: Difficulty = 3;
+/** How many in a row it takes to move. D3 says 2, both ways. */
+export const STEP_AFTER = 2;
+
+/**
+ * Where the learner is on the ladder, plus how far into a run they are.
+ *
+ * The runs are what stop a hot streak from rocketing someone to difficulty 3 in
+ * three questions: **a step resets both counters**, so 2 correct steps up and then
+ * it takes another 2 at the new level to step up again. Without the reset,
+ * "correct, correct, correct" reads as two overlapping runs of two.
+ */
+export type Ladder = {
+  difficulty: Difficulty;
+  correctRun: number;
+  wrongRun: number;
+};
+
+export function startLadder(difficulty: Difficulty = MIN_DIFFICULTY): Ladder {
+  return { difficulty, correctRun: 0, wrongRun: 0 };
+}
+
+/** Fold one graded answer into the ladder. Pure — returns a new Ladder. */
+export function applyResult(ladder: Ladder, isCorrect: boolean): Ladder {
+  if (isCorrect) {
+    const correctRun = ladder.correctRun + 1;
+
+    if (correctRun >= STEP_AFTER && ladder.difficulty < MAX_DIFFICULTY) {
+      return {
+        difficulty: (ladder.difficulty + 1) as Difficulty,
+        correctRun: 0,
+        wrongRun: 0,
+      };
+    }
+    // At the ceiling the run keeps counting rather than resetting — there is
+    // nowhere to step, and clearing it would mean a learner acing difficulty 3 is
+    // treated as having no momentum at all the moment they slip once.
+    return { difficulty: ladder.difficulty, correctRun, wrongRun: 0 };
+  }
+
+  const wrongRun = ladder.wrongRun + 1;
+
+  if (wrongRun >= STEP_AFTER && ladder.difficulty > MIN_DIFFICULTY) {
+    return {
+      difficulty: (ladder.difficulty - 1) as Difficulty,
+      correctRun: 0,
+      wrongRun: 0,
+    };
+  }
+  return { difficulty: ladder.difficulty, correctRun: 0, wrongRun };
+}
+
+/**
+ * How far back the ladder is rebuilt from history.
+ *
+ * The ladder is **recomputed from attempts, not stored**. That is a deliberate
+ * trade: one fewer column that can disagree with the attempts table, and a
+ * learner's level is always explainable from what they actually did. The cost is
+ * that history beyond this window is forgotten — which is the same forgetting D5
+ * builds into mastery, and for the same reason.
+ */
+export const LADDER_WINDOW = 10;
+
+/** Rebuild the ladder by folding a concept's recent results, oldest first. */
+export function ladderFrom(
+  results: readonly boolean[],
+  start: Difficulty = MIN_DIFFICULTY,
+): Ladder {
+  return results
+    .slice(-LADDER_WINDOW)
+    .reduce<Ladder>((ladder, isCorrect) => applyResult(ladder, isCorrect), startLadder(start));
+}
+
+export type QuestionRef = {
+  id: string;
+  difficulty: number;
+};
+
+/**
+ * Pick the next question from the bank.
+ *
+ * Preference order, and the last two rungs are the ones that matter:
+ *
+ *   1. unseen, at the target difficulty
+ *   2. unseen, at the nearest other difficulty — **ties break downward**, because
+ *      a learner who has run out of questions at their level should drop to easier
+ *      ground rather than be pushed up into harder
+ *   3. seen, at the target difficulty
+ *   4. anything at all
+ *
+ * Rungs 3 and 4 exist so the practice screen is **never empty** (spec §8). A
+ * learner who has worked through every question on a concept and gets a blank
+ * screen has been punished for finishing.
+ *
+ * Deterministic: no randomness, so the same state always yields the same question
+ * and a test can assert it. Bank order decides ties.
+ */
+export function selectNextQuestion<T extends QuestionRef>({
+  bank,
+  difficulty,
+  excludeIds = [],
+}: {
+  bank: readonly T[];
+  difficulty: Difficulty;
+  /** Questions already served in this session, or already answered correctly. */
+  excludeIds?: readonly string[];
+}): T | null {
+  if (bank.length === 0) return null;
+
+  const seen = new Set(excludeIds);
+  const unseen = bank.filter((question) => !seen.has(question.id));
+
+  const atTarget = unseen.find((question) => question.difficulty === difficulty);
+  if (atTarget) return atTarget;
+
+  const nearest = [...unseen].sort((a, b) => {
+    const byDistance =
+      Math.abs(a.difficulty - difficulty) - Math.abs(b.difficulty - difficulty);
+    if (byDistance !== 0) return byDistance;
+    return a.difficulty - b.difficulty; // tie → the easier one
+  })[0];
+  if (nearest) return nearest;
+
+  return bank.find((question) => question.difficulty === difficulty) ?? bank[0];
+}

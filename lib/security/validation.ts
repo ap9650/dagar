@@ -52,7 +52,20 @@ export const attemptSchema = z.object({
   ms_taken: z.number().int().min(0).max(3_600_000).optional(),
   session_kind: z.enum(["practice", "quiz"]),
   quiz_session_id: zUuid.optional(),
+  // Idempotency key, minted per submission by the client (migration 0011). A
+  // retry after a dropped response collapses into the same attempt row instead
+  // of spending two of the learner's five mastery slots on one question.
+  submission_id: zUuid.optional(),
 });
+
+/**
+ * Note what this schema does NOT contain: `is_correct`, `score`, `mastery`,
+ * `streak`. Zod strips unknown keys, so a client that POSTs `is_correct: true`
+ * has it dropped here before the handler ever sees it — the server regrades from
+ * `answer_value` regardless. That is the guided-practice.md §7 security criterion,
+ * enforced by the shape of this object rather than by a check someone has to
+ * remember to write.
+ */
 
 export const tutorMessageSchema = z.object({
   lesson_id: zUuid,

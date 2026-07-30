@@ -103,6 +103,7 @@ export type Database = {
           quiz_session_id: string | null
           session_kind: string
           student_id: string
+          submission_id: string | null
         }
         Insert: {
           concept_id: string
@@ -116,6 +117,7 @@ export type Database = {
           quiz_session_id?: string | null
           session_kind: string
           student_id: string
+          submission_id?: string | null
         }
         Update: {
           concept_id?: string
@@ -129,6 +131,7 @@ export type Database = {
           quiz_session_id?: string | null
           session_kind?: string
           student_id?: string
+          submission_id?: string | null
         }
         Relationships: [
           {
