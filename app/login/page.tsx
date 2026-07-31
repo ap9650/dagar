@@ -79,12 +79,24 @@ export default async function LoginPage({
           else, and the code is what tells us which door they wanted.
           Deliberately quiet — the overwhelming majority of arrivals are
           learners, and this must not compete with the primary path. */}
-      <a
-        href="/parent/claim"
-        className="self-center min-h-11 inline-flex items-center text-body-sm text-primary-strong underline underline-offset-4"
-      >
-        {t("login.parentCode")}
-      </a>
+      <div className="flex flex-col items-center gap-xs">
+        <a
+          href="/parent/claim"
+          className="min-h-11 inline-flex items-center text-body-sm text-primary-strong underline underline-offset-4"
+        >
+          {t("login.parentCode")}
+        </a>
+        {/* Beside it, not instead of it. A parent who already has a code wants
+            the first link; a parent who does not yet know what any of this is
+            wants the second, and making them guess between one link is how the
+            second person leaves. */}
+        <a
+          href="/for-parents"
+          className="min-h-11 inline-flex items-center text-body-sm text-body underline underline-offset-4"
+        >
+          {t("login.parentHow")}
+        </a>
+      </div>
     </main>
   );
 }

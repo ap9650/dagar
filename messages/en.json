@@ -19,7 +19,8 @@
   },
   "welcome": {
     "chooseLanguage": "Choose your language",
-    "selected": "Selected"
+    "selected": "Selected",
+    "forParents": "Are you a parent?"
   },
   "login": {
     "title": "Welcome to Saathi",
@@ -37,7 +38,8 @@
     "firstNameHint": "A first name is enough. You can skip this.",
     "checkEmail": "Check your email for a link to sign in.",
     "failed": "That did not work. Check your email and password and try again.",
-    "parentCode": "I have a parent code"
+    "parentCode": "I have a parent code",
+    "parentHow": "How does this work?"
   },
   "onboarding": {
     "gradeTitle": "Which class are you in?",
@@ -216,7 +218,11 @@
     "inviteParentHow": "Read it out to them, or send it on WhatsApp. In Saathi they tap “I have a parent code” and enter it.",
     "inviteParentExpiry": "This code works for {hours, plural, one {# more hour} other {# more hours}}.",
     "inviteParentCopy": "Copy the code",
-    "inviteParentCopied": "Copied"
+    "inviteParentCopied": "Copied",
+    "inviteParentSees": "They will see: lessons you finished, which topics you are getting, your streak and your badges.",
+    "inviteParentPrivate": "They will not see: your answers, your questions to Saathi, or anything you typed.",
+    "inviteParentShare": "Send it on WhatsApp",
+    "inviteParentShareMessage": "I am learning maths on Saathi. You can see how I am doing — open {url} and enter my code {code}"
   },
   "install": {
     "title": "Add Saathi to your home screen",
@@ -255,5 +261,30 @@
     "rateLimited": "That was a lot at once. Wait a moment and try again.",
     "backHome": "Back to Learn",
     "offlineBody": "Saathi needs a connection right now. Your progress is safe."
+  },
+  "forParents": {
+    "title": "For parents",
+    "intro": "Saathi is a maths tutor for Classes 6 to 8, following the NCERT syllabus. Your child uses it to learn; you get a simple weekly picture of how they are doing.",
+    "back": "Back to sign in",
+    "stepsTitle": "How to connect to your child",
+    "step1": "Your child opens Saathi, goes to Settings, and taps “Invite a parent”. A 6-character code appears on their screen.",
+    "step2": "They read it out to you, or send it on WhatsApp. The code works for 3 days.",
+    "step3": "You create your own Saathi account here — your email, your password. It is separate from your child's.",
+    "step4": "You enter the code once. From then on you go straight to their summary whenever you sign in.",
+    "seesTitle": "What you will see",
+    "sees1": "How many lessons and practice questions they finished this week",
+    "sees2": "Which topics they have got, and which need more practice",
+    "sees3": "Their day streak, so you know if they are keeping the habit",
+    "sees4": "Badges they earned — the moments worth celebrating at home",
+    "privateTitle": "What stays private",
+    "private1": "The answers they gave, right or wrong",
+    "private2": "The questions they asked the Saathi tutor",
+    "private3": "Anything they typed for themselves",
+    "readOnly": "Your view is read-only. There is nothing you can change, undo or delete — you cannot affect their learning by tapping anything.",
+    "haveCode": "I have a code",
+    "noCodeTitle": "No code yet?",
+    "noCodeBody": "Ask your child to open Saathi, go to Settings, and tap “Invite a parent”. It takes them one tap.",
+    "sharedPhoneTitle": "Sharing one phone?",
+    "sharedPhoneBody": "That works. Both accounts can live on the same phone — sign out from Settings to swap between your child's view and yours."
   }
 }

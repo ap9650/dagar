@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import type { Locale } from "@/i18n/config";
@@ -36,6 +36,7 @@ export default async function WelcomePage() {
   }
 
   const locale = (await getLocale()) as Locale;
+  const t = await getTranslations();
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-3xl">
@@ -43,6 +44,18 @@ export default async function WelcomePage() {
       <h1 className="text-h1 text-primary-strong text-center">Saathi</h1>
 
       <LanguagePicker current={locale} continueHref="/login" />
+
+      {/* BELOW the picker, never above it. The design rule for this screen is
+          that nothing above the language choice may require reading a language
+          — and a parent who has picked their language is exactly who this is
+          for. It is the only door for the fourth kind of arrival: an adult who
+          heard about Saathi and has no code and no child account to start from. */}
+      <a
+        href="/for-parents"
+        className="self-center min-h-11 inline-flex items-center text-body-sm text-body underline underline-offset-4"
+      >
+        {t("welcome.forParents")}
+      </a>
     </main>
   );
 }

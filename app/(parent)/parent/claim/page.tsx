@@ -54,6 +54,15 @@ export default async function ClaimPage() {
       </header>
 
       <ClaimCodeForm />
+
+      {/* Reachable from the form too: someone who got this far and is unsure
+          what they are agreeing to should not have to go back to find out. */}
+      <a
+        href="/for-parents"
+        className="self-center min-h-11 inline-flex items-center text-body-sm text-body underline underline-offset-4"
+      >
+        {t("login.parentHow")}
+      </a>
     </main>
   );
 }
