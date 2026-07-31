@@ -29,7 +29,17 @@ export default async function ForParentsPage() {
   const t = await getTranslations("forParents");
 
   const sees = [t("sees1"), t("sees2"), t("sees3"), t("sees4")];
-  const doesNotSee = [t("private1"), t("private2"), t("private3")];
+  // ONE line, because one thing is actually enforced.
+  //
+  // This list used to promise that the answers a learner gave and "anything they
+  // typed for themselves" stayed private too. Neither was true: a linked parent
+  // could read both. Rather than enforce promises the product may not want to
+  // keep — the answers are being left visible on purpose, for a future screen —
+  // the list now claims only what migration 0017 guarantees.
+  //
+  // A short list that holds is worth more than a long one that does not. This is
+  // a promise made to a child about their own words.
+  const doesNotSee = [t("private1")];
   const steps = [t("step1"), t("step2"), t("step3"), t("step4")];
 
   return (

@@ -311,6 +311,24 @@ The build plan ends at deploy; the product doesn't. In priority order:
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
    rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
    an untested deploy.
+1b. **"See their practice" — questions and answers for a supporting adult.**
+   Decided 31 Jul as a wanted feature, deliberately deferred. A new screen off
+   `/parent` (and off `/s/[token]` — **one screen for every supporting adult**,
+   whether parent, guardian, tutor or older sibling; the door they came through
+   must never change what they see) listing questions practised and what the
+   learner answered.
+
+   **The trap, and the reason this is not a 20-minute job:** showing what the
+   learner answered is easy; showing *the correct answer beside it* means a
+   parent-role account reading `questions.answer_value`, which today no signed-in
+   user can read at all. Grant that to the parent role and a learner who signs up
+   with a second email has the whole answer key. It has to follow the
+   `/s/[token]` pattern — the server assembles a fixed, safe payload and the
+   browser never holds a key it could reuse.
+
+   The RLS access this needs already exists and was left open on purpose: a
+   linked parent can read `attempts` (see `tests/integration/privacy-promise.test.ts`).
+   The tutor conversation is NOT part of this and never will be — migration 0017.
 2. **Check the health queries daily** — cache-read ratio and cost/learner first.
    Caching silently not working is the single most likely cost surprise.
 3. **Read the thumbs-down responses.** Ten of them will teach you more about the
