@@ -545,8 +545,9 @@ export type Database = {
           delivery_status: string | null
           id: string
           opened_at: string | null
-          parent_link_id: string
+          parent_link_id: string | null
           payload: Json
+          summary_link_id: string | null
           tracking_token: string | null
           week_start: string
         }
@@ -557,8 +558,9 @@ export type Database = {
           delivery_status?: string | null
           id?: string
           opened_at?: string | null
-          parent_link_id: string
+          parent_link_id?: string | null
           payload?: Json
+          summary_link_id?: string | null
           tracking_token?: string | null
           week_start: string
         }
@@ -569,8 +571,9 @@ export type Database = {
           delivery_status?: string | null
           id?: string
           opened_at?: string | null
-          parent_link_id?: string
+          parent_link_id?: string | null
           payload?: Json
+          summary_link_id?: string | null
           tracking_token?: string | null
           week_start?: string
         }
@@ -580,6 +583,13 @@ export type Database = {
             columns: ["parent_link_id"]
             isOneToOne: false
             referencedRelation: "parent_links"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parent_summaries_summary_link_id_fkey"
+            columns: ["summary_link_id"]
+            isOneToOne: false
+            referencedRelation: "summary_links"
             referencedColumns: ["id"]
           },
         ]

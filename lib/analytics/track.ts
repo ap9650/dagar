@@ -84,6 +84,41 @@ function scrub(props: EventProps): EventProps {
  * policy (`auth.uid() = student_id`) would reject anything else anyway, and
  * accepting an id here would make this an impersonation surface.
  */
+/**
+ * Record an event for a learner when there is NO session to read it from.
+ *
+ * Two callers, and both are legitimately session-less:
+ *   - the weekly cron, which runs as nobody
+ *   - `/s/[token]`, opened by a supporting adult who has no account at all
+ *
+ * It takes the student id explicitly and writes with the service role, so it
+ * bypasses the `auth.uid() = student_id` policy that `track()` relies on. That
+ * makes it a small impersonation surface by construction — **never call it with
+ * an id taken from a request**. Both callers derive the id from a row they
+ * already resolved (a share link, a summary), never from user input.
+ *
+ * Same scrubbing as `track()`: no PII, no free text. In particular the viewer's
+ * identity is not recorded, because we do not have it and do not want it — this
+ * counts that a summary was opened, not who opened it.
+ */
+export async function trackForStudent(
+  studentId: string,
+  name: EventName,
+  props: EventProps = {},
+): Promise<void> {
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    const { error } = await admin
+      .from("events")
+      .insert({ student_id: studentId, name, props: scrub(props) });
+
+    if (error) console.error(`[track] ${name} failed:`, error.message);
+  } catch (error) {
+    console.error(`[track] ${name} threw:`, error);
+  }
+}
+
 export async function track(
   name: EventName,
   props: EventProps = {},

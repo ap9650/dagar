@@ -357,6 +357,14 @@ intention, not a permission; the join step is the permission.
 The number is the adult's PII: never in `events`, never in a prompt, removable by
 the learner at any time, and used for delivery only.
 
+**Known limitation, accepted 1 Aug 2026.** The weekly cron iterates `summary_links`
+only, so a parent who took the **account** path receives no weekly message. They
+are not missing the content — `/parent` shows the same summary, live, whenever
+they sign in — only the nudge. Extending the cron to `parent_links` is half an
+hour and was declined deliberately: the account path is first on the cut list,
+and spending build time on the path we agreed not to invest in is how a cut list
+stops meaning anything. Revisit only if the account path survives.
+
 ### The sandbox cannot deliver a weekly summary at all (verified 2026-07-29)
 
 Correcting an earlier, softer framing that called the sandbox merely "not production

@@ -5,6 +5,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { fetchWeeklySummary } from "@/lib/parent/summary";
 import { isShareLinkExpired, isShareTokenShape } from "@/lib/parent/shareToken";
 import { WeeklySummary } from "@/components/parent/WeeklySummary";
+import { trackForStudent } from "@/lib/analytics/track";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -78,6 +79,11 @@ export default async function SharedSummaryPage({
     .from("summary_links")
     .update({ last_viewed_at: new Date().toISOString(), view_count: link.view_count + 1 })
     .eq("id", link.id);
+
+  // D4's Parent Engagement metric: the weekly-summary open rate. The student id
+  // comes from the row the token resolved to, never from the request — see
+  // `trackForStudent`. Nothing about the viewer is recorded.
+  await trackForStudent(link.student_id, "parent_summary_viewed");
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
