@@ -328,6 +328,35 @@ The SMS adapter ships as a working, unregistered stub so the channel is one conf
 change away once DLT clears. Say this explicitly in the demo — it's an architecture
 strength, not a gap.
 
+### Amended 1 Aug 2026 — the recipient comes from the LEARNER, not a parent account
+
+D4 originally hung delivery off `parent_links.whatsapp_e164`, which meant the
+weekly summary could only reach an adult who had **created an account and
+redeemed a 6-character code**. Building that flow showed the friction is not
+worth it for the common case:
+
+- the child is usually on the parent's phone, so that parent already sees more by
+  opening the app than a second account would show them
+- the person who actually reads a summary here is often the most literate person
+  in the household — frequently an older sibling — or a tutor looking at it
+  beside a parent, and none of them will register
+- `/parent` shows **one** child, so the account path's best argument (a tutor with
+  several learners) is not implemented and does not justify it
+
+**So: the learner enters the recipient's WhatsApp number in Settings.** No parent
+account is required for delivery, and the message carries the `/s/[token]` link,
+which also needs no account. The account path stays for anyone who wants a
+permanent signed-in view, and is **first on the cut list**.
+
+Consent is not skipped by this — it is relocated to where it actually belongs.
+The Twilio sandbox requires the recipient to send a join code from their own
+WhatsApp before anything can be delivered to them, so **the adult opts in from
+their own phone**, whatever a learner typed. A number entered by a child is an
+intention, not a permission; the join step is the permission.
+
+The number is the adult's PII: never in `events`, never in a prompt, removable by
+the learner at any time, and used for delivery only.
+
 ### The sandbox cannot deliver a weekly summary at all (verified 2026-07-29)
 
 Correcting an earlier, softer framing that called the sandbox merely "not production

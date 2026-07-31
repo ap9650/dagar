@@ -14,6 +14,12 @@ export default defineConfig({
     globals: true,
   },
   resolve: {
-    alias: { "@": path.resolve(__dirname, ".") },
+    alias: {
+      "@": path.resolve(__dirname, "."),
+      // See tests/stubs/server-only.ts — the real package throws on import
+      // outside a server context, which is right in Next and wrong in a test
+      // runner. `next build` still resolves the real one.
+      "server-only": path.resolve(__dirname, "tests/stubs/server-only.ts"),
+    },
   },
 });

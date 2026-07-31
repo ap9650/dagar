@@ -768,7 +768,10 @@ export type Database = {
           created_at: string
           expires_at: string
           id: string
+          last_sent_at: string | null
           last_viewed_at: string | null
+          recipient_e164: string | null
+          recipient_opted_in_at: string | null
           revoked_at: string | null
           student_id: string
           token: string
@@ -778,7 +781,10 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id?: string
+          last_sent_at?: string | null
           last_viewed_at?: string | null
+          recipient_e164?: string | null
+          recipient_opted_in_at?: string | null
           revoked_at?: string | null
           student_id: string
           token: string
@@ -788,7 +794,10 @@ export type Database = {
           created_at?: string
           expires_at?: string
           id?: string
+          last_sent_at?: string | null
           last_viewed_at?: string | null
+          recipient_e164?: string | null
+          recipient_opted_in_at?: string | null
           revoked_at?: string | null
           student_id?: string
           token?: string
