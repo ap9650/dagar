@@ -5,7 +5,8 @@ import { createClient } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { selectNextAction } from "@/lib/learning/adaptivity";
 import { dailyGoal } from "@/lib/learning/dailyGoal";
-import { daysBetween, istDate, istDayStart } from "@/lib/learning/dates";
+import { istDate, istDayStart } from "@/lib/learning/dates";
+import { fromRow, streakStatus } from "@/lib/learning/streaks";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
@@ -78,7 +79,7 @@ export default async function LearnPage() {
       .eq("student_id", studentId),
     supabase
       .from("streaks")
-      .select("current, last_active_date, grace_used_on")
+      .select("current, longest, last_active_date, grace_used_on")
       .eq("student_id", studentId)
       .maybeSingle(),
     supabase
@@ -98,16 +99,11 @@ export default async function LearnPage() {
   const chapter = chapters?.[0];
   const goal = dailyGoal(lessonsToday ?? 0, practiceToday ?? 0);
 
-  // A streak is only "current" if the learner was active today or yesterday —
-  // otherwise the stored number is stale until the next write recomputes it, and
-  // showing it would tell a learner they have a 5-day streak they actually lost.
-  const gapDays = streak?.last_active_date
-    ? daysBetween(streak.last_active_date, istDate())
-    : Infinity;
-  const streakDays = gapDays <= 1 ? (streak?.current ?? 0) : 0;
-  const graceActive = streak?.grace_used_on
-    ? daysBetween(streak.grace_used_on, istDate()) < 7
-    : false;
+  // Whether the STORED streak is still alive today — see streaks.ts. It lived
+  // here as three inline lines until /progress needed the same answer, and two
+  // screens quietly disagreeing about whether a learner still has their streak
+  // is exactly the bug that erodes trust in the number.
+  const streakState = streakStatus(fromRow(streak));
 
   const header = (
     <header className="flex items-center justify-between gap-md">
@@ -119,7 +115,14 @@ export default async function LearnPage() {
         </h1>
       </div>
       <div className="flex items-center gap-sm shrink-0">
-        <StreakBadge days={streakDays} graceActive={graceActive} />
+        {/* The flame is the way in to /progress. Tapping the thing you want to
+            know more about is where a learner already reaches, and it costs no
+            room in a 360px header — which is why the bottom nav in SCREENS is
+            still on the Day 3 list, alongside the parent tab that will make it a
+            four-destination bar rather than a two. */}
+        <Link href="/progress" aria-label={t("progress.open")}>
+          <StreakBadge days={streakState.days} graceActive={streakState.graceActive} />
+        </Link>
         {/* An icon, reachable from every screen: this is how a learner who picked
             the wrong language gets back out (auth-onboarding spec §7). */}
         <Link
@@ -289,9 +292,16 @@ export default async function LearnPage() {
         </ul>
       </section>
 
-      <Link href={`/quiz/${chapter.id}`} className={buttonClasses("secondary")}>
-        {t("chapter.quizStart")}
-      </Link>
+      <div className="flex flex-col gap-md">
+        <Link href={`/quiz/${chapter.id}`} className={buttonClasses("secondary")}>
+          {t("chapter.quizStart")}
+        </Link>
+        {/* Spelled out as well as reachable through the flame: a learner who does
+            not think to tap a badge should still be able to find the screen. */}
+        <Link href="/progress" className={buttonClasses("ghost")}>
+          {t("progress.open")}
+        </Link>
+      </div>
     </main>
   );
 }

@@ -164,7 +164,12 @@
     "streakTitle": "Streak",
     "milestonesTitle": "Badges",
     "milestoneLocked": "Not yet",
-    "empty": "Finish a lesson and your progress shows up here."
+    "empty": "Finish a lesson and your progress shows up here.",
+    "longestStreak": "Your best so far: {days, plural, one {# day} other {# days}}",
+    "chapterMastery": "{chapter} — {mastered} of {total} concepts mastered",
+    "notStarted": "Not started",
+    "badgeCount": "{earned} of {total}",
+    "open": "See your progress"
   },
   "mastery": {
     "needs_revision": "Keep practising",

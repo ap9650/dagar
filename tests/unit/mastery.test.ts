@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeMastery, masteryBand, quizBand } from "@/lib/learning/mastery";
+import { chapterMastery, computeMastery, masteryBand, quizBand } from "@/lib/learning/mastery";
 
 /**
  * D5 mastery. The boundary cases are the point: 0.8 exactly, 3 attempts exactly,
@@ -107,6 +107,33 @@ describe("masteryBand — D5 quiz bands", () => {
     const twoCorrect = computeMastery([T, T]);
     expect(twoCorrect.band).toBe("mastered");
     expect(twoCorrect.isMastered).toBe(false);
+  });
+});
+
+describe("chapterMastery — D5's percentage", () => {
+  const concepts = ["a", "b", "c", "d"];
+
+  it("is the share of the chapter's concepts that are mastered", () => {
+    expect(chapterMastery(concepts, new Set(["a", "b"]))).toEqual({
+      mastered: 2,
+      total: 4,
+      fraction: 0.5,
+    });
+  });
+
+  it("counts ALL concepts, not just the attempted ones", () => {
+    // The number that would flatter: one concept tried, one mastered, and a
+    // progress screen reporting 100% of a chapter the learner has barely opened.
+    expect(chapterMastery(concepts, new Set(["a"])).fraction).toBe(0.25);
+  });
+
+  it("ignores mastered concepts from other chapters", () => {
+    // `masteredConceptIds` is the learner's whole set, across every chapter.
+    expect(chapterMastery(concepts, new Set(["a", "z1", "z2"])).mastered).toBe(1);
+  });
+
+  it("is zero, not NaN, for a chapter with no concepts", () => {
+    expect(chapterMastery([], new Set())).toEqual({ mastered: 0, total: 0, fraction: 0 });
   });
 });
 

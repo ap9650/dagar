@@ -78,6 +78,23 @@ export function quizBand(correct: number, total: number): MasteryBand {
 }
 
 /**
+ * Chapter mastery (D5): the share of a chapter's concepts that are Mastered.
+ *
+ * Counted over ALL the chapter's concepts, not just the attempted ones. A learner
+ * who has mastered the only concept they have tried has not mastered the chapter,
+ * and reporting 100% would be a number that flatters instead of informs — the one
+ * thing a progress screen must never do.
+ */
+export function chapterMastery(
+  conceptIds: readonly string[],
+  masteredConceptIds: ReadonlySet<string>,
+): { mastered: number; total: number; fraction: number } {
+  const total = conceptIds.length;
+  const mastered = conceptIds.filter((id) => masteredConceptIds.has(id)).length;
+  return { mastered, total, fraction: total === 0 ? 0 : mastered / total };
+}
+
+/**
  * Mastery from a concept's attempt history.
  *
  * `results` is chronological, oldest first — the last `MASTERY_WINDOW` are taken.

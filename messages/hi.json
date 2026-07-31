@@ -164,7 +164,12 @@
     "streakTitle": "स्ट्रीक",
     "milestonesTitle": "बैज",
     "milestoneLocked": "अभी नहीं",
-    "empty": "एक लेसन पूरा करो, फिर यहाँ तुम्हारी प्रगति दिखेगी।"
+    "empty": "एक लेसन पूरा करो, फिर यहाँ तुम्हारी प्रगति दिखेगी।",
+    "longestStreak": "अब तक सबसे ज़्यादा: {days, plural, one {# दिन} other {# दिन}}",
+    "chapterMastery": "{chapter} — {total} में से {mastered} टॉपिक पक्के",
+    "notStarted": "अभी शुरू नहीं किया",
+    "badgeCount": "{total} में से {earned}",
+    "open": "अपनी प्रोग्रेस देखो"
   },
   "mastery": {
     "needs_revision": "और प्रैक्टिस करो",
