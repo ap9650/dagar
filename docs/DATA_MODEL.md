@@ -65,6 +65,16 @@ Retention: 90 days (D11).
 
 **`mentor_requests`** — `id` · `student_id` · `concept_id` · `trigger` (which D6 rule fired) · `learner_note` · `context` (jsonb: recent attempts + tutor excerpt) · `status` (`open`|`acknowledged`|`resolved`) · `created_at`
 
+> `context` is assembled server-side by `lib/learning/mentorContext.ts` and holds the
+> concept and chapter, the last 5 attempts **with the answers the learner gave** (plus
+> the choice label for MCQ — "b" tells a mentor nothing), and up to 6 tutor turns.
+> At most one **open** request exists per learner per concept; asking again refreshes
+> that row rather than filing a second one.
+>
+> **Retention debt:** the tutor excerpt is a copy of `tutor_messages` text and would
+> outlive the 90-day rule above unless the purge covers this column too. Truncated to
+> 300 chars per turn to bound it. The Day 3 retention job must include it.
+
 **`parent_summaries`** — `id` · `parent_link_id` · `week_start` (date) · `payload` (jsonb) · `channel` (`whatsapp`|`in_app`) · `delivered_at` · `delivery_status` · `tracking_token` (unique) · `opened_at`
 
 ## Observability

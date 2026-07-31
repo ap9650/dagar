@@ -259,6 +259,76 @@ d("RLS boundaries", () => {
     expect(error).not.toBeNull();
   });
 
+  // ─── mentor requests (2.6) ─────────────────────────────────────────────────
+
+  it("student B cannot read student A's mentor request", async () => {
+    // The context on this row is the most sensitive thing a learner produces:
+    // what they got wrong, what they typed, and anything they wrote in the note.
+    const { data: request } = await admin
+      .from("mentor_requests")
+      .insert({
+        student_id: alice.id,
+        concept_id: conceptId,
+        trigger: "three_consecutive_incorrect",
+        learner_note: "__alice private note__",
+        context: { recent_attempts: [] },
+      })
+      .select("id")
+      .single();
+
+    const { data: readAsBob } = await bob.client.from("mentor_requests").select("*");
+    expect(readAsBob ?? []).toHaveLength(0);
+
+    const { data: targeted } = await bob.client
+      .from("mentor_requests")
+      .select("*")
+      .eq("id", request!.id);
+    expect(targeted ?? []).toHaveLength(0);
+  });
+
+  it("a learner cannot file a mentor request in someone else's name", async () => {
+    const { error } = await bob.client.from("mentor_requests").insert({
+      student_id: alice.id, // impersonation attempt
+      concept_id: conceptId,
+      trigger: "three_consecutive_incorrect",
+      context: {},
+    });
+    expect(error).not.toBeNull();
+  });
+
+  it("a linked parent can READ their child's mentor request but not write one", async () => {
+    const { data: readable } = await parentOfAlice.client
+      .from("mentor_requests")
+      .select("id, learner_note")
+      .eq("student_id", alice.id);
+    expect((readable ?? []).length).toBeGreaterThan(0);
+
+    // D2: there is no parent write policy anywhere in this product.
+    const { error } = await parentOfAlice.client.from("mentor_requests").insert({
+      student_id: alice.id,
+      concept_id: conceptId,
+      trigger: "hints_exhausted_twice",
+      context: {},
+    });
+    expect(error).not.toBeNull();
+
+    // …and they cannot close one on the learner's behalf either.
+    const { data: updated } = await parentOfAlice.client
+      .from("mentor_requests")
+      .update({ status: "resolved" })
+      .eq("student_id", alice.id)
+      .select("id");
+    expect(updated ?? []).toHaveLength(0);
+  });
+
+  it("an UNLINKED parent cannot read that child's mentor requests", async () => {
+    const { data } = await strangerParent.client
+      .from("mentor_requests")
+      .select("*")
+      .eq("student_id", alice.id);
+    expect(data ?? []).toHaveLength(0);
+  });
+
   it("quiz questions are as answer-key-free as practice ones", async () => {
     // `kind` changes nothing about the boundary — `questions_public` is one view
     // over one table — but the quiz is the screen where a leaked key is worth the

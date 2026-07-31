@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { getLocale } from "next-intl/server";
+import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { requireAuth } from "@/lib/security/authGuard";
 import { parseBody, quizSubmitSchema, zUuid } from "@/lib/security/validation";
 import { LIMITS, memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 import { track } from "@/lib/analytics/track";
 import { gradeQuizSubmission } from "@/lib/learning/quiz";
+import { detectStruggle } from "@/lib/learning/struggle";
+import { HINT_TIERS } from "@/lib/learning/hints";
 import { t as tContent } from "@/lib/i18n/content";
 import type { Locale } from "@/i18n/config";
 
@@ -85,6 +88,8 @@ export async function POST(
   // mastery query timed out is the worse bug by a distance, and everything here
   // recomputes on the learner's next write anyway.
   let milestonesEarned: string[] = [];
+  let mentorTrigger: string | null = null;
+  let mentorConceptId: string | null = null;
 
   try {
     for (const conceptId of graded.conceptIds) {
@@ -108,6 +113,48 @@ export async function POST(
     console.error("[quiz/submit] derived state failed:", error);
   }
 
+  // ── D6, evaluated HERE and not during the quiz (mentor-request.md §7) ─────
+  //
+  // "Do not interrupt a quiz. Surface the CTA on the results screen instead."
+  // Three wrong in a row is ordinary inside a quiz — that is what a quiz is for
+  // — and putting "want a person to explain this?" in front of a learner on
+  // question four would be the app telling them they are failing while they are
+  // still sitting the thing.
+  //
+  // The attempts are already written, so by the time this runs the quiz's own
+  // answers are part of the history D6 reads.
+  try {
+    const supabase = await createClient();
+
+    for (const conceptId of graded.conceptIds) {
+      const { data: conceptAttempts } = await supabase
+        .from("attempts")
+        .select("is_correct, hints_used, created_at")
+        .eq("student_id", auth.userId)
+        .eq("concept_id", conceptId)
+        .order("created_at", { ascending: true });
+
+      const trigger = detectStruggle(
+        (conceptAttempts ?? []).map((a) => ({
+          is_correct: a.is_correct,
+          hints_used: a.hints_used,
+        })),
+        HINT_TIERS,
+      );
+
+      // First trigger wins, one CTA, one request (spec §7). Concepts are checked
+      // in the order they appeared in the quiz, so the offer lands on the one
+      // they met first rather than whichever the database returned first.
+      if (trigger) {
+        mentorTrigger = trigger;
+        mentorConceptId = conceptId;
+        break;
+      }
+    }
+  } catch (error) {
+    console.error("[quiz/submit] struggle check failed:", error);
+  }
+
   // No PII, no free text: ids and numbers only (saathi-security §5).
   await track("quiz_submitted", {
     chapter_id: graded.chapterId,
@@ -123,5 +170,8 @@ export async function POST(
     band: graded.band,
     perQuestion: graded.perQuestion,
     milestonesEarned,
+    showMentorCta: mentorTrigger !== null,
+    mentorTrigger,
+    mentorConceptId,
   });
 }

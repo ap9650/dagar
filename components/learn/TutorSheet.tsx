@@ -346,8 +346,11 @@ export function TutorSheet({
             </p>
           )}
 
+          {/* `lessonId` too: this is D6 rule 3, where the signal IS the tutor
+              conversation, so the excerpt a mentor reads should be the one from
+              this lesson rather than everything under the concept. */}
           {mentorTrigger && conceptId && (
-            <MentorCta conceptId={conceptId} trigger={mentorTrigger} />
+            <MentorCta conceptId={conceptId} lessonId={lessonId} trigger={mentorTrigger} />
           )}
 
           <div ref={bottomRef} />

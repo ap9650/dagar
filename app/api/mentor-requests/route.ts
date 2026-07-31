@@ -4,25 +4,21 @@ import { requireAuth } from "@/lib/security/authGuard";
 import { mentorRequestSchema, parseBody } from "@/lib/security/validation";
 import { memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 import { track } from "@/lib/analytics/track";
-import { STRUGGLE_WINDOW } from "@/lib/learning/struggle";
-import type { Json } from "@/lib/supabase/database.types";
+import { buildMentorContext } from "@/lib/learning/mentorContext";
 
 /**
  * POST /api/mentor-requests — the learner accepts the "want a person to explain
  * this?" offer.
  *
- * Built here in 2.2 rather than left for 2.6 because 2.2 ships the CTA that
- * triggers it, and a button that 404s is worse than no button. Slice 2.6 adds
- * D6 rule 3 (tutor turns with no practice) and the transcript excerpt in
- * `context`; the shape below does not change.
- *
  * **Capture-only (D8).** There is no mentor-side UI in the MVP and `status` moves
- * by hand. The copy the learner sees must therefore promise a person, not a
- * timeframe.
+ * by hand. The copy the learner sees therefore promises a person, not a
+ * timeframe — an app that says "someone will reply shortly" and then does not is
+ * worse than one that never offered.
  *
- * `context` is assembled SERVER-SIDE from real attempts. The schema deliberately
- * has no `context` field — accepting one would let a forged payload poison the
- * record a human is going to read.
+ * `context` is assembled SERVER-SIDE by `buildMentorContext`. The schema
+ * deliberately has no `context` field: this is the one place in the product
+ * where data reaches a human directly rather than through a screen, and a forged
+ * payload would poison the record they act on.
  */
 export async function POST(request: Request) {
   const auth = await requireAuth();
@@ -35,41 +31,78 @@ export async function POST(request: Request) {
   const parsed = await parseBody(request, mentorRequestSchema);
   if (!parsed.ok) return parsed.response;
 
-  const { concept_id, trigger, learner_note } = parsed.data;
+  const { concept_id, lesson_id, trigger, learner_note } = parsed.data;
 
   const supabase = await createClient();
 
-  // What a mentor needs to be useful in thirty seconds: which questions, right or
-  // wrong, how much help was already taken. Question SLUGS, never stems — the
-  // stem is reproducible from the slug and the row stays small.
-  let context: Json = {};
+  const context = await buildMentorContext({
+    supabase,
+    studentId: auth.userId,
+    conceptId: concept_id,
+    lessonId: lesson_id,
+    trigger,
+  });
 
-  if (concept_id) {
-    const { data: recent } = await supabase
-      .from("attempts")
-      .select("question_id, is_correct, hints_used, created_at")
-      .eq("student_id", auth.userId)
-      .eq("concept_id", concept_id)
-      .order("created_at", { ascending: false })
-      .limit(STRUGGLE_WINDOW);
+  // ── one open request per concept (spec §7) ───────────────────────────────
+  //
+  // A learner who is stuck enough to ask twice is stuck; they are not two
+  // people with two problems. Two open rows for the same concept means a mentor
+  // reads the same story twice and the second copy is the stale one — so the
+  // existing request is REFRESHED with the newer context instead.
+  //
+  // Scoped to `status = 'open'`. A request already acknowledged or resolved is a
+  // closed episode, and a learner getting stuck again next week deserves a new
+  // one rather than having their old thread reopened underneath a mentor.
+  const existingQuery = supabase
+    .from("mentor_requests")
+    .select("id")
+    .eq("student_id", auth.userId)
+    .eq("status", "open")
+    .limit(1);
 
-    context = {
-      recent_attempts: (recent ?? []).map((attempt) => ({
-        question_id: attempt.question_id,
-        is_correct: attempt.is_correct,
-        hints_used: attempt.hints_used,
-        at: attempt.created_at,
-      })),
-    };
+  const { data: existing } = concept_id
+    ? await existingQuery.eq("concept_id", concept_id).maybeSingle()
+    : await existingQuery.is("concept_id", null).eq("trigger", trigger).maybeSingle();
+
+  if (existing?.id) {
+    const { error } = await supabase
+      .from("mentor_requests")
+      .update({
+        trigger,
+        context,
+        // Only overwrite the note if they wrote a new one. A learner who
+        // explained themselves the first time should not lose it by tapping
+        // the button again without typing.
+        ...(learner_note ? { learner_note } : {}),
+      })
+      .eq("id", existing.id)
+      .eq("student_id", auth.userId);
+
+    if (error) {
+      console.error("[mentor-requests] update failed:", error.message);
+      return NextResponse.json(
+        { error: "Could not send your request", code: "MENTOR_REQUEST_FAILED" },
+        { status: 500 },
+      );
+    }
+
+    // No second event. The metric counts learners who asked for a person, and
+    // counting the same episode twice would overstate the one number this
+    // feature reports.
+    return NextResponse.json({ ok: true, id: existing.id, updated: true });
   }
 
-  const { error } = await supabase.from("mentor_requests").insert({
-    student_id: auth.userId,
-    concept_id: concept_id ?? null,
-    trigger,
-    learner_note: learner_note ?? null,
-    context,
-  });
+  const { data: created, error } = await supabase
+    .from("mentor_requests")
+    .insert({
+      student_id: auth.userId,
+      concept_id: concept_id ?? null,
+      trigger,
+      learner_note: learner_note ?? null,
+      context,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     console.error("[mentor-requests]", error.message);
@@ -79,9 +112,9 @@ export async function POST(request: Request) {
     );
   }
 
-  // `trigger` only — never the note. A learner's free text does not belong in an
-  // events table we aggregate and read (saathi-security §5).
+  // `trigger` only — never the note, never the answers. A learner's free text
+  // does not belong in an events table we aggregate and read (saathi-security §5).
   await track("mentor_request_submitted", { trigger });
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, id: created.id, updated: false });
 }

@@ -111,6 +111,9 @@ export const tutorFeedbackSchema = z.object({
 
 export const mentorRequestSchema = z.object({
   concept_id: zUuid.optional(),
+  // Set when the offer came from the tutor sheet (D6 rule 3), so the excerpt is
+  // scoped to the lesson they were actually asking about.
+  lesson_id: zUuid.optional(),
   trigger: z.enum([
     "three_consecutive_incorrect",
     "hints_exhausted_twice",

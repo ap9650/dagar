@@ -48,4 +48,12 @@ export type QuizSubmitResponse = {
   band: MasteryBand;
   perQuestion: QuizAnswerResult[];
   milestonesEarned: string[];
+  /**
+   * D6, evaluated after the quiz rather than during it (mentor-request.md §7).
+   * A learner mid-quiz must not be interrupted to be told they are struggling —
+   * the offer belongs on the results screen, where they have stopped anyway.
+   */
+  showMentorCta: boolean;
+  mentorTrigger: string | null;
+  mentorConceptId: string | null;
 };

@@ -18,6 +18,7 @@ import type {
 import type { Locale } from "@/i18n/config";
 import { MarkdownBody } from "./MarkdownBody";
 import { AnswerInput } from "./AnswerInput";
+import { MentorCta } from "./MentorCta";
 import { MilestoneToast } from "./MilestoneToast";
 
 /**
@@ -311,6 +312,17 @@ export function QuizRunner({
             {t("quiz.backToChapter")}
           </Link>
         </div>
+
+        {/* D6, and it appears HERE rather than mid-quiz on purpose: three wrong
+            in a row is ordinary inside a quiz, and offering a mentor on question
+            four would be the app telling a learner they are failing while they
+            are still sitting it (mentor-request.md §7). */}
+        {result.showMentorCta && result.mentorTrigger && (
+          <MentorCta
+            conceptId={result.mentorConceptId ?? undefined}
+            trigger={result.mentorTrigger}
+          />
+        )}
 
         {milestones.length > 0 && (
           <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />

@@ -191,7 +191,11 @@
     "ctaBody": "We can pass this on to a mentor.",
     "ctaAction": "Ask for help",
     "dismiss": "Not now",
-    "requested": "Passed on. Someone will get back to you."
+    "requested": "A person reads these, so it can take a day or two. Keep going in the meantime — you do not have to wait.",
+    "requestedTitle": "Passed on, with everything you tried",
+    "addNote": "Add a note (optional)",
+    "noteLabel": "Anything you want to tell them?",
+    "notePlaceholder": "I get stuck when the bottom numbers are different…"
   },
   "settings": {
     "title": "Settings",
