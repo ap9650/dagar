@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { LINK_CODE_LENGTH, normaliseLinkCode } from "@/lib/parent/linkCode";
 
 /**
  * Input validation for route handlers. Every handler validates before touching
@@ -41,8 +42,24 @@ export const updateProfileSchema = z.object({
 });
 
 export const claimLinkCodeSchema = z.object({
-  // 6 chars, case-insensitive on entry — a parent typing lowercase should work.
-  link_code: z.string().trim().toUpperCase().length(6),
+  /**
+   * Normalised with the SAME function the entry field uses, before the length
+   * check rather than after.
+   *
+   * The first version was `.trim().toUpperCase().length(6)`, which rejected
+   * `U32-2CT` and `u32 2ct` outright — and a code pasted out of WhatsApp is
+   * exactly where a stray hyphen or space comes from. The client form happens to
+   * normalise first, so this only bit a direct call; but a server schema that is
+   * stricter than the client is a trap for the next caller, and "that code did
+   * not work" for a correct code is the worst message in this flow.
+   */
+  link_code: z
+    .string()
+    .max(64) // bound the input before any work is done on it
+    .transform(normaliseLinkCode)
+    .refine((code) => code.length === LINK_CODE_LENGTH, {
+      message: `Link code must be ${LINK_CODE_LENGTH} characters`,
+    }),
 });
 
 export const attemptSchema = z.object({

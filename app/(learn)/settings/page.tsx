@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { SignOutButton } from "@/components/auth/SignOutButton";
+import { InviteParentCard } from "@/components/learn/InviteParentCard";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -75,6 +76,14 @@ export default async function SettingsPage() {
           </Card>
         </section>
       )}
+
+      {/* D2's learner half: the code is generated on tap, never on page load —
+          an uninvited learner should not have a live key to their account
+          sitting in the database. */}
+      <section className="flex flex-col gap-md">
+        <h2 className="text-label text-muted">{t("settings.inviteParentTitle")}</h2>
+        <InviteParentCard />
+      </section>
 
       {/* Sign out is reachable in two taps from anywhere: /learn → here → out.
           On a shared phone that is the common path, not an edge case. */}

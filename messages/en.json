@@ -36,7 +36,8 @@
     "firstNameLabel": "What should we call you?",
     "firstNameHint": "A first name is enough. You can skip this.",
     "checkEmail": "Check your email for a link to sign in.",
-    "failed": "That did not work. Check your email and password and try again."
+    "failed": "That did not work. Check your email and password and try again.",
+    "parentCode": "I have a parent code"
   },
   "onboarding": {
     "gradeTitle": "Which class are you in?",
@@ -208,7 +209,14 @@
     "inviteGenerate": "Get a code",
     "inviteExpires": "This code works for {hours} hours.",
     "signOut": "Sign out",
-    "signOutConfirm": "Sign out of Saathi?"
+    "signOutConfirm": "Sign out of Saathi?",
+    "inviteParentTitle": "Your parent",
+    "inviteParent": "Invite a parent",
+    "inviteParentBody": "Get a code so a parent can see how you are doing. They can only look — they cannot change anything.",
+    "inviteParentHow": "Read it out to them, or send it on WhatsApp. In Saathi they tap “I have a parent code” and enter it.",
+    "inviteParentExpiry": "This code works for {hours, plural, one {# more hour} other {# more hours}}.",
+    "inviteParentCopy": "Copy the code",
+    "inviteParentCopied": "Copied"
   },
   "install": {
     "title": "Add Saathi to your home screen",
@@ -230,7 +238,14 @@
     "practiceDone": "{count, plural, =0 {No practice yet} one {# practice question} other {# practice questions}}",
     "empty": "No activity yet this week",
     "emptyHelp": "Once they finish a lesson, you will see it here.",
-    "languageTitle": "Language"
+    "languageTitle": "Language",
+    "titleNoName": "Your child's week",
+    "weekTitle": "This week",
+    "milestonesTitle": "Earned this week",
+    "conceptsTitle": "How the topics are going",
+    "howToHelp": "If you have ten minutes together, {concept} is the one worth sitting with.",
+    "claimIsLearner": "This account is a learner's. Ask a parent to use their own.",
+    "claimSelf": "That is your own code — ask a parent to enter it."
   },
   "errors": {
     "offlineTitle": "You are offline",

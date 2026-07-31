@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { buttonClasses } from "@/components/ui/Button";
 import { EmailAuthForm } from "@/components/auth/EmailAuthForm";
+import { safeNextPath } from "@/lib/security/nextPath";
 
 /**
  * `/login` — Google primary, email below a divider (D2).
@@ -13,15 +14,26 @@ import { EmailAuthForm } from "@/components/auth/EmailAuthForm";
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; next?: string }>;
 }) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const { error, next } = await searchParams;
+  // Validated, never used raw: `?next=` is attacker-controlled and an unchecked
+  // redirect target is how a genuine sign-in delivers someone to a fake one.
+  const destination = safeNextPath(next);
+
   // Signed in already: never show a login screen to someone who is logged in.
   if (user) {
+    // Honour where they were heading BEFORE role routing. A parent who followed
+    // an invite to /parent/claim has no profile yet, and the role branch below
+    // would send them to the learner grade picker — asking an adult which class
+    // they are in, and stranding the invitation.
+    if (destination !== "/") redirect(destination);
+
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -33,7 +45,6 @@ export default async function LoginPage({
   }
 
   const t = await getTranslations();
-  const { error } = await searchParams;
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-xl">
@@ -61,7 +72,19 @@ export default async function LoginPage({
         <span className="h-px flex-1 bg-border" />
       </div>
 
-      <EmailAuthForm />
+      <EmailAuthForm next={destination} />
+
+      {/* The only route into the parent flow. Without it /parent/claim is a URL
+          nobody can reach: a parent arrives at the front door like everyone
+          else, and the code is what tells us which door they wanted.
+          Deliberately quiet — the overwhelming majority of arrivals are
+          learners, and this must not compete with the primary path. */}
+      <a
+        href="/parent/claim"
+        className="self-center min-h-11 inline-flex items-center text-body-sm text-primary-strong underline underline-offset-4"
+      >
+        {t("login.parentCode")}
+      </a>
     </main>
   );
 }

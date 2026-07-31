@@ -13,7 +13,15 @@ import { Input } from "@/components/ui/Input";
  * registration, which we cannot get in a buildathon (D2). Do not add it "just in
  * case" — it will fail at the demo, not in development.
  */
-export function EmailAuthForm() {
+export function EmailAuthForm({
+  /**
+   * Where to land after signing in. Already validated by `safeNextPath` on the
+   * server — the raw query value never reaches here.
+   */
+  next = "/",
+}: {
+  next?: string;
+}) {
   const t = useTranslations();
   const router = useRouter();
 
@@ -59,9 +67,12 @@ export function EmailAuthForm() {
         return;
       }
 
-      // Server decides where they belong — a returning learner goes to /learn,
-      // a new one to the grade screen. The client does not guess.
-      router.replace("/");
+      // `/` routes by role and is the default: a returning learner goes to
+      // /learn, a new one to the grade screen, and the client does not guess.
+      // `next` overrides it for someone who arrived heading somewhere specific —
+      // a parent following an invite link to /parent/claim, who has no profile
+      // yet and would otherwise be asked which class they are in.
+      router.replace(next);
       router.refresh();
     } catch {
       setError(t("errors.generic"));
