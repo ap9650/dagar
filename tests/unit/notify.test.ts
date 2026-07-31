@@ -161,3 +161,43 @@ describe("channelStatus — what the health page reads", () => {
     expect(channelStatus().find((c) => c.channel === "in_app")?.configured).toBe(true);
   });
 });
+
+describe("the sender format Twilio actually requires", () => {
+  it("accepts the bare number the console displays", async () => {
+    // The console shows `+1 415 523 8886`. Twilio's API wants
+    // `whatsapp:+14155238886` and answers a bare number with a generic 400 —
+    // wrong in a way nothing explains. Both forms are normalised.
+    process.env.TWILIO_ACCOUNT_SID = "AC_test";
+    process.env.TWILIO_AUTH_TOKEN = "token";
+    process.env.TWILIO_WHATSAPP_FROM = "+14155238886";
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({ sid: "SM1" }) });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { sendParentSummary } = await import("@/lib/notify");
+    await sendParentSummary(optedIn, message);
+
+    const body = fetchMock.mock.calls[0][1].body as URLSearchParams;
+    expect(body.get("From")).toBe("whatsapp:+14155238886");
+    expect(body.get("To")).toBe("whatsapp:+919000000000");
+  });
+
+  it("leaves an already-prefixed sender alone", async () => {
+    process.env.TWILIO_ACCOUNT_SID = "AC_test";
+    process.env.TWILIO_AUTH_TOKEN = "token";
+    process.env.TWILIO_WHATSAPP_FROM = "whatsapp:+14155238886";
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue({ ok: true, json: async () => ({ sid: "SM1" }) });
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { sendParentSummary } = await import("@/lib/notify");
+    await sendParentSummary(optedIn, message);
+
+    const body = fetchMock.mock.calls[0][1].body as URLSearchParams;
+    expect(body.get("From")).toBe("whatsapp:+14155238886"); // not doubled
+  });
+});

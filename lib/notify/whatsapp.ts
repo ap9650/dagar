@@ -29,12 +29,27 @@ import type { DeliveryResult, NotifyAdapter, Recipient, SummaryMessage } from ".
 
 const TWILIO_API = "https://api.twilio.com/2010-04-01";
 
+/**
+ * Twilio's `From` for WhatsApp must be `whatsapp:+14155238886`, not the bare
+ * number — but the console displays it as `+1 415 523 8886`, so copying what is
+ * on screen produces a value that is wrong in a way nothing explains. Twilio
+ * answers a bare number with a generic 400, which is a bad afternoon.
+ *
+ * So both forms are accepted and normalised here. Being strict about this would
+ * be enforcing a formatting convention nobody is served by.
+ */
+function normaliseSender(raw: string | undefined): string | undefined {
+  if (!raw) return undefined;
+  const trimmed = raw.trim().replace(/\s+/g, "");
+  return trimmed.startsWith("whatsapp:") ? trimmed : `whatsapp:${trimmed}`;
+}
+
 function credentials() {
   return {
     sid: process.env.TWILIO_ACCOUNT_SID,
     token: process.env.TWILIO_AUTH_TOKEN,
-    // The sandbox sender, e.g. `whatsapp:+14155238886`.
-    from: process.env.TWILIO_WHATSAPP_FROM,
+    // The sandbox sender. Accepts `whatsapp:+14155238886` or `+14155238886`.
+    from: normaliseSender(process.env.TWILIO_WHATSAPP_FROM),
   };
 }
 
