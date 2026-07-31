@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import "katex/dist/katex.min.css";
 import { createClient } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
+import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { selectPracticeQuestion } from "@/lib/learning/practice";
 import { PracticeSession } from "@/components/learn/PracticeSession";
 import type { Locale } from "@/i18n/config";
@@ -25,10 +26,13 @@ import type { Locale } from "@/i18n/config";
  */
 export default async function PracticePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ concept: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { concept: conceptId } = await params;
+  await trackRecommendationArrival(searchParams, { target: "practice" });
   const supabase = await createClient();
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();

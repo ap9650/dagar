@@ -19,6 +19,12 @@ export const EVENT_NAMES = [
   "practice_started",
   "practice_completed",
   "quiz_submitted",
+  // Added 31 Jul 2026 for the Recommendation Acceptance metric (PRD §12,
+  // target ≥30%), which is `recommendation_clicked ÷ dashboard views`. The
+  // numerator was on the canonical list from the start; the denominator was
+  // written into the metric definition but never made an event, so the metric
+  // could never have been computed. Adding it here and to DATA_MODEL.md.
+  "dashboard_viewed",
   "recommendation_clicked",
   "parent_linked",
   "parent_summary_sent",
@@ -117,6 +123,35 @@ export async function trackForStudent(
   } catch (error) {
     console.error(`[track] ${name} threw:`, error);
   }
+}
+
+/**
+ * The marker `NextLessonCard` puts on its link, and the three destinations read
+ * back. One constant so the writer and the readers cannot drift apart — a typo
+ * on either side would silently zero the Recommendation Acceptance metric, which
+ * is the exact failure this file exists to prevent.
+ */
+export const RECOMMENDATION_MARKER = "rec";
+
+/**
+ * Emit `recommendation_clicked` if the learner arrived here from the next-action
+ * card.
+ *
+ * Fires at the DESTINATION, not on the click. A click handler would measure
+ * intent — a tap that never finished loading on a 4G connection still counts.
+ * Arriving measures what actually happened, and it keeps the emit server-side
+ * where the rest of the tracking lives.
+ */
+export async function trackRecommendationArrival(
+  searchParams: Promise<Record<string, string | string[] | undefined>> | undefined,
+  props: EventProps = {},
+): Promise<void> {
+  if (!searchParams) return;
+  const resolved = await searchParams;
+  const from = resolved?.from;
+  const value = Array.isArray(from) ? from[0] : from;
+  if (value !== RECOMMENDATION_MARKER) return;
+  await track("recommendation_clicked", props);
 }
 
 export async function track(

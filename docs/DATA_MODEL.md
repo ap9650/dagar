@@ -97,11 +97,18 @@ Canonical event names — **use these exact strings**, they map to PRD §12:
 ```
 learner_registered   lesson_started      lesson_completed
 ai_question_asked    practice_started    practice_completed
-quiz_submitted       recommendation_clicked
+quiz_submitted       dashboard_viewed    recommendation_clicked
 parent_linked        parent_summary_sent  parent_summary_viewed
 mentor_request_submitted  streak_extended  milestone_earned
 tutor_feedback_given
 ```
+
+`dashboard_viewed` was added on 31 Jul 2026. Recommendation Acceptance (PRD §12,
+≥30%) is defined as `recommendation_clicked ÷ dashboard views`, but only the
+numerator was ever on this list — so the metric was uncomputable by construction.
+It fires server-side on every `/learn` render, which is what "a dashboard view"
+means; `recommendation_clicked` fires at the *destination* of the next-action
+card, not on the click, so it counts arrivals rather than intent.
 
 ## RLS policy shape
 

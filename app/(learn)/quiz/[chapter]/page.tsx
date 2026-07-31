@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import "katex/dist/katex.min.css";
 import { createClient } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
+import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { QuizRunner } from "@/components/learn/QuizRunner";
 import type { MasteryBand } from "@/lib/learning/mastery";
 import type { Locale } from "@/i18n/config";
@@ -29,10 +30,13 @@ import type { Locale } from "@/i18n/config";
  */
 export default async function QuizPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ chapter: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const { chapter: chapterId } = await params;
+  await trackRecommendationArrival(searchParams, { target: "quiz" });
   const supabase = await createClient();
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();

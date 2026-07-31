@@ -5,6 +5,7 @@ import { generateParentSummary } from "@/lib/ai/summaries";
 import { sendParentSummary } from "@/lib/notify";
 import { istDate, istDayStart } from "@/lib/learning/dates";
 import { generateShareToken } from "@/lib/parent/shareToken";
+import { trackForStudent } from "@/lib/analytics/track";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -150,6 +151,24 @@ export async function GET(request: Request) {
           })),
         },
         tracking_token: generateShareToken(),
+      });
+
+      // The denominator of Parent Summary Engagement (viewed ÷ sent, PRD §12).
+      // `parent_summary_viewed` fires in `/s/[token]`; without this line its
+      // partner never fires and the metric divides by zero forever — which is
+      // exactly the silent failure the canonical list exists to prevent. The
+      // dashboard would have rendered a confident, permanent blank.
+      //
+      // Every WRITTEN summary counts as sent, including `in_app`. The link is
+      // how an adult reads it; the channel only says whether we also managed to
+      // nudge them. Counting only pushed messages would make the denominator 0
+      // for every household on the frictionless path, which is most of them.
+      // The nuance is kept in `channel` rather than thrown away.
+      await trackForStudent(link.student_id, "parent_summary_sent", {
+        channel: outcome.delivered.channel,
+        delivered: outcome.delivered.ok,
+        source: generated.source,
+        locale,
       });
 
       report.written++;

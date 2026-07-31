@@ -14,6 +14,7 @@ import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { StreakBadge } from "@/components/learn/StreakBadge";
 import { JourneyPath, type JourneyNode } from "@/components/learn/JourneyPath";
 import { NextLessonCard } from "@/components/learn/NextLessonCard";
+import { track } from "@/lib/analytics/track";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import type { Locale } from "@/i18n/config";
 
@@ -229,6 +230,29 @@ export default async function LearnPage() {
       />
     );
   })();
+
+  // The denominator of Recommendation Acceptance (PRD §12). Carries WHAT was
+  // recommended, so the metric can be read per recommendation type rather than
+  // as one blended number — "learners follow revision prompts but ignore
+  // practice prompts" is the finding worth having, and a bare rate hides it.
+  //
+  // ── KNOWN IMPRECISION, measured 31 Jul 2026 ─────────────────────────────
+  // This fires more than once per human visit. Observed in the events table:
+  // two rows 354ms apart immediately after login, which is the auth redirect
+  // and the page render both landing. Prefetch of /learn from another screen
+  // does the same.
+  //
+  // Both inflate the DENOMINATOR of Recommendation Acceptance (PRD §12), so
+  // the rate reads LOW rather than flattering — the safe direction for a
+  // number that ends up in a deck. Left uncorrected on purpose: the honest fix
+  // belongs in the aggregation layer, which should collapse views by learner
+  // per minute rather than counting raw rows. Do that when /admin/metrics gets
+  // built, and do not quote a raw acceptance rate before then.
+  // ────────────────────────────────────────────────────────────────────────
+  await track("dashboard_viewed", {
+    recommendation: action.kind,
+    reason: action.kind === "practice" ? "strengthen" : action.reason,
+  });
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
