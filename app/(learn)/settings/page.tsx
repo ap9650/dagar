@@ -81,7 +81,7 @@ export default async function SettingsPage() {
           an uninvited learner should not have a live key to their account
           sitting in the database. */}
       <section className="flex flex-col gap-md">
-        <h2 className="text-label text-muted">{t("settings.inviteParentTitle")}</h2>
+        <h2 className="text-label text-muted">{t("settings.shareTitle")}</h2>
         <InviteParentCard />
       </section>
 

@@ -223,6 +223,44 @@ exits non-zero.
 
 ---
 
+## Deck & docs — decided, not yet written up (1 Aug)
+
+Not code. Do these while assembling the deck (3.9), not before feature freeze.
+
+**Broaden the secondary persona to parent / guardian / tutor.** The PRD already
+says "Parent / Guardian"; **tutor** is the addition, and it is the strongest of
+the three for this audience. The PRD's own problem statement says parents "lack
+subject expertise" — a tutor is exactly the adult who has it, and private tuition
+is near-universal in this demographic.
+
+The abstraction to name is not a list of three words but **"a supporting adult
+the learner chooses"**, which is what the product already implements: the child
+mints the code and hands it over, so consent flows from the child. That framing
+also answers the safeguarding question before it is asked — widening the persona
+does not widen the attack surface, because the gate was never "are you the
+parent", it was always "did the child give you this".
+
+GTM line worth a slide: a tutor with fifteen students is a fifteen-learner
+acquisition unit, which beats signing up parents one at a time.
+
+Touch: PRD §Secondary Persona, §6.2 JTBD, §value proposition, H6; deck persona
+and market slides; one line on `/for-parents`.
+
+**Do not touch:** `profiles.role = 'parent'` (a stored value read by RLS
+policies — renaming it is a migration and a policy rewrite for zero user-visible
+gain), the `/parent` routes, or a copy sweep through every string ("parent,
+guardian or tutor" breaks a button, and Hindi already runs 10–20% longer).
+
+Caveat to write down rather than paper over: a parent wants "is my child okay";
+a tutor wants "what do I teach on Tuesday". Same data, different emphasis. One
+summary serves both adequately in MVP — call the divergence a Phase 2 item, not a
+solved problem. We have never tested with a tutor.
+
+Note: Hindi needs no change — **अभिभावक** already means guardian in the broad
+sense and is the standard register, so the Hindi copy is already the inclusive one.
+
+---
+
 ## Day 4 — Sun 2 Aug — Finish, rehearse, demo
 
 A full working day — deadline is **11pm**. Catch-up, Hindi, rehearsal, deck and

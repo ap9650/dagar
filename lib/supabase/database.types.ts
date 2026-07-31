@@ -763,6 +763,47 @@ export type Database = {
           },
         ]
       }
+      summary_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          last_viewed_at: string | null
+          revoked_at: string | null
+          student_id: string
+          token: string
+          view_count: number
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          last_viewed_at?: string | null
+          revoked_at?: string | null
+          student_id: string
+          token: string
+          view_count?: number
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          last_viewed_at?: string | null
+          revoked_at?: string | null
+          student_id?: string
+          token?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "summary_links_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tutor_feedback: {
         Row: {
           created_at: string
