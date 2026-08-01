@@ -75,7 +75,29 @@ export function LessonCompleteButton({
   }
 
   return (
-    <div className="flex flex-col gap-md">
+    /*
+      STICKY, which the design system asked for and this did not do:
+      "Sticky primary action at the bottom of the content area on lesson and
+      practice screens."
+
+      Reported from a real phone: after finishing a lesson, "Practise this" sat
+      at the very bottom of a long scroll with nothing indicating it was there.
+      The comment below used to claim "the next action is always on screen after
+      completion" — it was on the PAGE, which is not the same thing, and on a
+      360×780 screen with a chapter of maths above it, usually was not.
+
+      That matters most at exactly the moment it failed: the learner has just
+      finished something and is deciding whether to carry on. A next step they
+      have to go hunting for is a next step many will not take.
+
+      Sticky also means the way forward is reachable while READING, not only at
+      the end — the tutor button stays in flow above, so this costs one button of
+      height rather than two.
+    */
+    <div
+      className="sticky bottom-0 -mx-lg px-lg pt-md pb-lg flex flex-col gap-md
+                 bg-background border-t border-border"
+    >
       {!complete ? (
         <Button onClick={markComplete} loading={busy}>
           {t("lesson.complete")}
@@ -83,7 +105,6 @@ export function LessonCompleteButton({
       ) : (
         <>
           <p className="text-body-sm text-correct">{t("lesson.completed")}</p>
-          {/* The next action is always on screen after completion. */}
           <Button onClick={() => router.push(nextHref)}>
             {t("lesson.practiceNext")}
           </Button>
