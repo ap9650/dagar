@@ -124,7 +124,8 @@
     "finish": "Finish practice",
     "summary": "You got {correct} of {total} right",
     "summaryEncourage": "Every one of these is practice that counts.",
-    "noQuestions": "Practice for this part is on its way. Try a lesson in the meantime."
+    "noQuestions": "Practice for this part is on its way. Try a lesson in the meantime.",
+    "insertSlash": "Add a fraction line"
   },
   "feedback": {
     "correct": "Correct!",

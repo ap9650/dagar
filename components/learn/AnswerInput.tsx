@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
@@ -46,6 +46,7 @@ export function AnswerInput({
 }) {
   const t = useTranslations();
   const groupId = useId();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   if (answerType === "mcq") {
     return (
@@ -119,26 +120,65 @@ export function AnswerInput({
         : undefined;
 
   return (
-    <Input
-      label={t("practice.answerLabel")}
-      hint={hint}
-      numeric={isNumeric}
-      value={value}
-      disabled={disabled}
-      // Off for all four: a maths answer is not a name or an address, and an
-      // autocomplete dropdown over the answer box on a shared phone can suggest
-      // whatever the last person typed.
-      autoComplete="off"
-      autoCorrect="off"
-      autoCapitalize="off"
-      spellCheck={false}
-      onChange={(event) => onChange(event.target.value)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          onSubmit();
-        }
-      }}
-    />
+    <div className="flex flex-col gap-sm">
+      <Input
+        ref={inputRef}
+        label={t("practice.answerLabel")}
+        hint={hint}
+        numeric={isNumeric}
+        value={value}
+        disabled={disabled}
+        // Off for all four: a maths answer is not a name or an address, and an
+        // autocomplete dropdown over the answer box on a shared phone can suggest
+        // whatever the last person typed.
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        onChange={(event) => onChange(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            onSubmit();
+          }
+        }}
+      />
+
+      {/*
+        A "/" KEY, BECAUSE ANDROID'S NUMBER PAD DOES NOT HAVE ONE.
+
+        Fractions were grouped with the other numeric types, so they opened
+        `inputMode="decimal"` — digits, minus, dot, comma. No slash. The hint
+        underneath said "Write it like 1/2" while the keyboard on the learner's
+        own phone made that impossible to type. Reported from a real device; a
+        360px browser shows a desktop keyboard and hides this completely.
+
+        The obvious fix — switch fractions to a full QWERTY — is worse. On
+        Android the slash sits behind the ?123 page, so it costs two taps AND
+        the digits stop being one tap. This keeps the number pad and gives the
+        slash a key of its own.
+
+        `onMouseDown` preventDefault so the field never loses focus: if it blurs,
+        the keypad closes and reopening it is another tap.
+      */}
+      {answerType === "fraction" && (
+        <button
+          type="button"
+          disabled={disabled || value.includes("/")}
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={() => {
+            onChange(`${value}/`);
+            inputRef.current?.focus();
+          }}
+          aria-label={t("practice.insertSlash")}
+          className="self-start min-h-11 min-w-11 px-lg inline-flex items-center justify-center
+                     rounded-(--radius-control) border border-border-strong bg-surface
+                     text-h3 text-ink disabled:opacity-40
+                     focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        >
+          /
+        </button>
+      )}
+    </div>
   );
 }
