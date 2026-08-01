@@ -220,7 +220,7 @@
     "inviteParentCopy": "Copy the code",
     "inviteParentCopied": "Copied",
     "inviteParentSees": "They will see: lessons you finished, which topics you are getting, your streak and your badges.",
-    "inviteParentPrivate": "They will not see: your answers, your questions to Saathi, or anything you typed.",
+    "inviteParentPrivate": "They will not see the questions you asked Saathi. That stays yours.",
     "inviteParentShare": "Send it on WhatsApp",
     "inviteParentShareMessage": "I am learning maths on Saathi. You can see how I am doing — open {url} and enter my code {code}",
     "shareLink": "Send it on WhatsApp",

@@ -187,6 +187,26 @@ d("the privacy promise on /for-parents", () => {
       .toMatch(/questions they asked/i);
   });
 
+  it("makes the SAME promise on the learner's own share screen", () => {
+    // The promise lives in two places: `/for-parents`, which the adult reads,
+    // and Settings, which the LEARNER reads while deciding whether to share.
+    //
+    // Fixing only the first is exactly what happened on 1 Aug — the adult-facing
+    // page was corrected while the child was still being told their answers stay
+    // private. The child's copy is the one that matters more: it is read at the
+    // moment consent is given.
+    //
+    // Two strings, one guarantee. Asserting both here is what stops them drifting.
+    for (const path of ["messages/en.json", "messages/hi.json"]) {
+      const s = JSON.parse(readFileSync(path, "utf8")).settings;
+      expect(s.inviteParentPrivate).toBeTruthy();
+      // Must not claim answers are private — a linked adult can read them.
+      expect(s.inviteParentPrivate).not.toMatch(/जवाब|answers/i);
+    }
+    expect(JSON.parse(readFileSync("messages/en.json", "utf8")).settings.inviteParentPrivate)
+      .toMatch(/questions you asked/i);
+  });
+
   it("private2: a linked parent cannot read their child's tutor questions", async () => {
     const { data } = await linkedParent.client
       .from("tutor_messages")

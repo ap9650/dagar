@@ -167,6 +167,23 @@ body:lang(hi) {
   line-height: 2.1;
 }
 
+/* KNOWN POLISH ITEM, investigated 1 Aug and deliberately left alone.
+
+   An inline \frac is ~26px tall in an 18px line and crowds the lines around it,
+   worst in "Fill the box: 2/5 = □/15". Two fixes were tried and neither worked:
+   a Devanagari-specific line-height bump (2.6), and inline-block + vertical-align
+   on the inline .katex. The measured box says it fits; KaTeX builds fractions
+   from nested vlist spans whose visual extent the box does not describe, so
+   neither lever reaches the cause.
+
+   NOT a Hindi bug — it was found during the Hindi pass, but English at 360px is
+   identical. The honest fix is authoring inline fractions as \tfrac in the seed
+   content, which is a content change, not a CSS one.
+
+   Left because it is legible: the fraction crowds its neighbours, no glyphs
+   actually overlap, and 2.1 below already buys the room that matters. */
+
+
 /* Celebration is the ONE place motion may be playful, and it is capped at 400ms
    (saathi-design § Motion). Under reduced motion the toast still appears — it
    just appears, rather than sliding. The reward is never removed, because the

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Check, Lock, Play } from "lucide-react";
+import { Check, Play } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/cn";
 
@@ -17,14 +17,28 @@ export type JourneyNode = {
  * filled nodes behind them and one ringed node in front of them knows where they
  * are without reading a number. It is almost entirely CSS on data we already have.
  *
- * Node states carry an ICON as well as a colour (design rule 10):
+ * Node states carry a NON-COLOUR signal as well as a colour (design rule 10):
  *   completed → filled primary, check
  *   current   → larger, ringed, play
- *   upcoming  → outlined, lock
+ *   upcoming  → outlined, the lesson number
  *
  * Every node is a link, so the whole path is keyboard-navigable for free, and
- * upcoming nodes are NOT disabled — nothing here is gated. The lock is a "you have
- * not got here yet" marker, not a barrier; a learner who wants to skip ahead may.
+ * upcoming nodes are NOT disabled — nothing here is gated (D17).
+ *
+ * ── why the upcoming node shows a NUMBER and not a padlock ──────────────────
+ * It was a padlock, with a comment explaining that it meant "you have not got
+ * here yet" rather than "you may not". That distinction lived in the comment and
+ * nowhere else. A padlock has one meaning to everyone who has ever used
+ * software: this is closed to you. Nobody clicks a padlock to find out it opens.
+ *
+ * So the icon enforced, in the learner's head, exactly the gating D17 rejects —
+ * and it is the specific Duolingo mechanic design rule 12 names as inverting for
+ * a learner who is already behind. Being told you have not unlocked lesson 4 is
+ * a small punishment for being at lesson 3.
+ *
+ * The number carries the same "not yet" information, adds which lesson it is,
+ * and forbids nothing.
+ * ────────────────────────────────────────────────────────────────────────────
  */
 export async function JourneyPath({ nodes }: { nodes: JourneyNode[] }) {
   const t = await getTranslations("chapter");
@@ -55,7 +69,7 @@ export async function JourneyPath({ nodes }: { nodes: JourneyNode[] }) {
                 ) : current ? (
                   <Play size={18} strokeWidth={2.5} />
                 ) : (
-                  <Lock size={16} strokeWidth={1.75} />
+                  <span className="text-label tabular-nums">{index + 1}</span>
                 )}
               </span>
 
