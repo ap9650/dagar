@@ -116,7 +116,7 @@
     "title": "Practice",
     "questionOf": "Question {number} of {total}",
     "answerLabel": "Your answer",
-    "answerHintFraction": "A fraction, like 1/2 — a decimal works too",
+    "answerHintFraction": "A fraction, like 1/2",
     "answerHintInteger": "A whole number, like 12 or -7",
     "check": "Check answer",
     "showHint": "See a hint",

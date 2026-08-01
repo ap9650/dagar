@@ -348,6 +348,26 @@ The build plan ends at deploy; the product doesn't. In priority order:
    right: a wrong key marks a correct learner wrong, silently, and this repo has
    two separate key-checking scripts because of it. Not a job to rush.
 
+0b. **Decide what a rounded decimal should do on a recurring answer.**
+   Grading compares decimals within `TOLERANCE = 1e-6`, which is right for exact
+   values — `0.6` matches `3/5`, `0.5` matches `1/2`. On a non-terminating one it
+   quietly demands six decimal places: for `5/12`, `0.42` `0.417` `0.4167` and
+   `0.41667` are all wrong, and only `0.416667` passes.
+
+   That is arithmetically correct and pedagogically unhelpful. A learner who
+   works out 5/12 as a decimal writes `0.42`, is marked wrong, and learns
+   nothing about why.
+
+   NOT fixed on 1 Aug on purpose: `grading.ts` is the highest-harm file in the
+   product — a loosened tolerance marks genuinely wrong answers correct — and
+   feature-freeze evening is the wrong time to touch it. The interim fix was to
+   stop the hint advertising decimals.
+
+   Worth considering: when a decimal is close but outside tolerance AND the
+   expected value is non-terminating, treat it as "not quite — write it as a
+   fraction" rather than a plain wrong. That teaches the actual point of the
+   chapter instead of failing them on rounding.
+
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
    rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
    an untested deploy.
