@@ -19,7 +19,8 @@
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
     "check:hindi": "node --no-warnings scripts/check-hindi.ts",
     "icons": "node --no-warnings scripts/generate-icons.ts",
-    "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts"
+    "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts",
+    "demo:data": "node --no-warnings scripts/demo-data.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
