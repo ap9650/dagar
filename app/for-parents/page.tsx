@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Check, Eye, EyeOff, Lock } from "lucide-react";
+import { ArrowLeft, Check, Eye, EyeOff, Link2 as LinkIcon, Lock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/Button";
 
@@ -40,6 +40,17 @@ export default async function ForParentsPage() {
   // A short list that holds is worth more than a long one that does not. This is
   // a promise made to a child about their own words.
   const doesNotSee = [t("private1")];
+  // TWO paths, and the link goes first because it IS the primary one.
+  //
+  // This page used to describe only the account-and-code route — four numbered
+  // steps ending in "create your own Saathi account". An adult who had just been
+  // sent a LINK and tapped through to here was being told to sign up for
+  // something they did not need, to reach a page they were already one tap from.
+  //
+  // The link path was chosen precisely because it has no friction (no account,
+  // no password, works on a borrowed phone). Explaining only the fallback made
+  // the product look like the thing it was designed not to be.
+  const linkWay = [t("linkWay1"), t("linkWay2"), t("linkWay3")];
   const steps = [t("step1"), t("step2"), t("step3"), t("step4")];
 
   return (
@@ -56,11 +67,35 @@ export default async function ForParentsPage() {
         <p className="text-body text-body">{t("intro")}</p>
       </header>
 
-      {/* ── how to connect ───────────────────────────────────────────────── */}
+      <h2 className="text-h3 text-ink">{t("waysTitle")}</h2>
+
+      {/* ── 1. the link: no account at all ───────────────────────────────── */}
+      <section
+        aria-labelledby="link-way-heading"
+        className="flex flex-col gap-md rounded-(--radius-card) border border-primary-soft bg-primary-wash px-lg py-lg"
+      >
+        <h3 id="link-way-heading" className="flex items-center gap-sm text-h3 text-primary-strong">
+          <LinkIcon size={20} strokeWidth={1.75} aria-hidden />
+          {t("linkWayTitle")}
+        </h3>
+        {/* Tinted and placed first, so a reader who stops after one section has
+            stopped on the right one. */}
+        <ul className="flex flex-col gap-sm">
+          {linkWay.map((line) => (
+            <li key={line} className="flex items-start gap-sm text-body text-body">
+              <Check size={20} strokeWidth={1.75} aria-hidden className="text-primary shrink-0 mt-0.5" />
+              <span>{line}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* ── 2. the account: for a second adult, or a parent who prefers it ── */}
       <section aria-labelledby="steps-heading" className="flex flex-col gap-lg">
         <h2 id="steps-heading" className="text-h3 text-ink">
-          {t("stepsTitle")}
+          {t("codeWayTitle")}
         </h2>
+        <p className="text-body-sm text-muted">{t("codeWayWhy")}</p>
 
         <ol className="flex flex-col gap-lg">
           {steps.map((step, index) => (

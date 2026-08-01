@@ -305,8 +305,15 @@
     "readOnly": "Your view is read-only. There is nothing you can change, undo or delete — you cannot affect their learning by tapping anything.",
     "haveCode": "I have a code",
     "noCodeTitle": "No code yet?",
-    "noCodeBody": "Ask your child to open Saathi, go to Settings, and tap “Invite a parent”. It takes them one tap.",
+    "noCodeBody": "Ask your child to open Saathi and go to Settings. They can either send you a link on WhatsApp — no account needed — or tap “Invite a parent” for a code. Either way it is one tap for them.",
     "sharedPhoneTitle": "Sharing one phone?",
-    "sharedPhoneBody": "That works. Both accounts can live on the same phone — sign out from Settings to swap between your child's view and yours."
+    "sharedPhoneBody": "That works. Both accounts can live on the same phone — sign out from Settings to swap between your child's view and yours.",
+    "waysTitle": "Two ways to see how they are doing",
+    "linkWayTitle": "The quickest way — a link",
+    "linkWay1": "Your child opens Saathi, goes to Settings, and taps “Share your progress”.",
+    "linkWay2": "They send you the link on WhatsApp. You tap it, and their week opens straight away.",
+    "linkWay3": "No account, no password, nothing to install. Keep the link and open it whenever you like — it always shows the latest week.",
+    "codeWayTitle": "Or make your own account",
+    "codeWayWhy": "Worth doing if more than one adult wants to check in, or if you would rather sign in than keep a link on your phone."
   }
 }
