@@ -148,22 +148,24 @@ body:lang(hi) {
   margin-block: var(--spacing-lg);
 }
 
-/* INLINE maths matches the body text exactly.
+/* INLINE maths keeps KaTeX's own 1.21em, and that is deliberate — I removed it
+   once and had to put it back.
 
-   KaTeX ships `.katex { font-size: 1.21em }`, so every inline fraction was
-   rendering 21% larger than the sentence around it — 20.57px against 17px body,
-   measured on the lesson screen. Nobody chose that; it is a library default that
-   silently overrode the rule directly below.
+   The reasoning for removing it was that nobody chose 1.21; it is a library
+   default. True, and irrelevant. A stacked fraction packs a numerator, a bar and
+   a denominator into one line's height, so KaTeX scales each digit to roughly
+   0.7 of the font size. At 1em that lands the DIGITS near 12px against 17px body
+   copy — below the 13px caption floor, let alone the 17px body rule. The 1.21
+   exists to buy those digits back.
 
-   The effect on a real phone is that fractions dominate the line and crowd the
-   text above and below. It was reported from an actual device after being waved
-   through here as "legible" — a reminder that a 360px browser window is not the
-   same as a phone in someone's hand.
+   Reported from a real phone within the hour: the fractions read worse small
+   than they did large. Crowding a line is a nuisance; a 12-year-old squinting at
+   a denominator is the thing this product exists to avoid.
 
-   Setting 1em is what the comment below always intended. */
-.lesson-body .katex {
-  font-size: 1em;
-}
+   The real fix is neither size: inline fractions should be SLASHED (1/4 on one
+   line), which is what typesetting does outside display maths and what removes
+   the height problem entirely. That is a content change across three chapters —
+   backlogged, not a midnight edit. */
 
 /* DISPLAY maths renders two points larger than body copy: a mis-read exponent is
    a wrong answer, and this audience is often reading on a scratched screen.
