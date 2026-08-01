@@ -116,7 +116,7 @@
     "title": "प्रैक्टिस",
     "questionOf": "{total} में से {number} सवाल",
     "answerLabel": "तुम्हारा जवाब",
-    "answerHintFraction": "ऐसे लिखो — 1/2",
+    "answerHintFraction": "भिन्न, जैसे 1/2 — दशमलव भी चलेगा",
     "answerHintInteger": "पूरी संख्या, जैसे 12 या -7",
     "check": "जवाब जाँचो",
     "showHint": "एक हिंट देखो",
