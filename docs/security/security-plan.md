@@ -22,14 +22,50 @@ in the browser.
 | **`questions`** | **✖ nothing** | ✖ | ✖ |
 | `questions_public` (view) | read | ✖ | ✖ |
 | `lesson_progress` `attempts` `quiz_sessions` `concept_mastery` `streaks` `milestones` | own rows: read/write | **read only** | ✖ |
-| `tutor_messages` | own rows: read/write | **read only** | ✖ |
+| **`tutor_messages`** | own rows: read/write | **✖ NOTHING** — see below | ✖ |
 | `mentor_requests` | own rows: read/write | **read only** | ✖ |
 | `parent_summaries` | ✖ | own link's rows: read | ✖ |
+| `summary_links` | own rows: read/write | ✖ | **✖ — token resolved by service role only** |
 | `events` | **insert only** | ✖ | ✖ |
 | `ai_calls` `tutor_feedback` | ✖ / own rows | ✖ | ✖ |
 
 **There is no parent write policy on any table.** If you find yourself writing one,
 re-read D2.
+
+### `tutor_messages` — closed 31 Jul, migration 0017
+
+`0004_tutor.sql` gave a linked parent SELECT on this table. `/for-parents` promised,
+in both languages, that the questions a learner asks the tutor stay private. The two
+disagreed for a week.
+
+The parent UI never rendered those rows, which is exactly why it survived review —
+**the screen is not the boundary, the policy is.** The anon key ships in the browser,
+so a linked adult could read the whole conversation from devtools.
+
+Proved by attempting it (`tests/integration/privacy-promise.test.ts`) before the
+policy was dropped: a real linked parent read back both of a child's messages,
+including "i dont understand any of this".
+
+**`attempts` is deliberately still parent-readable.** A supporting adult may in
+future see the questions practised and the answers given — a product decision, not
+an oversight, and the test documents it so that reversing it forces the copy to
+change in the same commit. The tutor conversation is different in kind: it is where
+a learner admits they are stuck, and one who believes an adult is reading it stops
+saying so.
+
+### Reading a negative test
+
+Every RLS test asserts a read returns **nothing** — which is also what a broken
+fixture produces. The first version of `privacy-promise.test.ts` passed 9/9 while
+proving nothing: it inserted `code` where `parent_links` wants `link_code`, so the
+parent was never linked and every assertion passed against someone who could read
+nothing at all.
+
+**Every negative-boundary test in this repo must open with controls** that prove the
+fixture is real — the link is active, the private rows exist, the attacker genuinely
+holds the privilege being tested — and must throw on fixture errors rather than
+ignore them. A green security test that passes for the wrong reason is worse than no
+test, because it stops people looking.
 
 ### The answer-key boundary
 
@@ -131,8 +167,28 @@ Two mechanisms, chosen by consequence (`lib/security/rateLimiter.ts`):
 | `POST /api/auth/signup` `login` | 10/min per lowercased email | memory |
 | `POST /api/parent/claim` | 5 per 10 min | memory |
 | `POST /api/attempts` | 120/min per learner | memory |
+| `POST /api/quiz/[id]/start` `submit` | per learner | memory |
+| `POST /api/summary-links` `parent-links` | per learner | memory |
+| `POST /api/mentor-requests` `events` | per learner | memory |
 | **`POST /api/tutor`** | **30/hour per learner** (D11) | **database** (`ai_calls`) |
+| **`POST /api/hints`** | **60/hour per learner** | **database** (`ai_calls`) |
 | **Global AI spend** | **₹150/day, Asia/Kolkata** (D11) | **database** (`ai_spend_today()`) |
+
+**The hint ceiling was added 1 Aug, and its absence is worth recording.**
+`checkAiBudget` was called by both AI routes but counted only `kind = 'tutor'`, so
+`/api/hints` appeared guarded and was not: a learner with no tutor messages had an
+unbounded hint allowance.
+
+The cost of one hint is trivial — the problem is that the daily ceiling above is
+**shared**. One learner leaning on the hint button drains it, and the tutor then
+degrades for everyone else. A per-learner limit covering one of two paid routes
+protects nobody.
+
+The two ceilings are independent by design: burning the hint allowance during
+practice must not silence the tutor, which is what a stuck learner needs most.
+60/hour is deliberately generous — four tiers across fifteen questions is a good
+hour of practice, not an attack, and a limit that fires on correct use gets removed
+rather than tuned.
 
 The daily ceiling degrades **the tutor only**. Lessons, practice and the quiz keep
 working — a cost control that takes down the whole app is worse than the overspend.

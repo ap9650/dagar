@@ -71,7 +71,9 @@ export async function POST(request: Request) {
     ? ""
     : rawFallback;
 
-  const budget = await checkAiBudget(auth.userId);
+  // "hint", not the default: this route was silently unlimited while appearing
+  // to be guarded, because the count was hardcoded to tutor calls.
+  const budget = await checkAiBudget(auth.userId, "hint");
   if (!budget.allowed) {
     return NextResponse.json({ hint: fallback, source: "fallback" });
   }

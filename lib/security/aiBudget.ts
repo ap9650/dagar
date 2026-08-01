@@ -11,7 +11,26 @@ import { createAdminClient } from "@/lib/supabase/admin";
  */
 
 export const TUTOR_MESSAGES_PER_HOUR = 30;
+
+/**
+ * Higher than the tutor's, because hints are how practice is MEANT to work.
+ *
+ * A learner escalating all four tiers (nudge → method → worked step → solution)
+ * on fifteen questions in an hour is a good hour, not an attack. Set this too
+ * tight and the limit fires on the product working correctly, which is how
+ * limits get removed instead of tuned.
+ */
+export const HINTS_PER_HOUR = 60;
+
 export const DAILY_SPEND_CEILING_INR = 150;
+
+/** Per-learner hourly ceiling, by call kind. */
+const HOURLY_CEILING: Record<AiCallKind, number> = {
+  tutor: TUTOR_MESSAGES_PER_HOUR,
+  hint: HINTS_PER_HOUR,
+};
+
+export type AiCallKind = "tutor" | "hint";
 
 export type BudgetVerdict =
   | { allowed: true }
@@ -23,21 +42,35 @@ export type BudgetVerdict =
  * render the tutor-unavailable state. Lessons, practice and the quiz must keep
  * working — the ceiling degrades the tutor, never the app.
  */
-export async function checkAiBudget(studentId: string): Promise<BudgetVerdict> {
+export async function checkAiBudget(
+  studentId: string,
+  /**
+   * Which ceiling to check. This was not a parameter until 31 Jul, and the
+   * count was hardcoded to `kind = 'tutor'` — so the hint route called this
+   * function, passed the check, and was never actually limited. A learner with
+   * zero tutor messages had an unbounded hint allowance.
+   *
+   * The cost of one hint is trivial. The problem is the SHARED ceiling below:
+   * one learner leaning on the hint button drains the global daily budget, and
+   * the tutor then degrades for everybody. A per-learner limit that silently
+   * covers only one of the two AI routes is not a per-learner limit.
+   */
+  kind: AiCallKind = "tutor",
+): Promise<BudgetVerdict> {
   const admin = createAdminClient();
 
-  // 1. Per-learner hourly rate (D11).
+  // 1. Per-learner hourly rate, per kind (D11).
   const since = new Date(Date.now() - 3600_000).toISOString();
   const { count, error: countError } = await admin
     .from("ai_calls")
     .select("id", { count: "exact", head: true })
     .eq("student_id", studentId)
-    .eq("kind", "tutor")
+    .eq("kind", kind)
     .gte("created_at", since);
 
   // Fail OPEN on an infrastructure error: a flaky count query must not take the
   // tutor down. The daily ceiling below is the backstop that bounds the damage.
-  if (!countError && (count ?? 0) >= TUTOR_MESSAGES_PER_HOUR) {
+  if (!countError && (count ?? 0) >= HOURLY_CEILING[kind]) {
     return { allowed: false, reason: "rate_limited", retryAfterSeconds: 300 };
   }
 
