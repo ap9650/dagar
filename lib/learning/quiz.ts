@@ -4,6 +4,7 @@ import type { Database } from "@/lib/supabase/database.types";
 import { gradeDetailed, type AnswerType } from "./grading";
 import { quizBand } from "./mastery";
 import { stripSolutions } from "./questionPayload";
+import { orderQuizQuestions } from "./quizSet";
 import type { QuizAnswerResult, QuizQuestion } from "./quizSet";
 import type { MasteryBand } from "./mastery";
 
@@ -67,11 +68,19 @@ export type QuizStart = {
  * a quiz of zero questions (spec §6).
  *
  * ── ORDER ───────────────────────────────────────────────────────────────────
- * By slug, which groups a concept's questions together (`c6-quiz-cmp-1`,
- * `c6-quiz-cmp-2`, then `c6-quiz-eqf-1`…). Deterministic, so two requests never
- * disagree, and thematically grouped, so a learner is not thrown between four
- * topics and back. No shuffle: a quiz a learner can retake is more useful when
- * they can see which questions they got wrong last time.
+ * Read from the bank by slug, which groups a concept's questions together
+ * (`c6-quiz-cmp-1`, `c6-quiz-cmp-2`, then `c6-quiz-eqf-1`…), then handed to
+ * `orderQuizQuestions` for a NEW attempt.
+ *
+ * This used to say "no shuffle", on the grounds that a retake is more useful
+ * when you can see which questions you got wrong last time. That holds for one
+ * retake. It stops holding by the third, when the bank is 8 questions and the
+ * quiz is all 8 of them: the same questions in the same order stop measuring
+ * understanding and start measuring memory of the sequence.
+ *
+ * So the order now varies per attempt while concepts stay contiguous — the
+ * grouping was the part worth keeping. Resume is unaffected: it replays the
+ * stored ids, so two requests still never disagree.
  */
 export async function startOrResumeQuiz({
   supabase,
@@ -136,13 +145,20 @@ export async function startOrResumeQuiz({
   }
 
   // ── an open session with no stored set (or nothing open at all) ────────────
+  //
+  // A NEW attempt gets a new order (see `orderQuizQuestions`). Resume, handled
+  // above, never re-orders: it replays the stored ids exactly, so a learner who
+  // comes back to a half-finished quiz finds it where they left it. The order is
+  // decided once, here, and then written down.
+  const ordered = orderQuizQuestions(bank);
+
   if (open?.id) {
     await supabase
       .from("quiz_sessions")
-      .update({ question_ids: bank.map((q) => q.id) })
+      .update({ question_ids: ordered.map((q) => q.id) })
       .eq("id", open.id)
       .eq("student_id", studentId);
-    return { sessionId: open.id, questions: bank, resumed: true };
+    return { sessionId: open.id, questions: ordered, resumed: true };
   }
 
   const { data: created, error } = await supabase
@@ -150,7 +166,7 @@ export async function startOrResumeQuiz({
     .insert({
       student_id: studentId,
       chapter_id: chapterId,
-      question_ids: bank.map((q) => q.id),
+      question_ids: ordered.map((q) => q.id),
     })
     .select("id")
     .single();
@@ -180,7 +196,12 @@ export async function startOrResumeQuiz({
     };
   }
 
-  return { sessionId: created.id, questions: bank, resumed: false };
+  // `ordered`, NOT `bank` — the row above stored `ordered.map(q => q.id)`, and
+  // serving a different order than the one written down would mean the learner's
+  // first view disagreed with their own session. Grading maps by question_id so
+  // scores would still be right, which is exactly what makes it the kind of bug
+  // you ship: nothing fails, the questions just move when you come back.
+  return { sessionId: created.id, questions: ordered, resumed: false };
 }
 
 export type QuizGrade = {

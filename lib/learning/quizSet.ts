@@ -25,6 +25,60 @@ export type QuizStartResponse = {
 };
 
 /**
+ * The order a NEW quiz attempt is served in.
+ *
+ * ── why this exists ─────────────────────────────────────────────────────────
+ * The chapter bank is 8 questions and the quiz is all 8 of them, so a retake
+ * cannot contain anything new. Served in a fixed order, the third attempt stops
+ * measuring understanding and starts measuring whether you remember that the
+ * answer to question 3 was 12 — and the mastery band quietly stops meaning
+ * anything.
+ *
+ * Reported from real use: "the questions were repetitive, there was no new
+ * question." Correct, and the honest fix is a bigger bank (backlogged). This is
+ * the cheap half: the same questions, never in the same order.
+ *
+ * ── why not a plain shuffle ─────────────────────────────────────────────────
+ * The fixed order was not arbitrary — ordering by slug groups a concept's
+ * questions together, so a learner is not thrown between four topics and back.
+ * That matters most for exactly the learner this product is for.
+ *
+ * So the grouping survives: questions shuffle WITHIN their concept, and the
+ * concepts shuffle as blocks. Every attempt is a different sequence; no attempt
+ * ping-pongs between topics.
+ *
+ * `random` is injected so tests can be deterministic. Math.random is right here
+ * — this is presentation order, not a token, and nothing is guessable that
+ * matters. (Contrast `lib/parent/shareToken.ts`, which is CSPRNG because there
+ * the value IS the authorisation.)
+ */
+export function orderQuizQuestions<T extends { id: string; concept_id: string }>(
+  bank: readonly T[],
+  random: () => number = Math.random,
+): T[] {
+  const shuffle = <U,>(items: U[]): U[] => {
+    // Fisher–Yates, unbiased.
+    const out = [...items];
+    for (let i = out.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [out[i], out[j]] = [out[j], out[i]];
+    }
+    return out;
+  };
+
+  // Insertion order preserves the bank's concept sequence before it is shuffled,
+  // so the grouping is taken from the data rather than assumed.
+  const byConcept = new Map<string, T[]>();
+  for (const question of bank) {
+    const group = byConcept.get(question.concept_id);
+    if (group) group.push(question);
+    else byConcept.set(question.concept_id, [question]);
+  }
+
+  return shuffle([...byConcept.values()]).flatMap((group) => shuffle(group));
+}
+
+/**
  * One question's outcome, returned **only from submit** (spec §3).
  *
  * This is the first and only point in a quiz where `solution_md` crosses to the

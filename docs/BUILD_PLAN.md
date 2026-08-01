@@ -328,6 +328,26 @@ suite as a safety net, plus a URL change that breaks any link already shared.
 
 The build plan ends at deploy; the product doesn't. In priority order:
 
+0. **Widen the quiz bank — the first content task.** Reported from real use on
+   1 Aug: *"I was trying the quiz again for fractions, the questions were
+   repetitive, there was no new question."* Correct, and not a code bug — there
+   are **8 quiz questions per chapter and the quiz is all 8 of them**, so a
+   retake cannot contain anything new.
+
+   Shipped that day: order now varies per attempt (`orderQuizQuestions`), which
+   stops a third retake being a memory test. That is the cheap half.
+
+   The real fix is more questions — 2 per concept becomes 4, so the quiz can
+   serve a random 8 from a bank of 16. **Honest estimate: 5–6 hours for all three
+   chapters** — 2.5–3h authoring stems, answer keys and worked solutions, 45m
+   Hindi, 45m key verification, 45m for the selection code and tests, 30m
+   re-seed and check. Roughly **1.5–2h for Class 6 alone** if only the demo
+   chapter matters.
+
+   The bottleneck is not writing them, it is that every `answer_value` must be
+   right: a wrong key marks a correct learner wrong, silently, and this repo has
+   two separate key-checking scripts because of it. Not a job to rush.
+
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
    rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
    an untested deploy.
