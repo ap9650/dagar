@@ -119,6 +119,8 @@ export const productFeedbackSchema = z.object({
   respondent_role: z.enum(["student", "parent", "teacher", "other"]),
   understood: z.enum(["yes", "a_bit", "no"]),
   would_return: z.enum(["yes", "maybe", "no"]),
+  /** Optional so 0018 responses stay valid and a skipper still counts. */
+  improve_most: z.enum(["chapters", "practice", "tutor", "phone", "other"]).optional(),
   worked_well: z.string().trim().max(1000).optional(),
   confusing: z.string().trim().max(1000).optional(),
 });

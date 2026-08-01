@@ -31,7 +31,7 @@ export default async function FeedbackPage() {
   // braces, not the boundary itself.
   const { data: existing } = await supabase
     .from("product_feedback")
-    .select("respondent_role, understood, would_return, worked_well, confusing")
+    .select("respondent_role, understood, would_return, improve_most, worked_well, confusing")
     .eq("user_id", user!.id)
     .maybeSingle();
 

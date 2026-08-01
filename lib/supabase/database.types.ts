@@ -460,6 +460,7 @@ export type Database = {
       product_feedback: {
         Row: {
           confusing: string | null
+          improve_most: string | null
           created_at: string
           id: string
           locale: string
@@ -474,6 +475,7 @@ export type Database = {
           confusing?: string | null
           created_at?: string
           id?: string
+          improve_most?: string | null
           locale?: string
           respondent_role: string
           understood: string
@@ -486,6 +488,7 @@ export type Database = {
           confusing?: string | null
           created_at?: string
           id?: string
+          improve_most?: string | null
           locale?: string
           respondent_role?: string
           understood?: string

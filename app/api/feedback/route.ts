@@ -37,7 +37,8 @@ export async function POST(request: Request) {
   const parsed = await parseBody(request, productFeedbackSchema);
   if (!parsed.ok) return parsed.response;
 
-  const { respondent_role, understood, would_return, worked_well, confusing } = parsed.data;
+  const { respondent_role, understood, would_return, improve_most, worked_well, confusing } =
+    parsed.data;
   const locale = await getLocale();
   const supabase = await createClient();
 
@@ -47,6 +48,7 @@ export async function POST(request: Request) {
       respondent_role,
       understood,
       would_return,
+      improve_most: improve_most ?? null,
       // Empty strings become null: a blank textarea is "they did not answer",
       // not "they answered with nothing", and the export should show the
       // difference.

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { MilestoneToast } from "./MilestoneToast";
+import { FeedbackPrompt } from "./FeedbackPrompt";
 
 /**
  * Marks the lesson complete, and reports the lesson as started when it opens.
@@ -127,6 +128,10 @@ export function LessonCompleteButton({
       {milestones.length > 0 && (
         <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />
       )}
+
+      {/* Only after finishing, and BELOW the next action — so anyone carrying
+          straight on to practice never has to read it. See FeedbackPrompt. */}
+      {complete && <FeedbackPrompt />}
     </div>
   );
 }

@@ -34,6 +34,7 @@ export function FeedbackForm({ initial }: { initial?: FeedbackAnswers | null }) 
   const [role, setRole] = useState(initial?.respondent_role ?? "");
   const [understood, setUnderstood] = useState(initial?.understood ?? "");
   const [wouldReturn, setWouldReturn] = useState(initial?.would_return ?? "");
+  const [improveMost, setImproveMost] = useState(initial?.improve_most ?? "");
   const [workedWell, setWorkedWell] = useState(initial?.worked_well ?? "");
   const [confusing, setConfusing] = useState(initial?.confusing ?? "");
 
@@ -54,6 +55,7 @@ export function FeedbackForm({ initial }: { initial?: FeedbackAnswers | null }) 
           respondent_role: role,
           understood,
           would_return: wouldReturn,
+          improve_most: improveMost || undefined,
           worked_well: workedWell.trim() || undefined,
           confusing: confusing.trim() || undefined,
         }),
@@ -110,6 +112,36 @@ export function FeedbackForm({ initial }: { initial?: FeedbackAnswers | null }) 
         ]}
       />
 
+      {/*
+        THE ONE QUESTION POLITENESS CANNOT ANSWER.
+
+        Everything else here has a costless friendly reply, and these
+        respondents are family, friends and a sister who teaches — they will be
+        kind. "Did it help?" → yes tells us little, because the honest answer and
+        the polite answer look the same.
+
+        A forced trade-off does not have that escape: choosing more chapters
+        means NOT choosing a better tutor. The answer carries a priority instead
+        of a courtesy.
+
+        Deliberately not "do you want more lessons?" — nobody has ever replied
+        "no thanks, three chapters is plenty". That would have returned unanimous
+        agreement and no information, while feeling like validation.
+      */}
+      <RadioGroup
+        name={`${groupId}-improve`}
+        legend={t("improveLabel")}
+        value={improveMost}
+        onChange={setImproveMost}
+        options={[
+          { value: "chapters", label: t("improveChapters") },
+          { value: "practice", label: t("improvePractice") },
+          { value: "tutor", label: t("improveTutor") },
+          { value: "phone", label: t("improvePhone") },
+          { value: "other", label: t("improveOther") },
+        ]}
+      />
+
       <FreeText
         label={t("workedLabel")}
         placeholder={t("workedPlaceholder")}
@@ -160,6 +192,7 @@ export type FeedbackAnswers = {
   respondent_role: string;
   understood: string;
   would_return: string;
+  improve_most: string | null;
   worked_well: string | null;
   confusing: string | null;
 };

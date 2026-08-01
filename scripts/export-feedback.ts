@@ -58,7 +58,7 @@ const db = createClient<Database>(url, key, { auth: { persistSession: false } })
 // a column added to the table later would silently join the export.
 const { data: rows, error } = await db
   .from("product_feedback")
-  .select("user_id, respondent_role, understood, would_return, worked_well, confusing, locale, created_at")
+  .select("user_id, respondent_role, understood, would_return, improve_most, worked_well, confusing, locale, created_at")
   .order("created_at", { ascending: true });
 
 if (error) {
@@ -79,6 +79,7 @@ const headers = [
   "respondent",
   "understood",
   "would_use_again",
+  "improve_most",
   "what_worked",
   "what_confused",
   "language",
@@ -93,6 +94,7 @@ const csv = [
       r.respondent_role,
       r.understood,
       r.would_return,
+      r.improve_most ?? "",
       r.worked_well ?? "",
       r.confusing ?? "",
       r.locale,
@@ -118,6 +120,14 @@ const people = new Set(rows.map((r) => r.user_id)).size;
 const byRole = count((r) => r.respondent_role);
 const byUnderstood = count((r) => r.understood);
 const byReturn = count((r) => r.would_return);
+// The forced choice — the one answer politeness cannot give, so the most
+// actionable block in this file.
+const byImprove = rows.reduce<Record<string, number>>((acc, r) => {
+  if (!r.improve_most) return acc;
+  acc[r.improve_most] = (acc[r.improve_most] ?? 0) + 1;
+  return acc;
+}, {});
+const topImprove = Object.entries(byImprove).sort((a, b) => b[1] - a[1])[0];
 const helped = (byUnderstood.yes ?? 0) + (byUnderstood.a_bit ?? 0);
 const pct = (n: number) => `${Math.round((n / rows.length) * 100)}%`;
 /** This file is read by judges; "1 responses from 1 distinct users" is not. */
@@ -148,6 +158,17 @@ a truncated id — enough to show the responses came from distinct people.
 - **${helped} of ${rows.length} (${pct(helped)}) said Saathi helped them understand something** — "yes" or "a bit"
 - **${byReturn.yes ?? 0} of ${rows.length} (${pct(byReturn.yes ?? 0)}) said they would use it again**
 
+## What they want next — the forced choice
+
+Asked as "if we could only do ONE more thing". Every other question here has a
+polite answer available; this one makes people trade off, so it is the block to
+act on.
+
+${Object.entries(byImprove).length
+  ? Object.entries(byImprove).sort((a, b) => b[1] - a[1]).map(([k, v]) => `- ${k}: ${v}`).join("\n")
+  : "_Not answered yet._"}
+${topImprove ? `\n**Most asked for: ${topImprove[0]} (${topImprove[1]} of ${rows.length}).**` : ""}
+
 ## Who answered
 
 ${Object.entries(byRole).map(([k, v]) => `- ${k}: ${v}`).join("\n")}
@@ -176,5 +197,6 @@ writeFileSync("feedback-export/feedback.md", md);
 console.log(`\n  ${plural(rows.length, "response", "responses")} from ${plural(people, "distinct user", "distinct users")}`);
 console.log(`  ${helped} (${pct(helped)}) said it helped them understand something`);
 console.log(`  ${byReturn.yes ?? 0} (${pct(byReturn.yes ?? 0)}) would use it again`);
+if (topImprove) console.log(`  most asked for: ${topImprove[0]} (${topImprove[1]})`);
 console.log(`\n  wrote feedback-export/feedback.csv`);
 console.log(`  wrote feedback-export/feedback.md\n`);

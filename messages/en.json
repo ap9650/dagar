@@ -348,6 +348,13 @@
     "promptDismiss": "Not now",
     "noPersonalDetails": "Please do not include your name, phone number or address.",
     "sendFailed": "That did not send. Try once more?",
-    "back": "Back"
+    "back": "Back",
+    "improveLabel": "If we could only do ONE more thing, what should it be?",
+    "improveChapters": "More chapters and classes",
+    "improvePractice": "More practice questions",
+    "improveTutor": "Explain things better when I am stuck",
+    "improvePhone": "Make it work better on my phone",
+    "improveOther": "Something else — I will say below",
+    "sectionTitle": "Your feedback"
   }
 }

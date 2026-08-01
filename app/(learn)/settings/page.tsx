@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, MessageSquare } from "lucide-react";
+import { ArrowLeft, ChevronRight, MessageSquare } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
@@ -85,16 +85,25 @@ export default async function SettingsPage() {
         <InviteParentCard />
       </section>
 
-      {/* The permanent home for feedback. The post-lesson prompt catches people
-          at the moment they have an opinion; this catches everyone else, and it
-          is the link that gets forwarded on WhatsApp. */}
-      <Link
-        href="/feedback"
-        className="min-h-11 inline-flex items-center gap-sm text-body-sm text-primary-strong underline underline-offset-4"
-      >
-        <MessageSquare size={20} strokeWidth={1.75} aria-hidden />
-        {t("productFeedback.openFromSettings")}
-      </Link>
+      {/* Its own section with a heading, like every other block on this page.
+          It was a bare underlined link squeezed between the share section and
+          Sign out — no heading, so it read as part of sharing, and visually
+          quieter than a control people rarely want. Feedback being less
+          prominent than Sign out is the wrong way round, especially now. */}
+      <section className="flex flex-col gap-md">
+        <h2 className="text-label text-muted">{t("productFeedback.sectionTitle")}</h2>
+        <Link
+          href="/feedback"
+          className="flex items-center gap-md min-h-14 px-lg rounded-(--radius-card)
+                     border border-border bg-background text-ink
+                     transition-colors duration-150 ease-out hover:bg-surface
+                     focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        >
+          <MessageSquare size={20} strokeWidth={1.75} aria-hidden className="text-primary shrink-0" />
+          <span className="text-body">{t("productFeedback.openFromSettings")}</span>
+          <ChevronRight size={20} strokeWidth={1.75} aria-hidden className="ms-auto text-muted shrink-0" />
+        </Link>
+      </section>
 
       {/* Sign out is reachable in two taps from anywhere: /learn → here → out.
           On a shared phone that is the common path, not an edge case. */}
