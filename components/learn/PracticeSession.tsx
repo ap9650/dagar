@@ -80,6 +80,21 @@ export function PracticeSession({
   const [correctCount, setCorrectCount] = useState(0);
   const [milestones, setMilestones] = useState<string[]>([]);
   const [mentorTrigger, setMentorTrigger] = useState<string | null>(null);
+  /**
+   * A request has been filed for THIS concept, in THIS session.
+   *
+   * Scoped that narrowly on purpose. Asking for help must not remove the offer
+   * from the rest of the chapter — a learner stuck on a different concept, or
+   * back tomorrow, should be offered a mentor again, and `detectStruggle` will
+   * raise it for them.
+   *
+   * What this prevents is only the immediate repeat: the struggle rule is "the
+   * last three attempts were wrong", so a single further wrong answer re-fires
+   * it seconds after they asked. Offering a mentor to someone who just
+   * requested one reads as nagging, and files a second request about the same
+   * concept for a person to work out.
+   */
+  const [mentorRequested, setMentorRequested] = useState(false);
 
   const seenIds = useRef<string[]>([firstQuestion.id]);
   const started = useRef(false);
@@ -142,7 +157,11 @@ export function PracticeSession({
 
       if (body.is_correct) setCorrectCount((count) => count + 1);
       if (body.milestonesEarned?.length) setMilestones(body.milestonesEarned);
-      if (body.showMentorCta && body.mentorTrigger) setMentorTrigger(body.mentorTrigger);
+      // `!mentorRequested` — not "never offer again", just not twice in a row
+      // about the same concept. See the state declaration.
+      if (body.showMentorCta && body.mentorTrigger && !mentorRequested) {
+        setMentorTrigger(body.mentorTrigger);
+      }
     } catch {
       setFailed(true);
     } finally {
@@ -196,6 +215,21 @@ export function PracticeSession({
   }, [conceptId, correctCount, router]);
 
   async function nextQuestion() {
+    // The offer — and any confirmation it turned into — belongs to the question
+    // that triggered it.
+    //
+    // `mentorTrigger` used to be set once and never cleared, so the card stayed
+    // mounted for the rest of the session. A learner who asked for help then had
+    // "Passed on… a person reads this, it can take a day or two" pinned under
+    // every remaining question. Reported from real use, and it reads as though
+    // the app is still waiting on you when the whole point of that copy is
+    // "keep going, you do not have to wait".
+    //
+    // Cleared on the way to the next question, so the confirmation is seen once,
+    // where it happened. If they get stuck again the API raises the trigger
+    // again — the offer is never lost, it just stops following them.
+    setMentorTrigger(null);
+
     if (isLastQuestion) {
       finish();
       return;
@@ -345,7 +379,14 @@ export function PracticeSession({
       </div>
 
       {/* D6. Below the actions, never over them. */}
-      {mentorTrigger && <MentorCta conceptId={conceptId} trigger={mentorTrigger} />}
+      {mentorTrigger && (
+        <MentorCta
+          conceptId={conceptId}
+          trigger={mentorTrigger}
+          onDismissed={() => setMentorTrigger(null)}
+          onSent={() => setMentorRequested(true)}
+        />
+      )}
 
       {milestones.length > 0 && (
         <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />

@@ -139,7 +139,13 @@ async function seedDemoLearner() {
       "milestones",
       "streaks",
       "tutor_messages",
+      // Rehearsing the D6 flow files a real request. Without this, Riya carries
+      // every "I got stuck" from every practice run into the demo.
+      "mentor_requests",
       "events",
+      // NOT summary_links: a share link may already have been sent to somebody,
+      // and silently revoking it on a reset would break a link that is out in
+      // the world. Turning it off is the learner's decision, from Settings.
     ] as const) {
       await db.from(table).delete().eq("student_id", user.id);
     }

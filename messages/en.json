@@ -196,9 +196,9 @@
     "dismiss": "Not now",
     "requested": "A person reads these, so it can take a day or two. Keep going in the meantime — you do not have to wait.",
     "requestedTitle": "Passed on, with everything you tried",
-    "addNote": "Add a note (optional)",
     "noteLabel": "Anything you want to tell them?",
-    "notePlaceholder": "I get stuck when the bottom numbers are different…"
+    "notePlaceholder": "I get stuck when the bottom numbers are different…",
+    "send": "Send to a mentor"
   },
   "settings": {
     "title": "Settings",

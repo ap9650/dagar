@@ -29,20 +29,50 @@ export function MentorCta({
   conceptId,
   lessonId,
   trigger,
+  onDismissed,
+  onSent,
 }: {
   conceptId?: string;
   /** Set when the offer came from the tutor sheet, so the excerpt is scoped. */
   lessonId?: string;
   trigger: string;
+  /**
+   * Called when the learner declines. The PARENT owns whether the offer comes
+   * back — see `PracticeSession`, which also clears it when they move on, so a
+   * confirmation does not follow somebody through the rest of a session.
+   */
+  onDismissed?: () => void;
+  /**
+   * Called once a request is actually filed.
+   *
+   * Asking is NOT meant to remove the offer from the chapter — a learner who
+   * gets stuck on a different concept tomorrow should be offered help again, and
+   * `detectStruggle` will raise it. This exists for the narrower case: the
+   * struggle rule is "the last three attempts were wrong", so one more wrong
+   * answer straight after asking re-fires it, and the learner is offered a
+   * mentor one question after requesting one. That reads as nagging and files
+   * duplicates about the same concept.
+   */
+  onSent?: () => void;
 }) {
   const t = useTranslations();
   const noteId = useId();
 
-  const [state, setState] = useState<"offered" | "sending" | "sent" | "dismissed">(
-    "offered",
-  );
+  /**
+   * ── THE ORDER: ask first, write second ────────────────────────────────────
+   * This card used to show the note field (behind an "Add a note (optional)"
+   * link) NEXT TO the action, so the learner met a form and a button at the same
+   * moment and had to work out that one was optional.
+   *
+   * Now the offer is a single button. Tapping it is the decision; the note box
+   * appears after, when they have already chosen to ask and the only question
+   * left is what to say. Same two pieces of information, one at a time — which
+   * is the rule for every other screen in this product.
+   */
+  const [state, setState] = useState<
+    "offered" | "composing" | "sending" | "sent" | "dismissed"
+  >("offered");
   const [note, setNote] = useState("");
-  const [noteOpen, setNoteOpen] = useState(false);
 
   if (state === "dismissed") return null;
 
@@ -85,6 +115,7 @@ export function MentorCta({
       console.error("[mentor] request threw");
     }
     setState("sent");
+    onSent?.();
   }
 
   return (
@@ -104,7 +135,10 @@ export function MentorCta({
         </div>
         <button
           type="button"
-          onClick={() => setState("dismissed")}
+          onClick={() => {
+            setState("dismissed");
+            onDismissed?.();
+          }}
           aria-label={t("mentor.dismiss")}
           className="ms-auto inline-flex items-center justify-center size-11 shrink-0 rounded-(--radius-control) text-body"
         >
@@ -112,40 +146,40 @@ export function MentorCta({
         </button>
       </div>
 
-      {/* Optional, and behind a tap.
-          The request already carries what they tried and what they wrote, so a
-          note is a bonus rather than a cost of asking — and a required textarea
-          in front of a stuck 12-year-old is a reason not to ask at all. */}
-      {noteOpen ? (
-        <div className="flex flex-col gap-xs">
-          <label htmlFor={noteId} className="text-caption text-body">
-            {t("mentor.noteLabel")}
-          </label>
-          <textarea
-            id={noteId}
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            maxLength={500}
-            rows={3}
-            placeholder={t("mentor.notePlaceholder")}
-            className="w-full rounded-(--radius-control) border border-border-strong bg-background
-                       px-md py-sm text-body text-ink
-                       focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-soft"
-          />
-        </div>
+      {state === "offered" ? (
+        // One button. Nothing to read, nothing to fill in, nothing to weigh up.
+        <Button variant="secondary" onClick={() => setState("composing")}>
+          {t("mentor.ctaAction")}
+        </Button>
       ) : (
-        <button
-          type="button"
-          onClick={() => setNoteOpen(true)}
-          className="self-start min-h-11 text-body-sm text-primary-strong underline underline-offset-4"
-        >
-          {t("mentor.addNote")}
-        </button>
-      )}
+        // They have already decided to ask. Now, and only now, what to say —
+        // and it stays genuinely skippable: sending with an empty box is fine,
+        // because the request already carries the concept and what they tried.
+        // A textarea a stuck 12-year-old MUST fill is a reason not to ask.
+        <div className="flex flex-col gap-md">
+          <div className="flex flex-col gap-xs">
+            <label htmlFor={noteId} className="text-caption text-body">
+              {t("mentor.noteLabel")}
+            </label>
+            <textarea
+              id={noteId}
+              value={note}
+              onChange={(event) => setNote(event.target.value)}
+              maxLength={500}
+              rows={3}
+              autoFocus
+              placeholder={t("mentor.notePlaceholder")}
+              className="w-full rounded-(--radius-control) border border-border-strong bg-background
+                         px-md py-sm text-body text-ink
+                         focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-soft"
+            />
+          </div>
 
-      <Button variant="secondary" loading={state === "sending"} onClick={send}>
-        {t("mentor.ctaAction")}
-      </Button>
+          <Button variant="secondary" loading={state === "sending"} onClick={send}>
+            {t("mentor.send")}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
