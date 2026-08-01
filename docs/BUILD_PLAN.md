@@ -369,6 +369,22 @@ The build plan ends at deploy; the product doesn't. In priority order:
    fraction" rather than a plain wrong. That teaches the actual point of the
    chapter instead of failing them on rounding.
 
+0c. **Slash the inline fractions.** A stacked `\frac` inside running text has no
+   good size: large enough to read the digits and it crowds the lines around it;
+   small enough to sit in the line and the digits fall to ~12px, under the
+   caption floor. Both were tried on 1 Aug and both were reported as wrong from a
+   real phone within the hour.
+
+   The fix is not a size. Typesetting solves this by writing inline fractions
+   **slashed** — `1/4` on one line — and reserving stacked ones for display
+   maths, which has the vertical room. It removes the problem rather than
+   trading its two symptoms.
+
+   A content change: inline `$\frac{a}{b}$` becomes `$a/b$` across three
+   chapters, in both languages, leaving every `$$…$$` display block alone.
+   Mechanical but wide, and it touches the Hindi files, so it needs
+   `npm run check:hindi` after. **Not a deadline-week edit.**
+
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
    rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
    an untested deploy.
