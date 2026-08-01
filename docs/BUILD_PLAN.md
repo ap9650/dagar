@@ -304,6 +304,26 @@ goes badly you cut with a plan rather than panicking. Sacrifice in this order:
 - **Hindi UI strings and the Hindi tutor.** ~2.5h combined, and they are the
   accessibility story. Cutting them contradicts the product's premise.
 
+## Naming — decided 1 Aug, deliberately deferred
+
+"Saathi" is already used by at least one other product. **Not changing it before
+submission**, and the trigger for revisiting is specific rather than vague: **when
+this moves to a real APK / app-store listing**, alongside advanced features.
+
+That is the point where the name starts to cost something — store listings enforce
+collisions, and a trademark and domain check belongs in the same piece of work.
+Before then it is cosmetic, and साथी is an ordinary Hindi word meaning companion,
+which is why several products share it and why nobody holds a strong exclusive
+claim on it.
+
+Measured blast radius, so the next person does not have to: **56 user-visible
+strings** across both message dictionaries, **4 in the AI prompts** — including the
+tutor's own identity, which is the one that needs care — 40 across app/ and
+components/, 2 icons/manifest, and 129 in docs. Roughly 90 minutes with the test
+suite as a safety net, plus a URL change that breaks any link already shared.
+
+---
+
 ## After the demo — the first real week
 
 The build plan ends at deploy; the product doesn't. In priority order:
