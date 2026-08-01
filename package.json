@@ -15,12 +15,13 @@
     "typecheck": "tsc --noEmit",
     "seed": "node --no-warnings scripts/seed.ts",
     "check:keys": "node --no-warnings scripts/check-arithmetic-keys.ts",
-    "db:types": "npx supabase gen types typescript --linked > lib/supabase/database.types.ts",
+    "db:types": "npx supabase gen types typescript --linked > /tmp/saathi-db-types.ts && grep -q 'export type Database' /tmp/saathi-db-types.ts && mv /tmp/saathi-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED \u2014 database.types.ts left untouched' && cat /tmp/saathi-db-types.ts && exit 1)",
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
     "check:hindi": "node --no-warnings scripts/check-hindi.ts",
     "icons": "node --no-warnings scripts/generate-icons.ts",
     "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts",
-    "demo:data": "node --no-warnings scripts/demo-data.ts"
+    "demo:data": "node --no-warnings scripts/demo-data.ts",
+    "feedback:export": "node --no-warnings scripts/export-feedback.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

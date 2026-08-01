@@ -457,6 +457,53 @@ export type Database = {
           },
         ]
       }
+      product_feedback: {
+        Row: {
+          confusing: string | null
+          created_at: string
+          id: string
+          locale: string
+          respondent_role: string
+          understood: string
+          updated_at: string
+          user_id: string
+          worked_well: string | null
+          would_return: string
+        }
+        Insert: {
+          confusing?: string | null
+          created_at?: string
+          id?: string
+          locale?: string
+          respondent_role: string
+          understood: string
+          updated_at?: string
+          user_id: string
+          worked_well?: string | null
+          would_return: string
+        }
+        Update: {
+          confusing?: string | null
+          created_at?: string
+          id?: string
+          locale?: string
+          respondent_role?: string
+          understood?: string
+          updated_at?: string
+          user_id?: string
+          worked_well?: string | null
+          would_return?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       milestones: {
         Row: {
           code: string

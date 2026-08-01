@@ -72,6 +72,13 @@ export const LIMITS = {
   tutor: { limit: 30, windowSeconds: 3600 },
   /** Blocks a scripted answer-submission loop. */
   attempts: { limit: 120, windowSeconds: 60 },
+  /**
+   * Feedback is one row per person and re-submitting edits it, so this is not
+   * about volume — it stops a script rewriting the same row in a loop. Generous,
+   * because a real person correcting a typo twice must never be blocked from
+   * telling us what confused them.
+   */
+  feedback: { limit: 20, windowSeconds: 600 },
 } as const;
 
 // ─── helper for route handlers ───────────────────────────────────────────────

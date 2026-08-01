@@ -107,6 +107,22 @@ export const quizSubmitSchema = z.object({
     .max(50),
 });
 
+/**
+ * Product feedback (0018).
+ *
+ * The two text fields are OPTIONAL and capped. Optional because a learner who
+ * taps three buttons and writes nothing is still a real response; capped because
+ * this is free text from the public and unbounded strings are a storage bill and
+ * a rendering hazard.
+ */
+export const productFeedbackSchema = z.object({
+  respondent_role: z.enum(["student", "parent", "teacher", "other"]),
+  understood: z.enum(["yes", "a_bit", "no"]),
+  would_return: z.enum(["yes", "maybe", "no"]),
+  worked_well: z.string().trim().max(1000).optional(),
+  confusing: z.string().trim().max(1000).optional(),
+});
+
 export const tutorMessageSchema = z.object({
   lesson_id: zUuid,
   // Cap input length BEFORE the model call, not after — the whole point is to

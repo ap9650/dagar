@@ -147,8 +147,24 @@ async function seedDemoLearner() {
       // and silently revoking it on a reset would break a link that is out in
       // the world. Turning it off is the learner's decision, from Settings.
     ] as const) {
-      await db.from(table).delete().eq("student_id", user.id);
+      // Errors checked, not swallowed. `product_feedback` was briefly in this
+      // list and keys on `user_id`, not `student_id` — the delete failed every
+      // run, the loop ignored it, and the reset silently did nothing for that
+      // table. A cleanup that quietly cleans nothing is worse than none.
+      const { error } = await db.from(table).delete().eq("student_id", user.id);
+      if (error) throw new Error(`reset ${table}: ${error.message}`);
     }
+
+    // Different owner column, hence its own line rather than a special case
+    // inside the loop.
+    //
+    // Rehearsing the feedback flow files a real-looking response, and the export
+    // is evidence for the submission — it must not carry rehearsals.
+    const { error: feedbackError } = await db
+      .from("product_feedback")
+      .delete()
+      .eq("user_id", user.id);
+    if (feedbackError) throw new Error(`reset product_feedback: ${feedbackError.message}`);
     await db.auth.admin.updateUserById(user.id, { password });
     console.log(`   reset ${DEMO_EMAIL}`);
   } else {

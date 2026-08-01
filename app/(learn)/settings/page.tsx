@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageSquare } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
@@ -84,6 +84,17 @@ export default async function SettingsPage() {
         <h2 className="text-label text-muted">{t("settings.shareTitle")}</h2>
         <InviteParentCard />
       </section>
+
+      {/* The permanent home for feedback. The post-lesson prompt catches people
+          at the moment they have an opinion; this catches everyone else, and it
+          is the link that gets forwarded on WhatsApp. */}
+      <Link
+        href="/feedback"
+        className="min-h-11 inline-flex items-center gap-sm text-body-sm text-primary-strong underline underline-offset-4"
+      >
+        <MessageSquare size={20} strokeWidth={1.75} aria-hidden />
+        {t("productFeedback.openFromSettings")}
+      </Link>
 
       {/* Sign out is reachable in two taps from anywhere: /learn → here → out.
           On a shared phone that is the common path, not an edge case. */}

@@ -46,3 +46,7 @@ next-env.d.ts
 # supabase CLI local state
 supabase/.temp
 .DS_Store
+
+# Real user feedback export — contains free text from real people, including
+# children. Regenerate with `npm run feedback:export` rather than committing it.
+feedback-export/
