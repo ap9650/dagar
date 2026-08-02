@@ -72,15 +72,16 @@ export function FeedbackForm({ initial }: { initial?: FeedbackAnswers | null }) 
         role="status"
         className="flex flex-col gap-md rounded-(--radius-card) border border-primary bg-primary-wash px-lg py-lg"
       >
+        {/* No "change my answers" control here.
+            The line above already says they can change it from Settings, so an
+            inline button repeats the same fact as a decision — on the one screen
+            whose whole job is to say "done, thank you". Editing feedback is
+            something almost nobody does, and offering it at the moment someone
+            has just finished invites second-guessing. The capability stays
+            (Settings loads the existing answers and the route upserts); only the
+            prompt to use it goes. */}
         <p className="text-h3 text-primary-strong">{t("sentTitle")}</p>
         <p className="text-body text-body">{t("sentBody")}</p>
-        <button
-          type="button"
-          onClick={() => setState("editing")}
-          className="self-start min-h-11 text-body-sm text-primary-strong underline underline-offset-4"
-        >
-          {t("edit")}
-        </button>
       </div>
     );
   }
