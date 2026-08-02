@@ -7,6 +7,7 @@ import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { InviteParentCard } from "@/components/learn/InviteParentCard";
 import { InstallSettings } from "@/components/install/InstallSettings";
+import { HapticsToggle } from "@/components/settings/HapticsToggle";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -77,6 +78,12 @@ export default async function SettingsPage() {
           </Card>
         </section>
       )}
+
+      {/* Renders its own heading, and renders NOTHING at all on a device without
+          the Vibration API — every iPhone — or under prefers-reduced-motion. The
+          heading has to live inside it, or an iPhone gets a section title with
+          nothing under it. */}
+      <HapticsToggle />
 
       {/* The install route that does not depend on having caught a prompt.
           The dashboard card offers once and can be dismissed — for a while it

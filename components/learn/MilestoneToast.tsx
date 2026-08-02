@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Award, X } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { haptic } from "@/lib/haptics";
 
 /**
  * Milestone toast (D7b) — celebratory, and the ONLY place motion may be playful.
@@ -23,6 +24,12 @@ export function MilestoneToast({
 }) {
   const t = useTranslations();
   const [visible, setVisible] = useState(true);
+
+  // The one place a pattern is allowed to be playful. Fires with the toast, not
+  // before it — a buzz with nothing on screen is just a startle.
+  useEffect(() => {
+    if (codes.length > 0) haptic("milestone");
+  }, [codes.length]);
 
   useEffect(() => {
     // 4s auto-dismiss. Long enough to read in a second language, short enough

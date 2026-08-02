@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect } from "react";
 import { CheckCircle2, Lightbulb } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { haptic } from "@/lib/haptics";
 import { MarkdownBody } from "./MarkdownBody";
 
 /**
@@ -34,6 +36,13 @@ export function FeedbackPanel({
   solutionMd: string | null;
 }) {
   const t = useTranslations();
+
+  // Correct only. There is no `wrong` pattern in lib/haptics.ts, deliberately —
+  // a buzz on a wrong answer is the amber-not-red rule broken in a different
+  // sense: a physical reprimand for mixing up a sign.
+  useEffect(() => {
+    if (isCorrect) haptic("correct");
+  }, [isCorrect]);
 
   if (isCorrect) {
     return (

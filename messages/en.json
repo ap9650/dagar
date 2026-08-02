@@ -236,7 +236,9 @@
     "shareLinkRevoke": "Turn this link off",
     "inviteParentCodeWhy": "A code lets them make their own Saathi account and sign in whenever they like. Useful for a tutor, or if more than one of you uses Saathi.",
     "shareTitle": "Share your progress",
-    "inviteParentCodeToggle": "Or give them a code for their own account"
+    "inviteParentCodeToggle": "Or give them a code for their own account",
+    "hapticsTitle": "Feedback",
+    "hapticsLabel": "Buzz when you get something right"
   },
   "install": {
     "title": "Add Saathi to your home screen",

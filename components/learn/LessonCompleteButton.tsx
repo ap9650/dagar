@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
+import { haptic } from "@/lib/haptics";
 import { MilestoneToast } from "./MilestoneToast";
 import { FeedbackPrompt } from "./FeedbackPrompt";
 
@@ -49,8 +50,11 @@ export function LessonCompleteButton({
     setBusy(true);
     setFailed(false);
 
-    // Optimistic on purpose — see the note above.
+    // Optimistic on purpose — see the note above. The buzz goes with the
+    // optimistic state, not the response: the learner finished the lesson, and
+    // whether our server heard about it is not their news.
     setComplete(true);
+    haptic("complete");
 
     try {
       const response = await fetch(`/api/lessons/${lessonId}/complete`, {
