@@ -560,6 +560,131 @@ export const class6Fractions: SeedChapter = {
   // ═══════════════════════════════════════════════════════════════════════════
   questions: [
     // ─────────────────────────────────────────────────────────────────────────
+    // PICTORIAL RECOGNITION (D18 slice 5.2)
+    //
+    // These are ADDITIONS, not conversions. Rewriting the comparison MCQs as
+    // pictures was considered and rejected: a bar of 1/4 beside a bar of 1/6
+    // hands over the answer, and the whole worth of that question is that it
+    // catches the "6 is bigger than 4, so 1/6 is bigger" mistake by making the
+    // learner reason. A picture would remove exactly the thinking it tests.
+    //
+    // What was missing instead is the other direction — read the notation, find
+    // its picture. That is the concrete↔abstract link the entire slice is about,
+    // and nothing in the bank tested it.
+    //
+    // Diagrams are never translated (D18 §6): a bar cut into eight is a bar cut
+    // into eight in both languages. Only the stem and the solution have Hindi.
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c6-fb-d1-q3",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "Which picture shows $3/8$?",
+      answer_value: "3/8",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "3/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 3 } },
+          // Shaded what is LEFT rather than what is taken — the same slip as
+          // answering 3/4 for the roti question.
+          { value: "5/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 5 } },
+          // Right top number, wrong number of parts: read only the 3.
+          { value: "3/5", viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3 } },
+        ],
+      },
+      solution_md: [
+        "The **bottom** number says how many equal parts the whole is cut into. For $3/8$ that is 8 parts.",
+        "",
+        "The **top** number says how many of them to take. That is 3.",
+        "",
+        "So look for the bar cut into **8** pieces with **3** of them filled.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-eqf-d1-q3",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "Which picture shows the same amount as $1/2$?",
+      answer_value: "2/4",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "2/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 2 } },
+          // Added 1 to the top and the bottom — the most common way to make an
+          // "equal" fraction that is not one.
+          { value: "2/3", viz: { kind: "partWhole", shape: "bar", parts: 3, shaded: 2 } },
+          // Doubled only the bottom.
+          { value: "1/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 1 } },
+        ],
+      },
+      solution_md: [
+        "Half means the filled part and the empty part are the **same size**.",
+        "",
+        "Cut the bar into 4 and fill 2, and you have filled exactly half of it:",
+        "",
+        "$$\n\\frac{1}{2} = \\frac{2}{4}\n$$",
+        "",
+        "Multiplying the top and the bottom by the same number never changes how much there is — it just cuts the same amount into more pieces.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-cmp-d1-q3",
+      concept_slug: "comparing-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "Which picture shows **more than half**?",
+      answer_value: "3/5",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "3/5", viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3 } },
+          { value: "2/5", viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 2 } },
+          { value: "1/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 1 } },
+        ],
+      },
+      solution_md: [
+        "A fraction is more than half when the top number is more than **half of** the bottom one.",
+        "",
+        "Half of 5 is 2.5, so $3/5$ is past halfway and $2/5$ has not reached it. Half of 4 is 2, so $1/4$ is well short.",
+        "",
+        "On the pictures: look for the bar where the filled part is longer than the empty part.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d1-q3",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "$$\n\\frac{1}{4} + \\frac{1}{4}\n$$\n\nWhich picture shows the answer?",
+      answer_value: "2/4",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "2/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 2 } },
+          // Added the bottoms as well as the tops. The whole reason this
+          // question is pictorial: 2/8 is visibly SMALLER than one of the
+          // quarters you started with, and no rule has to be quoted to see it.
+          { value: "2/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 2 } },
+          { value: "1/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 1 } },
+        ],
+      },
+      solution_md: [
+        "Both pieces are **quarters**, so they are the same size. Take one, then take another — that is 2 quarters.",
+        "",
+        "$$\n\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}\n$$",
+        "",
+        "The bottom number stays 4. It is not a count — it is the **size of the piece**, and adding two quarters does not make the pieces smaller.",
+        "",
+        "That is the trap in $2/8$: it is less than the single quarter you started with, so it cannot be two of them.",
+      ].join("\n"),
+    },
+    // ─────────────────────────────────────────────────────────────────────────
     // CONCEPT 1 — fraction-basics
     // ─────────────────────────────────────────────────────────────────────────
     {

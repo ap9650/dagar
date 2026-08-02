@@ -77,6 +77,7 @@ type Row = {
   answer_type: string;
   answer_value: string;
   choices: unknown;
+  input: unknown;
 };
 
 function choicesToText(choices: unknown): string {
@@ -90,6 +91,27 @@ function choicesToText(choices: unknown): string {
   return lines.length ? `\n\nOptions:\n${lines.join("\n")}` : "";
 }
 
+/**
+ * The options of a pictorial question (D18 slice 5.2).
+ *
+ * Without this the verifier solves a `choiceViz` question BLIND: "which picture
+ * shows more than half?" has no answer from the stem alone, and a cold solve
+ * that cannot see the options is not a check, it is a coin toss reported as a
+ * verification. The learner sees three diagrams; the verifier gets the value each
+ * diagram stands for, which is the same information without the drawing.
+ */
+function optionsToText(input: unknown): string {
+  if (typeof input !== "object" || input === null) return "";
+  const spec = input as { kind?: unknown; options?: unknown };
+  if (spec.kind !== "choiceViz" || !Array.isArray(spec.options)) return "";
+  const values = spec.options
+    .filter((o): o is { value: string } => typeof o === "object" && o !== null && "value" in o)
+    .map((o) => `- ${o.value}`);
+  return values.length
+    ? `\n\nThe learner picks one of these, shown as diagrams:\n${values.join("\n")}`
+    : "";
+}
+
 async function solveCold(row: Row): Promise<string> {
   const response = await anthropic.messages.create({
     model: MODEL,
@@ -99,7 +121,7 @@ async function solveCold(row: Row): Promise<string> {
       {
         role: "user",
         // Stem, type and options. NOT the stored answer.
-        content: `Answer type: ${row.answer_type}\n\nQuestion:\n${row.stem_md}${choicesToText(row.choices)}`,
+        content: `Answer type: ${row.answer_type}\n\nQuestion:\n${row.stem_md}${choicesToText(row.choices)}${optionsToText(row.input)}`,
       },
     ],
   });
@@ -121,7 +143,7 @@ async function solveCold(row: Row): Promise<string> {
 
 let query = db
   .from("questions")
-  .select("slug, stem_md, answer_type, answer_value, choices")
+  .select("slug, stem_md, answer_type, answer_value, choices, input")
   .order("slug");
 if (ONLY) query = query.like("slug", `${ONLY}%`);
 

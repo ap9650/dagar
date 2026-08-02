@@ -210,7 +210,26 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   await page.goto("/settings");
   await expect(page.getByRole("radio", { name: "Class 6" })).toBeChecked();
 
-  await page.getByText("Class 7", { exact: true }).click();
+  /*
+    Wait for the WRITE, not just the tick.
+
+    The control is optimistic: the radio flips the moment it is clicked, and the
+    PATCH goes out behind it. So `toBeChecked()` passed instantly whether or not
+    anything had been saved, and the `reload()` below raced the request — this
+    test failed about one run in two, which is the worst kind of red because it
+    looks like flakiness in the app rather than a missing await in the test.
+
+    The optimistic UI is correct and stays. It is the assertion that has to be
+    honest about what it has proved.
+  */
+  const [saved] = await Promise.all([
+    page.waitForResponse(
+      (r) => r.url().includes("/api/profile") && r.request().method() === "PATCH",
+      { timeout: 15_000 },
+    ),
+    page.getByText("Class 7", { exact: true }).click(),
+  ]);
+  expect(saved.ok()).toBeTruthy();
   await expect(page.getByRole("radio", { name: "Class 7" })).toBeChecked();
 
   // Survives a reload, so it reached the database and not just React state.
