@@ -494,6 +494,19 @@ unique(`student_id`, `code`) means it can never double-award.
 
 **Surfacing:**
 - Toast on earn — celebratory, honours `prefers-reduced-motion` (D10)
+- **One moment, ranked, never a stack** (added 2 Aug 2026). A milestone is *rare* —
+  seven codes, most earned once ever — so on its own it left every ordinary
+  completion ending in a line of small grey text. The second moment is **the day
+  becoming counted**, which is the goal ring closing and the streak moving; by D7
+  and D17 those are the same event, so they are reported once, together. The
+  routes return a `dayCounted` flag they were already computing internally and
+  discarding. `lib/learning/celebration.ts` ranks: milestone > day > silence.
+  A milestone never shows alongside the day — on the day one is earned the day was
+  almost always counted by the same action, so both would report one event twice.
+- **Silence is the third outcome, deliberately.** A second lesson on a day already
+  counted celebrates nothing. Rewarding it would be XP by another name, which D17
+  rejects: a second scoring system competing with concept mastery, which is the
+  score that means something.
 - Listed on the progress screen, earned and unearned both visible so there's a next goal
 - **Included in the parent WhatsApp summary** — this is what actually delivers the
   §5 "celebrate milestones" job. A milestone is the single most worthwhile thing to

@@ -19,7 +19,8 @@ import type { Locale } from "@/i18n/config";
 import { MarkdownBody } from "./MarkdownBody";
 import { AnswerInput } from "./AnswerInput";
 import { MentorCta } from "./MentorCta";
-import { MilestoneToast } from "./MilestoneToast";
+import { celebrationFor, type Celebration as Moment } from "@/lib/learning/celebration";
+import { Celebration } from "./Celebration";
 
 /**
  * The chapter quiz (slice 2.4).
@@ -70,7 +71,7 @@ export function QuizRunner({
 
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [milestones, setMilestones] = useState<string[]>([]);
+  const [moment, setMoment] = useState<Moment | null>(null);
 
   // Focus lands here when a new question renders, so a keyboard user is not
   // dropped back at the top of the document on every Next.
@@ -154,7 +155,9 @@ export function QuizRunner({
       const body = (await response.json()) as QuizSubmitResponse;
       setResult(body);
       setPhase("results");
-      if (body.milestonesEarned?.length) setMilestones(body.milestonesEarned);
+      // Milestones only: a quiz is neither a lesson nor five practice questions,
+      // so it does not count the day (D7) and the route returns no `dayCounted`.
+      setMoment(celebrationFor(body));
       // Mastery, the journey path and the daily goal all moved server-side.
       // Re-read them rather than guessing at them here.
       router.refresh();
@@ -362,9 +365,7 @@ export function QuizRunner({
           />
         )}
 
-        {milestones.length > 0 && (
-          <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />
-        )}
+        <Celebration moment={moment} onDismiss={() => setMoment(null)} />
       </div>
     );
   }

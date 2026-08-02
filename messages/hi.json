@@ -198,6 +198,11 @@
     "chapter_complete": "चैप्टर पूरा",
     "chapter_mastered": "चैप्टर पक्का"
   },
+  "celebration": {
+    "goalDone": "आज का काम पूरा।",
+    "firstDayTitle": "आज का काम पूरा",
+    "firstDayBody": "कल फिर आना, स्ट्रीक शुरू हो जाएगी।"
+  },
   "mentor": {
     "ctaTitle": "कोई इंसान समझाए तो?",
     "ctaBody": "हम यह किसी मेंटर तक पहुँचा सकते हैं।",

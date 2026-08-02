@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { haptic } from "@/lib/haptics";
-import { MilestoneToast } from "./MilestoneToast";
+import { celebrationFor, type Celebration as Moment } from "@/lib/learning/celebration";
+import { Celebration } from "./Celebration";
 import { FeedbackPrompt } from "./FeedbackPrompt";
 
 /**
@@ -43,7 +44,7 @@ export function LessonCompleteButton({
   const [complete, setComplete] = useState(alreadyComplete);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [milestones, setMilestones] = useState<string[]>([]);
+  const [moment, setMoment] = useState<Moment | null>(null);
   const started = useRef(false);
 
   // Opening the lesson IS starting it. Fire-and-forget: a failed start must never
@@ -75,7 +76,9 @@ export function LessonCompleteButton({
       }
 
       const body = await response.json();
-      if (body.milestonesEarned?.length) setMilestones(body.milestonesEarned);
+      // One moment, ranked server-fact-first — see lib/learning/celebration.ts.
+      // Notably it can be null, and on a second lesson the same day it should be.
+      setMoment(celebrationFor(body));
 
       // Refresh so the dashboard's journey path, streak and goal ring reflect
       // this on the way back. The server recomputed them; the client just
@@ -138,9 +141,7 @@ export function LessonCompleteButton({
         </div>
       )}
 
-      {milestones.length > 0 && (
-        <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />
-      )}
+      <Celebration moment={moment} onDismiss={() => setMoment(null)} />
 
       {/* Only after finishing, and BELOW the next action — so anyone carrying
           straight on to practice never has to read it. See FeedbackPrompt. */}

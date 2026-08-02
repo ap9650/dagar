@@ -211,6 +211,14 @@ body:lang(hi) {
   .celebrate-enter {
     animation: celebrate-enter 400ms ease-out;
   }
+
+  /* The icon pops slightly after the toast has arrived, which is what makes this
+     read as a *moment* rather than another panel sliding in. Scale only, on a
+     20px icon, inside the same 400ms budget — the layout never moves, so nothing
+     around it reflows and nothing has to be re-read. */
+  .celebrate-pop {
+    animation: celebrate-pop 400ms ease-out;
+  }
 }
 
 /* Diagram fills ease rather than snap, so a part being taken reads as an action
@@ -241,6 +249,21 @@ body:lang(hi) {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes celebrate-pop {
+  /* Held at rest for the first 40% so the pop lands after the toast has settled,
+     not underneath it. */
+  0%,
+  40% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 

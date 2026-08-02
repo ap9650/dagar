@@ -77,6 +77,9 @@ export async function POST(
       ok: true,
       alreadyComplete: true,
       streak: streak?.current ?? 0,
+      // Nothing new happened, so there is nothing to celebrate. Re-opening a
+      // finished lesson must not replay its confetti.
+      dayCounted: false,
       milestonesEarned: [],
     });
   }
@@ -92,6 +95,16 @@ export async function POST(
   const admin = createAdminClient();
   let streakDays = 0;
   let milestonesEarned: string[] = [];
+  /**
+   * Did THIS call turn today into a counted day?
+   *
+   * Declared out here so it survives the try below. It is the fact behind the
+   * daily-goal celebration, and it was already being computed and thrown away —
+   * the client had no way to tell "you closed your goal just now" apart from
+   * "your goal was already closed", so the strongest daily-return mechanic in
+   * D17 was closing silently on a screen the learner had navigated away from.
+   */
+  let dayCounted = false;
 
   try {
     const today = istDate(); // the IST calendar date, never a UTC timestamp (D7)
@@ -116,6 +129,7 @@ export async function POST(
     // keeps the streak alive but does not extend it, and emitting the event
     // anyway would inflate the Day-7 retention metric with repeat activity.
     if (!dayAlreadyCounted && streakDays > 0) {
+      dayCounted = true;
       await track("streak_extended", { days: streakDays });
     }
 
@@ -138,6 +152,7 @@ export async function POST(
     ok: true,
     alreadyComplete: false,
     streak: streakDays,
+    dayCounted,
     milestonesEarned,
   });
 }

@@ -157,6 +157,13 @@ export async function POST(request: Request) {
   let masteryIsMastered = false;
   let streakDays = 0;
   let milestonesEarned: string[] = [];
+  /**
+   * Did THIS answer turn today into a counted day? See the same flag in
+   * `lessons/[id]/complete` — on the practice side it can only become true on the
+   * fifth distinct question of the day, which is precisely the moment the goal
+   * ring closes.
+   */
+  let dayCounted = false;
   let showMentorCta = false;
   let mentorTrigger: string | null = null;
 
@@ -206,6 +213,7 @@ export async function POST(request: Request) {
         streakDays = streak?.current ?? 0;
 
         if (!dayAlreadyCounted && streakDays > 0) {
+          dayCounted = true;
           await track("streak_extended", { days: streakDays });
         }
       } else {
@@ -295,6 +303,7 @@ export async function POST(request: Request) {
       is_mastered: masteryIsMastered,
     },
     streak: streakDays,
+    dayCounted,
     milestonesEarned,
     showMentorCta,
     mentorTrigger,

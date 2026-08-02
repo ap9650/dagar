@@ -13,7 +13,8 @@ import { MarkdownBody } from "./MarkdownBody";
 import { AnswerInput } from "./AnswerInput";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { MentorCta } from "./MentorCta";
-import { MilestoneToast } from "./MilestoneToast";
+import { celebrationFor, type Celebration as Moment } from "@/lib/learning/celebration";
+import { Celebration } from "./Celebration";
 
 /**
  * The practice screen (slice 2.2).
@@ -41,6 +42,9 @@ type GradeResponse = {
   is_correct: boolean;
   solution_md: string | null;
   milestonesEarned: string[];
+  /** True on the answer that turned today into a counted day — never after. */
+  dayCounted: boolean;
+  streak: number;
   showMentorCta: boolean;
   mentorTrigger: string | null;
 };
@@ -78,7 +82,7 @@ export function PracticeSession({
   const [failed, setFailed] = useState(false);
 
   const [correctCount, setCorrectCount] = useState(0);
-  const [milestones, setMilestones] = useState<string[]>([]);
+  const [moment, setMoment] = useState<Moment | null>(null);
   const [mentorTrigger, setMentorTrigger] = useState<string | null>(null);
   /**
    * A request has been filed for THIS concept, in THIS session.
@@ -156,7 +160,9 @@ export function PracticeSession({
       setPhase("graded");
 
       if (body.is_correct) setCorrectCount((count) => count + 1);
-      if (body.milestonesEarned?.length) setMilestones(body.milestonesEarned);
+      // The fifth distinct question of the day closes the goal, so this is the
+      // one place a celebration can arrive MID-SET rather than at the end.
+      setMoment(celebrationFor(body));
       // `!mentorRequested` — not "never offer again", just not twice in a row
       // about the same concept. See the state declaration.
       if (body.showMentorCta && body.mentorTrigger && !mentorRequested) {
@@ -285,9 +291,7 @@ export function PracticeSession({
 
         <Button onClick={() => router.push("/learn")}>{t("errors.backHome")}</Button>
 
-        {milestones.length > 0 && (
-          <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />
-        )}
+        <Celebration moment={moment} onDismiss={() => setMoment(null)} />
       </div>
     );
   }
@@ -388,9 +392,7 @@ export function PracticeSession({
         />
       )}
 
-      {milestones.length > 0 && (
-        <MilestoneToast codes={milestones} onDismiss={() => setMilestones([])} />
-      )}
+      <Celebration moment={moment} onDismiss={() => setMoment(null)} />
     </div>
   );
 }

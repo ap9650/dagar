@@ -95,10 +95,9 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   await expect(page.getByRole("button", { name: /ask saathi/i })).toBeVisible();
 
   // ── walk the lesson ───────────────────────────────────────────────────────
-  // Since D18 a lesson may be a sequence of steps rather than one scroll, and
-  // "Got it — continue" only appears once the last step is passed. This walks
-  // whichever shape it is: a stepped lesson taps Continue to the end, a prose
-  // one finds the complete button straight away.
+  // Since D18 a lesson may be a sequence of steps rather than one scroll. This
+  // walks whichever shape it is: a stepped lesson taps Continue to the end, a
+  // prose one finds the complete button straight away.
   //
   // It also gives the step player its only end-to-end coverage — the loop is
   // bounded so a player that never advances fails here instead of hanging.
@@ -108,7 +107,37 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
     await page.waitForTimeout(150);
   }
   await expect(complete).toBeVisible({ timeout: 10_000 });
-  await complete.click();
+
+  /*
+    TWO buttons carry "Got it — continue": the step player's last-step button,
+    and the completion button revealed beneath it. That is why this waits on the
+    REQUEST rather than counting clicks.
+
+    It has to. Until 2 Aug this was a single `complete.click()`, which only ever
+    ended the steps — the loop above exits the moment the step player's own last
+    button appears, since it shares the label. So `/complete` was never posted,
+    and the demo path had never once covered lesson completion, the streak, or
+    milestone awarding. Everything downstream still passed, which is exactly why
+    it went unnoticed.
+  */
+  const completed = page.waitForResponse(
+    (r) => r.url().includes("/complete") && r.request().method() === "POST",
+    { timeout: 30_000 },
+  );
+
+  await complete.first().click();
+  await page.waitForTimeout(400);
+  // Still there ⇒ that click ended the steps and this one is the completion.
+  // Gone ⇒ it was a prose lesson and the first click already completed it.
+  if (await complete.count()) await complete.first().click();
+
+  expect((await completed).ok()).toBeTruthy();
+
+  // A first lesson always earns `first_lesson` (D7b), so the celebration is not
+  // optional here — this is the one moment in the journey it is guaranteed.
+  await expect(page.getByRole("status").filter({ hasText: /new badge/i })).toBeVisible({
+    timeout: 10_000,
+  });
 
   // ── practice, via the wrong answer ────────────────────────────────────────
   await page.goto("/progress");

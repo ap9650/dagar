@@ -198,6 +198,11 @@
     "chapter_complete": "Chapter finished",
     "chapter_mastered": "Chapter mastered"
   },
+  "celebration": {
+    "goalDone": "Today's goal is done.",
+    "firstDayTitle": "That's today done",
+    "firstDayBody": "Come back tomorrow to start a streak."
+  },
   "mentor": {
     "ctaTitle": "Want a person to explain this?",
     "ctaBody": "We can pass this on to a mentor.",
