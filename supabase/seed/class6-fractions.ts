@@ -198,6 +198,65 @@ export const class6Fractions: SeedChapter = {
         "",
         "When the top and bottom are the same, you have taken every part — the whole thing.",
       ].join("\n"),
+      // Lesson 2 moves fractions off the plate and onto the line — the shift
+      // from "a piece of something" to "a number". Every step is a number line
+      // for that reason; a roti here would undo the point.
+      steps: [
+        {
+          kind: "see",
+          md: "A fraction is not only a piece of roti. It is a **number**. $1/2$ sits exactly halfway between 0 and 1.",
+          viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 2, marks: [{ at: 0.5, label: "1/2" }] },
+        },
+        {
+          kind: "see",
+          md: "To place $3/5$, first cut the gap from 0 to 1 into 5 equal steps.",
+          viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 5 },
+        },
+        {
+          kind: "reveal",
+          md: "Now count 3 steps along from 0. Where do you land?",
+          answer: "On $3/5$. The bottom number sets the step size; the top number says how many steps.",
+          viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 5, marks: [{ at: 0.6, label: "3/5" }] },
+        },
+        {
+          kind: "tap",
+          md: "Which line shows $2/3$?",
+          options: [
+            { viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 3, marks: [{ at: 0.3333, label: "?" }] } },
+            { viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 3, marks: [{ at: 0.6667, label: "?" }] } },
+            { viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 2, marks: [{ at: 0.5, label: "?" }] } },
+          ],
+          answer: 1,
+          why: "Three equal steps, and the mark is at the second one.",
+        },
+        {
+          kind: "see",
+          md: "The bigger the bottom number, the **smaller** each step. Here the same gap is cut into 8.",
+          viz: { kind: "numberLine", from: 0, to: 1, step: 1, divisions: 8 },
+        },
+        {
+          // The single most common slip in the chapter, so it is asked rather
+          // than told — a learner who guesses wrong here remembers being wrong.
+          kind: "reveal",
+          md: "So which one sits closer to 0 — $1/8$ or $1/3$?",
+          answer: "$1/8$, even though 8 is the bigger number. More parts means each part is smaller.",
+          viz: {
+            kind: "numberLine", from: 0, to: 1, step: 1,
+            marks: [{ at: 0.125, label: "1/8" }, { at: 0.3333, label: "1/3", tone: "hint" }],
+          },
+        },
+        {
+          kind: "see",
+          md: "When the top and bottom match, you have taken every part.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 5, label: "5/5 = 1" },
+        },
+        {
+          kind: "reveal",
+          md: "And $0/5$?",
+          answer: "0. You took no parts at all.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 0, label: "0/5 = 0" },
+        },
+      ],
     },
     {
       slug: "c6-fractions-l3",
@@ -242,6 +301,63 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{2}{5} = \\frac{6}{15}\n$$",
       ].join("\n"),
+      // Two shapes carry this whole lesson: the same roti cut two ways. The
+      // `compare` prop is not used — showing them as two SEPARATE wholes is the
+      // point, because the claim is that two different-looking things are one
+      // amount.
+      steps: [
+        {
+          kind: "see",
+          md: "Cut a roti in half and eat one half.",
+          viz: { kind: "partWhole", shape: "circle", parts: 2, shaded: 1, label: "1/2" },
+        },
+        {
+          kind: "see",
+          md: "Now cut the same roti into 4 and eat 2.",
+          viz: { kind: "partWhole", shape: "circle", parts: 4, shaded: 2, label: "2/4" },
+        },
+        {
+          kind: "tap",
+          md: "Did you eat more the second time?",
+          options: [
+            { label: "Yes, 2 pieces beats 1" },
+            { label: "No, exactly the same" },
+          ],
+          answer: 1,
+          why: "Different numbers, same amount. These are **equivalent fractions**.",
+        },
+        {
+          kind: "see",
+          md: "The rule: multiply the top **and** the bottom by the same number, and nothing changes.",
+          viz: { kind: "partWhole", shape: "bar", parts: 6, shaded: 3, label: "1/2 = 3/6" },
+        },
+        {
+          kind: "reveal",
+          md: "So does adding work too? Is $1/2$ the same as $2/3$?",
+          answer: "No. Only multiplying and dividing keep the value. Adding 1 to each changes the amount.",
+        },
+        {
+          kind: "tap",
+          md: "Which one is another way of writing $1/2$?",
+          options: [
+            { viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3 } },
+            { viz: { kind: "partWhole", shape: "bar", parts: 6, shaded: 3 } },
+            { viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 3 } },
+          ],
+          answer: 1,
+          why: "Six parts, three taken. Half of 6 is 3.",
+        },
+        {
+          kind: "see",
+          md: "**Simplest form** is when nothing is left to divide out. $12/18 = 6/9 = 2/3$.",
+          viz: { kind: "partWhole", shape: "grid", parts: 9, shaded: 6, label: "6/9 = 2/3" },
+        },
+        {
+          kind: "reveal",
+          md: "Fill the box: $2/5 = \\square/15$",
+          answer: "6. The bottom was multiplied by 3, so the top is too: $2 \\times 3 = 6$.",
+        },
+      ],
     },
     {
       slug: "c6-fractions-l4",
@@ -284,6 +400,60 @@ export const class6Fractions: SeedChapter = {
         "",
         "It is tempting to say Bina ate more because both her numbers are bigger — 5 beats 3 and 8 beats 4. But a fraction is not two separate numbers. It is one amount, and the only way to compare amounts is to make the pieces the same size first.",
       ].join("\n"),
+      // Bars throughout, not circles. Comparing is the entire lesson, and two
+      // bars stack with the same left edge and the same width — two circles do
+      // not compare at all.
+      steps: [
+        {
+          kind: "see",
+          md: "Anil ate $3/4$ of his roti.",
+          viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 3, label: "3/4" },
+        },
+        {
+          kind: "see",
+          md: "Bina ate $5/8$ of hers. Same size roti.",
+          viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 5, label: "5/8" },
+        },
+        {
+          kind: "reveal",
+          md: "Can you tell who ate more just by looking?",
+          answer: "Not easily — the pieces are different sizes. Make the pieces match first.",
+        },
+        {
+          kind: "see",
+          md: "Same bottom number is easy. The pieces match, so just count them: $5/7 > 3/7$.",
+          viz: { kind: "partWhole", shape: "bar", parts: 7, shaded: 5, label: "5/7" },
+        },
+        {
+          // Catches almost everybody the first time, so it is a tap rather than
+          // a sentence — being wrong here is what makes it stick.
+          kind: "tap",
+          md: "Which is bigger: $1/4$ or $1/6$?",
+          options: [
+            { viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 1 } },
+            { viz: { kind: "partWhole", shape: "bar", parts: 6, shaded: 1 } },
+          ],
+          answer: 0,
+          why: "One piece out of 4 is bigger than one out of 6. A bigger bottom means smaller pieces.",
+        },
+        {
+          kind: "see",
+          md: "Back to Anil. Rewrite $3/4$ in eighths so both are in the same pieces.",
+          viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 6, label: "3/4 = 6/8" },
+        },
+        {
+          kind: "tap",
+          md: "Now who ate more?",
+          options: [{ label: "Anil, $6/8$" }, { label: "Bina, $5/8$" }],
+          answer: 0,
+          why: "Six eighths against five eighths. Same size pieces, so just count.",
+        },
+        {
+          kind: "reveal",
+          md: "Bina's numbers are both bigger — 5 beats 3, 8 beats 4. So why is she not ahead?",
+          answer: "A fraction is **one amount**, not two separate numbers. Only compare once the pieces match.",
+        },
+      ],
     },
     {
       slug: "c6-fractions-l5",
@@ -332,6 +502,56 @@ export const class6Fractions: SeedChapter = {
         "",
         "So $\\frac{5}{12}$ litre of milk is left in the jug.",
       ].join("\n"),
+      // The bottle is one whole all the way through, so a bar of fifths is the
+      // same object in every step — which is what makes "the bottom does not
+      // change" visible rather than asserted.
+      steps: [
+        {
+          kind: "see",
+          md: "You drink $1/5$ of a bottle in the morning.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 1, label: "1/5" },
+        },
+        {
+          kind: "see",
+          md: "And $2/5$ more at lunch.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 2, label: "2/5" },
+        },
+        {
+          kind: "reveal",
+          md: "How much have you drunk altogether?",
+          answer: "$3/5$. One fifth plus two fifths is three fifths — you are just counting fifths.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3, label: "3/5" },
+        },
+        {
+          kind: "see",
+          md: "The bottom does not change. It is not an amount — it says **what size piece** you are counting.",
+          viz: { kind: "partWhole", shape: "bar", parts: 7, shaded: 3, label: "4/7 − 1/7 = 3/7" },
+        },
+        {
+          kind: "tap",
+          md: "So what is $1/5 + 2/5$?",
+          options: [{ label: "$3/5$" }, { label: "$3/10$" }],
+          answer: 0,
+          why: "Counting three fifths does not turn them into tenths. The bottom stays.",
+        },
+        {
+          kind: "see",
+          md: "Different bottoms cannot be added — like adding 3 apples to 2 mangoes and calling it 5 apples.",
+          viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 1, label: "1/4" },
+        },
+        {
+          kind: "reveal",
+          md: "$1/2 + 1/4$. Rewrite $1/2$ in quarters first.",
+          answer: "$1/2 = 2/4$. Now they match: $2/4 + 1/4 = 3/4$.",
+          viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 3, label: "3/4" },
+        },
+        {
+          kind: "reveal",
+          md: "A jug holds $3/4$ litre. Amma pours out $1/3$ litre. How much is left?",
+          answer: "Twelfths fit both: $9/12 - 4/12 = 5/12$ litre.",
+          viz: { kind: "partWhole", shape: "grid", parts: 12, shaded: 5, label: "5/12" },
+        },
+      ],
     },
   ],
 

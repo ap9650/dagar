@@ -39,10 +39,15 @@ export const PATTERNS = {
   correct: [18],
   /** A lesson finished. Slightly more presence, still one pulse. */
   complete: [28],
-  /** A milestone. The only place a pattern is allowed to be playful. */
+  /**
+   * A milestone. The only place a pattern is allowed to be playful.
+   *
+   * There is deliberately NO separate "streak extended" pattern. A buzz every
+   * single day for +1 is noise, and noise is how a signal stops being felt. The
+   * streak moments that actually matter — 3 days, 7 days — are milestones, so
+   * they arrive through this one.
+   */
   milestone: [18, 60, 18, 60, 36],
-  /** The daily goal ring closing, or a streak extending. */
-  streak: [22, 70, 22],
 } as const;
 
 export type HapticEvent = keyof typeof PATTERNS;

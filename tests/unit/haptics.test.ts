@@ -124,7 +124,7 @@ describe("haptic", () => {
     vi.stubGlobal("navigator", {});
     vi.stubGlobal("window", { matchMedia: () => ({ matches: false }) });
     vi.stubGlobal("localStorage", { getItem: () => null });
-    expect(() => haptic("streak")).not.toThrow();
+    expect(() => haptic("complete")).not.toThrow();
   });
 });
 

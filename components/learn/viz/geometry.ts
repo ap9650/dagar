@@ -13,12 +13,22 @@ import type { PartWholeSpec } from "./types";
 /** Square viewBox for circle and grid; bar overrides the height. */
 export const VIEWBOX = 240;
 
-/** Number-line canvas. */
+/** Number-line canvas width. Height depends on whether there are jumps. */
 export const W = 320;
-export const H = 132;
 export const PAD = 22;
-/** Low on the canvas, leaving the upper band free for jump arcs. */
-export const AXIS_Y = 92;
+
+/**
+ * The canvas a number line needs.
+ *
+ * A jump arcs ABOVE the axis, so a line that has one needs a tall upper band and
+ * the axis sits low. A line WITHOUT jumps needs room for a mark label and
+ * nothing more — and giving it the tall canvas anyway left a third of a 360px
+ * screen empty above the line, which is the most expensive whitespace in the
+ * product.
+ */
+export function numberLineBox(hasJumps: boolean): { H: number; AXIS_Y: number } {
+  return hasJumps ? { H: 132, AXIS_Y: 92 } : { H: 80, AXIS_Y: 46 };
+}
 
 export function buildCells(shape: PartWholeSpec["shape"], parts: number): string[] {
   if (shape === "bar") return barCells(parts);

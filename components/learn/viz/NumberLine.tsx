@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
-import { AXIS_Y, H, minorTicks, PAD, round, ticks, W } from "./geometry";
+import { minorTicks, numberLineBox, PAD, round, ticks, W } from "./geometry";
 import type { NumberLineSpec, Tone } from "./types";
 
 /**
@@ -30,6 +30,8 @@ export function NumberLine({ spec, className }: { spec: NumberLineSpec; classNam
   const span = to - from || 1;
   const x = (value: number) => PAD + ((value - from) / span) * (W - PAD * 2);
 
+  const jumps = spec.jumps ?? [];
+  const { H, AXIS_Y } = numberLineBox(jumps.length > 0);
   const majors = ticks(from, to, spec.step);
   const minors = spec.divisions && spec.divisions > 1 ? minorTicks(majors, spec.divisions) : [];
 
@@ -101,7 +103,7 @@ export function NumberLine({ spec, className }: { spec: NumberLineSpec; classNam
 
         {/* Jumps arc ABOVE the line. Below would collide with the tick labels,
             and the arc is the part a learner traces with a finger. */}
-        {(spec.jumps ?? []).map((jump, index) => {
+        {jumps.map((jump, index) => {
           const colour = TONE[jump.tone ?? "neutral"];
           const x0 = x(jump.from);
           const x1 = x(jump.to);

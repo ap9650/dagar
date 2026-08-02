@@ -10,7 +10,7 @@
  */
 import { writeFileSync } from "node:fs";
 import {
-  AXIS_Y, buildCells, H, minorTicks, PAD, round, ticks, VIEWBOX, W,
+  buildCells, minorTicks, numberLineBox, PAD, round, ticks, VIEWBOX, W,
 } from "../components/learn/viz/geometry.ts";
 
 const P = "#0f766e", SURF = "#f1f5f4", BORD = "#b6c0ca", BODY = "#3f4a57", HINT = "#0369a1";
@@ -29,6 +29,7 @@ function numberLine(
   marks: { at: number; label?: string }[], jumps: { from: number; to: number; label?: string }[],
 ) {
   const x = (v: number) => PAD + ((v - from) / (to - from)) * (W - PAD * 2);
+  const { H, AXIS_Y } = numberLineBox(jumps.length > 0);
   const majors = ticks(from, to, step);
   const minors = divisions > 1 ? minorTicks(majors, divisions) : [];
   return `<div><svg viewBox="0 0 ${W} ${H}" width="300" height="${(300 * H) / W}">
