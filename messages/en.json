@@ -361,5 +361,14 @@
     "improvePhone": "Make it work better on my phone",
     "improveOther": "Something else — I will say below",
     "sectionTitle": "Your feedback"
+  },
+  "viz": {
+    "shapeCircle": "A circle",
+    "shapeBar": "A bar",
+    "shapeGrid": "A grid",
+    "partWhole": "{shape} divided into {parts} equal parts, {shaded} shaded.",
+    "partIndex": "Part {index} of {parts}",
+    "shadedCount": "{shaded} of {parts} parts shaded",
+    "numberLine": "A number line from {from} to {to}."
   }
 }

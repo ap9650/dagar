@@ -23,7 +23,8 @@
     "demo:data": "node --no-warnings scripts/demo-data.ts",
     "feedback:export": "node --no-warnings scripts/export-feedback.ts",
     "deck": "python3 scripts/gen-persona-illustration.py && python3 scripts/build-deck.py && python3 scripts/build-how-doc.py",
-    "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview"
+    "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview",
+    "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

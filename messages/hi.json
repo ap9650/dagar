@@ -361,5 +361,14 @@
     "improvePhone": "फ़ोन पर और बेहतर चलाओ",
     "improveOther": "कुछ और — नीचे लिख देता/देती हूँ",
     "sectionTitle": "तुम्हारा फ़ीडबैक"
+  },
+  "viz": {
+    "shapeCircle": "एक गोला",
+    "shapeBar": "एक पट्टी",
+    "shapeGrid": "एक जाली",
+    "partWhole": "{shape} जो {parts} बराबर हिस्सों में बँटा है, {shaded} हिस्से रंगे हैं।",
+    "partIndex": "{parts} में से हिस्सा {index}",
+    "shadedCount": "{parts} में से {shaded} हिस्से रंगे हैं",
+    "numberLine": "{from} से {to} तक की संख्या रेखा।"
   }
 }
