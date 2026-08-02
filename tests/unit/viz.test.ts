@@ -121,3 +121,16 @@ describe("minorTicks", () => {
     expect(minorTicks([0, 1], 3)).toEqual([0.333, 0.667]);
   });
 });
+
+describe("axis labels", () => {
+  it("uses a real minus sign, not a hyphen", async () => {
+    // String(-6) gives U+002D, a word-joining hyphen: shorter, lower, and beside
+    // the U+2212 KaTeX renders in the prose it reads as a different symbol.
+    // Class 7 is entirely negative numbers, so it appears on every screen.
+    const { minus } = await import("@/components/learn/viz/geometry");
+    expect(minus(-6)).toBe("−6");
+    expect(minus(6)).toBe("6");
+    expect(minus(-0.5)).toBe("−0.5");
+    expect(minus(0)).toBe("0");
+  });
+});

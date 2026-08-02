@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
-import { minorTicks, numberLineBox, PAD, round, ticks, W } from "./geometry";
+import { minorTicks, minus, numberLineBox, PAD, round, ticks, W } from "./geometry";
 import type { NumberLineSpec, Tone } from "./types";
 
 /**
@@ -96,7 +96,7 @@ export function NumberLine({ spec, className }: { spec: NumberLineSpec; classNam
               fill="var(--color-body)"
               className="tabular-nums"
             >
-              {value}
+              {minus(value)}
             </text>
           </g>
         ))}

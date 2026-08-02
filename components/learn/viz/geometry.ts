@@ -107,6 +107,18 @@ export function minorTicks(majors: number[], divisions: number): number[] {
   return out;
 }
 
+/**
+ * A real minus sign, not a hyphen.
+ *
+ * `String(-6)` gives "-6" with U+002D, which is a word-joining hyphen: shorter,
+ * sitting lower, and beside the U+2212 that KaTeX renders in the prose it reads
+ * as a different symbol. Class 7 is entirely negative numbers, so this is on
+ * every screen of it.
+ */
+export function minus(value: number): string {
+  return String(value).replace("-", "\u2212");
+}
+
 /** Two decimals: smooth enough for curves, stable enough for a snapshot. */
 export function round(value: number): number {
   return Math.round(value * 100) / 100;

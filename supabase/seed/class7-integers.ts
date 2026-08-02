@@ -83,6 +83,81 @@ export const class7Integers: SeedChapter = {
         "-4 > -11",
         "$$",
       ].join("\n"),
+      // ═══════════════════════════════════════════════════════════════════════
+      // INTERACTIVE (D18). Every step is a number line, deliberately.
+      //
+      // Fractions had rotis; integers have no object. A negative number is not a
+      // quantity you can hold up — it is a POSITION, and the number line is the
+      // only place "-2 is bigger than -5" stops sounding absurd. So the line is
+      // the concrete thing here, and every step returns to it.
+      // ═══════════════════════════════════════════════════════════════════════
+      steps: [
+        {
+          kind: "see",
+          md: "In January, Shimla drops to 4 degrees **below** zero.",
+          viz: {
+            kind: "numberLine", from: -6, to: 6, step: 2,
+            marks: [{ at: -4, label: "−4°C" }],
+          },
+        },
+        {
+          kind: "see",
+          md: "Counting numbers cannot say that. **Integers** can — the whole numbers and their negatives.",
+          viz: { kind: "numberLine", from: -5, to: 5, step: 1 },
+        },
+        {
+          // Asked BEFORE the rule is given. Almost everybody picks −5, and being
+          // wrong here is what makes the next screen land.
+          kind: "tap",
+          md: "Which is bigger: $-2$ or $-5$?",
+          options: [{ label: "$-2$" }, { label: "$-5$" }],
+          answer: 0,
+          why: "It looks as though 5 beats 2. On the number line it does not.",
+        },
+        {
+          kind: "see",
+          md: "Further **right** on the line means bigger. $-2$ sits to the right of $-5$.",
+          viz: {
+            kind: "numberLine", from: -6, to: 6, step: 3,
+            // NOT `correct` on −2. Green means "you got it right" everywhere else
+            // in the product, and −5 is not a mistake — it is simply smaller.
+            // Two neutral tones that differ only in hue let the eye tell the
+            // marks apart without implying one of them is wrong.
+            marks: [{ at: -5, label: "−5" }, { at: -2, label: "−2", tone: "hint" }],
+          },
+        },
+        {
+          // Money, because it is the one place a learner already has the right
+          // intuition and does not know it.
+          kind: "reveal",
+          md: "You owe ₹5. Your friend owes ₹2. Who is worse off?",
+          answer: "You are. The bigger the number after the minus sign, the **smaller** the integer.",
+        },
+        {
+          kind: "see",
+          md: "Every integer has an **opposite** — the same distance from 0, on the other side.",
+          viz: {
+            kind: "numberLine", from: -8, to: 8, step: 4,
+            marks: [{ at: -7, label: "−7" }, { at: 7, label: "7", tone: "hint" }],
+          },
+        },
+        {
+          kind: "tap",
+          md: "What is the opposite of $-7$?",
+          options: [{ label: "$7$" }, { label: "$-7$" }, { label: "$0$" }],
+          answer: 0,
+          why: "Same distance from 0, on the other side of it.",
+        },
+        {
+          kind: "reveal",
+          md: "Which is greater, $-11$ or $-4$?",
+          answer: "$-4$. Walk right from $-11$ and you reach it, so it is further right.",
+          viz: {
+            kind: "numberLine", from: -12, to: 0, step: 4,
+            marks: [{ at: -11, label: "−11" }, { at: -4, label: "−4", tone: "hint" }],
+          },
+        },
+      ],
     },
     {
       slug: "c7-integers-l2",
