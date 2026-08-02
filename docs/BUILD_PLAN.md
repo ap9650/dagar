@@ -297,6 +297,66 @@ If Sunday runs ahead of schedule, **rehearse again and polish the deck**. Do not
 
 ---
 
+## Day 5–6 — interactive content (added 2 Aug, after the teacher's feedback)
+
+**Why this exists.** A teacher of Classes 6–8 used Saathi on her own phone and said
+her students cannot hold two paragraphs, and that comprehension across one classroom
+varies far too much for a wall of text to reach all of them. She is right: fifteen
+lessons, 215 words each, **not one image, diagram or sound**. Full reasoning in
+`DECISIONS.md` D18; the build contract is `docs/specs/interactive-lessons.md`.
+
+This is the largest single piece of work since the MVP shipped, and it is content
+strategy rather than features — which is why it earns an extension rather than a
+corner of Sunday.
+
+| # | Task | Est |
+|---|---|---|
+| 5.1a | `PartWhole` + `NumberLine` + the `Viz` resolver, animated, snapshot-tested | 3h |
+| 5.1b | `LessonSteps` player, progress bar, `see` / `reveal` / `tap` / `worked` | 2h |
+| 5.1c | `build` — interactive shading | 1h |
+| 5.1d | Migration 0020 (`lessons.steps` jsonb, nullable) + zod parser with `body_md` fallback | 1h |
+| 5.1e | **Class 6 Fractions — 5 lessons authored, EN + HI** · ends at the review gate | 3h |
+| 5.1f | `SpeakButton` + language toggle independent of `profiles.locale` | 1h |
+| 5.1g | `TokenRow`, `BalanceScale`, `ArrayGrid` | 3h |
+| 5.1h | **Class 7 Integers** and **Class 8 Linear Equations** authored, EN + HI | 6h |
+| 5.1i | Accessibility pass, re-seed, deploy, verify on a real Android phone | 2h |
+| | **Lessons subtotal** | **~22h** |
+| 5.2a | Practice input kinds — `choice-viz`, `tiles`, `shade`, `place` | 4h |
+| 5.2b | Pictorial forms for the existing question bank, three chapters | 2h |
+| | **Practice subtotal** | **~6h** |
+| | **Total** | **~28h** |
+
+### The rules this runs under
+
+**Additive, so it can stop anywhere.** `lessons.steps` is nullable; a lesson with
+steps renders the new player, one without renders `body_md` exactly as today. Class 6
+can be interactive while 7 and 8 are untouched, with no broken state in between —
+and the deployed app is in real learners' hands while this is being built.
+
+**Grading is not touched.** Slice 5.2 changes how an answer is *entered*, never how
+it is judged. A tile answer is assembled into the same string the text input would
+have produced and handed to the same grader (D3).
+
+**Class 6 is reviewed before it is seeded.** It sets the visual vocabulary every
+later chapter reuses, and a wrong diagram is believed in a way wrong prose is not.
+
+**Order is lessons first, all three chapters, then practice.** Practice reuses the
+finished primitives, so second costs nothing; first would mean building them twice.
+
+### Distribution is deliberately held
+
+Wide sharing of the app waits until this ships. Sending a version we already know is
+boring to twenty teenagers spends the one honest ask available from a nephew's
+classmates, on a finding we already have. The feedback that matters — a teacher's
+verdict, six defects found on a real phone — is collected. See D18.
+
+**What that means for the submission:** the deck ships on time with the teacher's
+quote and the step mockup, and real screenshots swap in if the extension lands. The
+extension is expected, not confirmed; there must never be a moment with nothing
+submitted.
+
+---
+
 ## Cut list — contingency only, nothing is pre-cut
 
 **Do not cut anything preemptively.** This list exists so that *if* Saturday night
@@ -381,6 +441,12 @@ The build plan ends at deploy; the product doesn't. In priority order:
    fraction" rather than a plain wrong. That teaches the actual point of the
    chapter instead of failing them on rounding.
 
+   **Reduced, not solved, by slice 5.2 (2 Aug).** Pictorial practice input means
+   a learner picking `5/12` from tiles never makes a rounding decision at all,
+   so this stops being the common path. It still needs fixing for the `typed`
+   fallback — and `grading.ts` remains the highest-harm file in the product, so
+   it still does not get touched in a rush.
+
 0c. **Slash the inline fractions.** A stacked `\frac` inside running text has no
    good size: large enough to read the digits and it crowds the lines around it;
    small enough to sit in the line and the digits fall to ~12px, under the
@@ -396,6 +462,11 @@ The build plan ends at deploy; the product doesn't. In priority order:
    chapters, in both languages, leaving every `$$…$$` display block alone.
    Mechanical but wide, and it touches the Hindi files, so it needs
    `npm run check:hindi` after. **Not a deadline-week edit.**
+
+   **Absorbed by Day 5–6 (2 Aug).** Every lesson body is being rewritten as
+   steps, so this stops being a separate pass — it becomes a rule the new
+   authoring follows. Note it also gets *smaller*: a step that shows a shaded
+   diagram often does not need the inline fraction in prose at all.
 
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
    rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is

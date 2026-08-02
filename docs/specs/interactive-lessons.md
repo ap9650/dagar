@@ -1,6 +1,6 @@
-# Spec — Interactive Lessons
+# Spec — Interactive Lessons and Practice
 
-**Build slice:** 5.1 · **Implements:** D18 (new) · **Depends on:** `micro-lesson.md`, `i18n.md`, `saathi-design`
+**Build slice:** 5.1 (lessons), 5.2 (practice) · **Implements:** D18 · **Depends on:** `micro-lesson.md`, `guided-practice.md`, `i18n.md`, `saathi-design`
 
 > **Why this exists.** A teacher of Classes 6–8 used Saathi on 2 Aug 2026 and said
 > the lessons are walls of text: her students cannot hold two paragraphs, and
@@ -214,6 +214,70 @@ per the analytics rule.
 
 ---
 
+## 10b. Practice becomes pictorial — slice 5.2
+
+Everything above concerns lessons. Practice is a second surface, built on the same
+five primitives, and it is where learners spend most of their minutes.
+
+### What transfers from Duolingo, and what does not
+
+The mechanic worth taking is **not** that it has pictures. It is that **you never
+type**. Typing is where a learner's understanding gets lost in transit — into a
+keyboard they are fighting, and into a rounding decision nobody taught them.
+
+Not taken: hearts, streak pressure inside a session, or anything that ends a
+practice set as a punishment. Same reasoning as D17.
+
+### Two real defects this closes
+
+| Defect | How pictorial input closes it |
+|---|---|
+| **No `/` on the Android keyboard** — reported from a phone 1 Aug; a slash key had to be added to the fraction input as a workaround | A learner choosing `3/8` from tiles never opens a keyboard |
+| **Recurring decimals demand six places** — `5/12` as `0.42` is marked wrong (backlog 0b) | A learner picking a tile never has to decide how to round |
+
+The workaround slash key stays for the typed fallback. The rounding item stays on
+the backlog for the typed path, but stops being the *common* path.
+
+### Input kinds
+
+| Kind | The learner… | Best for |
+|---|---|---|
+| `choice-viz` | picks between 2–4 **diagrams** rather than text options | "which one shows ⅜?", comparing, equivalence |
+| `tiles` | builds the answer from a bank of digits and symbols — `3`, `8`, `/`, `−` | any numeric or fraction answer; replaces the text input |
+| `shade` | taps parts of a shape until it matches the target | fraction basics, equivalence |
+| `place` | taps a position on a number line | integers, ordering, negative numbers |
+| `typed` | the existing text input | **fallback** — kept for anything the four above cannot express |
+
+`typed` is deliberately retained. A question the pictorial kinds cannot carry is a
+question we should still be able to ask.
+
+### What does NOT change
+
+- **Grading stays exactly where it is.** `lib/learning/grading.ts` receives the same
+  normalised string it does today; a tile answer is assembled into `3/8` and graded
+  by the same code. **No new grading path, no second implementation** — that file is
+  the highest-harm file in the product (D3) and this slice must not touch it.
+- Adaptive difficulty, mastery, attempt writes, hints and the hint ladder are all
+  unchanged. This is an input change, not a learning-model change.
+- Feedback colours are unchanged: correct green, not-quite **amber**, never red.
+
+### The chapter quiz is deliberately untouched
+
+The quiz is the assessment surface. Keeping its input plain keeps attempts
+comparable across a learner's retakes and across learners, and one interactive
+surface at a time is enough for one slice. Revisit after practice has real usage.
+
+### Extra acceptance criteria for 5.2
+
+- [ ] A `tiles` answer is assembled and passed to the existing grader unmodified
+- [ ] `lib/learning/grading.ts` is unchanged by this slice — verified by diff
+- [ ] Every pictorial option has an `aria-label` stating the maths, and the set is a real radio group
+- [ ] Tile and option targets are ≥44px
+- [ ] A question with no pictorial form falls back to `typed` and still works
+- [ ] Wrong answers stay amber with a next step, never red, never a bare ✗
+
+---
+
 ## 11. Scope and order
 
 Build in this order — each stage is independently shippable.
@@ -225,8 +289,27 @@ Build in this order — each stage is independently shippable.
 | 3 | `build` (interactive `PartWhole`) | 1h |
 | 4 | **Class 6 Fractions — 5 lessons authored, EN + HI** | 3h |
 | 5 | `SpeakButton` and the language toggle | 1h |
-| 6 | `TokenRow`, `BalanceScale`, `ArrayGrid` + Classes 7–8 | 5h |
+| 6 | `TokenRow`, `BalanceScale`, `ArrayGrid` | 3h |
+| 7 | **Class 7 Integers** and **Class 8 Linear Equations** authored, EN + HI | 6h |
+| 8 | Accessibility pass, re-seed, deploy, verify on a real phone | 2h |
+| | **Lessons subtotal** | **~22h** |
+| 9 | Practice input kinds (`choice-viz`, `tiles`, `shade`, `place`) | 4h |
+| 10 | Pictorial forms authored for the existing question bank, 3 chapters | 2h |
+| | **Practice subtotal (slice 5.2)** | **~6h** |
+| | **Total** | **~28h** |
 
-**Stages 1–5 are the one-day scope and cover the demo chapter.** Stage 6 is the
-second day and buys chapters a judge is unlikely to open — do it only if the
-extension allows and stages 1–5 are finished and tested.
+**Every stage is independently shippable**, which is the point of the additive
+`steps` rule in §6. Class 6 alone (stages 1–5, ~11h) already answers the teacher's
+feedback and gives the demo chapter.
+
+Order is deliberate: **all three chapters of lessons before any practice work.**
+Practice reuses the finished primitives, so doing it second costs nothing extra;
+doing it first would mean building primitives twice against an unsettled visual
+vocabulary.
+
+### Content review gate
+
+Class 6 Fractions is reviewed on screen **before it is seeded** — it sets the
+visual vocabulary every later chapter reuses, and a wrong diagram teaches wrong
+maths more convincingly than wrong prose does, because a picture is believed.
+Classes 7 and 8 follow the approved pattern.
