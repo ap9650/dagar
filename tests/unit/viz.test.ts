@@ -134,3 +134,92 @@ describe("axis labels", () => {
     expect(minus(0)).toBe("0");
   });
 });
+
+describe("layoutTokens", () => {
+  it("lays out plain counters in a row", async () => {
+    const { layoutTokens } = await import("@/components/learn/viz/geometry");
+    const { tokens, pairs } = layoutTokens({ positive: 3, negative: 0 });
+    expect(tokens).toHaveLength(3);
+    expect(tokens.every((t) => t.sign === 1)).toBe(true);
+    expect(pairs).toBe(0);
+  });
+
+  it("cancels matched chips into pairs — the zero pair", async () => {
+    // 5 + (−3): three pairs vanish, two positives survive. That leftover IS the
+    // answer, which is the entire reason this shape exists.
+    const { layoutTokens } = await import("@/components/learn/viz/geometry");
+    const { tokens, pairs } = layoutTokens({ positive: 5, negative: 3, pairing: true });
+    expect(pairs).toBe(3);
+    expect(tokens.filter((t) => t.paired)).toHaveLength(6);
+    const survivors = tokens.filter((t) => !t.paired);
+    expect(survivors).toHaveLength(2);
+    expect(survivors.every((t) => t.sign === 1)).toBe(true);
+  });
+
+  it("leaves the NEGATIVE side surviving when negatives win", async () => {
+    const { layoutTokens } = await import("@/components/learn/viz/geometry");
+    const { tokens } = layoutTokens({ positive: 2, negative: 6, pairing: true });
+    const survivors = tokens.filter((t) => !t.paired);
+    expect(survivors).toHaveLength(4);
+    expect(survivors.every((t) => t.sign === -1)).toBe(true);
+  });
+
+  it("cancels to nothing when they match exactly", async () => {
+    const { layoutTokens } = await import("@/components/learn/viz/geometry");
+    const { tokens } = layoutTokens({ positive: 4, negative: 4, pairing: true });
+    expect(tokens.filter((t) => !t.paired)).toHaveLength(0);
+  });
+
+  it("wraps into groups — (−4) × 3 is three rows of four", async () => {
+    const { layoutTokens } = await import("@/components/learn/viz/geometry");
+    const { tokens } = layoutTokens({ positive: 0, negative: 12, groupsOf: 4 });
+    expect(new Set(tokens.map((t) => t.cy)).size).toBe(3);
+    expect(new Set(tokens.map((t) => t.cx)).size).toBe(4);
+  });
+
+  it("keeps every chip inside the box, stroke included", async () => {
+    // Without padding a chip centred at exactly r has half its stroke clipped and
+    // renders with a flat top — which is what the gallery showed.
+    const { layoutTokens, TOKEN_R } = await import("@/components/learn/viz/geometry");
+    const { tokens, width, height } = layoutTokens({ positive: 5, negative: 3, pairing: true });
+    for (const t of tokens) {
+      expect(t.cx - TOKEN_R).toBeGreaterThan(0);
+      expect(t.cy - TOKEN_R).toBeGreaterThan(0);
+      expect(t.cx + TOKEN_R).toBeLessThan(width);
+      expect(t.cy + TOKEN_R).toBeLessThan(height);
+    }
+  });
+});
+
+describe("layoutPan", () => {
+  it("draws the constant as ONE labelled weight, not a pile", async () => {
+    // 3x + 5 = 35 needs thirty-five unit blocks. The first version drew six and
+    // overflowed the pan — a picture that was quietly false.
+    const { layoutPan } = await import("@/components/learn/viz/geometry");
+    const items = layoutPan(0, 35, 100);
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({ kind: "n", value: 35 });
+  });
+
+  it("fits inside the pan for the widest case in the curriculum", async () => {
+    const { layoutPan } = await import("@/components/learn/viz/geometry");
+    const items = layoutPan(4, 100, 160);
+    const left = Math.min(...items.map((i) => i.x));
+    const right = Math.max(...items.map((i) => i.x + i.w));
+    const { PAN_HALF } = await import("@/components/learn/viz/geometry");
+    expect(right - left).toBeLessThanOrEqual(PAN_HALF * 2);
+  });
+
+  it("centres its contents on the pan", async () => {
+    const { layoutPan } = await import("@/components/learn/viz/geometry");
+    const items = layoutPan(2, 12, 160);
+    const left = Math.min(...items.map((i) => i.x));
+    const right = Math.max(...items.map((i) => i.x + i.w));
+    expect(Math.round((left + right) / 2)).toBe(160);
+  });
+
+  it("omits the weight when there is no constant — 2x = 12 has none on the left", async () => {
+    const { layoutPan } = await import("@/components/learn/viz/geometry");
+    expect(layoutPan(2, undefined, 100).every((i) => i.kind === "x")).toBe(true);
+  });
+});

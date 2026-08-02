@@ -111,10 +111,20 @@ describe("message dictionaries", () => {
       "install.inAppBrowser",
     ]);
 
+    /**
+     * Keys containing a Latin letter that is MATHEMATICS, not English.
+     *
+     * `viz.balance` describes a balance holding "x boxes". `x` is the variable's
+     * name, and NCERT's own Hindi editions write variables as Latin letters —
+     * the same way they keep Arabic numerals (D16). Replacing it with a
+     * Devanagari letter would not be a translation, it would be different maths.
+     */
+    const IS_NOTATION = new Set(["viz.balance"]);
+
     // "फिर से try करो" is the failure mode. Placeholder names like {name} and
     // ICU keywords like `plural` are structural, not copy, so strip them first.
     const offenders = hiKeys.filter((key) => {
-      if (QUOTES_FOREIGN_UI.has(key)) return false;
+      if (QUOTES_FOREIGN_UI.has(key) || IS_NOTATION.has(key)) return false;
       const value = key
         .split(".")
         .reduce<unknown>((acc, part) => (acc as Record<string, unknown>)[part], hi) as string;

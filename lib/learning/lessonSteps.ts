@@ -42,7 +42,30 @@ const numberLine = z.object({
   target: z.number().optional(),
 });
 
-const viz = z.discriminatedUnion("kind", [partWhole, numberLine]);
+const tokenRow = z.object({
+  kind: z.literal("tokenRow"),
+  positive: z.number().int().min(0).max(12),
+  negative: z.number().int().min(0).max(12),
+  pairing: z.boolean().optional(),
+  groupsOf: z.number().int().min(1).max(12).optional(),
+  label: z.string().optional(),
+});
+
+const pan = z.object({
+  xs: z.number().int().min(0).max(4),
+  /** The constant, drawn as ONE labelled weight — see BalanceScaleSpec. */
+  n: z.number().int().optional(),
+});
+
+const balanceScale = z.object({
+  kind: z.literal("balanceScale"),
+  left: pan,
+  right: pan,
+  tilt: z.enum(["left", "right"]).optional(),
+  label: z.string().optional(),
+});
+
+const viz = z.discriminatedUnion("kind", [partWhole, numberLine, tokenRow, balanceScale]);
 
 /**
  * The prose on a step. Capped, not for storage reasons but because the content

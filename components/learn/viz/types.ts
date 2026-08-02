@@ -61,7 +61,58 @@ export type NumberLineSpec = {
  */
 export type Tone = "neutral" | "correct" | "notquite" | "hint";
 
-export type VizSpec = PartWholeSpec | NumberLineSpec;
+/**
+ * Counters for integers: `+1` and `−1` chips.
+ *
+ * The one idea this exists for is the **zero pair** — a `+1` beside a `−1`
+ * makes nothing, and that is why subtracting a negative leaves you better off.
+ * Said in words it is a rule to memorise; shown as two chips cancelling it is
+ * obvious.
+ *
+ * Positive is a filled chip, negative an outlined one, and each carries its own
+ * sign glyph — so the two are told apart by fill AND by symbol, never by hue
+ * alone (design rule 10). Deliberately not amber for negative: amber means
+ * "not quite" everywhere else here, and a negative number is not a mistake.
+ */
+export type TokenRowSpec = {
+  kind: "tokenRow";
+  positive: number;
+  negative: number;
+  /** Draw matched +/− chips as a struck-through pair — the zero pair, visible. */
+  pairing?: boolean;
+  /** Wrap into rows of n: "three lots of four debts" for multiplication. */
+  groupsOf?: number;
+  label?: string;
+};
+
+/**
+ * A pan balance — the mental model Class 8 is built on.
+ *
+ * Lesson 1 says it in words: *"An equation is a balance. Whatever is on the left
+ * weighs exactly the same as whatever is on the right."* Every rule in the
+ * chapter follows from it, including the one learners recite without believing:
+ * whatever you do to one side, do to the other.
+ *
+ * Each pan holds `xs` boxes marked x, plus ONE weight labelled with the constant.
+ *
+ * A pile of unit blocks was tried first and does not survive contact with the
+ * curriculum: `3x + 5 = 35` needs thirty-five of them. They overflowed the pan
+ * and, capped, drew six — a picture that was simply untrue. One labelled weight
+ * scales to any number and still reads as something with heft on a pan.
+ */
+export type BalanceScaleSpec = {
+  kind: "balanceScale";
+  left: { xs: number; n?: number };
+  right: { xs: number; n?: number };
+  /**
+   * Level by default, because a written equation IS level — that is the claim
+   * the `=` sign makes. Tilt only to show what taking from one side alone does.
+   */
+  tilt?: "left" | "right";
+  label?: string;
+};
+
+export type VizSpec = PartWholeSpec | NumberLineSpec | TokenRowSpec | BalanceScaleSpec;
 
 /** Normalises `shaded: 3` and `shaded: [0,1,2]` to one shape for rendering. */
 export function toIndexSet(value: number | number[] | undefined, parts: number): Set<number> {

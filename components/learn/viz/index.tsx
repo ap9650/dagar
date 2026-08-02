@@ -1,7 +1,9 @@
 "use client";
 
+import { BalanceScale } from "./BalanceScale";
 import { NumberLine } from "./NumberLine";
 import { PartWhole } from "./PartWhole";
+import { TokenRow } from "./TokenRow";
 import type { VizSpec } from "./types";
 
 /**
@@ -18,6 +20,10 @@ export function Viz({ spec, className }: { spec: VizSpec; className?: string }) 
       return <PartWhole spec={spec} className={className} />;
     case "numberLine":
       return <NumberLine spec={spec} className={className} />;
+    case "tokenRow":
+      return <TokenRow spec={spec} className={className} />;
+    case "balanceScale":
+      return <BalanceScale spec={spec} className={className} />;
     default:
       // Unreachable while the union is exhaustive; reachable the moment a seed
       // file names a shape that has not been built yet.
@@ -27,4 +33,6 @@ export function Viz({ spec, className }: { spec: VizSpec; className?: string }) 
 
 export { PartWhole } from "./PartWhole";
 export { NumberLine } from "./NumberLine";
+export { TokenRow } from "./TokenRow";
+export { BalanceScale } from "./BalanceScale";
 export * from "./types";

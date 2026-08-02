@@ -127,3 +127,115 @@ export function round(value: number): number {
 function round3(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
+
+/* ── tokens ────────────────────────────────────────────────────────────────
+   Chip layout for integers. Pure, so "does this draw the right number of
+   chips, in the right pairs" is a unit test rather than a squint. */
+
+export const TOKEN_R = 17;
+export const TOKEN_GAP = 8;
+/**
+ * Breathing room inside the viewBox.
+ *
+ * Without it a chip centred at exactly `r` has its top edge ON the boundary, so
+ * half the 2.5px stroke is clipped and every circle renders with a flat top —
+ * and the strike through a cancelled pair, which deliberately overhangs the
+ * chips, loses both its ends.
+ */
+export const TOKEN_PAD = 6;
+export const TOKEN_ROW_H = TOKEN_R * 2 + TOKEN_GAP + 6;
+
+export type Token = { sign: 1 | -1; cx: number; cy: number; paired: boolean };
+
+/**
+ * Where each chip goes.
+ *
+ * With `pairing`, matched `+1`/`−1` chips are laid out as adjacent COLUMNS —
+ * one above the other — so a struck-through pair reads as a single cancelled
+ * thing. Leftovers follow in a row of their own. That layout is the whole
+ * lesson: what is left after the pairs vanish is the answer.
+ */
+export function layoutTokens(spec: {
+  positive: number;
+  negative: number;
+  pairing?: boolean;
+  groupsOf?: number;
+}): { tokens: Token[]; width: number; height: number; pairs: number } {
+  const positive = Math.max(0, Math.min(spec.positive, 12));
+  const negative = Math.max(0, Math.min(spec.negative, 12));
+  const pairs = spec.pairing ? Math.min(positive, negative) : 0;
+  const step = TOKEN_R * 2 + TOKEN_GAP;
+  const tokens: Token[] = [];
+
+  const origin = TOKEN_R + TOKEN_PAD;
+
+  // Paired columns first: a + above a −, struck through together.
+  for (let i = 0; i < pairs; i++) {
+    const cx = origin + i * step;
+    tokens.push({ sign: 1, cx, cy: origin, paired: true });
+    tokens.push({ sign: -1, cx, cy: origin + step, paired: true });
+  }
+
+  // Then whatever did not cancel, wrapped by `groupsOf` when given.
+  const leftoverSign: 1 | -1 = positive - pairs > 0 ? 1 : -1;
+  const leftover = Math.abs(positive - pairs) + Math.abs(negative - pairs);
+  const perRow = spec.groupsOf && spec.groupsOf > 0 ? spec.groupsOf : Math.max(1, leftover);
+  const rowOffset = pairs > 0 ? step * 2 + TOKEN_GAP : 0;
+
+  for (let i = 0; i < leftover; i++) {
+    tokens.push({
+      sign: leftoverSign,
+      cx: origin + (i % perRow) * step,
+      cy: origin + rowOffset + Math.floor(i / perRow) * step,
+      paired: false,
+    });
+  }
+
+  const width = Math.max(...tokens.map((t) => t.cx), origin) + TOKEN_R + TOKEN_PAD;
+  const height = Math.max(...tokens.map((t) => t.cy), origin) + TOKEN_R + TOKEN_PAD;
+  return { tokens, width, height, pairs };
+}
+
+/* ── balance pans ──────────────────────────────────────────────────────────
+   What sits on a pan, laid out up front rather than by advancing a cursor
+   mid-render — a component that mutates while rendering is a lint error here
+   and a real hazard the moment anything re-renders partway. */
+
+/**
+ * Sized so the WIDEST thing the curriculum can ask for still fits on a pan:
+ * four x-boxes beside a three-digit constant. The first sizing overflowed at
+ * exactly that case, which a test caught rather than a screenshot.
+ */
+export const PAN_ITEM = { boxW: 18, boxH: 26, weightH: 26, gap: 4 };
+/** Half the pan's width. Contents must fit inside `PAN_HALF * 2`. */
+export const PAN_HALF = 70;
+
+export type PanItem =
+  | { kind: "x"; x: number; w: number }
+  | { kind: "n"; x: number; w: number; value: number };
+
+/**
+ * `x` boxes are drawn narrower than a numeric weight and carry the letter; the
+ * constant is ONE block showing its value.
+ *
+ * Drawing the constant as a pile of unit blocks was the first attempt and it
+ * cannot work: `3x + 5 = 35` needs thirty-five of them, which overflowed the pan
+ * and, once capped, drew six — a picture that was quietly false.
+ */
+export function layoutPan(xs: number, n: number | undefined, centre: number): PanItem[] {
+  const boxes = Math.max(0, Math.min(xs, 4));
+  const { boxW, gap } = PAN_ITEM;
+  // Wide enough for three digits without the text touching the edges.
+  const weightW = n === undefined ? 0 : Math.max(28, String(n).length * 12 + 12);
+
+  const total = boxes * (boxW + gap) + (weightW ? weightW + gap : 0) - (boxes || weightW ? gap : 0);
+  let cursor = centre - total / 2;
+
+  const items: PanItem[] = [];
+  for (let i = 0; i < boxes; i++) {
+    items.push({ kind: "x", x: cursor, w: boxW });
+    cursor += boxW + gap;
+  }
+  if (n !== undefined) items.push({ kind: "n", x: cursor, w: weightW, value: n });
+  return items;
+}

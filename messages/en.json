@@ -379,6 +379,8 @@
     "partWhole": "{shape} divided into {parts} equal parts, {shaded} shaded.",
     "partIndex": "Part {index} of {parts}",
     "shadedCount": "{shaded} of {parts} parts shaded",
-    "numberLine": "A number line from {from} to {to}."
+    "numberLine": "A number line from {from} to {to}.",
+    "tokens": "{positive} positive counters and {negative} negative counters.",
+    "balance": "A balance: {leftX} x boxes and {leftOne} weights on the left, {rightX} x boxes and {rightOne} weights on the right."
   }
 }

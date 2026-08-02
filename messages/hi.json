@@ -379,6 +379,8 @@
     "partWhole": "{shape} जो {parts} बराबर हिस्सों में बँटा है, {shaded} हिस्से रंगे हैं।",
     "partIndex": "{parts} में से हिस्सा {index}",
     "shadedCount": "{parts} में से {shaded} हिस्से रंगे हैं",
-    "numberLine": "{from} से {to} तक की संख्या रेखा।"
+    "numberLine": "{from} से {to} तक की संख्या रेखा।",
+    "tokens": "{positive} धनात्मक और {negative} ऋणात्मक गोटियाँ।",
+    "balance": "एक तराज़ू: बाईं ओर {leftX} x डिब्बे और {leftOne} बाट, दाईं ओर {rightX} x डिब्बे और {rightOne} बाट।"
   }
 }
