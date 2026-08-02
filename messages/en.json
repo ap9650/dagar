@@ -136,7 +136,10 @@
     "tilesEmpty": "Tap the tiles to build your answer",
     "tilesLabel": "Answer tiles",
     "tilesBackspace": "Remove the last tile",
-    "optionShowing": "The option showing {value}"
+    "optionShowing": "The option showing {value}",
+    "shadeCount": "{shaded} of {parts} filled",
+    "placeHint": "Tap the line where the number belongs",
+    "placePicked": "You chose {value}"
   },
   "feedback": {
     "correct": "Correct!",

@@ -591,6 +591,43 @@ export const class7Integers: SeedChapter = {
   ],
 
   questions: [
+    // ── PLACE — the answer is a POSITION, which is how the line is taught ─────
+    {
+      slug: "c7-nl-d1-q4",
+      concept_slug: "integers-number-line",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "Tap the line where $-3$ sits.",
+      answer_value: "-3",
+      input: { kind: "place", from: -5, to: 5, step: 1 },
+      solution_md: [
+        "Negative numbers live to the **left** of zero, and they count outwards the same way positive ones do.",
+        "",
+        "From 0, go left three steps: $-1$, $-2$, $-3$.",
+        "",
+        "It sits the same distance from zero as $3$ does — just on the other side.",
+      ].join("\n"),
+    },
+    {
+      slug: "c7-nl-d2-q3",
+      concept_slug: "integers-number-line",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "Tap the number that is $3$ **less** than $-1$.",
+      answer_value: "-4",
+      input: { kind: "place", from: -8, to: 4, step: 1 },
+      solution_md: [
+        "**Less** means move **left**, wherever you are starting from.",
+        "",
+        "Start at $-1$ and take three steps left: $-2$, $-3$, $-4$.",
+        "",
+        "$$\n-1 - 3 = -4\n$$",
+        "",
+        "Going left from a negative number takes you further from zero, so the answer is *more* negative — not closer to it.",
+      ].join("\n"),
+    },
     // ─────────────────────────────────────────────────────────────────────────
     // PICTORIAL RECOGNITION (D18 slice 5.2) — read the notation, find the picture.
     //

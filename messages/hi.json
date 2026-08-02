@@ -136,7 +136,10 @@
     "tilesEmpty": "टाइल दबाकर अपना जवाब बनाओ",
     "tilesLabel": "जवाब की टाइलें",
     "tilesBackspace": "आखिरी टाइल हटाओ",
-    "optionShowing": "{value} दिखाने वाला विकल्प"
+    "optionShowing": "{value} दिखाने वाला विकल्प",
+    "shadeCount": "{parts} में से {shaded} भरे",
+    "placeHint": "लाइन पर वहाँ दबाओ जहाँ संख्या आती है",
+    "placePicked": "तुमने {value} चुना"
   },
   "feedback": {
     "correct": "सही! 🎉",

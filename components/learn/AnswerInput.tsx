@@ -10,6 +10,8 @@ import { parseInput } from "@/lib/learning/questionInput";
 import { spokenMath } from "@/lib/mathText";
 import { MarkdownBody } from "./MarkdownBody";
 import { ChoiceVizInput } from "./answer/ChoiceVizInput";
+import { PlaceInput } from "./answer/PlaceInput";
+import { ShadeInput } from "./answer/ShadeInput";
 import { TilesInput } from "./answer/TilesInput";
 
 /**
@@ -76,6 +78,14 @@ export function AnswerInput({
 
   if (spec?.kind === "choiceViz") {
     return <ChoiceVizInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
+  }
+
+  if (spec?.kind === "shade") {
+    return <ShadeInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
+  }
+
+  if (spec?.kind === "place") {
+    return <PlaceInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
   }
 
   if (answerType === "mcq") {

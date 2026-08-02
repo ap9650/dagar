@@ -46,7 +46,24 @@ const TONE_FILL: Record<Tone, string> = {
   hint: "var(--color-hint)",
 };
 
-export function PartWhole({ spec, className }: { spec: PartWholeSpec; className?: string }) {
+export function PartWhole({
+  spec,
+  className,
+  onShadedChange,
+}: {
+  spec: PartWholeSpec;
+  className?: string;
+  /**
+   * Reports how many parts are now filled, for PRACTICE (D18 5.2a).
+   *
+   * Additive on purpose. A lesson passes nothing and behaves exactly as before:
+   * it keeps the tapped set internally and compares it against `target`, because
+   * there the answer is known on the client. Practice cannot work that way — the
+   * answer never reaches the browser (D3) — so it passes this instead and sends
+   * the count to the server to be graded.
+   */
+  onShadedChange?: (shaded: number) => void;
+}) {
   const t = useTranslations("viz");
   const hatchId = useId();
 
@@ -61,12 +78,14 @@ export function PartWhole({ spec, className }: { spec: PartWholeSpec; className?
   const solved = spec.interactive && target.size > 0 && sameSet(filled, target);
 
   function toggle(index: number) {
-    setTapped((previous) => {
-      const next = new Set(previous);
-      if (next.has(index)) next.delete(index);
-      else next.add(index);
-      return next;
-    });
+    // Built outside the updater rather than inside it. `onShadedChange` calls
+    // into a parent's state, and React may run an updater twice in development —
+    // a side effect in there would report the tap twice.
+    const next = new Set(tapped);
+    if (next.has(index)) next.delete(index);
+    else next.add(index);
+    setTapped(next);
+    onShadedChange?.(next.size);
   }
 
   // Composed from three keys rather than an ICU `select`, because a select's

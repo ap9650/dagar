@@ -559,6 +559,51 @@ export const class6Fractions: SeedChapter = {
   // QUESTIONS
   // ═══════════════════════════════════════════════════════════════════════════
   questions: [
+    // ── SHADE — the learner MAKES the fraction rather than recognising one ────
+    {
+      slug: "c6-eqf-d1-q4",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      // Difficulty 1, deliberately. MAKING a fraction is easier than naming one:
+      // the learner fills parts until it looks like a half, which is a thing they
+      // can do before they can read `2/4`. Putting the pictorial kinds behind two
+      // correct answers would gate the easiest input on the hardest questions.
+      difficulty: 1,
+      answer_type: "fraction",
+      stem_md: "Shade **half** of this bar.",
+      answer_value: "1/2",
+      // Four parts for a question about halves, deliberately. The learner shades
+      // 2 and submits `2/4`, which D3 already grades correct against `1/2` — so
+      // the equivalence they just learned is what makes their answer right,
+      // rather than a rule they have to remember to apply.
+      input: { kind: "shade", shape: "bar", parts: 4 },
+      solution_md: [
+        "Half means the filled part and the empty part are the **same size**.",
+        "",
+        "The bar is in 4 pieces, so half of it is **2** of them.",
+        "",
+        "$$\n\\frac{2}{4} = \\frac{1}{2}\n$$",
+        "",
+        "Both are right. $\\frac{2}{4}$ is what you shaded; $\\frac{1}{2}$ is the same amount written in fewer pieces.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-fb-d2-q4",
+      concept_slug: "fraction-basics",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "fraction",
+      stem_md: "Shade $3/8$ of this grid.",
+      answer_value: "3/8",
+      input: { kind: "shade", shape: "grid", parts: 8 },
+      solution_md: [
+        "The **bottom** number is how many equal parts there are — the grid already has 8.",
+        "",
+        "The **top** number is how many to fill. That is 3.",
+        "",
+        "Which three you pick does not matter. A fraction counts parts; it does not care where they sit.",
+      ].join("\n"),
+    },
     // ─────────────────────────────────────────────────────────────────────────
     // PICTORIAL RECOGNITION (D18 slice 5.2)
     //

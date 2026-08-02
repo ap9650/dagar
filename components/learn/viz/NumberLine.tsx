@@ -23,12 +23,56 @@ const TONE: Record<Tone, string> = {
   hint: "var(--color-hint)",
 };
 
-export function NumberLine({ spec, className }: { spec: NumberLineSpec; className?: string }) {
+export function NumberLine({
+  spec,
+  className,
+  onPick,
+  picked,
+}: {
+  spec: NumberLineSpec;
+  className?: string;
+  /**
+   * Turns the line into a control the learner points at, for PRACTICE (D18 5.2a).
+   *
+   * Additive: without it this renders exactly as it always has, and the fifteen
+   * lessons that use it are untouched.
+   *
+   * ── why the WHOLE line is the target, not one button per tick ─────────────
+   * A line from −5 to 5 has eleven positions across 320px — 29px each, well
+   * under the 44px minimum. Discrete buttons would either break design rule 6
+   * or force every question onto a shorter line.
+   *
+   * So a tap anywhere is valid and snaps to the nearest mark (`placedValue`).
+   * There is no gap between targets and therefore nothing to miss, which serves
+   * the rule better than eleven small buttons would. The learner is answering a
+   * maths question, not being tested on their aim.
+   */
+  onPick?: (value: number) => void;
+  /** The value currently chosen, drawn as the learner's own mark. */
+  picked?: number | null;
+}) {
   const t = useTranslations("viz");
 
   const { from, to } = spec;
   const span = to - from || 1;
   const x = (value: number) => PAD + ((value - from) / span) * (W - PAD * 2);
+
+  /** Screen x → a value on the line. Uses the rendered box, so scaling is free. */
+  function valueAt(clientX: number, box: DOMRect): number {
+    const ratio = (clientX - box.left) / box.width;      // 0…1 across the SVG
+    const inner = (ratio * W - PAD) / (W - PAD * 2);     // 0…1 across the AXIS
+    return from + Math.min(Math.max(inner, 0), 1) * span;
+  }
+
+  function nudge(direction: 1 | -1) {
+    // With nothing chosen yet, an arrow key starts from the MIDDLE of the line,
+    // not from `from`. Starting at the left end makes the first ArrowLeft do
+    // nothing — the control looks broken to the one user who most needs it to
+    // work, since a keyboard or switch user has no other way in. On an integer
+    // line the midpoint is also the natural place to start: zero.
+    const current = picked ?? from + Math.round(span / 2 / spec.step) * spec.step;
+    onPick?.(Math.min(Math.max(current + direction * spec.step, from), to));
+  }
 
   const jumps = spec.jumps ?? [];
   const { H, AXIS_Y } = numberLineBox(jumps.length > 0);
@@ -39,9 +83,29 @@ export function NumberLine({ spec, className }: { spec: NumberLineSpec; classNam
     <figure className={cn("m-0 flex justify-center", className)}>
       <svg
         viewBox={`0 0 ${W} ${H}`}
-        role="img"
+        // `slider` is the native pattern for "choose a value along a line", and
+        // it brings arrow keys and a spoken value with it. Without `onPick` this
+        // stays a plain image, exactly as the lessons expect.
+        role={onPick ? "slider" : "img"}
         aria-label={t("numberLine", { from, to })}
-        className="w-full max-w-[320px] h-auto"
+        {...(onPick && {
+          tabIndex: 0,
+          "aria-valuemin": from,
+          "aria-valuemax": to,
+          "aria-valuenow": picked ?? undefined,
+          onClick: (event: React.MouseEvent<SVGSVGElement>) =>
+            onPick(valueAt(event.clientX, event.currentTarget.getBoundingClientRect())),
+          onKeyDown: (event: React.KeyboardEvent<SVGSVGElement>) => {
+            if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+              event.preventDefault();
+              nudge(1);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+              event.preventDefault();
+              nudge(-1);
+            }
+          },
+        })}
+        className={cn("w-full max-w-[320px] h-auto", onPick && "cursor-pointer touch-none")}
       >
         <defs>
           <marker
@@ -134,6 +198,25 @@ export function NumberLine({ spec, className }: { spec: NumberLineSpec; classNam
             </g>
           );
         })}
+
+        {/* The learner's own choice, drawn like an authored mark so the line
+            reads the same whether the dot was placed by us or by them. */}
+        {onPick && picked !== null && picked !== undefined && (
+          <g>
+            <circle cx={round(x(picked))} cy={AXIS_Y} r="9" fill="var(--color-primary)" />
+            <text
+              x={round(x(picked))}
+              y={AXIS_Y - 18}
+              textAnchor="middle"
+              fontSize="15"
+              fontWeight="600"
+              fill="var(--color-primary)"
+              className="tabular-nums"
+            >
+              {minus(picked)}
+            </text>
+          </g>
+        )}
 
         {(spec.marks ?? []).map((mark, index) => {
           const colour = TONE[mark.tone ?? "neutral"];
