@@ -40,8 +40,19 @@ export function MarkdownBody({
    */
   inline?: boolean;
 }) {
+  // A SPAN when inline, not a div.
+  //
+  // The `p → span` override below made the CONTENT inline while the wrapper
+  // stayed a block element, so every inline use produced `<div>` inside
+  // whatever contained it. React flags that as a hydration error — "in HTML,
+  // <div> cannot be a descendant of <p>" — and it was already true of the MCQ
+  // option labels before the quiz results started using it.
+  //
+  // Being inline means being an inline element, wrapper included.
+  const Wrapper = inline ? "span" : "div";
+
   return (
-    <div className={inline ? "lesson-body inline" : "lesson-body flex flex-col gap-md"}>
+    <Wrapper className={inline ? "lesson-body inline" : "lesson-body flex flex-col gap-md"}>
       <Markdown
         remarkPlugins={remarkPlugins}
         rehypePlugins={rehypePlugins as unknown as PluggableList}
@@ -53,7 +64,7 @@ export function MarkdownBody({
       >
         {markdown}
       </Markdown>
-    </div>
+    </Wrapper>
   );
 }
 

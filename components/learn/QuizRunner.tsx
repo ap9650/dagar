@@ -243,6 +243,19 @@ export function QuizRunner({
               const q = byId.get(item.question_id);
               const stem = q ? tContent(q, "stem_md", locale) : "";
 
+              // What the learner actually wrote, resolved for display.
+              //
+              // For MCQ the submitted value is the choice ID, so printing it raw
+              // shows "b" — the same bug that made mentor requests useless until
+              // they carried the label. Map it back through the localised
+              // choices; free text passes through untouched.
+              const answerText = !item.answered
+                ? null
+                : q
+                  ? (tChoices(q, locale).find((c) => c.id === item.given_answer)?.label ??
+                     item.given_answer)
+                  : item.given_answer;
+
               return (
                 <li
                   key={item.question_id}
@@ -279,6 +292,31 @@ export function QuizRunner({
                     <div className="text-body-sm text-ink">
                       <MarkdownBody markdown={stem} />
                     </div>
+                  )}
+
+                  {/* What they wrote, on EVERY question — including the ones
+                      they got right.
+
+                      Reported after a real quiz: the results screen showed the
+                      verdict and the question, and never the answer. On a wrong
+                      one you got the worked method with nothing to compare it
+                      to; on a right one you got "Correct!" and had to take our
+                      word for it.
+
+                      It matters most on the correct ones, which is the opposite
+                      of what you would guess. Grading accepts equivalent forms —
+                      0.6 is marked right for 3/5 — so a learner who answered in
+                      decimals sees "Correct!" and never learns that the fraction
+                      was what the chapter was about. Echoing the answer closes
+                      that loop without marking anyone wrong. */}
+                  {/* Nothing rendered for a skipped question: the status line
+                      above already reads "You skipped this one", and saying it
+                      twice in one card is noise. */}
+                  {answerText !== null && (
+                    <p className="text-body-sm text-body">
+                      <span className="text-muted">{t("quiz.yourAnswer")}: </span>
+                      <MarkdownBody markdown={answerText} inline />
+                    </p>
                   )}
 
                   {/* Every wrong answer shows its worked method (spec §5). This

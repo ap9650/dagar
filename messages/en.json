@@ -160,7 +160,8 @@
       "needs_revision": "Let us go over a few things again",
       "developing": "You are getting there",
       "mastered": "You have got this chapter"
-    }
+    },
+    "yourAnswer": "You answered"
   },
   "progress": {
     "title": "Your progress",
