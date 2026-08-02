@@ -105,6 +105,19 @@ export async function fetchWeeklySummary({
       .from("attempts")
       .select("*", { count: "exact", head: true })
       .eq("student_id", studentId)
+      // PRACTICE only. Without this the count swept up quiz answers too, so an
+      // 8-question quiz added 8 to a number labelled "practice questions" — and
+      // that number is handed to the model that writes the parent's message, so
+      // it was stated to a parent as fact, in a sentence they cannot check.
+      //
+      // Retries ARE still counted, deliberately. "Try again" writes a second
+      // row, so answering one question wrong then right counts twice. That is
+      // effort, which is the honest thing to show a parent, and the alternative
+      // — counting distinct questions — would make a learner who worked hard on
+      // three questions look like they did less than one who breezed through
+      // three. The retry signal a parent can actually act on is the mastery
+      // band, not a tally of second attempts.
+      .eq("session_kind", "practice")
       .gte("created_at", since),
     supabase
       .from("streaks")
