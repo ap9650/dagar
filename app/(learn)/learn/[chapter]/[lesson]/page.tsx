@@ -8,7 +8,9 @@ import "katex/dist/katex.min.css";
 import { createClient } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
+import { parseSteps } from "@/lib/learning/lessonSteps";
 import { LessonBody } from "@/components/learn/LessonBody";
+import { LessonSteps } from "@/components/learn/LessonSteps";
 import { LessonProgress } from "@/components/learn/LessonProgress";
 import { LessonCompleteButton } from "@/components/learn/LessonCompleteButton";
 import { TutorSheet } from "@/components/learn/TutorSheet";
@@ -46,7 +48,7 @@ export default async function LessonPage({
     // this one sits. One query, not one per dot.
     supabase
       .from("lessons")
-      .select("id, title, body_md, est_minutes, order_index, concept_id, i18n")
+      .select("id, title, body_md, steps, est_minutes, order_index, concept_id, i18n")
       .eq("chapter_id", chapterId)
       .order("order_index"),
     supabase
@@ -72,6 +74,10 @@ export default async function LessonPage({
   const completedIds = new Set(
     (progress ?? []).filter((p) => p.status === "completed").map((p) => p.lesson_id),
   );
+
+  // Validated here, on the server. A malformed blob becomes null and the prose
+  // renders instead — a content mistake must never blank a lesson (spec §10).
+  const steps = parseSteps(lesson.steps);
 
   const nextLesson = ordered[index + 1];
   // After completion there is always somewhere to go: the next lesson, or — at
@@ -99,20 +105,39 @@ export default async function LessonPage({
           </span>
         </div>
 
-        <LessonProgress
-          step={index + 1}
-          total={ordered.length}
-          completedSteps={ordered
-            .map((l, i) => (completedIds.has(l.id) ? i + 1 : 0))
-            .filter(Boolean)}
-        />
+        {/* Chapter position is hidden on a stepped lesson. Two progress bars on a
+            360px screen is the opposite of "one thing at a time" (design rule
+            11), and inside a lesson "where am I in THIS lesson" is the more
+            actionable of the two — chapter position is on the journey path they
+            arrived from. */}
+        {!steps && (
+          <LessonProgress
+            step={index + 1}
+            total={ordered.length}
+            completedSteps={ordered
+              .map((l, i) => (completedIds.has(l.id) ? i + 1 : 0))
+              .filter(Boolean)}
+          />
+        )}
 
         <h1 className="text-h1 text-ink">{tContent(lesson, "title", locale)}</h1>
       </header>
 
-      {/* Falls back to the English body when Hindi is absent — a learner sees
-          content, never a blank (D16). Slice 1.6 fills the Hindi in. */}
-      <LessonBody markdown={tContent(lesson, "body_md", locale)} />
+      {/* D18's fallback, and the reason this slice can ship a chapter at a time:
+          steps present → the player; steps absent or malformed → the prose that
+          has always been here. Falls back to the English body when Hindi is
+          absent too — a learner sees content, never a blank (D16). */}
+      {steps ? (
+        <LessonSteps steps={steps}>
+          <LessonCompleteButton
+            lessonId={lesson.id}
+            nextHref={nextHref}
+            alreadyComplete={completedIds.has(lesson.id)}
+          />
+        </LessonSteps>
+      ) : (
+        <LessonBody markdown={tContent(lesson, "body_md", locale)} />
+      )}
 
       {/* The tutor sits WITH the lesson, not on a route of its own: a learner
           who taps it is confused about the paragraph in front of them, and
@@ -127,11 +152,15 @@ export default async function LessonPage({
         }))}
       />
 
-      <LessonCompleteButton
-        lessonId={lesson.id}
-        nextHref={nextHref}
-        alreadyComplete={completedIds.has(lesson.id)}
-      />
+      {/* On a stepped lesson this lives inside the player, revealed at the end.
+          Here it is the prose path's own footer. */}
+      {!steps && (
+        <LessonCompleteButton
+          lessonId={lesson.id}
+          nextHref={nextHref}
+          alreadyComplete={completedIds.has(lesson.id)}
+        />
+      )}
     </main>
   );
 }

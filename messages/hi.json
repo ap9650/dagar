@@ -95,7 +95,10 @@
     "complete": "समझ गया — आगे बढ़ो",
     "completed": "लेसन पूरा हुआ",
     "practiceNext": "इसकी प्रैक्टिस करो",
-    "backToChapter": "चैप्टर पर वापस"
+    "backToChapter": "चैप्टर पर वापस",
+    "reveal": "दिखाओ",
+    "gotIt": "बिल्कुल सही",
+    "notQuiteHere": "थोड़ा सा रह गया — ये देखो"
   },
   "tutor": {
     "title": "साथी से पूछो",

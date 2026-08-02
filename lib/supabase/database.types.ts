@@ -368,6 +368,7 @@ export type Database = {
           id: string
           order_index: number
           slug: string | null
+          steps: Json | null
           title: string
         }
         Insert: {
@@ -379,6 +380,7 @@ export type Database = {
           id?: string
           order_index?: number
           slug?: string | null
+          steps?: Json | null
           title: string
         }
         Update: {
@@ -390,6 +392,7 @@ export type Database = {
           id?: string
           order_index?: number
           slug?: string | null
+          steps?: Json | null
           title?: string
         }
         Relationships: [
@@ -452,56 +455,6 @@ export type Database = {
             foreignKeyName: "mentor_requests_student_id_fkey"
             columns: ["student_id"]
             isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      product_feedback: {
-        Row: {
-          confusing: string | null
-          improve_most: string | null
-          created_at: string
-          id: string
-          locale: string
-          respondent_role: string
-          understood: string
-          updated_at: string
-          user_id: string
-          worked_well: string | null
-          would_return: string
-        }
-        Insert: {
-          confusing?: string | null
-          created_at?: string
-          id?: string
-          improve_most?: string | null
-          locale?: string
-          respondent_role: string
-          understood: string
-          updated_at?: string
-          user_id: string
-          worked_well?: string | null
-          would_return: string
-        }
-        Update: {
-          confusing?: string | null
-          created_at?: string
-          id?: string
-          improve_most?: string | null
-          locale?: string
-          respondent_role?: string
-          understood?: string
-          updated_at?: string
-          user_id?: string
-          worked_well?: string | null
-          would_return?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "product_feedback_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -640,6 +593,56 @@ export type Database = {
             columns: ["summary_link_id"]
             isOneToOne: false
             referencedRelation: "summary_links"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_feedback: {
+        Row: {
+          confusing: string | null
+          created_at: string
+          id: string
+          improve_most: string | null
+          locale: string
+          respondent_role: string
+          understood: string
+          updated_at: string
+          user_id: string
+          worked_well: string | null
+          would_return: string
+        }
+        Insert: {
+          confusing?: string | null
+          created_at?: string
+          id?: string
+          improve_most?: string | null
+          locale?: string
+          respondent_role: string
+          understood: string
+          updated_at?: string
+          user_id: string
+          worked_well?: string | null
+          would_return: string
+        }
+        Update: {
+          confusing?: string | null
+          created_at?: string
+          id?: string
+          improve_most?: string | null
+          locale?: string
+          respondent_role?: string
+          understood?: string
+          updated_at?: string
+          user_id?: string
+          worked_well?: string | null
+          would_return?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_feedback_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

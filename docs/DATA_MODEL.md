@@ -24,7 +24,13 @@ touches the grading path.
 
 **`concepts`** — `id` · `chapter_id` (FK) · `name` · `slug` · `order_index` · `i18n` (jsonb)
 
-**`lessons`** — `id` · `slug` (unique, nullable — seed key) · `chapter_id` (FK) · `concept_id` (FK) · `order_index` · `title` · `body_md` (KaTeX allowed) · `est_minutes` · `i18n` (jsonb)
+**`lessons`** — `id` · `slug` (unique, nullable — seed key) · `chapter_id` (FK) · `concept_id` (FK) · `order_index` · `title` · `body_md` (KaTeX allowed) · `steps` (jsonb, nullable — D18) · `est_minutes` · `i18n` (jsonb)
+
+> `steps` and `body_md` are **both** supported, indefinitely. Steps present → the
+> step player; steps null or malformed → `body_md`, exactly as before. Shape is
+> validated in `lib/learning/lessonSteps.ts` rather than by a CHECK constraint, so
+> a content fix is a re-seed and not a migration. Hindi step prose lives in
+> `i18n` beside `title` and `body_md`; diagram props are never translated.
 
 **`questions`** — `id` · `slug` (unique, nullable — seed key) · `concept_id` (FK) · `chapter_id` (FK) · `kind` (`practice`|`quiz`) · `difficulty` (1–3) · `stem_md` · `answer_type` (`mcq`|`integer`|`fraction`|`decimal`|`expression`) · `answer_value` (text, canonical) · `choices` (jsonb, mcq only) · `solution_md` · `i18n` (jsonb — `stem_md`/`solution_md`/`choices` only, **never `answer_value`**)
 

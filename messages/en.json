@@ -95,7 +95,10 @@
     "complete": "Got it — continue",
     "completed": "Lesson complete",
     "practiceNext": "Practise this",
-    "backToChapter": "Back to the chapter"
+    "backToChapter": "Back to the chapter",
+    "reveal": "Show me",
+    "gotIt": "That’s it",
+    "notQuiteHere": "Not quite — here it is"
   },
   "tutor": {
     "title": "Ask Saathi",
