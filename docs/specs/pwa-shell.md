@@ -42,7 +42,7 @@ Caching a lesson risks showing a learner stale content; caching an API response
 risks showing one learner another learner's data from a shared phone. Full offline
 learning is Phase 3 (D15) — do not half-build it here.
 
-On a failed navigation while offline, show a small "You're offline — Saathi needs a
+On a failed navigation while offline, show a small "You're offline — Dagar needs a
 connection right now" page in the learner's locale, with a retry.
 
 ---
@@ -71,7 +71,7 @@ No new events. Off the canonical list — do not invent one.
 
 - [ ] Chrome on Android offers "Install app" / "Add to Home Screen" on the deployed URL
 - [ ] The installed app opens **full-screen with no browser address bar**
-- [ ] The home-screen icon is the Saathi icon, not a screenshot or a generic globe
+- [ ] The home-screen icon is the Dagar icon, not a screenshot or a generic globe
 - [ ] The maskable icon is not cropped into on a circular-icon Android launcher
 - [ ] Lighthouse PWA installability checks pass on the deployed URL
 - [ ] The install prompt appears only after a first lesson is completed

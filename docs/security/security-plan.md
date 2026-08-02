@@ -1,6 +1,6 @@
-# Saathi — Security Plan
+# Dagar — Security Plan
 
-Saathi stores learning data about **children aged 11–14**. A leak here is not an
+Dagar stores learning data about **children aged 11–14**. A leak here is not an
 inconvenience, it is harm to a minor. This document is the standing record of what
 protects that data and what does not.
 
@@ -233,7 +233,7 @@ a silent one:
 - Penetration testing
 - SOC 2 or equivalent
 - A formal DPIA
-- **COPPA / India DPDP Act legal review** — Saathi processes children's data and a
+- **COPPA / India DPDP Act legal review** — Dagar processes children's data and a
   real deployment needs this. The MVP is a buildathon prototype, not a launch.
 - Automated secret scanning in CI
 - Distributed (Redis-backed) rate limiting — see the `memoryLimit` caveat above

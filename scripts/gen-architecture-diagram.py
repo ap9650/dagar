@@ -106,7 +106,7 @@ varrow((1060 + R) / 2, 152, 232)
 
 # ---- Experience ----
 band(272, "EXPERIENCE")
-box(L, 232, R, 342, EXP, "Saathi Learning Experience",
+box(L, 232, R, 342, EXP, "Dagar Learning Experience",
     "Mobile-first web app  ·  curriculum dashboard, micro-lessons, practice, quiz, progress, parent view")
 
 # distribution bus into core services

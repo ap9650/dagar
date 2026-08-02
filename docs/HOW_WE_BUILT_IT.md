@@ -1,4 +1,4 @@
-# Saathi — How We Built It
+# Dagar — How We Built It
 
 **An AI learning companion for underserved learners.**
 Buildathon MVP · August 2026 · Built by Akriti Panwar
@@ -9,7 +9,7 @@ Live product: **saathi-ap19.vercel.app** · Source: **github.com/ap9650/saathi**
 
 ## 1. What we set out to build, and the clock we built it against
 
-Saathi is an AI-powered adaptive learning platform for underserved learners — students who are behind, who cannot afford tuition, and whose parents want to help but have no way in. The long-term product spans subjects, grades, languages and accessibility needs. The Buildathon MVP proves one complete learning loop end to end: **NCERT Mathematics, Classes 6–8, one chapter per grade, in Hindi and English**.
+Dagar is an AI-powered adaptive learning platform for underserved learners — students who are behind, who cannot afford tuition, and whose parents want to help but have no way in. The long-term product spans subjects, grades, languages and accessibility needs. The Buildathon MVP proves one complete learning loop end to end: **NCERT Mathematics, Classes 6–8, one chapter per grade, in Hindi and English**.
 
 The scope was chosen so that nothing in the loop is a mock. A learner signs in, reads a lesson, asks a tutor a genuinely confused question, practises with adaptive difficulty, sits a quiz, sees mastery per concept, keeps a streak — and a supporting adult receives a weekly summary. Every one of those is real, server-backed and instrumented.
 
@@ -21,7 +21,7 @@ We had four days. This document is about what that constraint did to the decisio
 
 ## 2. Architecture
 
-![Saathi high-level architecture](architecture.png)
+![Dagar high-level architecture](architecture.png)
 
 The system is six layers, and the shape of it is deliberate: the Learning Intelligence Engine sits *between* the learner-facing experience and the data, so that personalisation is a property of the system rather than a feature bolted onto one screen.
 
@@ -99,7 +99,7 @@ Seven of them, event-derived and automatic: first lesson, first practice set, th
 
 ## 5. Security, and why it came before features
 
-Saathi stores learning data about **children aged 11–14**. That single fact moves security ahead of features rather than after them. Five surfaces, worked in this order.
+Dagar stores learning data about **children aged 11–14**. That single fact moves security ahead of features rather than after them. Five surfaces, worked in this order.
 
 ### Row-level security on every table
 
@@ -142,7 +142,7 @@ One decision worth naming: the in-app feedback form collects no email address, a
 
 ## 6. The AI tutor — what "curriculum-aware" actually means
 
-The claim that separates Saathi from a general assistant is that the tutor knows where the learner is. Concretely, every tutor call carries exactly this and nothing more:
+The claim that separates Dagar from a general assistant is that the tutor knows where the learner is. Concretely, every tutor call carries exactly this and nothing more:
 
 1. The learner's **locale** — the tutor replies in their language.
 2. Grade, current chapter and lesson title.
@@ -167,7 +167,7 @@ Not the whole curriculum. Grounding is the current lesson plus mastery, which is
 
 The PRD put Hindi in Phase 2. We moved it into the MVP and made it a Must Have ranked *above* personalisation.
 
-The reasoning is simple: Saathi's learners are disproportionately in Hindi-medium government schools. For them an English-only interface is not a missing feature, it is a locked front door. Adaptive personalisation is worth nothing to a learner who cannot read the lesson.
+The reasoning is simple: Dagar's learners are disproportionately in Hindi-medium government schools. For them an English-only interface is not a missing feature, it is a locked front door. Adaptive personalisation is worth nothing to a learner who cannot read the lesson.
 
 "Bilingual" covers the full UI, all curriculum content, and the AI tutor — not just menu labels. Three rules made it work:
 
@@ -227,7 +227,7 @@ Every item here is a decision with a rejected alternative. This is the section w
 
 ### Ship a PWA, not an Android APK
 
-Google Play requires a 14-day closed test with 12 testers before a first release — longer than the entire build. So Saathi is an installable progressive web app: a link, no download, no store listing, no install friction on a shared phone. The same app wraps into a Trusted Web Activity for the Play Store later with no rewrite.
+Google Play requires a 14-day closed test with 12 testers before a first release — longer than the entire build. So Dagar is an installable progressive web app: a link, no download, no store listing, no install friction on a shared phone. The same app wraps into a Trusted Web Activity for the Play Store later with no rewrite.
 
 **What we gave up:** the credibility of an app-store listing, and background notification reliability.
 
@@ -285,7 +285,7 @@ Recorded because the reasoning is more useful than the fix.
 
 We put the app on a real Android phone and gave the link to real people. Six defects came back that no test had caught, and most were fixed the same day: the lesson's next action being below the fold, quiz retakes serving identical questions, correct quiz answers not showing what the learner had actually typed, a fraction input with no easy way to type a slash, a padlock icon that read as "locked" when it meant "not yet started", and a redundant edit control after feedback submission.
 
-There is also an in-app feedback form — five questions, about sixty seconds, three of them tap-only. It is deliberately **not** a five-star rating: "Did Saathi help you understand something?" tests the claim the product actually makes, whereas a 4.2 average is a number nobody can act on.
+There is also an in-app feedback form — five questions, about sixty seconds, three of them tap-only. It is deliberately **not** a five-star rating: "Did Dagar help you understand something?" tests the claim the product actually makes, whereas a 4.2 average is a number nobody can act on.
 
 One question on it is doing specific work. Most respondents are family, friends and a teacher — they will be kind, and for every friendly question the honest answer and the polite answer look identical. So one question is a forced trade-off: choosing "more chapters" means *not* choosing "a better tutor". That answer carries a priority instead of a courtesy.
 
@@ -305,7 +305,7 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 | **An admin metrics dashboard** | The events are recorded; only the view is missing. First item on the cut list — a PM tool with no learner value. |
 | **Difficulty shown on questions** | Practice adapts difficulty but never displays it. Arguably it should stay hidden; that is a product question we have not answered. |
 | **A tutor evaluation set** | 20–30 real learner questions with a rubric and an LLM judge. Until it exists, every prompt edit is an untested deploy — and the tutor is the differentiator. First thing after submission. |
-| **A different product name** | "Saathi" is used by at least one other product. साथी is an ordinary Hindi word meaning companion, which is why several products share it and why nobody holds a strong claim. We measured the change — 56 user-visible strings, 4 in the AI prompts, 40 in code, 2 in icons and manifest — and deliberately deferred it to the point where it starts to cost something: a real app-store listing, where collisions are enforced and a trademark check belongs in the same piece of work. |
+| **A different product name** | "Dagar" is used by at least one other product. साथी is an ordinary Hindi word meaning companion, which is why several products share it and why nobody holds a strong claim. We measured the change — 56 user-visible strings, 4 in the AI prompts, 40 in code, 2 in icons and manifest — and deliberately deferred it to the point where it starts to cost something: a real app-store listing, where collisions are enforced and a trademark check belongs in the same piece of work. |
 
 ---
 
@@ -323,4 +323,4 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 
 ## 15. In one paragraph
 
-Saathi is a working, deployed, bilingual, accessible learning companion with real learner state behind it: mastery tracked per concept, practice that adapts, a tutor grounded in the exact lesson on screen, a parent loop that needs no parent account, and 317 passing tests concentrated on the code where a bug would be silent. It is one subject and three chapters, because four days buys one loop done properly rather than five done approximately. The architecture, the schema and the content model were all built so that widening it is authoring work — and the list of what we chose not to build, with the reason for each, is above rather than omitted.
+Dagar is a working, deployed, bilingual, accessible learning companion with real learner state behind it: mastery tracked per concept, practice that adapts, a tutor grounded in the exact lesson on screen, a parent loop that needs no parent account, and 317 passing tests concentrated on the code where a bug would be silent. It is one subject and three chapters, because four days buys one loop done properly rather than five done approximately. The architecture, the schema and the content model were all built so that widening it is authoring work — and the list of what we chose not to build, with the reason for each, is above rather than omitted.

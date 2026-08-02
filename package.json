@@ -1,5 +1,5 @@
 {
-  "name": "saathi",
+  "name": "dagar",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit",
     "seed": "node --no-warnings scripts/seed.ts",
     "check:keys": "node --no-warnings scripts/check-arithmetic-keys.ts",
-    "db:types": "npx supabase gen types typescript --linked > /tmp/saathi-db-types.ts && grep -q 'export type Database' /tmp/saathi-db-types.ts && mv /tmp/saathi-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED \u2014 database.types.ts left untouched' && cat /tmp/saathi-db-types.ts && exit 1)",
+    "db:types": "npx supabase gen types typescript --linked > /tmp/dagar-db-types.ts && grep -q 'export type Database' /tmp/dagar-db-types.ts && mv /tmp/dagar-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED \u2014 database.types.ts left untouched' && cat /tmp/dagar-db-types.ts && exit 1)",
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
     "check:hindi": "node --no-warnings scripts/check-hindi.ts",
     "icons": "node --no-warnings scripts/generate-icons.ts",

@@ -12,7 +12,7 @@ import type { Locale } from "@/i18n/config";
  * `/s/[token]` — a learner's week, for a supporting adult with no account.
  *
  * ═══════════════════════════════════════════════════════════════════════════
- * THE ONLY PAGE IN SAATHI THAT RENDERS A LEARNER'S DATA WITHOUT A SESSION.
+ * THE ONLY PAGE IN DAGAR THAT RENDERS A LEARNER'S DATA WITHOUT A SESSION.
  *
  * Everything that makes that acceptable:
  *
@@ -98,7 +98,7 @@ export default async function SharedSummaryPage({
 
       <WeeklySummary summary={summary} />
 
-      {/* For a reader who has never heard of Saathi — which, on a forwarded
+      {/* For a reader who has never heard of Dagar — which, on a forwarded
           link, is most of them. */}
       <Link
         href="/for-parents"

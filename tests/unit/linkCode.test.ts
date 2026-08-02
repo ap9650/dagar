@@ -116,7 +116,7 @@ describe("safeNextPath — the open redirect guard", () => {
 
   it("refuses anything that leaves the site", () => {
     // The attack: a learner is sent /login?next=<attacker>, signs in for real,
-    // and Saathi itself delivers them to a copy of the login screen.
+    // and Dagar itself delivers them to a copy of the login screen.
     expect(safeNextPath("https://evil.example/login")).toBe("/");
     expect(safeNextPath("//evil.example")).toBe("/");
     expect(safeNextPath("/\\evil.example")).toBe("/");

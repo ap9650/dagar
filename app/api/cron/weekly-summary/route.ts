@@ -122,7 +122,7 @@ export async function GET(request: Request) {
         studentId: link.student_id,
       });
 
-      const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://saathi-ap19.vercel.app";
+      const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://dagar-ap19.vercel.app";
       const url = `${origin}/s/${link.token}`;
 
       const outcome = await sendParentSummary(

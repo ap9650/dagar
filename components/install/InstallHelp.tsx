@@ -42,7 +42,7 @@ export function InstallHelp({
       {/* The failure this exists for: on MIUI and several other Android skins a
           PWA installs into the app list and the launcher never places an icon.
           It looks exactly like a failed install, and it is the phone population
-          Saathi actually targets. */}
+          Dagar actually targets. */}
       <p className="text-caption text-muted">{t("launcherNote")}</p>
     </div>
   );

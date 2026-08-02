@@ -42,7 +42,7 @@ export function InviteParentCard() {
 
   function summaryUrl(forToken: string): string {
     const origin =
-      typeof window !== "undefined" ? window.location.origin : "https://saathi-ap19.vercel.app";
+      typeof window !== "undefined" ? window.location.origin : "https://dagar-ap19.vercel.app";
     return `${origin}/s/${forToken}`;
   }
 

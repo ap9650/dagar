@@ -19,7 +19,7 @@
 // Bump on every deploy that changes the shell. The version is what stops the
 // classic PWA failure: a learner running last week's JavaScript against this
 // week's API, with no way to tell that is what is happening.
-const VERSION = "saathi-v1";
+const VERSION = "dagar-v1";
 const OFFLINE_URL = "/offline";
 
 const PRECACHE = [

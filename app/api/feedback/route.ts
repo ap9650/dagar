@@ -6,7 +6,7 @@ import { parseBody, productFeedbackSchema } from "@/lib/security/validation";
 import { LIMITS, memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 
 /**
- * POST /api/feedback — what a real user thinks of Saathi (0018).
+ * POST /api/feedback — what a real user thinks of Dagar (0018).
  *
  * ── one row per person, updated rather than appended ────────────────────────
  * `product_feedback` is unique on `user_id`, so this upserts. Someone who

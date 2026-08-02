@@ -1,4 +1,4 @@
-# Saathi — Market Sizing & Monetisation
+# Dagar — Market Sizing & Monetisation
 
 Fills the two gaps in PRD v1.0: §4 had TAM/SAM/SOM with no numbers, and no
 monetisation model appeared anywhere.
@@ -26,7 +26,7 @@ Every school-going learner who could use personalised digital learning support.
 | Monetisable ARPU ceiling (see §2) | ₹500 / learner / year |
 | **TAM** | **~248M learners · ₹12,400 Cr (~$1.46B)** |
 
-### SAM — the curriculum and grades Saathi actually serves
+### SAM — the curriculum and grades Dagar actually serves
 
 Narrowed by the three constraints that genuinely gate the product: grade band,
 curriculum alignment, and device access.
@@ -41,14 +41,14 @@ curriculum alignment, and device access.
 Step 2 matters because NCERT textbooks are used by CBSE and adopted or adapted by
 a majority of state boards — the content asset is reusable well beyond CBSE.
 
-Step 3 is the input most likely to be wrong in Saathi's favour. ASER has reported
+Step 3 is the input most likely to be wrong in Dagar's favour. ASER has reported
 household smartphone availability well above 85% for older school-age children;
 75% is deliberately conservative, and *shared* device access is not the same as
 usable access.
 
 ### SOM — realistically obtainable in 3 years
 
-Saathi reaches underserved learners through institutions, not consumer marketing.
+Dagar reaches underserved learners through institutions, not consumer marketing.
 Direct-to-consumer acquisition spend is not available to a product whose users are
 selected for being unable to afford tuition.
 
@@ -92,7 +92,7 @@ This is a **stated stage**, not an absence of a model.
 
 ### The constraint that shapes everything
 
-Saathi's users are defined by inability to afford tuition. A consumer subscription
+Dagar's users are defined by inability to afford tuition. A consumer subscription
 as the primary revenue engine contradicts the product's own targeting. So:
 
 > **Learners never pay for the core learning loop. Institutions pay for reach;
@@ -120,10 +120,10 @@ That floor is the single most important number in this document.
 
 | Tier | Price | Includes |
 |---|---|---|
-| **Saathi Free** | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones, parent summary. AI Tutor capped at 10 questions/day. |
-| **Saathi Plus** | ₹99/mo · ₹799/yr | Unlimited AI Tutor, adaptive practice depth, revision plans, detailed parent insights. |
-| **Saathi Mentor** | +₹299/mo | Plus 2 human mentor sessions/month. Gated on mentor supply — do not sell ahead of capacity. |
-| **Saathi for Institutions** | ₹450–600/learner/yr | NGO, CSR and government licences. Cohort dashboards, reporting, bulk onboarding. **The scalable revenue engine.** |
+| **Dagar Free** | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones, parent summary. AI Tutor capped at 10 questions/day. |
+| **Dagar Plus** | ₹99/mo · ₹799/yr | Unlimited AI Tutor, adaptive practice depth, revision plans, detailed parent insights. |
+| **Dagar Mentor** | +₹299/mo | Plus 2 human mentor sessions/month. Gated on mentor supply — do not sell ahead of capacity. |
+| **Dagar for Institutions** | ₹450–600/learner/yr | NGO, CSR and government licences. Cohort dashboards, reporting, bulk onboarding. **The scalable revenue engine.** |
 
 Institutional volume pricing:
 
@@ -140,7 +140,7 @@ underserved segment, assume **1–2%**. A model depending on consumer conversion
 would need ~20× the user base for the same revenue. CSR is also structurally
 favourable in India — Section 135 of the Companies Act mandates qualifying
 companies to spend 2% of net profit on CSR, and education is the most common
-category. Saathi is buying-ready for that budget in a way a consumer subscription
+category. Dagar is buying-ready for that budget in a way a consumer subscription
 is not.
 
 ### Year-3 revenue model at SOM

@@ -9,7 +9,7 @@ import { buttonClasses } from "@/components/ui/Button";
  * ── WHY THIS SCREEN EXISTS ──────────────────────────────────────────────────
  * Parent linking is a concept no other e-learning site has, and both people in
  * it were being asked to act on information neither had been given. A parent
- * landing on the sign-in screen has never heard of Saathi, does not know what
+ * landing on the sign-in screen has never heard of Dagar, does not know what
  * they would be able to see, and — if their child has not made a code yet —
  * reaches a dead end with nothing to do.
  *
@@ -43,7 +43,7 @@ export default async function ForParentsPage() {
   // TWO paths, and the link goes first because it IS the primary one.
   //
   // This page used to describe only the account-and-code route — four numbered
-  // steps ending in "create your own Saathi account". An adult who had just been
+  // steps ending in "create your own Dagar account". An adult who had just been
   // sent a LINK and tapped through to here was being told to sign up for
   // something they did not need, to reach a page they were already one tap from.
   //

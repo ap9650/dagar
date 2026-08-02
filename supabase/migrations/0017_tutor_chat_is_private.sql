@@ -1,7 +1,7 @@
 -- 0017_tutor_chat_is_private.sql — the tutor conversation belongs to the learner
 --
 -- `/for-parents` promises, in both languages, that the questions a learner asks
--- the Saathi tutor stay private. The database did not enforce it: 0004_tutor.sql
+-- the Dagar tutor stay private. The database did not enforce it: 0004_tutor.sql
 -- gave any linked parent SELECT on tutor_messages.
 --
 -- The parent UI never rendered those rows, which is why this survived review —

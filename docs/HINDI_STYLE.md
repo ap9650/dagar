@@ -1,4 +1,4 @@
-# Saathi — Hindi Style Guide
+# Dagar — Hindi Style Guide
 
 Load this before any Hindi authoring or translation.
 
@@ -13,7 +13,7 @@ age by people who do this professionally, and matching it means the app and the
 textbook reinforce each other instead of competing. Deviating from it adds
 cognitive load for no gain.
 
-This covers the large majority of Saathi's content: lesson bodies, question stems,
+This covers the large majority of Dagar's content: lesson bodies, question stems,
 worked solutions, concept names.
 
 **Anchor prompts to the real thing:** *"Write this the way the NCERT Class 6 Ganit
@@ -25,7 +25,7 @@ book and compare.
 भिन्न · पूर्णांक · समीकरण · हर · अंश · गुणनफल · भाजक · समतुल्य
 
 Never simplify these into English transliterations ("फ्रैक्शन"). The learner needs
-Saathi's words to match the words in their exam.
+Dagar's words to match the words in their exam.
 
 ### Exercise instructions follow NCERT too
 
@@ -54,7 +54,7 @@ correct in their place. Mixing them up in either direction is the error.
 
 ### For the conversational surfaces only
 
-- **तुम**, not आप — Saathi means *companion*, and आप is polite distance.
+- **तुम**, not आप — Dagar means *companion*, and आप is polite distance.
   (Parent-facing copy uses आप; that reader is an adult.)
 - Everyday words: **सवाल** over प्रश्न, **जवाब** over उत्तर, **गलती** over त्रुटि,
   **फिर से** over पुनः. Drop **कृपया** entirely — it makes an app sound like a form.

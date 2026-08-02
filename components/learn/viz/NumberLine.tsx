@@ -9,7 +9,7 @@ import type { NumberLineSpec, Tone } from "./types";
  * A number line, with optional marks and jumps.
  *
  * Second most-used shape, and the one that carries the most weight in Class 7:
- * integer addition is *taught* as a jump along a line, and Saathi has been
+ * integer addition is *taught* as a jump along a line, and Dagar has been
  * describing that jump in words.
  *
  * `divisions` is what makes it work for fractions too — minor ticks between the

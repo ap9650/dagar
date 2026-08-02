@@ -33,10 +33,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title: t("title"),
     description: t("description"),
     // iOS ignores the web app manifest's icons entirely and uses this instead —
-    // without it an installed Saathi on an iPhone gets a screenshot of the page
+    // without it an installed Dagar on an iPhone gets a screenshot of the page
     // as its home-screen icon (D15, pwa-shell spec §2).
     icons: { apple: "/icons/apple-touch-icon.png" },
-    appleWebApp: { capable: true, title: "Saathi", statusBarStyle: "default" },
+    appleWebApp: { capable: true, title: "Dagar", statusBarStyle: "default" },
   };
 }
 

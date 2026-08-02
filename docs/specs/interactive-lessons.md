@@ -2,7 +2,7 @@
 
 **Build slice:** 5.1 (lessons), 5.2 (practice) · **Implements:** D18 · **Depends on:** `micro-lesson.md`, `guided-practice.md`, `i18n.md`, `saathi-design`
 
-> **Why this exists.** A teacher of Classes 6–8 used Saathi on 2 Aug 2026 and said
+> **Why this exists.** A teacher of Classes 6–8 used Dagar on 2 Aug 2026 and said
 > the lessons are walls of text: her students cannot hold two paragraphs, and
 > comprehension across one classroom varies enormously. She is right, and the
 > lesson content proves it — Class 6 Lesson 1 says *"cut one roti into 4 equal

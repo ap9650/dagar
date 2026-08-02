@@ -7,7 +7,7 @@ import type { DeliveryResult, NotifyAdapter, Recipient, SummaryMessage } from ".
 export type { DeliveryResult, NotifyChannel, Recipient, SummaryMessage } from "./types";
 
 /**
- * `sendParentSummary` — the one function the rest of Saathi calls (D4).
+ * `sendParentSummary` — the one function the rest of Dagar calls (D4).
  *
  * The caller does not choose a channel and cannot. It hands over a recipient and
  * a message; this decides how, in order of how well the channel serves an Indian

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/Button";
  * taps three buttons and writes nothing is still a complete response — and a
  * teacher who wants to write three paragraphs can.
  *
- * Deliberately NOT a 1–5 star rating. "Did Saathi help you understand
+ * Deliberately NOT a 1–5 star rating. "Did Dagar help you understand
  * something?" tests the claim the product actually makes; a 4.2 average is a
  * number nobody can act on.
  *

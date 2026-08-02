@@ -5,7 +5,7 @@
  * A grading bug does not throw, does not log, and does not look like anything
  * from inside the app. It just tells a learner who was right that they were
  * wrong — and a learner who is already behind concludes they are bad at maths.
- * That is the most damaging thing Saathi can do, so this file is deterministic,
+ * That is the most damaging thing Dagar can do, so this file is deterministic,
  * pure, and tested harder than anything else here.
  *
  * RULES THIS FILE MUST NEVER BREAK

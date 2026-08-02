@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { FeedbackForm, type FeedbackAnswers } from "@/components/learn/FeedbackForm";
 
 /**
- * `/feedback` — what a real user thinks of Saathi (0018).
+ * `/feedback` — what a real user thinks of Dagar (0018).
  *
  * Inside `(learn)`, so it is behind the auth layout. That is deliberate: to say
  * anything useful about a learning app you have to have used it, and using it

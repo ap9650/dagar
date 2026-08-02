@@ -1,7 +1,7 @@
 -- 0020_lesson_steps.sql — lessons become a sequence of screens
 -- Spec: docs/specs/interactive-lessons.md · Decision: D18
 --
--- A teacher of Classes 6–8 used Saathi on 2 Aug 2026 and said her students
+-- A teacher of Classes 6–8 used Dagar on 2 Aug 2026 and said her students
 -- cannot hold two paragraphs. Fifteen lessons, 215 words each, and not one
 -- image, diagram or sound between them. Lesson 1 says "cut one roti into 4
 -- equal pieces" and shows nothing.

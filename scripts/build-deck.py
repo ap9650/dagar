@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Builds `docs/deck/Saathi-Pitch-Deck.pptx` — the submission deck.
+Builds `docs/deck/Dagar-Pitch-Deck.pptx` — the submission deck.
 
 Editable by design: every word on every slide is a real PowerPoint text run, not
 a picture of text. Change a number here and re-run, or change it in PowerPoint
@@ -114,7 +114,7 @@ def slide_shell(prs, number, kicker, title, subtitle=None):
         y = 2.06
     # footer
     text(s, M, SH - 0.44, 6.0, 0.24,
-         [{"t": f"Saathi  ·  Personalised learning for every underserved learner",
+         [{"t": f"Dagar  ·  Personalised learning for every underserved learner",
            "size": 8.5, "color": MUTED}])
     text(s, SW - M - 2.0, SH - 0.44, 2.0, 0.24,
          [{"t": str(number), "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
@@ -170,7 +170,7 @@ def cover(prs):
     box(s, 0, 0, SW, SH, fill=PRIMARY_WASH, shape=MSO_SHAPE.RECTANGLE)
     box(s, 0, 0, 0.22, SH, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
     text(s, 1.1, 2.05, 8.6, 1.0,
-         [{"t": "Saathi", "size": 62, "bold": True, "color": PRIMARY_STRONG,
+         [{"t": "Dagar", "size": 62, "bold": True, "color": PRIMARY_STRONG,
            "space_after": 6, "line": 1.0},
           {"t": "साथी  ·  companion", "size": 15, "color": PRIMARY, "space_after": 0}])
     box(s, 1.12, 3.62, 1.4, 0.05, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
@@ -230,7 +230,7 @@ def s1_problem(prs):
 def s2_solution(prs):
     s, y = slide_shell(prs, 2, "02 · Solution",
                        "A companion that knows what you are learning.",
-                       "Saathi is not a chatbot with a syllabus attached. It is a "
+                       "Dagar is not a chatbot with a syllabus attached. It is a "
                        "curriculum-aware learning journey — and the AI is grounded "
                        "in the exact lesson on the learner's screen.")
 
@@ -285,7 +285,7 @@ def s3_validation(prs):
     s, y = slide_shell(prs, 3, "03 · Market validation",
                        "The phone is already in their hand.",
                        "The access problem is close to solved. The reason-to-open-it "
-                       "problem is wide open — and that is the one Saathi is built for.")
+                       "problem is wide open — and that is the one Dagar is built for.")
 
     sw = (CONTENT_W - 0.4) / 3
     stat(s, M, y, sw, 1.72, "~90%",
@@ -613,7 +613,7 @@ def s9_roadmap(prs):
     y2 = y + 2.46
     box(s, M, y2, CONTENT_W, 1.42, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
     text(s, M + 0.32, y2 + 0.2, CONTENT_W - 0.64, 0.4,
-         [{"t": "WHO SAATHI IS FOR NEXT", "size": 9.5, "bold": True, "color": PRIMARY}])
+         [{"t": "WHO DAGAR IS FOR NEXT", "size": 9.5, "bold": True, "color": PRIMARY}])
     groups = [
         ("Learners", "Students with visual, hearing or speech impairments  ·  "
                      "neurodiverse learners  ·  adult literacy learners"),
@@ -638,7 +638,7 @@ def s10_adoption(prs):
     left = [
         ("Teachers are the highest-leverage channel",
          "One teacher forwards a link to forty students in a single message. No app "
-         "store, no install, no cost — Saathi is an installable web link. This is "
+         "store, no install, no cost — Dagar is an installable web link. This is "
          "how the first testers were reached, and it is the lowest-CAC route in the "
          "model by an order of magnitude."),
         ("Families and word of mouth",
@@ -733,7 +733,7 @@ def s11_competitors(prs):
     yb = yy + 0.2
     box(s, M, yb, CONTENT_W, 1.0, fill=PRIMARY, line=None)
     text(s, M + 0.32, yb + 0.14, CONTENT_W - 0.64, 0.76,
-         [{"t": "Saathi's position:  curriculum-aware, mastery-driven, hints before "
+         [{"t": "Dagar's position:  curriculum-aware, mastery-driven, hints before "
                 "answers, Hindi from day one, free at the core.",
            "size": 12.5, "bold": True, "color": WHITE, "space_after": 5},
           {"t": "The defensible piece is not the model — anyone can call the same "
@@ -751,14 +751,14 @@ def s12_pricing(prs):
                        "whether the product works at all. Free is a stage, not a "
                        "missing model.")
     tiers = [
-        ("Saathi Free", "₹0", "Full curriculum, micro-lessons, practice, quizzes, "
+        ("Dagar Free", "₹0", "Full curriculum, micro-lessons, practice, quizzes, "
          "progress, streaks, milestones and parent summaries. AI Tutor capped at 10 "
          "questions/day.", PRIMARY, "THE MISSION TIER"),
-        ("Saathi Plus", "₹99/mo  ·  ₹799/yr", "Unlimited AI Tutor, deeper adaptive "
+        ("Dagar Plus", "₹99/mo  ·  ₹799/yr", "Unlimited AI Tutor, deeper adaptive "
          "practice, revision plans, detailed parent insights.", HINT, "FAMILIES PAY FOR DEPTH"),
-        ("Saathi Mentor", "+₹299/mo", "Adds two human mentor sessions a month. Gated "
+        ("Dagar Mentor", "+₹299/mo", "Adds two human mentor sessions a month. Gated "
          "on verified mentor supply — never sold ahead of capacity.", AMBER, "SUPPLY-GATED"),
-        ("Saathi for Institutions", "₹450–600 / learner / yr", "NGO, CSR and government "
+        ("Dagar for Institutions", "₹450–600 / learner / yr", "NGO, CSR and government "
          "licences. Cohort dashboards, reporting, bulk onboarding.", CORRECT,
          "THE REVENUE ENGINE"),
     ]
@@ -809,7 +809,7 @@ def s12_pricing(prs):
 
     source_note(s, SH - 0.86,
                 "Sources: Duolingo investor materials (company strategy overview; Q3 FY2025 "
-                "10-Q) — FY2025 revenue $1.04B, subscriptions 76% of revenue. Saathi unit "
+                "10-Q) — FY2025 revenue $1.04B, subscriptions 76% of revenue. Dagar unit "
                 "costs: docs/DECISIONS.md D11, verified against Claude API pricing.")
 
 
@@ -817,7 +817,7 @@ def s13_testimonials(prs):
     s, y = slide_shell(prs, 13, "13 · What users said",
                        "Real feedback from real users.",
                        "Collected in-app from students, parents and teachers using "
-                       "Saathi on their own phones. Replace the placeholders below "
+                       "Dagar on their own phones. Replace the placeholders below "
                        "with actual quotes and the response count.")
     w, h, gx, gy = (CONTENT_W - 0.4) / 3, 1.56, 0.2, 0.2
     for i, (cx, cy) in enumerate(grid(M, y, 3, 2, w, h, gx, gy)):
@@ -857,7 +857,7 @@ def main() -> None:
                s6_features, s7_how, s8_next, s9_roadmap, s10_adoption,
                s11_competitors, s12_pricing, s13_testimonials):
         fn(prs)
-    out = "docs/deck/Saathi-Pitch-Deck.pptx"
+    out = "docs/deck/Dagar-Pitch-Deck.pptx"
     prs.save(out)
     print(f"wrote {out} — {len(prs.slides.__iter__.__self__._sldIdLst)} slides")
 

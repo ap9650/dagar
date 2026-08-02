@@ -146,7 +146,7 @@ export function parentSummaryFacts(summary: WeeklySummary): string {
     // grounding before the prompt.
     summary.streak.alive && summary.streak.days > 0
       ? `Streak: ${summary.streak.days} — this is a HABIT measure, the number of ` +
-        `consecutive days they have opened Saathi at all. It says nothing about ` +
+        `consecutive days they have opened Dagar at all. It says nothing about ` +
         `when the lessons or questions above happened, and must not be attached ` +
         `to either count.`
       : "Streak: none right now — no active run of consecutive days.",

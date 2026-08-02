@@ -68,6 +68,9 @@ const db = createClient<Database>(url, key, { auth: { persistSession: false } })
  * a demo that follows a test run is not polluted by it.
  */
 const JUNK_EMAIL_PATTERNS = [
+  // Kept as `saathi` after the rename: this matches rows that already exist
+  // in the database from Day-1 verification. Renaming it would simply stop
+  // matching them, leaving the accounts it was written to clean up.
   /@saathi\.test$/i, // slice 1.1 verification, Day 1
   /^e2e_/i, // playwright demo path
   /^rls_/i, // tests/integration/rls.test.ts

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Renders `docs/HOW_WE_BUILT_IT.md` into `docs/deck/Saathi-How-We-Built-It.docx`.
+Renders `docs/HOW_WE_BUILT_IT.md` into `docs/deck/Dagar-How-We-Built-It.docx`.
 
 The markdown is the source of truth; the .docx is a build artefact. Edit the .md
 and re-run, or edit the .docx directly and never run this again — both are
@@ -27,7 +27,7 @@ from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
 
 SRC = "docs/HOW_WE_BUILT_IT.md"
-OUT = "docs/deck/Saathi-How-We-Built-It.docx"
+OUT = "docs/deck/Dagar-How-We-Built-It.docx"
 
 PRIMARY = RGBColor(0x0F, 0x76, 0x6E)
 PRIMARY_STRONG = RGBColor(0x11, 0x5E, 0x59)
@@ -154,7 +154,7 @@ def cover(doc, lines):
         doc.add_paragraph()
     p = para(doc, space_after=4)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    add_runs(p, "Saathi", size=44, color=PRIMARY_STRONG, bold=True)
+    add_runs(p, "Dagar", size=44, color=PRIMARY_STRONG, bold=True)
     p = para(doc, space_after=22)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     add_runs(p, "साथी  ·  companion", size=12, color=PRIMARY)

@@ -11,7 +11,7 @@ import { hasSupabaseEnv } from "../setup";
  * what they will NOT see:
  *
  *     private1  The answers they gave, right or wrong
- *     private2  The questions they asked the Saathi tutor
+ *     private2  The questions they asked the Dagar tutor
  *     private3  Anything they typed for themselves
  *
  * That promise is made to a CHILD about their own words. The parent UI not

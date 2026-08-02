@@ -19,7 +19,7 @@ import {
  * Add-to-Home-Screen prompt (D15).
  *
  * **Shown only after a first lesson is completed, never on first load.** A
- * learner who has not yet got anything out of Saathi has no reason to install
+ * learner who has not yet got anything out of Dagar has no reason to install
  * it, and asking then is how an app trains someone to dismiss its prompts
  * without reading them.
  *

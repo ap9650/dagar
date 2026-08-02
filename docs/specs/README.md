@@ -1,4 +1,4 @@
-# Saathi — Implementation Specs
+# Dagar — Implementation Specs
 
 One file per feature slice. **A spec is what you hand Claude Code, and what you check
 the result against.**

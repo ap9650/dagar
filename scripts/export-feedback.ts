@@ -142,7 +142,7 @@ const quotes = rows
     return lines.join("\n");
   });
 
-const md = `# Saathi — real user feedback
+const md = `# Dagar — real user feedback
 
 Collected in-app at \`/feedback\`. Every response comes from a signed-in account
 that had used the product, so nobody is reacting to a screenshot.
@@ -155,7 +155,7 @@ a truncated id — enough to show the responses came from distinct people.
 ## Headline
 
 - **${plural(rows.length, "response", "responses")} from ${plural(people, "distinct user", "distinct users")}**
-- **${helped} of ${rows.length} (${pct(helped)}) said Saathi helped them understand something** — "yes" or "a bit"
+- **${helped} of ${rows.length} (${pct(helped)}) said Dagar helped them understand something** — "yes" or "a bit"
 - **${byReturn.yes ?? 0} of ${rows.length} (${pct(byReturn.yes ?? 0)}) said they would use it again**
 
 ## What they want next — the forced choice
@@ -177,7 +177,7 @@ ${Object.entries(byRole).map(([k, v]) => `- ${k}: ${v}`).join("\n")}
 
 ${Object.entries(byUnderstood).map(([k, v]) => `- ${k.replace("_", " ")}: ${v}`).join("\n")}
 
-## Would you use Saathi again?
+## Would you use Dagar again?
 
 ${Object.entries(byReturn).map(([k, v]) => `- ${k}: ${v}`).join("\n")}
 
@@ -187,7 +187,7 @@ ${quotes.length ? quotes.join("\n\n") : "_No written comments yet._"}
 
 ---
 
-_Exported ${new Date().toISOString().slice(0, 10)} from the live Saathi database._
+_Exported ${new Date().toISOString().slice(0, 10)} from the live Dagar database._
 `;
 
 mkdirSync("feedback-export", { recursive: true });

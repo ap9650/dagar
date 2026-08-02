@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
 /**
  * The plugin aliases `next-intl/config` to `./i18n/request.ts` by convention.
  * No `i18n` key on nextConfig — that is the Pages Router API and next-intl warns
- * about it. Saathi has no `[locale]` route segment (SCREENS.md route map); the
+ * about it. Dagar has no `[locale]` route segment (SCREENS.md route map); the
  * locale comes from a cookie instead.
  */
 const withNextIntl = createNextIntlPlugin();

@@ -1,4 +1,4 @@
-# Saathi — Data Model
+# Dagar — Data Model
 
 Postgres on Supabase. All tables in `public`. RLS **on** for every table.
 Timestamps are `timestamptz default now()`. IDs are `uuid default gen_random_uuid()`.

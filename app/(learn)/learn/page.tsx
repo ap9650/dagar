@@ -263,7 +263,7 @@ export default async function LearnPage() {
       {nextCard}
 
       {/* Only after a first lesson is completed (D15). A learner who has not yet
-          got anything out of Saathi has no reason to install it, and asking then
+          got anything out of Dagar has no reason to install it, and asking then
           teaches them to dismiss prompts without reading. */}
       <InstallPrompt show={completedIds.size > 0} />
 

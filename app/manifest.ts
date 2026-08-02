@@ -16,9 +16,9 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Saathi — Learn maths, step by step",
+    name: "Dagar — Learn maths, step by step",
     // Home screens truncate hard. This is what actually appears under the icon.
-    short_name: "Saathi",
+    short_name: "Dagar",
     description:
       "Your learning companion. NCERT mathematics for Classes 6 to 8, in English and Hindi.",
     start_url: "/",

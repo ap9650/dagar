@@ -19,7 +19,7 @@ import type { Locale } from "@/i18n/config";
  * ═══════════════════════════════════════════════════════════════════════════
  * POST /api/attempts — WHERE PRACTICE IS GRADED, AGAINST THE ANSWER KEY.
  *
- * Three modules in Saathi read the base `questions` table, and they are the
+ * Three modules in Dagar read the base `questions` table, and they are the
  * complete list: this one, `POST /api/hints` (which needs the worked solution to
  * keep a hint mathematically honest), and `lib/learning/quiz.ts` (which grades a
  * submitted chapter quiz). All three are server-side, all three use the service

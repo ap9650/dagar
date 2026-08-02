@@ -11,7 +11,7 @@ import { isLinkCodeExpired } from "@/lib/parent/linkCode";
  * POST /api/parent-links/claim — a parent redeems a 6-character code.
  *
  * ═══════════════════════════════════════════════════════════════════════════
- * THIS ROUTE CREATES THE ONLY CROSS-USER READ PATH IN SAATHI.
+ * THIS ROUTE CREATES THE ONLY CROSS-USER READ PATH IN DAGAR.
  *
  * Everything else in the product is "a learner reads their own rows". After this
  * handler succeeds, one adult can read one child's learning data — so this is

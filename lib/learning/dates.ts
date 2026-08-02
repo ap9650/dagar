@@ -31,7 +31,7 @@ export function istDate(at: Date = new Date()): string {
  * The instant IST midnight began for the given date — i.e. the lower bound for
  * "today" in a `created_at >= ?` query.
  *
- * IST is UTC+5:30 with no daylight saving, so the offset is a constant. If Saathi
+ * IST is UTC+5:30 with no daylight saving, so the offset is a constant. If Dagar
  * ever serves a zone that observes DST, this must be rewritten to derive the
  * offset per-date rather than assuming one.
  */

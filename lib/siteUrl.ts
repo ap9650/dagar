@@ -1,5 +1,5 @@
 /**
- * The app's own origin, e.g. `https://saathi-ap19.vercel.app`.
+ * The app's own origin, e.g. `https://dagar-ap19.vercel.app`.
  *
  * Needed for the OAuth `redirectTo` and the parent-summary deep link. A wrong
  * value here is the failure mode the auth spec calls out explicitly: Google

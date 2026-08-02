@@ -56,8 +56,8 @@ function fallbackSummary(summary: WeeklySummary, locale: Locale): string {
 
   if (summary.quiet) {
     return name
-      ? `${name} did not open Saathi this week. That is alright — even ten minutes counts. Ask them to try one lesson today.`
-      : `Saathi was not opened this week. That is alright — even ten minutes counts.`;
+      ? `${name} did not open Dagar this week. That is alright — even ten minutes counts. Ask them to try one lesson today.`
+      : `Dagar was not opened this week. That is alright — even ten minutes counts.`;
   }
   const who = name ?? "Your child";
   const focus = summary.focus

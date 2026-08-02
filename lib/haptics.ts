@@ -25,6 +25,9 @@
  * ────────────────────────────────────────────────────────────────────────────
  */
 
+// Keeps the `saathi` prefix after the rename to Dagar, on purpose: this key
+// already exists in real browsers, and renaming it would silently reset the
+// setting for everyone who has one. A stale identifier is cheaper than that.
 const SETTING_KEY = "saathi.haptics";
 
 /**

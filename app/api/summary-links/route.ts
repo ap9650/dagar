@@ -14,7 +14,7 @@ import { generateShareToken, isShareLinkExpired } from "@/lib/parent/shareToken"
  * data, and nobody else — not even a linked parent — can mint or revoke one.
  *
  * DELETE is as important as POST here and is not an afterthought. The link is
- * the one thing in Saathi a learner hands to someone outside the app, so being
+ * the one thing in Dagar a learner hands to someone outside the app, so being
  * able to take it back has to be as easy as giving it. Revocation is immediate:
  * the token stops resolving on the next request, with nothing cached in between.
  */

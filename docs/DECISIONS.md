@@ -1,4 +1,4 @@
-# Saathi — Build Decisions (PRD Addendum)
+# Dagar — Build Decisions (PRD Addendum)
 
 These are the implementation decisions the PRD v1.0 left open. This file is the
 source of truth when the PRD is silent or ambiguous. Update it, don't argue with it.
@@ -30,7 +30,7 @@ risk during a live demo.
 
 NCERT is mid-rollout of **Ganita Prakash**, which replaces the older textbooks and
 **renumbers or dissolves the chapters we target**. Both editions are in circulation
-right now, and underserved government schools — Saathi's actual audience — are the
+right now, and underserved government schools — Dagar's actual audience — are the
 most likely to still be on old stock, because new textbook distribution reaches them
 last.
 
@@ -85,7 +85,7 @@ the parent link code.
 
 ## D15 — Distribution: PWA now, Play Store later
 
-**Saathi is a mobile-first Progressive Web App, not a native APK.**
+**Dagar is a mobile-first Progressive Web App, not a native APK.**
 
 Installs to the Android home screen via Chrome "Add to Home Screen" — own icon,
 fullscreen, app-like. Judges open a URL rather than sideloading an APK.
@@ -108,10 +108,10 @@ worker for the app shell, and an install prompt. Full offline learning stays Pha
 
 ## D16 — Hindi language support **is in MVP**
 
-**Decision:** Saathi ships **bilingual: English + Hindi (Devanagari)** in the
+**Decision:** Dagar ships **bilingual: English + Hindi (Devanagari)** in the
 Buildathon MVP. Not Phase 2.
 
-Rationale: Saathi's learners are disproportionately in Hindi-medium government
+Rationale: Dagar's learners are disproportionately in Hindi-medium government
 schools. An English-only interface is not a missing feature for them — it is a
 wall at the front door. Adaptive personalisation is worth nothing to a learner who
 cannot read the lesson. Language access outranks sophistication for this audience.
@@ -188,7 +188,7 @@ comes from the `saathi_locale` **cookie**. Two reasons, both structural:
 
 1. The picker runs before a profile exists, so on that screen there is nothing else
    to read.
-2. Saathi has **no `[locale]` route segment** — `/learn`, not `/hi/learn` — so the URL
+2. Dagar has **no `[locale]` route segment** — `/learn`, not `/hi/learn` — so the URL
    carries no locale either, and a Server Component cannot read `localStorage`.
    Without a cookie the first paint is English and flips to Hindi on hydration.
 
@@ -227,7 +227,7 @@ translated from English.
 Why this is more than a quality upgrade: translation, however careful, carries
 English sentence structure and English examples underneath. For a learner whose
 every other textbook is in Hindi, that reads as slightly foreign — and Hindi-medium
-learners are not a secondary audience for Saathi, they are the core one.
+learners are not a secondary audience for Dagar, they are the core one.
 
 **The architectural consequence, which is the part worth knowing now:**
 
@@ -521,7 +521,7 @@ Emits `milestone_earned` with the code.
 ## D17 — Habit mechanics: what we take from Duolingo, and what we don't
 
 Duolingo is the reference for habit design. But its audience is a **voluntary adult
-hobbyist** who can quit with no consequence. Saathi's is a **12-year-old who is
+hobbyist** who can quit with no consequence. Dagar's is a **12-year-old who is
 already behind in a subject they cannot opt out of.** Several Duolingo mechanics
 invert when you change that premise.
 
@@ -539,16 +539,16 @@ invert when you change that premise.
 
 ### Deliberately reject
 
-| Mechanic | Why it breaks Saathi |
+| Mechanic | Why it breaks Dagar |
 |---|---|
-| **Leagues / leaderboards** | Ranks learners against each other. Saathi's learners are selected for being behind — ranking them is demotivating for exactly the people we serve. Already design rule 12. |
+| **Leagues / leaderboards** | Ranks learners against each other. Dagar's learners are selected for being behind — ranking them is demotivating for exactly the people we serve. Already design rule 12. |
 | **Hearts / lives** | Makes mistakes scarce and stops the lesson. A learner who is getting things wrong is the learner who needs *more* practice, not a locked door. Directly contradicts amber-not-red. |
 | **Guilt-based notifications** | The passive-aggressive-owl pattern. Wrong for a child, and worse on a shared phone where a parent sees it. Notifications, when added, encourage — they never shame. **See D17b: encouraging reminders are in scope; countdowns are not.** |
 | **XP / points / levels** | Adds a second scoring system competing with concept mastery, which is the score that actually means something. |
 
 ## D17b — Reminder notifications **are** in scope, as encouragement
 
-**Decision (2026-07-30):** Saathi sends a **daily reminder notification**, opt-in,
+**Decision (2026-07-30):** Dagar sends a **daily reminder notification**, opt-in,
 worded as an invitation. This does not contradict D17 — D17 rejects *guilt*
 notifications and says explicitly that notifications, when added, encourage.
 
@@ -626,7 +626,7 @@ SMS remains DLT-blocked and WhatsApp sandbox cannot carry a scheduled cadence
 ### The line
 
 **Motivate by progress, never by fear of loss or comparison.** Duolingo leans on
-loss aversion (your streak! your league!) because its user can walk away. Saathi's
+loss aversion (your streak! your league!) because its user can walk away. Dagar's
 learner already feels behind — adding manufactured anxiety works against the
 product's whole reason for existing.
 
@@ -740,14 +740,14 @@ contaminate the activation and retention metrics that decide whether the product
 works. Free is a declared stage, not a missing model.
 
 Post-MVP: learners never pay for the core learning loop. Institutions (NGO, CSR,
-government) pay per learner for reach; families pay only for depth via Saathi Plus.
+government) pay per learner for reach; families pay only for depth via Dagar Plus.
 Institutional pricing floor is **₹300/learner/year** — the D11 cost target for a
 fully active learner. Full tiers, unit economics and market sizing in
 `MARKET_AND_PRICING.md`.
 
 ## D18 — Lessons are steps, not prose (2026-08-02)
 
-**The finding.** A teacher of Classes 6–8 used Saathi on her own phone and said her
+**The finding.** A teacher of Classes 6–8 used Dagar on her own phone and said her
 students cannot hold two paragraphs, and that comprehension across one classroom
 varies far too much for a single block of text to reach all of them. The content
 proves her right: Class 6 Lesson 1 says *"cut one roti into 4 equal pieces"* and

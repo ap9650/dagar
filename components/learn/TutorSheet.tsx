@@ -12,7 +12,7 @@ import { MentorCta } from "./MentorCta";
  * The AI Tutor — a bottom sheet over the lesson, never a separate route.
  *
  * That is a deliberate constraint from the spec and it is about attention: a
- * learner who taps "Ask Saathi" has a specific confusion about the paragraph
+ * learner who taps "Ask Dagar" has a specific confusion about the paragraph
  * they are reading. Navigating them away loses the paragraph, and they come
  * back having to find their place again.
  *
@@ -261,7 +261,7 @@ export function TutorSheet({
               {/* Who spoke, for assistive tech. Sighted users get alignment and
                   the tail shape — colour is never the only signal (rule 10). */}
               <span className="sr-only">
-                {turn.role === "user" ? t("tutor.youSaid") : t("tutor.saathiSaid")}
+                {turn.role === "user" ? t("tutor.youSaid") : t("tutor.tutorSaid")}
               </span>
 
               <div

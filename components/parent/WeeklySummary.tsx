@@ -8,7 +8,7 @@ import type { WeeklySummary as Summary } from "@/lib/parent/summary";
  * The learner's week, as a supporting adult reads it.
  *
  * ── EVERY NUMBER CARRIES ITS OWN EXPLANATION ────────────────────────────────
- * The person reading this may never have used Saathi and may not be the parent
+ * The person reading this may never have used Dagar and may not be the parent
  * at all. In this demographic it is often the most literate person in the
  * household — frequently an older sibling — or a tutor the family asked to look.
  * None of them know what a "streak" is, what "mastery" means, or whether four

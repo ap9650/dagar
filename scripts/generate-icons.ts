@@ -6,7 +6,7 @@
  * ships with Next, so this needs no extra dependency.
  *
  * THE MARK: three ascending dots joined by a line — the journey path from the
- * dashboard, which is Saathi's one signature UI element. Pure geometry, no text:
+ * dashboard, which is Dagar's one signature UI element. Pure geometry, no text:
  * a letterform would need a font at render time, and it would have to pick a
  * script, which is exactly the choice the language picker exists to avoid making
  * for the learner.

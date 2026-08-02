@@ -1,4 +1,4 @@
-# Saathi — Build Plan
+# Dagar — Build Plan
 
 ## Calendar — revised 2026-07-29 for a Thursday start
 
@@ -82,7 +82,7 @@ Do this before breakfast if you can. Day 1 starts the moment it is done, **same 
 
 | # | Step | Command / prompt |
 |---|---|---|
-| 0.1 | Bootstrap Next.js | ✅ **Done 30 Jul.** Next 16.2.12. Note: `create-next-app .` fails here because the folder is `Saathi` (npm names must be lowercase) — scaffolded to a temp dir named `saathi` and rsynced in, excluding its own `CLAUDE.md`. |
+| 0.1 | Bootstrap Next.js | ✅ **Done 30 Jul.** Next 16.2.12. Note: `create-next-app .` fails here because the folder is `Dagar` (npm names must be lowercase) — scaffolded to a temp dir named `saathi` and rsynced in, excluding its own `CLAUDE.md`. |
 | 0.2 | Install deps | `npm i @supabase/supabase-js @supabase/ssr @anthropic-ai/sdk zod katex react-katex twilio next-intl` |
 | 0.3 | Supabase project | Create at supabase.com → copy URL, anon key, service role key into `.env.local` |
 | 0.4 | Anthropic key | console.anthropic.com → `ANTHROPIC_API_KEY` in `.env.local` |
@@ -299,7 +299,7 @@ If Sunday runs ahead of schedule, **rehearse again and polish the deck**. Do not
 
 ## Day 5–6 — interactive content (added 2 Aug, after the teacher's feedback)
 
-**Why this exists.** A teacher of Classes 6–8 used Saathi on her own phone and said
+**Why this exists.** A teacher of Classes 6–8 used Dagar on her own phone and said
 her students cannot hold two paragraphs, and that comprehension across one classroom
 varies far too much for a wall of text to reach all of them. She is right: fifteen
 lessons, 215 words each, **not one image, diagram or sound**. Full reasoning in
@@ -379,7 +379,7 @@ goes badly you cut with a plan rather than panicking. Sacrifice in this order:
 
 ## Naming — decided 1 Aug, deliberately deferred
 
-"Saathi" is already used by at least one other product. **Not changing it before
+"Dagar" is already used by at least one other product. **Not changing it before
 submission**, and the trigger for revisiting is specific rather than vague: **when
 this moves to a real APK / app-store listing**, alongside advanced features.
 
@@ -510,7 +510,7 @@ that requires (D16). Neither is a demo-week task.
    confused question → tutor hints instead of answering → practice adapts → quiz
    shows mastery.
 3. **The differentiator, 1 min** — show the tutor *knowing* which concept is weak.
-   This is what separates Saathi from ChatGPT with a syllabus.
+   This is what separates Dagar from ChatGPT with a syllabus.
 4. **Parent, 1 min** — WhatsApp summary arriving on a real phone, live.
    > **Setup, not optional:** the demo phone must send `join <code>` to the Twilio
    > sandbox **on the day**. The sandbox session expires after 3 days and free-form

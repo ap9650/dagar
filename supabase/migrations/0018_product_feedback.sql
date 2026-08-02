@@ -1,4 +1,4 @@
--- 0018_product_feedback.sql — what real users think of Saathi
+-- 0018_product_feedback.sql — what real users think of Dagar
 --
 -- Collected for the buildathon submission ("working product with real user
 -- feedback attached") and, more usefully, to find out what actually confuses a

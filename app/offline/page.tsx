@@ -6,7 +6,7 @@ import { RetryButton } from "@/components/RetryButton";
  * `/offline` — precached by the service worker and shown when a navigation
  * fails.
  *
- * It exists so a lost signal produces a Saathi screen in the learner's own
+ * It exists so a lost signal produces a Dagar screen in the learner's own
  * language rather than Chrome's dinosaur. A learner on a shared phone with
  * patchy 4G meets this often; it should read as "the connection dropped", not as
  * "the app is broken".

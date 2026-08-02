@@ -6,7 +6,7 @@ import { DEFAULT_LOCALE, LOCALE_COOKIE, isLocale } from "./config";
  * next-intl request configuration. The plugin in `next.config.ts` finds this file
  * by convention (`./i18n/request.ts`) — do not move or rename it.
  *
- * Saathi has NO `[locale]` segment in its routes: `/learn`, not `/hi/learn`
+ * Dagar has NO `[locale]` segment in its routes: `/learn`, not `/hi/learn`
  * (SCREENS.md route map). The locale therefore comes from the cookie rather than
  * the URL, which is next-intl's "without i18n routing" setup.
  *

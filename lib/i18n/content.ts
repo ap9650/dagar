@@ -4,7 +4,7 @@ import { DEFAULT_LOCALE, type Locale } from "@/i18n/config";
  * Curriculum content resolution (D16, docs/specs/i18n.md §3).
  *
  * ─────────────────────────────────────────────────────────────────────────────
- * There are TWO localisation mechanisms in Saathi and confusing them is the main
+ * There are TWO localisation mechanisms in Dagar and confusing them is the main
  * source of bugs here:
  *
  *   UI strings         → messages/{en,hi}.json → useTranslations()/getTranslations()

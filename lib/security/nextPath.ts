@@ -4,7 +4,7 @@
  * `proxy.ts` puts the path they were heading for in `?next=`, and both the login
  * page and the auth form read it back. That is ordinary, and it is also the
  * classic **open redirect**: an attacker sends a learner a link to
- * `/login?next=https://evil.example/looks-like-saathi`, the learner signs in
+ * `/login?next=https://evil.example/looks-like-dagar`, the learner signs in
  * genuinely, and the app itself delivers them to a copy of the login screen that
  * captures whatever they type next.
  *

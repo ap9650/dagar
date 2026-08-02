@@ -11,7 +11,7 @@
  */
 
 /**
- * USD → INR. Assumption, not a live rate — Saathi does not call an FX API for
+ * USD → INR. Assumption, not a live rate — Dagar does not call an FX API for
  * a number that only feeds a spend ceiling with a wide margin.
  */
 export const USD_TO_INR = 88;

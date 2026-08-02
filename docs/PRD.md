@@ -2,7 +2,7 @@
 > For anything the PRD leaves open — scope, schema, thresholds, channels — see
 > [`DECISIONS.md`](./DECISIONS.md), which supersedes this document on implementation detail.
 
-# SAATHI
+# DAGAR
 
 ## Product Requirements Document (PRD)
 
@@ -32,8 +32,8 @@ Parents also want to support their children's education but often lack the time,
 
 ## Proposed Solution
 
-Saathi is an AI-powered adaptive learning platform that delivers structured, personalised and inclusive learning experiences.
-Rather than functioning as a generic AI chatbot, Saathi guides learners through a curriculum-aware journey consisting of:
+Dagar is an AI-powered adaptive learning platform that delivers structured, personalised and inclusive learning experiences.
+Rather than functioning as a generic AI chatbot, Dagar guides learners through a curriculum-aware journey consisting of:
 - Structured curriculum pathways
 - Bite-sized concept lessons
 - Context-aware AI tutoring
@@ -59,7 +59,7 @@ Core Features
 - Daily Learning Streak
 - Parent Progress Summary
 - Request a Human Mentor
-Saathi ships **bilingual — English and Hindi** — from the MVP. Saathi's learners are
+Dagar ships **bilingual — English and Hindi** — from the MVP. Dagar's learners are
 disproportionately in Hindi-medium government schools; for them an English-only
 interface is not a missing feature but a barrier to entry, and adaptive
 personalisation is worth nothing to a learner who cannot read the lesson. Language
@@ -106,7 +106,7 @@ Learners require a unified experience that combines personalised teaching, pract
 ## Opportunity
 
 The convergence of AI, increasing smartphone adoption and structured digital curricula presents an opportunity to build an adaptive learning platform that makes personalised education affordable, inclusive and scalable.
-By combining AI with structured curriculum, parent engagement and optional human mentorship, Saathi can support learners across diverse educational needs.
+By combining AI with structured curriculum, parent engagement and optional human mentorship, Dagar can support learners across diverse educational needs.
 
 # 3. Market Validation
 
@@ -139,7 +139,7 @@ H7: Learners who remain stuck will request human mentor support.
 
 # 4. Market Opportunity
 
-Saathi is designed as a long-term adaptive learning platform for underserved learners.
+Dagar is designed as a long-term adaptive learning platform for underserved learners.
 The Buildathon MVP validates one focused learning journey while establishing the foundation for future expansion.
 Market sizing is India-only. Figures are derived estimates; the full derivation,
 inputs and confidence levels are in `MARKET_AND_PRICING.md`.
@@ -162,7 +162,7 @@ hypotheses in Section 12; introducing pricing would contaminate the activation a
 retention metrics that determine whether the product works at all. Free is a
 deliberate stage, not an absent model.
 
-The model that follows is shaped by one constraint: Saathi's learners are defined
+The model that follows is shaped by one constraint: Dagar's learners are defined
 by their inability to afford tuition. A consumer subscription cannot be the primary
 revenue engine without contradicting the product's own targeting.
 
@@ -171,10 +171,10 @@ revenue engine without contradicting the product's own targeting.
 
 | Tier | Price | Includes |
 |---|---|---|
-| Saathi Free | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones and parent summaries. AI Tutor capped at 10 questions per day. |
-| Saathi Plus | ₹99/month · ₹799/year | Unlimited AI Tutor, adaptive practice depth, revision plans and detailed parent insights. |
-| Saathi Mentor | +₹299/month | Adds human mentor sessions. Gated on verified mentor supply. |
-| Saathi for Institutions | ₹450–600/learner/year | NGO, CSR and government licences with cohort dashboards and reporting. The scalable revenue engine. |
+| Dagar Free | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones and parent summaries. AI Tutor capped at 10 questions per day. |
+| Dagar Plus | ₹99/month · ₹799/year | Unlimited AI Tutor, adaptive practice depth, revision plans and detailed parent insights. |
+| Dagar Mentor | +₹299/month | Adds human mentor sessions. Gated on verified mentor supply. |
+| Dagar for Institutions | ₹450–600/learner/year | NGO, CSR and government licences with cohort dashboards and reporting. The scalable revenue engine. |
 
 Pricing is bounded below by cost: at the Section 13 targets, a fully active learner
 costs approximately ₹370/year in AI inference and infrastructure. No institutional
@@ -193,7 +193,7 @@ programmes.
 
 ## Why Start with Mathematics?
 
-Although Saathi's long-term vision spans multiple subjects and learner groups, the MVP focuses on Mathematics for Classes 6–8 because:
+Although Dagar's long-term vision spans multiple subjects and learner groups, the MVP focuses on Mathematics for Classes 6–8 because:
 - Mathematical learning gaps are measurable.
 - Concept mastery can be objectively assessed.
 - AI explanations and guided practice provide immediate value.
@@ -224,7 +224,7 @@ This focused scope allows the team to validate the core product experience while
 
 ### Phase 3 – Inclusive Learning Platform
 
-Expand Saathi into an accessibility-first learning platform supporting:
+Expand Dagar into an accessibility-first learning platform supporting:
 - Learners with visual impairments
 - Learners with hearing impairments
 - Learners with speech impairments
@@ -272,7 +272,7 @@ Parents are active participants in the learner's educational journey.
 
 ### Parent Value Proposition
 
-Saathi empowers parents to actively support learning without requiring them to teach the curriculum.
+Dagar empowers parents to actively support learning without requiring them to teach the curriculum.
 Parents can:
 - Monitor chapter completion
 - Track learning consistency
@@ -283,7 +283,7 @@ Parents can:
 
 ## Future Personas
 
-As Saathi evolves, the platform will expand to support additional learner groups and institutional stakeholders.
+As Dagar evolves, the platform will expand to support additional learner groups and institutional stakeholders.
 
 ### Learners
 
@@ -303,7 +303,7 @@ As Saathi evolves, the platform will expand to support additional learner groups
 
 ## Product Principles
 
-Every experience within Saathi is guided by six principles:
+Every experience within Dagar is guided by six principles:
 - Inclusive — Education should adapt to every learner.
 - Personalised — Every learner progresses at their own pace.
 - Curriculum-Aware — AI teaches within the learner's educational context.
@@ -313,7 +313,7 @@ Every experience within Saathi is guided by six principles:
 
 # 6. Jobs To Be Done (JTBD)
 
-The Jobs-to-be-Done (JTBD) framework captures the functional, emotional and social outcomes Saathi aims to deliver for each user group. These jobs guide feature prioritisation and product decisions.
+The Jobs-to-be-Done (JTBD) framework captures the functional, emotional and social outcomes Dagar aims to deliver for each user group. These jobs guide feature prioritisation and product decisions.
 
 ## 6.1 Student JTBD
 
@@ -389,7 +389,7 @@ The MVP consists of five primary capabilities.
 
 ## 7.3 Learning Intelligence Engine
 
-The Learning Intelligence Engine powers all adaptive experiences across Saathi.
+The Learning Intelligence Engine powers all adaptive experiences across Dagar.
 Rather than functioning as a standalone feature, it continuously analyses learner behaviour to personalise every stage of the learning journey.
 
 ### Learner Context
@@ -554,7 +554,7 @@ These targets are initial benchmarks for evaluating product direction during the
 
 # 13. High-Level Technical Architecture
 
-![Saathi high-level architecture](./architecture.png)
+![Dagar high-level architecture](./architecture.png)
 
 *Regenerate with `python3 scripts/gen-architecture-diagram.py`.*
 

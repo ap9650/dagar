@@ -91,7 +91,7 @@ Declining is not an error state and is never asked again.
 | Desktop Chrome | ✅ |
 | **iOS Safari** | ⚠️ **only after the PWA is installed to the home screen**, iOS 16.4+ |
 
-iOS is **not a scope concern** — it is rare in the communities Saathi serves, and
+iOS is **not a scope concern** — it is rare in the communities Dagar serves, and
 the product owner has confirmed it is not worth building around. Kept here only so
 there is a straight answer if a judge opens the demo on an iPhone.
 

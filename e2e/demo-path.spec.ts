@@ -92,7 +92,10 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   await page.waitForURL(/\/learn\/[^/]+\/[^/]+/, { timeout: 15_000 });
 
   // The tutor door is present on the lesson. We do not open it — see the header.
-  await expect(page.getByRole("button", { name: /ask saathi/i })).toBeVisible();
+  // The tutor lost the app's name in the Dagar rename: "Ask Saathi" worked
+  // because saathi is a person-word, and "ask the trail" does not. Naming the
+  // tutor is the mascot's job.
+  await expect(page.getByRole("button", { name: /ask a question/i })).toBeVisible();
 
   // ── walk the lesson ───────────────────────────────────────────────────────
   // Since D18 a lesson may be a sequence of steps rather than one scroll. This

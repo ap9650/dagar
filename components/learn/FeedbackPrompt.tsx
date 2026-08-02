@@ -30,6 +30,9 @@ import { useTranslations } from "next-intl";
  * rather than the database — this is a UI preference, not learner data, and
  * asking twice is the fastest way to be ignored.
  */
+// Keeps the `saathi` prefix after the rename to Dagar, on purpose: this key
+// already exists in real browsers, and renaming it would silently reset the
+// setting for everyone who has one. A stale identifier is cheaper than that.
 const SEEN_KEY = "saathi.feedbackPrompt.seen";
 
 /** No external changes to listen for — the value only moves when we set it. */

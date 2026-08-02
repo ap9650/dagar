@@ -41,7 +41,7 @@ export default async function WelcomePage() {
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-3xl">
       {/* Reads the same in both scripts, so it needs no translation. */}
-      <h1 className="text-h1 text-primary-strong text-center">Saathi</h1>
+      <h1 className="text-h1 text-primary-strong text-center">Dagar</h1>
 
       <LanguagePicker current={locale} continueHref="/login" />
 
@@ -49,7 +49,7 @@ export default async function WelcomePage() {
           that nothing above the language choice may require reading a language
           — and a parent who has picked their language is exactly who this is
           for. It is the only door for the fourth kind of arrival: an adult who
-          heard about Saathi and has no code and no child account to start from. */}
+          heard about Dagar and has no code and no child account to start from. */}
       <a
         href="/for-parents"
         className="self-center min-h-11 inline-flex items-center text-body-sm text-body underline underline-offset-4"

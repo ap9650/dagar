@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
  * The streak flame — **always visible in the header** (saathi-design § Streak).
  *
  * Duolingo is right that constant visibility is what makes a streak matter. What
- * Saathi does differently is the broken state: it reads "Start again today", never
+ * Dagar does differently is the broken state: it reads "Start again today", never
  * a loss message, and the dead flame is **grey, never red**. A learner who is
  * already behind does not need the colour of danger for missing a day.
  *

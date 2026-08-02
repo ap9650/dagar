@@ -44,6 +44,9 @@ export const LOCALE_LABEL: Record<Locale, string> = {
  * so a Hindi learner would get an English server render followed by a flash to
  * Hindi on hydration. Functional preference only — no tracking, no consent gate.
  */
+// Keeps the `saathi` prefix after the rename to Dagar, on purpose: this key
+// already exists in real browsers, and renaming it would silently reset the
+// setting for everyone who has one. A stale identifier is cheaper than that.
 export const LOCALE_COOKIE = "saathi_locale";
 
 /** One year. A learner should never have to pick their language twice. */

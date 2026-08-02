@@ -103,7 +103,7 @@ export function selectNextAction({
  *   2 correct in a row → step up (max 3)
  *   2 wrong in a row   → step down (min 1), and the UI serves a worked example
  *
- * Adaptivity in Saathi is SELECTION FROM THE SEEDED BANK, never generation. Every
+ * Adaptivity in Dagar is SELECTION FROM THE SEEDED BANK, never generation. Every
  * question a learner sees was authored by a person and had its answer key verified
  * (`npm run verify:answers`). A generated question is an unverified question, and
  * an unverified question can mark a correct learner wrong.

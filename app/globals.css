@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Saathi design tokens — the single source of truth.
+   Dagar design tokens — the single source of truth.
 
    Tailwind 4 is CSS-first: tokens live here in @theme, not in a config file.
    Every value below is contrast-verified against the saathi-design skill.
