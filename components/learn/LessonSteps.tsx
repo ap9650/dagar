@@ -10,7 +10,6 @@ import { TapStep } from "@/components/learn/steps/TapStep";
 import { RevealStep } from "@/components/learn/steps/RevealStep";
 import { WorkedStep } from "@/components/learn/steps/WorkedStep";
 import type { LessonStep } from "@/lib/learning/lessonSteps";
-import { stepSpeech } from "@/lib/learning/speakable";
 import { SpeakButton } from "@/components/learn/SpeakButton";
 
 /**
@@ -33,9 +32,16 @@ import { SpeakButton } from "@/components/learn/SpeakButton";
  */
 export function LessonSteps({
   steps,
+  speech,
   children,
 }: {
   steps: LessonStep[];
+  /**
+   * What to say for each step, per language, built on the server from EACH
+   * LANGUAGE'S OWN steps. `hi` is null when there is no Hindi text — the button
+   * must not offer a language it would have to fake.
+   */
+  speech: { en: string; hi: string | null }[];
   /** Rendered once the last step is passed — the lesson-complete action. */
   children: React.ReactNode;
 }) {
@@ -55,11 +61,6 @@ export function LessonSteps({
   const total = steps.length;
   const step = steps[index];
   const last = index === total - 1;
-
-  // BOTH languages are prepared, because the listening language is chosen
-  // separately from the reading language (D18) — a learner reading English may
-  // want it explained in Hindi. Switching is then instant and needs no fetch.
-  const speech = { en: stepSpeech(step, "en"), hi: stepSpeech(step, "hi") };
 
   return (
     <section className="flex flex-col gap-xl">
@@ -83,7 +84,7 @@ export function LessonSteps({
           <p className="text-caption text-muted">
             {t("stepOf", { step: done ? total : index + 1, total })}
           </p>
-          {!done && <SpeakButton text={speech} />}
+          {!done && speech[index] && <SpeakButton text={speech[index]} />}
         </div>
       </div>
 

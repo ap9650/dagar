@@ -8,7 +8,8 @@ import "katex/dist/katex.min.css";
 import { createClient } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
-import { parseSteps } from "@/lib/learning/lessonSteps";
+import { localisedSteps, parseSteps } from "@/lib/learning/lessonSteps";
+import { stepSpeech } from "@/lib/learning/speakable";
 import { LessonBody } from "@/components/learn/LessonBody";
 import { LessonSteps } from "@/components/learn/LessonSteps";
 import { LessonProgress } from "@/components/learn/LessonProgress";
@@ -77,7 +78,22 @@ export default async function LessonPage({
 
   // Validated here, on the server. A malformed blob becomes null and the prose
   // renders instead — a content mistake must never blank a lesson (spec §10).
-  const steps = parseSteps(lesson.steps);
+  const steps = localisedSteps(lesson, locale);
+
+  // What the listen button will SAY, per step, in each language — built on the
+  // server from each language's own steps.
+  //
+  // This is the fix for a real bug: audio used to be generated from whatever
+  // steps were on screen, with only the symbol words swapped. Asked for Hindi it
+  // read English prose with Hindi words for the fractions, which is exactly how
+  // it sounded on a phone. `hi` is NULL when there is no Hindi text, so the
+  // button offers a language only when it has something to say in it.
+  const stepsEn = parseSteps(lesson.steps);
+  const stepsHi = localisedSteps(lesson, "hi");
+  const speech = (steps ?? []).map((_, i) => ({
+    en: stepsEn?.[i] ? stepSpeech(stepsEn[i], "en") : "",
+    hi: stepsHi && stepsHi !== stepsEn && stepsHi[i] ? stepSpeech(stepsHi[i], "hi") : null,
+  }));
 
   const nextLesson = ordered[index + 1];
   // After completion there is always somewhere to go: the next lesson, or — at
@@ -128,7 +144,7 @@ export default async function LessonPage({
           has always been here. Falls back to the English body when Hindi is
           absent too — a learner sees content, never a blank (D16). */}
       {steps ? (
-        <LessonSteps steps={steps}>
+        <LessonSteps steps={steps} speech={speech}>
           <LessonCompleteButton
             lessonId={lesson.id}
             nextHref={nextHref}

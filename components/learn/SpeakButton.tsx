@@ -2,7 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { Volume2, Square } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import {
   getServerSnapshot,
@@ -32,8 +32,9 @@ import type { Locale } from "@/i18n/config";
  * page is written in. Passing a single string would have quietly re-coupled the
  * two settings that the teacher's feedback was about separating.
  */
-export function SpeakButton({ text }: { text: Record<Locale, string> }) {
+export function SpeakButton({ text }: { text: { en: string; hi: string | null } }) {
   const t = useTranslations("lesson");
+  const uiLocale = useLocale() as Locale;
   const { available, lang, speaking } = useSyncExternalStore(
     subscribe,
     getSnapshot,
@@ -44,24 +45,31 @@ export function SpeakButton({ text }: { text: Record<Locale, string> }) {
     // Chrome returns an EMPTY voice list on the first call and fills it
     // asynchronously, so this needs the event as well as the initial read —
     // otherwise the button decides there are no voices and never comes back.
-    watchVoices();
-    refresh();
-  }, []);
+    watchVoices(uiLocale);
+    // The reading language is the default listening language, until the learner
+    // says otherwise. It is a default, not a lock — the whole point of the
+    // feature is that the two can differ.
+    refresh(uiLocale);
+  }, [uiLocale]);
 
   // Stop when the step changes. Otherwise the previous screen keeps talking
   // over the one the learner is now looking at.
   useEffect(() => stop, [text.en]);
 
-  if (available.length === 0) return null;
+  // A language is on offer only if the DEVICE can speak it AND we have words for
+  // it. Either half missing and the button would be pretending.
+  const offer = available.filter((l) => (text[l] ?? "").trim().length > 0);
+  if (offer.length === 0) return null;
 
+  const active: Locale = offer.includes(lang) ? lang : offer[0];
   const other: Locale | null =
-    available.length > 1 ? (lang === "hi" ? "en" : "hi") : null;
+    offer.length > 1 ? (active === "hi" ? "en" : "hi") : null;
 
   return (
     <div className="flex items-center gap-sm">
       <button
         type="button"
-        onClick={() => (speaking ? stop() : speak(text[lang], lang))}
+        onClick={() => (speaking ? stop() : speak(text[active] ?? "", active))}
         aria-label={speaking ? t("stopListening") : t("listen")}
         className={cn(
           "inline-flex items-center justify-center gap-sm min-h-11 px-lg",
@@ -98,7 +106,7 @@ export function SpeakButton({ text }: { text: Record<Locale, string> }) {
           )}
         >
           {/* Each script writes itself. */}
-          <span lang={lang}>{lang === "hi" ? "हिं" : "EN"}</span>
+          <span lang={active}>{active === "hi" ? "हिं" : "EN"}</span>
         </button>
       )}
     </div>

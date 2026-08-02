@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { parseSteps, progressAt } from "@/lib/learning/lessonSteps";
+import { localisedSteps, parseSteps, progressAt } from "@/lib/learning/lessonSteps";
 
 /**
  * The parser's job is to be UNTRUSTING.
@@ -152,5 +152,59 @@ describe("progressAt", () => {
 
   it("survives an empty lesson instead of dividing by zero", () => {
     expect(progressAt(0, 0)).toBe(0);
+  });
+});
+
+describe("localisedSteps", () => {
+  const en = valid;
+  const hi = [
+    { kind: "see", md: "एक रोटी। चार लोग।" },
+    {
+      kind: "build",
+      md: "इसे 4 बराबर टुकड़ों में काटो।",
+      viz: { kind: "partWhole", shape: "circle", parts: 4, shaded: 0, target: 1 },
+    },
+    {
+      kind: "tap",
+      md: "इनमें से 3/8 कौन सा है?",
+      options: [
+        { viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 2 } },
+        { viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 3 } },
+      ],
+      answer: 1,
+    },
+  ];
+
+  it("returns Hindi steps to a Hindi learner", () => {
+    // The bug this exists for: the page read the base column and a Hindi learner
+    // saw English steps, while the listen button read English prose with Hindi
+    // words for the fractions.
+    const steps = localisedSteps({ steps: en, i18n: { hi: { steps: hi } } }, "hi");
+    expect(steps![0].md).toBe("एक रोटी। चार लोग।");
+  });
+
+  it("returns English to an English learner even when Hindi exists", () => {
+    const steps = localisedSteps({ steps: en, i18n: { hi: { steps: hi } } }, "en");
+    expect(steps![0].md).toBe(valid[0].md);
+  });
+
+  it("falls back to English when there is no Hindi", () => {
+    expect(localisedSteps({ steps: en, i18n: {} }, "hi")![0].md).toBe(valid[0].md);
+    expect(localisedSteps({ steps: en }, "hi")![0].md).toBe(valid[0].md);
+  });
+
+  it("falls back to English when the two have drifted in length", () => {
+    // A mixture of languages mid-lesson is worse than one language throughout.
+    const short = { steps: en, i18n: { hi: { steps: hi.slice(0, 2) } } };
+    expect(localisedSteps(short, "hi")![0].md).toBe(valid[0].md);
+  });
+
+  it("falls back to English when the Hindi is malformed", () => {
+    const bad = { steps: en, i18n: { hi: { steps: [{ kind: "see" }, {}, {}] } } };
+    expect(localisedSteps(bad, "hi")![0].md).toBe(valid[0].md);
+  });
+
+  it("is null when there are no steps at all", () => {
+    expect(localisedSteps({ steps: null, i18n: { hi: { steps: hi } } }, "hi")).toBeNull();
   });
 });

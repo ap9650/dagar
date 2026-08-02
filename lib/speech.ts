@@ -63,10 +63,21 @@ function pickVoice(lang: Locale): SpeechSynthesisVoice | null {
   return voices.find((v) => v.lang.toLowerCase().startsWith(prefix)) ?? null;
 }
 
-function read(): SpeechState {
+function read(preferred?: Locale): SpeechState {
   const available = (["en", "hi"] as Locale[]).filter((lang) => pickVoice(lang));
   const stored = localStorage.getItem(LANG_KEY) as Locale | null;
-  const lang = stored && available.includes(stored) ? stored : (available[0] ?? "en");
+
+  // Order matters: an explicit choice, then the language they are READING in,
+  // then whatever the device has. Defaulting to `available[0]` alone handed a
+  // Hindi learner an English "EN" pill and made them find the toggle to get the
+  // language they had already chosen once.
+  const lang =
+    stored && available.includes(stored)
+      ? stored
+      : preferred && available.includes(preferred)
+        ? preferred
+        : (available[0] ?? "en");
+
   return { available, lang, speaking: synth()?.speaking ?? false };
 }
 
@@ -85,9 +96,9 @@ export const getServerSnapshot = () => SERVER_STATE;
  * first call and fills it asynchronously, so a one-shot check at mount decides
  * the device has no voices at all and hides the button forever.
  */
-export function refresh() {
+export function refresh(preferred?: Locale) {
   if (typeof window === "undefined") return;
-  const next = read();
+  const next = read(preferred);
   if (
     next.lang === state.lang &&
     next.speaking === state.speaking &&
@@ -100,12 +111,18 @@ export function refresh() {
 }
 
 let wired = false;
+/** Remembered so the late `voiceschanged` pass makes the same default choice. */
+let preferredLang: Locale | undefined;
 
-export function watchVoices() {
+export function watchVoices(preferred?: Locale) {
+  preferredLang = preferred ?? preferredLang;
   const engine = synth();
   if (!engine || wired) return;
   wired = true;
-  engine.addEventListener("voiceschanged", refresh);
+  // Not `refresh` directly: the listener is handed an Event, which would arrive
+  // as the "preferred locale" argument and be quietly ignored — leaving the
+  // language decided by whichever voice the device happened to list first.
+  engine.addEventListener("voiceschanged", () => refresh(preferredLang));
 }
 
 export function setLang(lang: Locale) {

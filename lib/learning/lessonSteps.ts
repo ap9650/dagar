@@ -220,6 +220,45 @@ export function mergeStepText(steps: LessonStep[], text: StepText[] | undefined)
   });
 }
 
+/**
+ * The learner's steps, in their language.
+ *
+ * ── WHY THIS IS NOT `t()` ───────────────────────────────────────────────────
+ * `lib/i18n/content.ts` resolves *string* fields — a title, a body. `steps` is
+ * an array of objects, so it needs its own reader, and for a while it did not
+ * have one: the lesson page called `parseSteps(lesson.steps)` on the base column
+ * and the Hindi steps sat in `i18n` unread.
+ *
+ * A Hindi learner therefore saw English steps, and the listen button — asked to
+ * read "Hindi" — applied Hindi words for the symbols to English prose and said
+ * *"You took 1 piece out of 4 equal pieces. We write that as 1 बटा 4."*
+ *
+ * Reported from a real phone, and the giveaway was exactly that: only the
+ * fraction sounded Hindi.
+ * ────────────────────────────────────────────────────────────────────────────
+ *
+ * English is always the fallback, as everywhere else in the curriculum: an
+ * untranslated or malformed Hindi array renders the English steps rather than
+ * nothing.
+ */
+export function localisedSteps(
+  row: { steps?: unknown; i18n?: unknown },
+  locale: string,
+): LessonStep[] | null {
+  const base = parseSteps(row.steps);
+  if (locale === "en" || !base) return base;
+
+  const i18n = row.i18n;
+  if (typeof i18n !== "object" || i18n === null || Array.isArray(i18n)) return base;
+  const forLocale = (i18n as Record<string, unknown>)[locale];
+  if (typeof forLocale !== "object" || forLocale === null || Array.isArray(forLocale)) return base;
+
+  const translated = parseSteps((forLocale as Record<string, unknown>).steps);
+  // A different length means the two have drifted; showing a mixture would be
+  // worse than showing English.
+  return translated && translated.length === base.length ? translated : base;
+}
+
 /** How many steps count as "done" for the progress bar at index `i`. */
 export function progressAt(index: number, total: number): number {
   if (total <= 0) return 0;
