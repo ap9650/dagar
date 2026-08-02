@@ -732,6 +732,107 @@ Institutional pricing floor is **₹300/learner/year** — the D11 cost target f
 fully active learner. Full tiers, unit economics and market sizing in
 `MARKET_AND_PRICING.md`.
 
+## D18 — Lessons are steps, not prose (2026-08-02)
+
+**The finding.** A teacher of Classes 6–8 used Saathi on her own phone and said her
+students cannot hold two paragraphs, and that comprehension across one classroom
+varies far too much for a single block of text to reach all of them. The content
+proves her right: Class 6 Lesson 1 says *"cut one roti into 4 equal pieces"* and
+shows nothing. Across all fifteen lessons there is **not one image, diagram or
+sound** — 215 words of prose per lesson and a formula.
+
+This is the most valuable feedback the product has received, and it says the core
+content model is wrong rather than under-polished.
+
+**The change.** The unit of a lesson stops being a page and becomes a **step**: one
+screen, one idea, one picture, and often one thing to tap. Six to nine steps per
+lesson; `est_minutes` stays at 4, because this redistributes attention rather than
+adding content. Full contract in `docs/specs/interactive-lessons.md`.
+
+### The pedagogy is named, not invented
+
+**Concrete → Pictorial → Abstract.** Notation never appears before the picture that
+earns it — `$\frac{1}{4}$` only after a shape has been cut into four. This is the
+established sequence for middle-school mathematics, and today's lessons skip
+straight to abstract with a story attached.
+
+### Five primitives, not forty-five illustrations
+
+`PartWhole`, `NumberLine`, `TokenRow`, `BalanceScale`, `ArrayGrid` — parameterised
+SVG components instantiated roughly sixty times across three chapters. **This is
+the decision that makes the work authoring rather than illustration**, and it is
+why this is a two-day slice and not a three-week one.
+
+### Animated SVG, deliberately NOT video
+
+Video was considered and rejected on the constraint that governs every other media
+decision in this product: **data costs the learner money** (design constraint 4). A
+30-second explainer is 2–5MB; three per lesson across fifteen lessons in two
+languages is a curriculum the target family pays to watch. Production is also
+thirty narrated recordings, and a content fix means re-recording rather than
+editing a number.
+
+Animated SVG delivers the thing video would actually buy — showing a process
+*unfold* rather than describing it — at roughly one-thousandth the size: a roti
+cut into four, a counter hopping along a number line, a `+1` and a `−1` chip
+sliding together and vanishing. Language-neutral, so it never doubles for Hindi,
+and it honours `prefers-reduced-motion` (D10).
+
+Real video belongs in Phase 2 with proper production, not squeezed into a slice.
+
+### Audio, with its own language
+
+The teacher's sharpest point, and the one nobody would have predicted: **the spoken
+language is chosen separately from the written one.** A learner reading the English
+lesson may want it explained in Hindi.
+
+Web Speech API — zero files, zero bytes, no API cost, and bilingual for free.
+Feature-detected: no `hi-IN` voice on the device and the control is not rendered at
+all, rather than rendered broken.
+
+### A lesson never grades
+
+A wrong tap inside a lesson shows the correct answer with its picture and moves on
+— amber, one line of why, no score, no retry gate, and **nothing written to
+`attempts`**. Assessment is practice and quiz. A lesson that tests is a lesson a
+learner who is already behind stops opening, which is the same reasoning as D17.
+
+### Practice becomes pictorial. The quiz does not.
+
+Practice adopts the mechanic that matters from Duolingo, which is not the pictures
+— it is that **you never type**. The learner taps a diagram or builds the answer
+from a tile bank.
+
+Two real defects fall out of this for free: the missing `/` key on an Android
+keyboard (reported from a phone on 1 Aug), and the recurring-decimal problem, where
+`5/12` demands six decimal places (backlog item 0b) — a learner choosing from tiles
+never has to decide how to round.
+
+**The chapter quiz stays as it is.** It is the assessment surface; keeping its input
+plain keeps it comparable across attempts, and one interactive surface at a time is
+enough.
+
+### `steps` is additive, and that is what de-risks it
+
+```
+lesson.steps present → the step player
+lesson.steps null    → body_md, exactly as today
+```
+
+One nullable `jsonb` column (migration 0020). Nothing migrated, nothing deleted.
+Class 6 can be interactive while Classes 7 and 8 are untouched, with no broken
+state in between — so the build can stop at any hour and ship what is authored,
+while the deployed app is in real learners' hands.
+
+### And one thing that follows from all of it
+
+**Wide distribution is held until this ships.** Sending a version we already know is
+boring to twenty teenagers spends the one honest ask available from a nephew's
+classmates, on a finding we already have. The feedback that matters — a teacher's
+verdict, six defects found on a real phone — is already collected. More responses
+saying "it was dull" would add nothing and would burn the audience for the version
+worth trying.
+
 ## Resolved PRD gaps
 
 | Gap | Resolution | Date |

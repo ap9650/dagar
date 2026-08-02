@@ -240,7 +240,12 @@
     "body": "It opens like an app, with its own icon. No download needed.",
     "action": "Add to home screen",
     "notNow": "Not now",
-    "iosSteps": "Tap Share, then Add to Home Screen."
+    "iosSteps": "Tap Share, then Add to Home Screen.",
+    "settingsTitle": "Home screen",
+    "androidSteps": "Open your browser menu (⋮) and tap “Add to Home screen”.",
+    "launcherNote": "Added it but can’t see it? Some phones put it in your app list instead of the home screen — search for Saathi there.",
+    "inAppBrowser": "You’re in WhatsApp’s browser, which can’t add apps. Tap the menu and choose “Open in Chrome”, then try again.",
+    "alreadyInstalled": "Saathi is already on your home screen."
   },
   "parent": {
     "claimTitle": "Enter your child's code",

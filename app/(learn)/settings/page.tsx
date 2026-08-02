@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { InviteParentCard } from "@/components/learn/InviteParentCard";
+import { InstallSettings } from "@/components/install/InstallSettings";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -76,6 +77,15 @@ export default async function SettingsPage() {
           </Card>
         </section>
       )}
+
+      {/* The install route that does not depend on having caught a prompt.
+          The dashboard card offers once and can be dismissed — for a while it
+          was the ONLY way in, so one mis-tap meant the app could never be
+          installed at all. This row is always here. */}
+      <section className="flex flex-col gap-md">
+        <h2 className="text-label text-muted">{t("install.settingsTitle")}</h2>
+        <InstallSettings />
+      </section>
 
       {/* D2's learner half: the code is generated on tap, never on page load —
           an uninvited learner should not have a live key to their account

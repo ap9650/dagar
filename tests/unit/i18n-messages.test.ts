@@ -98,8 +98,18 @@ describe("message dictionaries", () => {
      * learner hunting for Devanagari words that are not on their screen — the
      * rule exists to stop lazy untranslated English, not to stop us naming a
      * button that exists in another app.
+     *
+     * `install.androidSteps` and `install.inAppBrowser` are the same case for
+     * Chrome and for WhatsApp's "Open in Chrome". A shared Android phone in a
+     * Hindi-speaking household is usually still set to English, so the menu item
+     * the learner is looking for genuinely says "Add to Home screen". The
+     * sentence around the quote is Hindi; only the quote is not.
      */
-    const QUOTES_FOREIGN_UI = new Set(["install.iosSteps"]);
+    const QUOTES_FOREIGN_UI = new Set([
+      "install.iosSteps",
+      "install.androidSteps",
+      "install.inAppBrowser",
+    ]);
 
     // "फिर से try करो" is the failure mode. Placeholder names like {name} and
     // ICU keywords like `plural` are structural, not copy, so strip them first.
