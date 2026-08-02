@@ -688,6 +688,7 @@ export type Database = {
           difficulty: number
           i18n: Json
           id: string
+          input: Json | null
           kind: string
           slug: string | null
           solution_md: string
@@ -703,6 +704,7 @@ export type Database = {
           difficulty: number
           i18n?: Json
           id?: string
+          input?: Json | null
           kind: string
           slug?: string | null
           solution_md: string
@@ -718,6 +720,7 @@ export type Database = {
           difficulty?: number
           i18n?: Json
           id?: string
+          input?: Json | null
           kind?: string
           slug?: string | null
           solution_md?: string
@@ -969,6 +972,7 @@ export type Database = {
           difficulty: number | null
           i18n: Json | null
           id: string | null
+          input: Json | null
           kind: string | null
           slug: string | null
           stem_md: string | null
@@ -982,6 +986,7 @@ export type Database = {
           difficulty?: number | null
           i18n?: never
           id?: string | null
+          input?: Json | null
           kind?: string | null
           slug?: string | null
           stem_md?: string | null
@@ -995,6 +1000,7 @@ export type Database = {
           difficulty?: number | null
           i18n?: never
           id?: string | null
+          input?: Json | null
           kind?: string | null
           slug?: string | null
           stem_md?: string | null

@@ -132,7 +132,11 @@
     "summary": "{total} में से {correct} सही हुए",
     "summaryEncourage": "हर सवाल की प्रैक्टिस काम आती है।",
     "noQuestions": "इस हिस्से के सवाल अभी तैयार हो रहे हैं। तब तक कोई पाठ देख लो।",
-    "insertSlash": "भिन्न की लकीर लगाओ"
+    "insertSlash": "भिन्न की लकीर लगाओ",
+    "tilesEmpty": "टाइल दबाकर अपना जवाब बनाओ",
+    "tilesLabel": "जवाब की टाइलें",
+    "tilesBackspace": "आखिरी टाइल हटाओ",
+    "optionShowing": "{value} दिखाने वाला विकल्प"
   },
   "feedback": {
     "correct": "सही! 🎉",

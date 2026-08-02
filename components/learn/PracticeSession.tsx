@@ -314,6 +314,7 @@ export function PracticeSession({
       <AnswerInput
         answerType={question.answer_type}
         choices={choices}
+        input={question.input}
         value={answer}
         onChange={(next) => {
           setAnswer(next);

@@ -6,8 +6,11 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/cn";
 import { Input } from "@/components/ui/Input";
 import type { Choice } from "@/lib/i18n/content";
+import { parseInput } from "@/lib/learning/questionInput";
 import { spokenMath } from "@/lib/mathText";
 import { MarkdownBody } from "./MarkdownBody";
+import { ChoiceVizInput } from "./answer/ChoiceVizInput";
+import { TilesInput } from "./answer/TilesInput";
 
 /**
  * The answer control, chosen by `answer_type`.
@@ -31,6 +34,7 @@ import { MarkdownBody } from "./MarkdownBody";
 export function AnswerInput({
   answerType,
   choices,
+  input,
   value,
   onChange,
   onSubmit,
@@ -38,6 +42,11 @@ export function AnswerInput({
 }: {
   answerType: string;
   choices: Choice[];
+  /**
+   * The authored pictorial control (D18 slice 5.2), as raw jsonb. Validated
+   * here rather than trusted — see `parseInput`.
+   */
+  input?: unknown;
   value: string;
   onChange: (value: string) => void;
   /** Enter submits, so the whole question is answerable from the keyboard. */
@@ -47,6 +56,27 @@ export function AnswerInput({
   const t = useTranslations();
   const groupId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  /*
+    ── PICTORIAL FIRST, TEXT AS THE FALLBACK ────────────────────────────────
+    A question with a valid `input` renders its control; everything else falls
+    through to exactly what shipped before this slice.
+
+    The fallthrough is deliberately generous. `parseInput` returns null for a
+    malformed blob, AND this switch has no case for a kind whose component has
+    not been built yet — both land on the text field, which works. A question
+    that loses its pictures is a worse question; a question that renders nothing
+    is a dead end, and a learner cannot get past a dead end.
+  */
+  const spec = parseInput(input);
+
+  if (spec?.kind === "tiles") {
+    return <TilesInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
+  }
+
+  if (spec?.kind === "choiceViz") {
+    return <ChoiceVizInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
+  }
 
   if (answerType === "mcq") {
     return (

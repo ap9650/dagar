@@ -223,6 +223,9 @@ for (const chapter of chapters) {
         answer_type: question.answer_type,
         answer_value: question.answer_value,
         choices: question.choices ?? null,
+        // Additive: a question without one keeps a null here and renders the
+        // text field, exactly as before slice 5.2.
+        input: (question.input ?? null) as Json,
         solution_md: question.solution_md,
         i18n: i18nFor(question.slug),
       };

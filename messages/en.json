@@ -132,7 +132,11 @@
     "summary": "You got {correct} of {total} right",
     "summaryEncourage": "Every one of these is practice that counts.",
     "noQuestions": "Practice for this part is on its way. Try a lesson in the meantime.",
-    "insertSlash": "Add a fraction line"
+    "insertSlash": "Add a fraction line",
+    "tilesEmpty": "Tap the tiles to build your answer",
+    "tilesLabel": "Answer tiles",
+    "tilesBackspace": "Remove the last tile",
+    "optionShowing": "The option showing {value}"
   },
   "feedback": {
     "correct": "Correct!",

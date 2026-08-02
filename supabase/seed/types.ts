@@ -7,6 +7,7 @@
  */
 
 import type { LessonStep } from "../../lib/learning/lessonSteps.ts";
+import type { QuestionInput } from "../../lib/learning/questionInput.ts";
 
 export type Choice = { id: string; label: string };
 
@@ -29,6 +30,19 @@ export type SeedQuestion = {
   answer_value: string;
   /** MCQ only. Wrong options must encode mistakes learners actually make. */
   choices?: Choice[];
+  /**
+   * How the answer is ENTERED (D18 slice 5.2). Optional and additive, exactly
+   * like `SeedLesson.steps`: a question with `input` renders tiles or diagrams,
+   * one without renders today's text field or radios.
+   *
+   * It never changes how the answer is JUDGED. Whatever the learner assembles is
+   * handed to the same grader, through the same route (D3).
+   *
+   * **Practice only.** The quiz is the assessment surface and stays plain — see
+   * the spec, and `toQuizQuestion`, which hard-codes null so authoring one here
+   * by mistake cannot change the quiz.
+   */
+  input?: QuestionInput;
   /** A worked METHOD, not just the answer — the tutor uses it to ground hints. */
   solution_md: string;
 };

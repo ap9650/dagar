@@ -65,7 +65,18 @@ const balanceScale = z.object({
   label: z.string().optional(),
 });
 
-const viz = z.discriminatedUnion("kind", [partWhole, numberLine, tokenRow, balanceScale]);
+/**
+ * Exported because slice 5.2 reuses it for pictorial PRACTICE options: a
+ * `choiceViz` question offers diagrams drawn by the very same primitives. One
+ * schema, so a diagram cannot be valid in a lesson and invalid in practice.
+ */
+export const vizSchema = z.discriminatedUnion("kind", [
+  partWhole,
+  numberLine,
+  tokenRow,
+  balanceScale,
+]);
+const viz = vizSchema;
 
 /**
  * The prose on a step. Capped, not for storage reasons but because the content

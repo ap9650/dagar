@@ -22,6 +22,14 @@ export type PracticeQuestion = {
   stem_md: string;
   answer_type: string;
   choices: unknown;
+  /**
+   * How the answer is ENTERED (D18 slice 5.2) — tiles, diagrams, shading. Null
+   * for every question not yet converted, which renders today's control.
+   *
+   * `unknown` on purpose: it is authored jsonb and is validated by
+   * `parseInput` at the point of use, never trusted on the way in.
+   */
+  input: unknown;
   i18n: unknown;
 };
 

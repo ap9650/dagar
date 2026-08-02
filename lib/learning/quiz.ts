@@ -49,6 +49,16 @@ function toQuizQuestion(row: BankRow): QuizQuestion | null {
     stem_md: row.stem_md,
     answer_type: row.answer_type,
     choices: row.choices,
+    /*
+      THE QUIZ IS DELIBERATELY NOT PICTORIAL (spec §10b).
+
+      Hard-coded null rather than read from the row, so this cannot start
+      rendering tile banks the day someone authors an `input` on a quiz
+      question. The quiz is the assessment surface: keeping its input plain is
+      what keeps attempts comparable across a learner's retakes and between
+      learners. Revisit once pictorial practice has real usage.
+    */
+    input: null,
     i18n: stripSolutions(row.i18n),
   };
 }
