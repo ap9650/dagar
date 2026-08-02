@@ -83,6 +83,55 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "The right side is also 10. Both sides match, so **yes**, $x = 3$ is the solution.",
       ].join("\n"),
+      // The balance carries the whole chapter, so it appears on screen one and
+      // the words "an equation is a balance" arrive with the picture, not before.
+      steps: [
+        {
+          kind: "see",
+          md: "3 pens and a ₹5 eraser cost ₹35. What does one pen cost?",
+          viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 }, label: "3x + 5 = 35" },
+        },
+        {
+          kind: "see",
+          md: "The **variable** $x$ is the thing you do not know yet.",
+          viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 } },
+        },
+        {
+          kind: "reveal",
+          md: "So what is the $=$ sign actually claiming?",
+          answer: "That both sides weigh exactly the same. It is a **claim**, not an instruction to do something.",
+        },
+        {
+          kind: "tap",
+          md: "Which of these is linear, in one variable?",
+          options: [{ label: "$2x + 5 = 11$" }, { label: "$x^2 + 3 = 7$" }],
+          answer: 0,
+          why: "No squares, no roots, and only one letter.",
+        },
+        {
+          kind: "see",
+          md: "A **solution** is a value of the variable that makes the claim true.",
+          viz: { kind: "balanceScale", left: { xs: 0, n: 10 }, right: { xs: 0, n: 10 }, label: "both sides 10" },
+        },
+        {
+          kind: "reveal",
+          md: "Is $x = 3$ a solution of $4x - 2 = 10$?",
+          answer: "Put 3 in: $4 \\times 3 - 2 = 10$. The right side is 10 too, so yes.",
+        },
+        {
+          // Named as a habit rather than a step, because it is the one thing that
+          // makes every later mistake self-correcting.
+          kind: "see",
+          md: "The best habit in this chapter: put your answer back in and check.",
+        },
+        {
+          kind: "tap",
+          md: "Is $x = 5$ a solution of $3x - 1 = 14$?",
+          options: [{ label: "Yes" }, { label: "No" }],
+          answer: 0,
+          why: "$3 \\times 5 - 1 = 14$. Both sides match, so you never have to wonder.",
+        },
+      ],
     },
     {
       slug: "c8-linear-l2",
@@ -141,6 +190,53 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "Check: $5 \\times 7 - 8 = 35 - 8 = 27 \\ \\checkmark$",
       ].join("\n"),
+      // The tilt exists for exactly one step here, and it is the step that makes
+      // "do it to both sides" a consequence rather than a commandment.
+      steps: [
+        {
+          kind: "see",
+          md: "Solving means getting $x$ **alone**. You undo what was done to it.",
+          viz: { kind: "balanceScale", left: { xs: 2, n: 5 }, right: { xs: 0, n: 17 }, label: "2x + 5 = 17" },
+        },
+        {
+          kind: "see",
+          md: "Whatever you do to one side, do to the other. The balance must stay level.",
+        },
+        {
+          kind: "reveal",
+          md: "What happens if you take the 5 off the left only?",
+          answer: "It tips, and the claim is broken. So take 5 from **both** sides.",
+          viz: { kind: "balanceScale", left: { xs: 2 }, right: { xs: 0, n: 17 }, tilt: "right" },
+        },
+        {
+          kind: "see",
+          md: "Take 5 from both, and it stays level.",
+          viz: { kind: "balanceScale", left: { xs: 2 }, right: { xs: 0, n: 12 }, label: "2x = 12" },
+        },
+        {
+          kind: "reveal",
+          md: "Now divide both sides by 2.",
+          answer: "$x = 6$. Check it: $2 \\times 6 + 5 = 17$.",
+        },
+        {
+          // Named as what it is, so a learner who uses it knows where to look
+          // when an answer comes out wrong.
+          kind: "see",
+          md: "\"Take it across and change the sign\" is not a new rule — it is this, with the middle step left out.",
+        },
+        {
+          kind: "tap",
+          md: "$5x - 8 = 27$. What is $5x$?",
+          options: [{ label: "$35$" }, { label: "$19$" }],
+          answer: 0,
+          why: "Add 8 to both sides: $27 + 8 = 35$.",
+        },
+        {
+          kind: "reveal",
+          md: "So what is $x$?",
+          answer: "$7$, because $35 \\div 5 = 7$. Check: $5 \\times 7 - 8 = 27$.",
+        },
+      ],
     },
     {
       slug: "c8-linear-l3",
@@ -213,6 +309,49 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "Check: $15 \\div 3 + 4 = 5 + 4 = 9 \\ \\checkmark$",
       ].join("\n"),
+      // Two things that only LOOK harder, so each is met, defused, and dropped.
+      steps: [
+        {
+          kind: "see",
+          md: "Brackets and fractions make an equation look harder. Neither changes the method.",
+          viz: { kind: "balanceScale", left: { xs: 3, n: 6 }, right: { xs: 0, n: 21 }, label: "3(x + 2) = 21" },
+        },
+        {
+          kind: "reveal",
+          md: "In $3(x + 2)$, what does the 3 multiply?",
+          answer: "**Everything** inside. It is $3x + 6$, never $3x + 2$.",
+        },
+        {
+          kind: "tap",
+          md: "So $3(x + 2) = 21$ becomes which one?",
+          options: [{ label: "$3x + 6 = 21$" }, { label: "$3x + 2 = 21$" }],
+          answer: 0,
+          why: "The 3 reaches both terms inside the bracket. Forgetting the second is the commonest slip here.",
+        },
+        {
+          kind: "reveal",
+          md: "Now solve it.",
+          answer: "$3x = 15$, so $x = 5$.",
+        },
+        {
+          kind: "see",
+          md: "A fraction is no different. In $x/4 = 3$, the $x$ has been divided by 4.",
+        },
+        {
+          kind: "reveal",
+          md: "So how do you undo it?",
+          answer: "Multiply both sides by 4, giving $x = 12$.",
+        },
+        {
+          kind: "see",
+          md: "An answer that is not a whole number is normal — not a sign you went wrong.",
+        },
+        {
+          kind: "reveal",
+          md: "$4x + 3 = 10$. What is $x$?",
+          answer: "$4x = 7$, so $x = 7/4$. Leave it as a fraction: that is exact, a rounded decimal is not.",
+        },
+      ],
     },
     {
       slug: "c8-linear-l4",
@@ -275,6 +414,52 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "If you carry the 4 across as $+4$ you get $x = 7$, and the check fails immediately — which is exactly what checking is for.",
       ].join("\n"),
+      // 3x + 4 = x + 10 rather than the 7x of the prose version: a pan holds
+      // four boxes, and a picture that cannot show the equation is worse than no
+      // picture. The method is identical either way.
+      steps: [
+        {
+          kind: "see",
+          md: "Sometimes the unknown turns up on **both** sides.",
+          viz: { kind: "balanceScale", left: { xs: 3, n: 4 }, right: { xs: 1, n: 10 }, label: "3x + 4 = x + 10" },
+        },
+        {
+          kind: "see",
+          md: "Nothing new is needed. Gather the $x$s on one side, the plain numbers on the other.",
+        },
+        {
+          kind: "reveal",
+          md: "Take one $x$ from both sides. What is left?",
+          answer: "$2x + 4 = 10$. The right side has no $x$ now.",
+          viz: { kind: "balanceScale", left: { xs: 2, n: 4 }, right: { xs: 0, n: 10 } },
+        },
+        {
+          kind: "reveal",
+          md: "Now take 4 from both sides, then halve.",
+          answer: "$2x = 6$, so $x = 3$.",
+          viz: { kind: "balanceScale", left: { xs: 2 }, right: { xs: 0, n: 6 }, label: "2x = 6" },
+        },
+        {
+          kind: "see",
+          md: "Either side works. Moving the **smaller** number of $x$s keeps everything positive.",
+        },
+        {
+          kind: "tap",
+          md: "Moving the 4 across the $=$ sign makes it...",
+          options: [{ label: "$-4$" }, { label: "$+4$" }],
+          answer: 0,
+          why: "Crossing the $=$ sign changes the sign. Every time.",
+        },
+        {
+          kind: "see",
+          md: "Carry it across as $+4$ and you get $x = 7$ — and the check fails at once.",
+        },
+        {
+          kind: "reveal",
+          md: "Check $x = 3$ in $3x + 4 = x + 10$.",
+          answer: "Left: $9 + 4 = 13$. Right: $3 + 10 = 13$. Both 13 — this is where checking earns its keep.",
+        },
+      ],
     },
     {
       slug: "c8-linear-l5",
@@ -325,6 +510,52 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "That last line is not optional. An answer that solves the equation but not the question is the commonest way to lose marks here.",
       ].join("\n"),
+      // The part that matters outside the exam hall. The algebra here is the
+      // easiest in the chapter; knowing what to write down is the whole lesson.
+      steps: [
+        {
+          kind: "see",
+          md: "The hard part is not the algebra. It is knowing what to write down.",
+        },
+        {
+          kind: "see",
+          md: "Name the unknown. Say the sentence in symbols. Solve, then read the answer back.",
+        },
+        {
+          // English reverses the order, and this catches almost everybody once.
+          kind: "tap",
+          md: "\"5 less than a number\" is which one?",
+          options: [{ label: "$x - 5$" }, { label: "$5 - x$" }],
+          answer: 0,
+          why: "English says it backwards. It is the number, minus 5.",
+        },
+        {
+          kind: "see",
+          md: "A pen costs ₹$x$. A notebook costs ₹15 more than the pen.",
+        },
+        {
+          kind: "see",
+          md: "Together they cost ₹85.",
+          viz: { kind: "balanceScale", left: { xs: 2, n: 15 }, right: { xs: 0, n: 85 }, label: "2x + 15 = 85" },
+        },
+        {
+          kind: "reveal",
+          md: "Solve it.",
+          answer: "$2x = 70$, so $x = 35$.",
+        },
+        {
+          kind: "reveal",
+          md: "So what does the pen cost?",
+          answer: "₹35. Read it back: the notebook is ₹50, and $35 + 50 = 85$.",
+        },
+        {
+          kind: "tap",
+          md: "\"Three times a number, then add 7\" is which one?",
+          options: [{ label: "$3x + 7$" }, { label: "$3(x + 7)$" }],
+          answer: 0,
+          why: "Multiply first, then add — the order the sentence gives them in.",
+        },
+      ],
     },
   ],
 

@@ -214,6 +214,65 @@ export const class7Integers: SeedChapter = {
         "",
         "So it was 4°C at noon.",
       ].join("\n"),
+      // Adding is a WALK, so the line carries it — except for the zero pair,
+      // which is the one idea a line cannot show. Two chips cancelling can.
+      steps: [
+        {
+          kind: "see",
+          md: "Adding is moving along the line. Positive moves right, negative moves left.",
+          viz: { kind: "numberLine", from: -10, to: 10, step: 5 },
+        },
+        {
+          kind: "see",
+          md: "Two moves the same way just add up. Owe ₹4, then owe ₹3 more.",
+          viz: {
+            kind: "numberLine", from: -10, to: 2, step: 3,
+            jumps: [{ from: 0, to: -4, label: "−4" }, { from: -4, to: -7, label: "−3", tone: "hint" }],
+          },
+        },
+        {
+          kind: "reveal",
+          md: "So what is $(-4) + (-3)$?",
+          answer: "$-7$. Two moves left, and seven steps left altogether.",
+        },
+        {
+          kind: "see",
+          md: "Different signs fight each other, and the stronger move wins.",
+          viz: {
+            kind: "numberLine", from: -10, to: 4, step: 2,
+            jumps: [{ from: -9, to: -4, label: "+5" }],
+          },
+        },
+        {
+          kind: "tap",
+          md: "$(-9) + 5$ lands where?",
+          options: [{ label: "$-4$" }, { label: "$-14$" }, { label: "$4$" }],
+          answer: 0,
+          why: "Start at $-9$ and move 5 right. You owed ₹9 and paid ₹5 back.",
+        },
+        {
+          // The one moment counters beat the line: a pair vanishing IS the idea.
+          kind: "see",
+          md: "A number plus its opposite is always 0.",
+          viz: { kind: "tokenRow", positive: 6, negative: 6, pairing: true, label: "6 + (−6) = 0" },
+        },
+        {
+          kind: "reveal",
+          md: "At 6am Leh was $-7$°C. By noon it had risen 11 degrees.",
+          answer: "$(-7) + 11 = 4$. So it was 4°C at noon.",
+          viz: {
+            kind: "numberLine", from: -8, to: 6, step: 2,
+            jumps: [{ from: -7, to: 4, label: "+11" }],
+          },
+        },
+        {
+          kind: "tap",
+          md: "And $(-3) + 8$?",
+          options: [{ label: "$5$" }, { label: "$-5$" }, { label: "$11$" }],
+          answer: 0,
+          why: "Three steps left, then eight right — you end up five right of zero.",
+        },
+      ],
     },
     {
       slug: "c7-integers-l3",
@@ -260,6 +319,62 @@ export const class7Integers: SeedChapter = {
         "",
         "It fell by 9 degrees. Notice that the answer is positive — a *size* has no minus sign, even when both temperatures do.",
       ].join("\n"),
+      // Subtraction is not a second thing to learn, and the lesson refuses to
+      // present it as one: every step reduces to the walk from lesson 2.
+      steps: [
+        {
+          kind: "see",
+          md: "Subtraction is addition wearing a hat. To subtract, **add the opposite**.",
+          viz: { kind: "numberLine", from: -10, to: 10, step: 5 },
+        },
+        {
+          kind: "see",
+          md: "$5 - 8$ means start at 5 and move 8 to the left.",
+          viz: {
+            kind: "numberLine", from: -5, to: 8, step: 3,
+            jumps: [{ from: 5, to: -3, label: "−8" }],
+          },
+        },
+        {
+          kind: "reveal",
+          md: "Where do you land?",
+          answer: "On $-3$. So $5 - 8 = 5 + (-8) = -3$.",
+        },
+        {
+          // The strange one, given money first and symbols second.
+          kind: "see",
+          md: "Now the strange one. If someone cancels ₹9 you owed, you have **gained** ₹9.",
+          viz: {
+            kind: "numberLine", from: -8, to: 6, step: 2,
+            jumps: [{ from: -6, to: 3, label: "+9" }],
+          },
+        },
+        {
+          kind: "tap",
+          md: "$(-6) - (-9)$ is the same as which one?",
+          options: [{ label: "$(-6) + 9$" }, { label: "$(-6) - 9$" }, { label: "$6 + 9$" }],
+          answer: 0,
+          why: "Subtracting $-9$ means adding its opposite, which is $+9$.",
+        },
+        {
+          kind: "reveal",
+          md: "So what is $(-6) - (-9)$?",
+          answer: "$3$. Two minus signs together become a plus — because the opposite of $-9$ is $+9$.",
+        },
+        {
+          kind: "see",
+          md: "Srinagar fell from $-2$°C to $-11$°C.",
+          viz: {
+            kind: "numberLine", from: -12, to: 2, step: 2,
+            marks: [{ at: -2, label: "−2" }, { at: -11, label: "−11", tone: "hint" }],
+          },
+        },
+        {
+          kind: "reveal",
+          md: "By how much did it fall?",
+          answer: "$(-2) - (-11) = 9$ degrees. A **size** has no minus sign, even when both temperatures do.",
+        },
+      ],
     },
     {
       slug: "c7-integers-l4",
@@ -327,6 +442,57 @@ export const class7Integers: SeedChapter = {
         "(-2) \\times 3 \\times (-5) = 30",
         "$$",
       ].join("\n"),
+      // Counters, not the line. "Three lots of a debt" is a thing you can count;
+      // repeated jumps just look like one long jump.
+      steps: [
+        {
+          kind: "see",
+          md: "Multiplying is repeated adding. Here are three lots of a ₹4 debt.",
+          viz: { kind: "tokenRow", positive: 0, negative: 12, groupsOf: 4, label: "(−4) × 3" },
+        },
+        {
+          kind: "reveal",
+          md: "So what is $(-4) \\times 3$?",
+          answer: "$-12$. Three lots of four negatives.",
+        },
+        {
+          // Revealed a line at a time, because the pattern only works if you
+          // watch it happen. Shown as a block it is four facts to accept.
+          kind: "worked",
+          md: "Watch what happens as the second number drops by 1.",
+          lines: [
+            "$(-4) \\times 2 = -8$",
+            "$(-4) \\times 1 = -4$",
+            "$(-4) \\times 0 = 0$",
+            "Each time, the answer goes **up** by 4.",
+          ],
+        },
+        {
+          kind: "reveal",
+          md: "So what must $(-4) \\times (-1)$ be?",
+          answer: "$4$. The pattern has to keep going up by 4 — nothing else fits.",
+        },
+        {
+          kind: "see",
+          md: "That gives the whole rule: **same signs positive, different signs negative**.",
+        },
+        {
+          kind: "tap",
+          md: "$(-6) \\times (-7)$?",
+          options: [{ label: "$42$" }, { label: "$-42$" }],
+          answer: 0,
+          why: "Same signs, so the answer is positive. Then $6 \\times 7 = 42$.",
+        },
+        {
+          kind: "see",
+          md: "With more than two numbers, count the minus signs. Even is positive, odd is negative.",
+        },
+        {
+          kind: "reveal",
+          md: "$(-2) \\times 3 \\times (-5)$?",
+          answer: "$30$. Two minus signs is even, so positive. Then $2 \\times 3 \\times 5 = 30$.",
+        },
+      ],
     },
     {
       slug: "c7-integers-l5",
@@ -375,6 +541,52 @@ export const class7Integers: SeedChapter = {
         "",
         "13 days. The answer is positive, and it should be — a count of days cannot be negative.",
       ].join("\n"),
+      // Nothing new to learn, and the lesson says so first — the whole risk here
+      // is a learner treating division as a fresh set of rules to memorise.
+      steps: [
+        {
+          kind: "see",
+          md: "Division undoes multiplication, so it borrows the same sign rules.",
+          viz: { kind: "tokenRow", positive: 0, negative: 12, groupsOf: 4, label: "(−12) ÷ 3 = −4" },
+        },
+        {
+          kind: "reveal",
+          md: "$(-24) \\div 6$?",
+          answer: "$-4$. Different signs, so the answer is negative.",
+        },
+        {
+          kind: "tap",
+          md: "And $(-36) \\div (-9)$?",
+          options: [{ label: "$4$" }, { label: "$-4$" }],
+          answer: 0,
+          why: "Same signs give a positive. Check it: $4 \\times (-9) = -36$.",
+        },
+        {
+          kind: "see",
+          md: "You can always check a division by multiplying back.",
+        },
+        {
+          kind: "reveal",
+          md: "Multiplying does not care about order. Does dividing?",
+          answer: "It does. $(-12) \\div 4 = -3$, but $4 \\div (-12)$ is not $-3$. Keep the given order.",
+        },
+        {
+          kind: "see",
+          md: "A well's water drops 4 cm every day. Altogether it has dropped 52 cm.",
+        },
+        {
+          kind: "reveal",
+          md: "For how many days has this been going on?",
+          answer: "$(-52) \\div (-4) = 13$ days. Positive, as it must be — a count of days cannot be negative.",
+        },
+        {
+          kind: "tap",
+          md: "$(-45) \\div 5$?",
+          options: [{ label: "$-9$" }, { label: "$9$" }],
+          answer: 0,
+          why: "Different signs, so negative. Then $45 \\div 5 = 9$.",
+        },
+      ],
     },
   ],
 

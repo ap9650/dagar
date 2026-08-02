@@ -1,7 +1,12 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { chapters } from "@/supabase/seed";
-import { mergeStepText, parseSteps, type StepText } from "@/lib/learning/lessonSteps";
+import {
+  mergeStepText,
+  parseSteps,
+  type LessonStep,
+  type StepText,
+} from "@/lib/learning/lessonSteps";
 
 /**
  * The authored curriculum, checked at test time rather than seed time.
@@ -84,6 +89,65 @@ describe("authored lesson steps", () => {
     for (const step of text) {
       for (const value of [step.md, step.answer, step.why, ...(step.lines ?? [])]) {
         if (value) expect(value, value).not.toMatch(/[०-९]/);
+      }
+    }
+  });
+});
+
+
+/**
+ * A LaTeX command in a TypeScript string literal needs a DOUBLE backslash.
+ *
+ * Written with one, `\\times` is not a command: `\\t` is a TAB, so it becomes a
+ * tab followed by "imes" and the lesson renders `(-4)imes2 = -8`. `\\div` fares
+ * no better — an unknown escape drops its backslash and the reader gets "div".
+ *
+ * Found by looking at a screenshot, which is a slow way to catch what a string
+ * check catches instantly. Nothing throws either way; the maths is just quietly
+ * wrong on screen.
+ *
+ * The check runs INSIDE `$…$` spans only. English prose says "three times a
+ * number" perfectly legitimately, and a guard that fails on real copy is a guard
+ * someone deletes.
+ */
+describe("authored step text survives TypeScript escaping", () => {
+  const COMMANDS = /(?<!\\)\b(times|div|frac|square|neq|ldots|checkmark)\b/;
+
+  function everyString(lesson: { steps?: LessonStep[] }): string[] {
+    return (lesson.steps ?? []).flatMap((step) => [
+      step.md,
+      // `tap` also has an `answer`, but there it is an option INDEX.
+      ...("answer" in step && typeof step.answer === "string" ? [step.answer] : []),
+      ...("why" in step && step.why ? [step.why] : []),
+      ...("lines" in step ? step.lines : []),
+      ...("options" in step ? step.options.flatMap((o) => (o.label ? [o.label] : [])) : []),
+    ]);
+  }
+
+  it.each(stepped)("%s has no control character in any step", (_slug, lesson) => {
+    for (const text of everyString(lesson)) {
+      const control = [...text].filter((ch) => ch.charCodeAt(0) < 32);
+      expect(control, JSON.stringify(text)).toEqual([]);
+    }
+  });
+
+  it.each(stepped)("%s keeps the backslash on every LaTeX command", (_slug, lesson) => {
+    for (const text of everyString(lesson)) {
+      for (const [, math] of text.matchAll(/\$([^$]+)\$/g)) {
+        expect(COMMANDS.test(math), `${JSON.stringify(text)} → ${math}`).toBe(false);
+      }
+    }
+  });
+
+  it.each(stepped)("%s has no DOUBLE backslash inside inline maths", (_slug, lesson) => {
+    // The other half of the same mistake, and the half that slipped past the
+    // check above: over-escaping gives the value `\\\\times`, whose backslash
+    // satisfies "has a backslash" while LaTeX reads `\\\\` as a LINE BREAK and
+    // renders the word "times" as italic text. There is no line break inside
+    // `$…$` anywhere in this curriculum, so any is a mistake.
+    for (const text of everyString(lesson)) {
+      for (const [, math] of text.matchAll(/\$([^$]+)\$/g)) {
+        expect(math.includes("\\\\"), `${JSON.stringify(text)} → ${math}`).toBe(false);
       }
     }
   });
