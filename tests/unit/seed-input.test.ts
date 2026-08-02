@@ -63,21 +63,57 @@ describe("authored question input", () => {
     expect(extras.length, `bank ${spec.bank.join(" ")}`).toBeGreaterThan(0);
   });
 
-  it.each(tiled)("%s has no tile that cannot appear in any answer", (_slug, question) => {
-    // A stray "-" under an addition question is a tile that can only ever
-    // produce a wrong answer. That happened: the first generator keyed the minus
-    // tile off the STEM, and an em-dash in the prose put one there.
+  it.each(tiled)("%s uses only digits and answer symbols", (_slug, question) => {
     const spec = parseInput(question.input)!;
     if (spec.kind !== "tiles") return;
     for (const tile of spec.bank) {
       expect(/^[0-9]$|^[/.-]$/.test(tile), `tile "${tile}"`).toBe(true);
-      if (tile === "-") {
-        expect(question.answer_value.includes("-"), "minus tile on a positive answer").toBe(true);
-      }
-      if (tile === "/") {
-        expect(question.answer_type, "slash tile on a non-fraction").toBe("fraction");
-      }
     }
+  });
+
+  /**
+   * THE BANK MUST NOT LEAK THE SHAPE OF THE ANSWER.
+   *
+   * The first version of these banks added `/` only when the answer was a
+   * fraction and `-` only when it was negative. Both are tells. In Class 6 the
+   * slash quietly announced "this one is a fraction, not a whole number". In
+   * Class 7 it would have been far worse: half the answers are negative, so a
+   * minus tile would have announced the sign — and the sign is the entire
+   * misconception that chapter exists to correct.
+   *
+   * So the symbol set is a property of the CHAPTER, not the question. A learner
+   * must always be able to express the wrong form; that is what makes it a
+   * question rather than a hint.
+   *
+   * This is asserted per chapter rather than per question because a single
+   * question cannot be judged on its own — the leak only exists in the contrast
+   * between one bank and its neighbours.
+   */
+  describe("a tile bank never reveals the form of its answer", () => {
+    const byChapter = chapters.map(
+      (chapter) =>
+        [
+          chapter.slug,
+          chapter.questions
+            .map((q) => parseInput(q.input))
+            .filter((spec) => spec?.kind === "tiles"),
+        ] as const,
+    );
+
+    it.each(byChapter.filter(([, specs]) => specs.length > 0))(
+      "%s uses one symbol set across every bank",
+      (_slug, specs) => {
+        for (const symbol of ["/", "-"]) {
+          const carrying = specs.filter(
+            (spec) => spec!.kind === "tiles" && spec!.bank.includes(symbol),
+          ).length;
+          expect(
+            carrying === 0 || carrying === specs.length,
+            `"${symbol}" is on ${carrying} of ${specs.length} banks — that contrast is the leak`,
+          ).toBe(true);
+        }
+      },
+    );
   });
 
   // ── choiceViz ────────────────────────────────────────────────────────────

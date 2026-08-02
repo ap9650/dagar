@@ -721,7 +721,7 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "A water bottle is $\\frac{4}{7}$ full.\n\nInto how many equal parts has the bottle been divided?",
       answer_value: "7",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "7"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "7", "/"] },
       solution_md: [
         "The **bottom** number tells you how many equal parts the whole was divided into.",
         "",
@@ -737,7 +737,7 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "A bag has 12 laddoos. Meera eats $\\frac{1}{4}$ of them.\n\nHow many laddoos did she eat?",
       answer_value: "3",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "$\\frac{1}{4}$ means the 12 laddoos are split into **4 equal groups**, and Meera eats **1** group.",
         "",
@@ -782,7 +782,7 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "Ravi ate $\\frac{2}{5}$ of a packet of biscuits. That was 8 biscuits.\n\nHow many biscuits were in the full packet?",
       answer_value: "20",
-      input: { kind: "tiles", bank: ["0", "1", "2", "5", "8"] },
+      input: { kind: "tiles", bank: ["0", "1", "2", "5", "8", "/"] },
       solution_md: [
         "This one runs backwards — you know the part and you need the whole.",
         "",
@@ -806,7 +806,7 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "A tank holds 40 litres when full. Right now it is $\\frac{3}{4}$ full.\n\nHow many **more** litres are needed to fill it?",
       answer_value: "10",
-      input: { kind: "tiles", bank: ["0", "1", "2", "3", "4"] },
+      input: { kind: "tiles", bank: ["0", "1", "2", "3", "4", "/"] },
       solution_md: [
         "Two steps here.",
         "",
@@ -857,7 +857,7 @@ export const class6Fractions: SeedChapter = {
       answer_type: "integer",
       stem_md: "$\\frac{1}{3} = \\frac{\\square}{9}$\n\nWhat number goes in the box?",
       answer_value: "3",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "9"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "9", "/"] },
       solution_md: [
         "The bottom went from 3 to 9, so it was multiplied by 3.",
         "",
@@ -874,7 +874,7 @@ export const class6Fractions: SeedChapter = {
       answer_type: "integer",
       stem_md: "$\\frac{4}{5} = \\frac{12}{\\square}$\n\nWhat number goes in the box?",
       answer_value: "15",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "The top went from 4 to 12, so it was multiplied by 3.",
         "",
@@ -916,7 +916,7 @@ export const class6Fractions: SeedChapter = {
       answer_type: "integer",
       stem_md: "$\\frac{18}{24} = \\frac{3}{\\square}$\n\nWhat number goes in the box?",
       answer_value: "4",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "8"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
         "This one goes the other way — the fraction is being made *simpler*, not bigger.",
         "",
@@ -941,7 +941,7 @@ export const class6Fractions: SeedChapter = {
         "How many matches did the second team win?",
       ].join("\n"),
       answer_value: "6",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "6"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "6", "/"] },
       solution_md: [
         "The first team won $\\frac{15}{20}$ of their matches. In its simplest form:",
         "",
@@ -1040,7 +1040,7 @@ export const class6Fractions: SeedChapter = {
         "What is the **smallest** whole number that can go in the box?",
       ].join("\n"),
       answer_value: "3",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "Both fractions are in fifths, so the box just has to beat 2.",
         "",
@@ -1095,7 +1095,7 @@ export const class6Fractions: SeedChapter = {
         "What is the **largest** whole number that can go in the box?",
       ].join("\n"),
       answer_value: "5",
-      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5"] },
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "First put both fractions in ninths. The bottom of $\\frac{2}{3}$ goes from 3 to 9, so multiply by 3:",
         "",

@@ -618,6 +618,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\nx + 7 = 12\n$$\n\nWhat is the value of $x$?",
       answer_value: "5",
+      input: { kind: "tiles", bank: ["1", "2", "3", "5", "7", "/"] },
       solution_md: [
         "7 has been added to $x$, so undo it by subtracting 7 from **both** sides:",
         "",
@@ -636,6 +637,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "If $x = -2$, what is the value of $3x + 8$?",
       answer_value: "2",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
         "Put $-2$ in place of $x$:",
         "",
@@ -655,6 +657,7 @@ export const class8LinearEquations: SeedChapter = {
       stem_md:
         "For which value of $x$ do both sides of $2x + 1 = x + 6$ come out equal?",
       answer_value: "5",
+      input: { kind: "tiles", bank: ["1", "2", "3", "5", "6", "/"] },
       solution_md: [
         "Gather the $x$ terms on the left and the numbers on the right:",
         "",
@@ -705,6 +708,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n3x = 21\n$$\n\nWhat is the value of $x$?",
       answer_value: "7",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "7", "/"] },
       solution_md: [
         "$x$ has been multiplied by 3, so divide **both** sides by 3:",
         "",
@@ -723,6 +727,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\nx - 9 = 4\n$$\n\nWhat is the value of $x$?",
       answer_value: "13",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "9", "/"] },
       solution_md: [
         "9 has been taken away from $x$, so add 9 to both sides:",
         "",
@@ -741,6 +746,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n2x + 5 = 17\n$$\n\nWhat is the value of $x$?",
       answer_value: "6",
+      input: { kind: "tiles", bank: ["1", "2", "5", "6", "7", "/"] },
       solution_md: [
         "Undo the adding first, then the multiplying.",
         "",
@@ -763,6 +769,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n5x - 8 = 27\n$$\n\nWhat is the value of $x$?",
       answer_value: "7",
+      input: { kind: "tiles", bank: ["1", "2", "5", "7", "8", "/"] },
       solution_md: [
         "Add 8 to both sides, then divide by 5.",
         "",
@@ -785,6 +792,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "fraction",
       stem_md: "$$\n4x + 3 = 10\n$$\n\nWhat is the value of $x$?",
       answer_value: "7/4",
+      input: { kind: "tiles", bank: ["0", "1", "3", "4", "7", "/"] },
       solution_md: [
         "Subtract 3 from both sides:",
         "",
@@ -809,6 +817,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n\\frac{x}{3} + 4 = 9\n$$\n\nWhat is the value of $x$?",
       answer_value: "15",
+      input: { kind: "tiles", bank: ["1", "3", "4", "5", "9", "/"] },
       solution_md: [
         "Subtract 4 from both sides first:",
         "",
@@ -835,6 +844,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n5x = 3x + 8\n$$\n\nWhat is the value of $x$?",
       answer_value: "4",
+      input: { kind: "tiles", bank: ["1", "3", "4", "5", "8", "/"] },
       solution_md: [
         "Take $3x$ from both sides so the $x$s are all on the left:",
         "",
@@ -857,6 +867,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n7x - 2 = 5x + 10\n$$\n\nWhat is the value of $x$?",
       answer_value: "6",
+      input: { kind: "tiles", bank: ["0", "1", "2", "5", "6", "7", "/"] },
       solution_md: [
         "Gather the $x$s on the left and the numbers on the right:",
         "",
@@ -879,6 +890,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n4x + 9 = 7x - 6\n$$\n\nWhat is the value of $x$?",
       answer_value: "5",
+      input: { kind: "tiles", bank: ["4", "5", "6", "7", "9", "/"] },
       solution_md: [
         "Here the right side has more $x$s, so move the $x$s there and the numbers to the left — it keeps everything positive.",
         "",
@@ -935,6 +947,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "fraction",
       stem_md: "$$\n6x - 1 = 2x + 4\n$$\n\nWhat is the value of $x$?",
       answer_value: "5/4",
+      input: { kind: "tiles", bank: ["1", "2", "4", "5", "6", "/"] },
       solution_md: [
         "Gather the $x$s left, the numbers right:",
         "",
@@ -957,6 +970,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n2(x + 3) = x + 11\n$$\n\nWhat is the value of $x$?",
       answer_value: "5",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "Open the bracket first — the 2 multiplies **both** terms inside:",
         "",
@@ -985,6 +999,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "A number increased by 8 gives 23.\n\nWhat is the number?",
       answer_value: "15",
+      input: { kind: "tiles", bank: ["1", "2", "3", "5", "8", "/"] },
       solution_md: [
         "Let the number be $x$. *Increased by 8* means $x + 8$:",
         "",
@@ -1007,6 +1022,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "integer",
       stem_md: "Three times a number is 27.\n\nWhat is the number?",
       answer_value: "9",
+      input: { kind: "tiles", bank: ["1", "2", "3", "7", "9", "/"] },
       solution_md: [
         "Let the number be $x$. *Three times a number* is $3x$:",
         "",
@@ -1027,6 +1043,7 @@ export const class8LinearEquations: SeedChapter = {
         "Together they cost ₹85. What does the **pen** cost, in rupees?",
       ].join("\n"),
       answer_value: "35",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
         "The notebook is $x + 15$, so together:",
         "",
@@ -1057,6 +1074,7 @@ export const class8LinearEquations: SeedChapter = {
         "How old is Meena?",
       ].join("\n"),
       answer_value: "8",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
         "Let her age be $x$:",
         "",
@@ -1087,6 +1105,7 @@ export const class8LinearEquations: SeedChapter = {
         "What is its **width**, in cm?",
       ].join("\n"),
       answer_value: "8",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
         "Let the width be $x$, so the length is $x + 4$.",
         "",
@@ -1119,6 +1138,7 @@ export const class8LinearEquations: SeedChapter = {
         "How much did he start with, in rupees?",
       ].join("\n"),
       answer_value: "180",
+      input: { kind: "tiles", bank: ["0", "1", "2", "3", "8", "/"] },
       solution_md: [
         "Let him start with $x$. After spending ₹120 he has $x - 120$, and that equals a third of $x$:",
         "",

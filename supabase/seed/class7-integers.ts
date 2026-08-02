@@ -591,6 +591,84 @@ export const class7Integers: SeedChapter = {
   ],
 
   questions: [
+    // ─────────────────────────────────────────────────────────────────────────
+    // PICTORIAL RECOGNITION (D18 slice 5.2) — read the notation, find the picture.
+    //
+    // Class 7's two shapes carry different ideas and are not interchangeable.
+    // Adding is a WALK, so it belongs on the line: the answer is where you land.
+    // Multiplying is COUNTING LOTS, so it belongs on chips: repeated jumps along
+    // a line just look like one long jump, which teaches nothing.
+    //
+    // Diagrams are never translated (D18 §6) — only stems and solutions have Hindi.
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c7-add-d1-q3",
+      concept_slug: "adding-subtracting-integers",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "Start at $-5$ and move $3$ to the right.\n\nWhich picture shows where you land?",
+      answer_value: "-2",
+      input: {
+        kind: "choiceViz",
+        options: [
+          {
+            value: "-2",
+            viz: { kind: "numberLine", from: -8, to: 4, step: 1,
+                   jumps: [{ from: -5, to: -2 }], marks: [{ at: -2, tone: "correct" }] },
+          },
+          {
+            // Moved LEFT instead of right — treating "+3" as "3 more of the same
+            // direction you already are". The commonest first error on the line.
+            value: "-8",
+            viz: { kind: "numberLine", from: -8, to: 4, step: 1,
+                   jumps: [{ from: -5, to: -8 }], marks: [{ at: -8 }] },
+          },
+          {
+            // Dropped the sign and started from +5.
+            value: "8",
+            viz: { kind: "numberLine", from: -8, to: 9, step: 1,
+                   jumps: [{ from: 5, to: 8 }], marks: [{ at: 8 }] },
+          },
+        ],
+      },
+      solution_md: [
+        "Moving **right** always makes a number bigger, whether you start on the minus side or not.",
+        "",
+        "From $-5$, three steps right lands on $-4$, $-3$, $-2$.",
+        "",
+        "$$\n-5 + 3 = -2\n$$",
+        "",
+        "It is still a negative number — you did not travel far enough to reach zero. That is the whole picture.",
+      ].join("\n"),
+    },
+    {
+      slug: "c7-mul-d1-q3",
+      concept_slug: "multiplying-integers",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "Which picture shows $3 \\times (-2)$?",
+      answer_value: "-6",
+      input: {
+        kind: "choiceViz",
+        options: [
+          // Three lots of "two owed" — six negative chips.
+          { value: "-6", viz: { kind: "tokenRow", positive: 0, negative: 6, groupsOf: 2 } },
+          // Counted the 3 and the 2 instead of taking 3 lots of 2.
+          { value: "-5", viz: { kind: "tokenRow", positive: 0, negative: 5 } },
+          // Lost the sign — the error the whole chapter is about.
+          { value: "6", viz: { kind: "tokenRow", positive: 6, negative: 0, groupsOf: 2 } },
+        ],
+      },
+      solution_md: [
+        "$3 \\times (-2)$ means **three lots of** $-2$ — three groups, each of them a debt of 2.",
+        "",
+        "$$\n(-2) + (-2) + (-2) = -6\n$$",
+        "",
+        "Three groups of two chips is six chips, and every one of them is owed. So the answer is negative.",
+      ].join("\n"),
+    },
     // ── integers-number-line ────────────────────────────────────────────────
     {
       slug: "c7-nl-d1-q1",
@@ -624,6 +702,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "What is the **opposite** of $-9$?",
       answer_value: "9",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "9"] },
       solution_md: [
         "The opposite of an integer is the same distance from 0, on the other side.",
         "",
@@ -640,6 +719,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "Which integer is **5 units to the left** of $-2$ on the number line?",
       answer_value: "-7",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "5", "7"] },
       solution_md: [
         "Moving left means going down. Start at $-2$ and count five steps left:",
         "",
@@ -682,6 +762,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "How many integers lie **strictly between** $-4$ and $3$?",
       answer_value: "6",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "6"] },
       solution_md: [
         "*Strictly between* means $-4$ and $3$ themselves do not count. List what is left:",
         "",
@@ -701,6 +782,7 @@ export const class7Integers: SeedChapter = {
       stem_md:
         "A number and its opposite are **18 units apart** on the number line.\n\nWhat is the positive one of the two?",
       answer_value: "9",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "8", "9"] },
       solution_md: [
         "A number and its opposite sit the same distance from 0, one on each side.",
         "",
@@ -723,6 +805,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-7) + 3\n$$",
       answer_value: "-4",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "7"] },
       solution_md: [
         "Start at $-7$ and move **3 to the right**.",
         "",
@@ -745,6 +828,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n5 - 8\n$$",
       answer_value: "-3",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "5", "8"] },
       solution_md: [
         "Subtracting 8 means moving 8 steps to the **left** from 5. You pass 0 and keep going:",
         "",
@@ -763,6 +847,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-6) - (-9)\n$$",
       answer_value: "3",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "6", "9"] },
       solution_md: [
         "To subtract an integer, **add its opposite**. The opposite of $-9$ is $9$:",
         "",
@@ -806,6 +891,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-12) + 5 - (-7)\n$$",
       answer_value: "0",
+      input: { kind: "tiles", bank: ["-", "0", "1", "2", "5", "7"] },
       solution_md: [
         "Work left to right, and turn the subtraction into adding the opposite.",
         "",
@@ -832,6 +918,7 @@ export const class7Integers: SeedChapter = {
         "Which integer represents his balance now?",
       ].join("\n"),
       answer_value: "-200",
+      input: { kind: "tiles", bank: ["-", "0", "1", "2", "3", "4"] },
       solution_md: [
         "Money owed is negative, repaying moves **up**, borrowing moves **down**.",
         "",
@@ -856,6 +943,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-4) \\times 3\n$$",
       answer_value: "-12",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "5"] },
       solution_md: [
         "Multiplication is repeated addition:",
         "",
@@ -898,6 +986,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-7) \\times (-8)\n$$",
       answer_value: "56",
+      input: { kind: "tiles", bank: ["-", "1", "5", "6", "7", "8"] },
       solution_md: [
         "Same signs, so the answer is **positive**. Now multiply the sizes:",
         "",
@@ -918,6 +1007,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-2) \\times 3 \\times (-5)\n$$",
       answer_value: "30",
+      input: { kind: "tiles", bank: ["-", "0", "1", "2", "3", "5"] },
       solution_md: [
         "Count the minus signs first: there are **two**, an even number, so the answer is positive.",
         "",
@@ -940,6 +1030,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-1) \\times (-1) \\times (-1) \\times (-1) \\times (-1)\n$$",
       answer_value: "-1",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "5"] },
       solution_md: [
         "Do not multiply one step at a time — **count the minus signs**. There are five, an **odd** number, so the answer is negative.",
         "",
@@ -990,6 +1081,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-24) \\div 6\n$$",
       answer_value: "-4",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "6"] },
       solution_md: [
         "Different signs give a **negative** answer. Divide the sizes: $24 \\div 6 = 4$.",
         "",
@@ -1008,6 +1100,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-36) \\div (-9)\n$$",
       answer_value: "4",
+      input: { kind: "tiles", bank: ["-", "1", "3", "4", "6", "9"] },
       solution_md: [
         "Same signs give a **positive** answer. Divide the sizes: $36 \\div 9 = 4$.",
         "",
@@ -1051,6 +1144,7 @@ export const class7Integers: SeedChapter = {
       answer_type: "integer",
       stem_md: "$$\n(-48) \\div (-4) \\div (-3)\n$$",
       answer_value: "-4",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "8"] },
       solution_md: [
         "Work **left to right** — division does not let you reorder.",
         "",
@@ -1075,6 +1169,7 @@ export const class7Integers: SeedChapter = {
         "For how many days has this been happening?",
       ].join("\n"),
       answer_value: "13",
+      input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "5"] },
       solution_md: [
         "A drop is negative. The total drop is $-52$ and each day is $-4$:",
         "",
@@ -1094,6 +1189,7 @@ export const class7Integers: SeedChapter = {
       stem_md:
         "Which integer, when divided by $-7$, gives $9$?",
       answer_value: "-63",
+      input: { kind: "tiles", bank: ["-", "1", "3", "6", "7", "9"] },
       solution_md: [
         "This runs backwards, so undo the division by multiplying:",
         "",
