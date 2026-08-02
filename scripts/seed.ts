@@ -17,6 +17,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
 import type { Database, Json } from "../lib/supabase/database.types.ts";
 import { chapters } from "../supabase/seed/index.ts";
+import { mergeStepText, type StepText } from "../lib/learning/lessonSteps.ts";
+import type { SeedLesson } from "../supabase/seed/types.ts";
 
 // ─── env ─────────────────────────────────────────────────────────────────────
 // Read .env.local directly: this is a plain node script, not Next, so nothing
@@ -74,6 +76,34 @@ if (Object.keys(hi).length === 0) {
 /** `{}` when a row has no Hindi yet, so `t()` falls back to English (never blank). */
 function i18nFor(slug: string): Json {
   return hi[slug] ? { hi: hi[slug] } : {};
+}
+
+/**
+ * A lesson's Hindi, with the steps assembled rather than copied.
+ *
+ * The translator writes only prose, positionally, under `steps` in hi.json. The
+ * English structure — every `parts`, every `shaded`, every answer index — is
+ * applied here. **The diagram exists once**, so a `parts: 4` typo fixed in
+ * English can never leave the Hindi lesson teaching different maths to the
+ * learners least able to notice.
+ *
+ * A length mismatch drops the Hindi steps entirely rather than half-translating:
+ * `t()` then falls back to the English steps, which is a clean outcome. A lesson
+ * that switches language halfway through is not.
+ */
+function lessonI18n(lesson: SeedLesson): Json {
+  const base = hi[lesson.slug] as Record<string, unknown> | undefined;
+  if (!base) return {};
+  if (!lesson.steps) return { hi: base as Json };
+
+  const merged = mergeStepText(lesson.steps, base.steps as StepText[] | undefined);
+  if (base.steps && !merged) {
+    console.warn(
+      `  ! ${lesson.slug}: Hindi has ${(base.steps as unknown[]).length} step texts for ` +
+        `${lesson.steps.length} steps — Hindi steps dropped, English will show.`,
+    );
+  }
+  return { hi: { ...base, steps: merged ?? undefined } as Json };
 }
 
 // ─── seed ────────────────────────────────────────────────────────────────────
@@ -156,8 +186,9 @@ for (const chapter of chapters) {
         order_index: lesson.order_index,
         title: lesson.title,
         body_md: lesson.body_md,
+        steps: lesson.steps ?? null,
         est_minutes: lesson.est_minutes,
-        i18n: i18nFor(lesson.slug),
+        i18n: lessonI18n(lesson),
       };
     })
     .filter((row) => row !== null);

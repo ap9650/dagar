@@ -84,6 +84,81 @@ export const class6Fractions: SeedChapter = {
         "",
         "Try a few in practice, then come back for the number line.",
       ].join("\n"),
+
+      // ═══════════════════════════════════════════════════════════════════════
+      // THE INTERACTIVE VERSION (D18).
+      //
+      // The prose above stays — it is the fallback, and it is what renders if
+      // anything below fails validation. Nothing was deleted.
+      //
+      // Concrete → Pictorial → Abstract: the roti is cut before "1/4" is ever
+      // written down. The old lesson said "cut one roti into 4 equal pieces"
+      // and showed nothing, which is the sentence that started all of this.
+      //
+      // Inline fractions are SLASHED, not stacked (backlog 0c) — a stacked
+      // \frac in running text has no good size on a 360px screen.
+      // ═══════════════════════════════════════════════════════════════════════
+      steps: [
+        {
+          kind: "see",
+          md: "One roti. Four people. Nobody gets a whole one.",
+          viz: { kind: "partWhole", shape: "circle", parts: 1, shaded: 1 },
+        },
+        {
+          // First interaction is on step 2, before any notation. The learner
+          // does the cutting the old lesson only described.
+          kind: "build",
+          md: "Cut it into 4 equal pieces. Tap one piece to take it.",
+          viz: { kind: "partWhole", shape: "circle", parts: 4, shaded: 0, target: [0] },
+        },
+        {
+          // Only NOW does the notation appear, on a picture that earned it.
+          kind: "see",
+          md: "You took 1 piece out of 4 equal pieces. We write that as $1/4$.",
+          viz: { kind: "partWhole", shape: "circle", parts: 4, shaded: 1, label: "1/4" },
+        },
+        {
+          // NCERT vocabulary is kept — हर and अंश are the words in their
+          // textbook and their exam. Asked as a question rather than stated,
+          // because a definition read is a definition skimmed.
+          kind: "reveal",
+          md: "In $1/4$, what is the 4 telling you?",
+          answer: "How many equal parts the whole was cut into. Its name is the **denominator**.",
+          viz: { kind: "partWhole", shape: "circle", parts: 4, shaded: 1, label: "1/4" },
+        },
+        {
+          kind: "tap",
+          md: "Which one shows $3/8$?",
+          options: [
+            // Wrong options encode real mistakes: right numerator wrong
+            // denominator, and right denominator wrong numerator.
+            { viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 3 } },
+            { viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 3 } },
+            { viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 5 } },
+          ],
+          answer: 1,
+          why: "Eight equal parts, and three of them taken.",
+        },
+        {
+          // The "equal" rule. No diagram, because PartWhole can only draw equal
+          // parts — an unequal one would have to be faked, and a faked diagram
+          // in a maths lesson is worse than none.
+          kind: "reveal",
+          md: "You break a roti into 4 pieces. One is huge, three are tiny. Is the big piece $1/4$?",
+          answer: "No. The parts have to be **equal**, or it is not a fraction at all.",
+        },
+        {
+          kind: "see",
+          md: "A bottle holds 5 glasses. You pour out 2 glasses.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 2, label: "2/5" },
+        },
+        {
+          kind: "reveal",
+          md: "So how much is still in the bottle?",
+          answer: "3 parts out of 5. That is $3/5$ — and $2/5$ and $3/5$ together make the whole bottle.",
+          viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3, label: "3/5" },
+        },
+      ],
     },
     {
       slug: "c6-fractions-l2",

@@ -6,6 +6,8 @@
  * by hand and never has to seed in a particular order.
  */
 
+import type { LessonStep } from "../../lib/learning/lessonSteps.ts";
+
 export type Choice = { id: string; label: string };
 
 /** Grading (D3) reads this. The grader normalises, so write ONE canonical form. */
@@ -37,6 +39,13 @@ export type SeedLesson = {
   order_index: number;
   title: string;
   body_md: string;
+  /**
+   * The interactive version (D18). Optional and additive: a lesson with steps
+   * renders the step player, one without renders `body_md` exactly as before.
+   * `body_md` stays authored either way — it is the fallback when a steps blob
+   * fails validation, and a lesson must never be able to render blank.
+   */
+  steps?: LessonStep[];
   est_minutes: number;
 };
 

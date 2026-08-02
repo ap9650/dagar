@@ -220,6 +220,19 @@ body:lang(hi) {
   transition: fill 150ms ease-out;
 }
 
+/* An `outline` on an SVG path traces its BOUNDING BOX, so a focused quarter of a
+   circle gets a rectangle round it — and the UA default is blue, which is not a
+   colour in this product. Focus is shown as a thicker teal stroke instead, which
+   follows the actual shape the learner is about to tap. */
+.viz-part {
+  outline: none;
+}
+
+.viz-part:focus-visible {
+  stroke: var(--color-primary);
+  stroke-width: 5;
+}
+
 @keyframes celebrate-enter {
   from {
     opacity: 0;

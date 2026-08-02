@@ -147,7 +147,7 @@ export function PartWhole({ spec, className }: { spec: PartWholeSpec; className?
                   toggle(index);
                 }
               }}
-              className="viz-fill cursor-pointer focus-visible:outline-2 focus-visible:outline-primary"
+              className="viz-fill viz-part cursor-pointer"
             />
           );
         })}

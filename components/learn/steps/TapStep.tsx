@@ -28,13 +28,20 @@ export function TapStep({ step }: { step: TapStepSpec }) {
   const [chosen, setChosen] = useState<number | null>(null);
   const answered = chosen !== null;
   const right = chosen === step.answer;
+  const hasPictures = step.options.some((option) => option.viz);
 
   return (
     <StepShell md={step.md}>
+      {/* ── ONE COLUMN WHENEVER THERE ARE PICTURES ───────────────────────────
+          Fraction bars are compared by stacking them: same width, same left
+          edge, and the difference is the shaded run. Side by side in a
+          two-column grid they end up at different scales and the comparison —
+          which IS the question — stops working. Two columns is only for short
+          text options. */}
       <div
         role="radiogroup"
         aria-label={step.md}
-        className={cn("grid gap-md", step.options.length > 2 ? "grid-cols-2" : "grid-cols-1")}
+        className={cn("grid gap-md", hasPictures ? "grid-cols-1" : "grid-cols-2")}
       >
         {step.options.map((option, index) => {
           const isChosen = chosen === index;
@@ -73,11 +80,11 @@ export function TapStep({ step }: { step: TapStepSpec }) {
                   <MarkdownBody markdown={option.label} inline />
                 </span>
               )}
+              {/* A tick, not a sentence: the panel below already says "That's
+                  it" and gives the reason. Saying it twice on one screen makes
+                  the answer feel like an announcement rather than a fact. */}
               {state === "correct" && (
-                <span className="inline-flex items-center gap-xs text-label font-medium text-correct">
-                  <Check size={16} strokeWidth={3} aria-hidden />
-                  {t("gotIt")}
-                </span>
+                <Check size={20} strokeWidth={3} aria-hidden className="text-correct" />
               )}
             </button>
           );

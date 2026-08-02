@@ -151,6 +151,75 @@ export function parseSteps(value: unknown): LessonStep[] | null {
   return null;
 }
 
+/**
+ * The translatable text of one step, and nothing else.
+ *
+ * ── WHY HINDI IS NOT A SECOND STEPS ARRAY ───────────────────────────────────
+ * A circle cut into four is a circle cut into four in every language. If the
+ * Hindi lived as its own complete `steps` array, every diagram would be
+ * duplicated by hand — and the day someone fixes a `parts: 4` typo in English
+ * only, the Hindi lesson teaches different maths. Silently, and to the learners
+ * least able to notice.
+ *
+ * So a translator writes prose, positionally, and `mergeStepText` puts it onto
+ * the English structure. The diagram cannot drift because it exists once.
+ * ────────────────────────────────────────────────────────────────────────────
+ */
+export type StepText = {
+  md?: string;
+  /** `reveal` only. */
+  answer?: string;
+  /** `tap` only — the one line of why, after either outcome. */
+  why?: string;
+  /** `worked` only, positional. */
+  lines?: string[];
+  /** `tap` only — option labels, positional. Diagram options have none. */
+  options?: { label?: string }[];
+  speak?: string;
+};
+
+/**
+ * Apply translated prose to the English steps.
+ *
+ * Returns `null` on a length mismatch rather than translating what it can. A
+ * half-translated lesson is worse than an English one: the learner hits an
+ * English screen mid-flow with no way to tell whether they have missed
+ * something, and `tContent` already falls back to English cleanly.
+ *
+ * Notation is never taken from the translation — `viz.label` holds things like
+ * "1/4", which is the same in both languages (D16: numerals stay Arabic).
+ */
+export function mergeStepText(steps: LessonStep[], text: StepText[] | undefined): LessonStep[] | null {
+  if (!text || text.length !== steps.length) return null;
+
+  return steps.map((step, i) => {
+    const tr = text[i] ?? {};
+    const merged = { ...step, md: tr.md ?? step.md, speak: tr.speak ?? step.speak };
+
+    switch (merged.kind) {
+      case "reveal":
+        return { ...merged, answer: tr.answer ?? merged.answer };
+      case "worked":
+        return {
+          ...merged,
+          lines: tr.lines?.length === merged.lines.length ? tr.lines : merged.lines,
+        };
+      case "tap":
+        return {
+          ...merged,
+          why: tr.why ?? merged.why,
+          options: merged.options.map((option, j) => ({
+            ...option,
+            // Only a text label is translatable; a diagram option has none.
+            label: option.label === undefined ? undefined : (tr.options?.[j]?.label ?? option.label),
+          })),
+        };
+      default:
+        return merged;
+    }
+  });
+}
+
 /** How many steps count as "done" for the progress bar at index `i`. */
 export function progressAt(index: number, total: number): number {
   if (total <= 0) return 0;

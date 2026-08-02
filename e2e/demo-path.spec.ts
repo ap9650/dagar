@@ -94,7 +94,21 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   // The tutor door is present on the lesson. We do not open it — see the header.
   await expect(page.getByRole("button", { name: /ask saathi/i })).toBeVisible();
 
-  await page.getByRole("button", { name: /got it — continue/i }).click();
+  // ── walk the lesson ───────────────────────────────────────────────────────
+  // Since D18 a lesson may be a sequence of steps rather than one scroll, and
+  // "Got it — continue" only appears once the last step is passed. This walks
+  // whichever shape it is: a stepped lesson taps Continue to the end, a prose
+  // one finds the complete button straight away.
+  //
+  // It also gives the step player its only end-to-end coverage — the loop is
+  // bounded so a player that never advances fails here instead of hanging.
+  const complete = page.getByRole("button", { name: /got it — continue/i });
+  for (let step = 0; step < 15 && !(await complete.count()); step++) {
+    await page.getByRole("button", { name: /^continue$/i }).first().click();
+    await page.waitForTimeout(150);
+  }
+  await expect(complete).toBeVisible({ timeout: 10_000 });
+  await complete.click();
 
   // ── practice, via the wrong answer ────────────────────────────────────────
   await page.goto("/progress");
