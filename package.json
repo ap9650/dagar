@@ -21,7 +21,9 @@
     "icons": "node --no-warnings scripts/generate-icons.ts",
     "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts",
     "demo:data": "node --no-warnings scripts/demo-data.ts",
-    "feedback:export": "node --no-warnings scripts/export-feedback.ts"
+    "feedback:export": "node --no-warnings scripts/export-feedback.ts",
+    "deck": "python3 scripts/gen-persona-illustration.py && python3 scripts/build-deck.py && python3 scripts/build-how-doc.py",
+    "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
