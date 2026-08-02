@@ -10,6 +10,7 @@ import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { localisedSteps, parseSteps } from "@/lib/learning/lessonSteps";
 import { stepSpeech } from "@/lib/learning/speakable";
+import { nextAfterLesson, nextStepHref } from "@/lib/learning/nextStep";
 import { LessonBody } from "@/components/learn/LessonBody";
 import { LessonSteps } from "@/components/learn/LessonSteps";
 import { LessonProgress } from "@/components/learn/LessonProgress";
@@ -95,12 +96,12 @@ export default async function LessonPage({
     hi: stepsHi && stepsHi !== stepsEn && stepsHi[i] ? stepSpeech(stepsHi[i], "hi") : null,
   }));
 
-  const nextLesson = ordered[index + 1];
-  // After completion there is always somewhere to go: the next lesson, or — at
-  // the end of the chapter — practice on this lesson's concept.
-  const nextHref = nextLesson
-    ? `/learn/${chapterId}/${nextLesson.id}`
-    : `/practice/${lesson.concept_id}`;
+  // Practice at a concept boundary, not after every lesson — and the label has
+  // to be able to say which it is. See `lib/learning/nextStep.ts` for why this
+  // is a value rather than a ternary here.
+  const next = nextAfterLesson(lesson, ordered[index + 1]);
+  const nextHref = nextStepHref(next, chapterId);
+  const goesToPractice = next.kind === "practice";
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
@@ -148,6 +149,7 @@ export default async function LessonPage({
           <LessonCompleteButton
             lessonId={lesson.id}
             nextHref={nextHref}
+            nextIsPractice={goesToPractice}
             alreadyComplete={completedIds.has(lesson.id)}
           />
         </LessonSteps>
@@ -174,6 +176,7 @@ export default async function LessonPage({
         <LessonCompleteButton
           lessonId={lesson.id}
           nextHref={nextHref}
+          nextIsPractice={goesToPractice}
           alreadyComplete={completedIds.has(lesson.id)}
         />
       )}

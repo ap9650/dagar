@@ -101,7 +101,8 @@
     "notQuiteHere": "थोड़ा सा रह गया — ये देखो",
     "listen": "सुनो",
     "stopListening": "रोको",
-    "listenIn": "{lang} में सुनो"
+    "listenIn": "{lang} में सुनो",
+    "nextLesson": "अगला पाठ"
   },
   "tutor": {
     "title": "साथी से पूछो",

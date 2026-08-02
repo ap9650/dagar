@@ -101,7 +101,8 @@
     "notQuiteHere": "Not quite — here it is",
     "listen": "Listen",
     "stopListening": "Stop",
-    "listenIn": "Listen in {lang}"
+    "listenIn": "Listen in {lang}",
+    "nextLesson": "Next lesson"
   },
   "tutor": {
     "title": "Ask Saathi",

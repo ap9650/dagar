@@ -21,11 +21,20 @@ import { FeedbackPrompt } from "./FeedbackPrompt";
 export function LessonCompleteButton({
   lessonId,
   nextHref,
+  nextIsPractice,
   alreadyComplete,
 }: {
   lessonId: string;
   /** Where "what next" goes — practice, or the next lesson. Never a dead end. */
   nextHref: string;
+  /**
+   * Which of the two it is, so the LABEL CAN TELL THE TRUTH.
+   *
+   * It could not before: the button said "Practise this" and opened the next
+   * lesson, every time except at the end of a chapter. Reported from a phone.
+   * A caller that knows the destination has to say which it is.
+   */
+  nextIsPractice: boolean;
   alreadyComplete: boolean;
 }) {
   const t = useTranslations();
@@ -111,7 +120,7 @@ export function LessonCompleteButton({
         <>
           <p className="text-body-sm text-correct">{t("lesson.completed")}</p>
           <Button onClick={() => router.push(nextHref)}>
-            {t("lesson.practiceNext")}
+            {nextIsPractice ? t("lesson.practiceNext") : t("lesson.nextLesson")}
           </Button>
         </>
       )}
