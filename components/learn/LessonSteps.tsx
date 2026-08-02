@@ -10,6 +10,8 @@ import { TapStep } from "@/components/learn/steps/TapStep";
 import { RevealStep } from "@/components/learn/steps/RevealStep";
 import { WorkedStep } from "@/components/learn/steps/WorkedStep";
 import type { LessonStep } from "@/lib/learning/lessonSteps";
+import { stepSpeech } from "@/lib/learning/speakable";
+import { SpeakButton } from "@/components/learn/SpeakButton";
 
 /**
  * The step player (D18) — one idea per screen, with a visible finish line.
@@ -54,6 +56,11 @@ export function LessonSteps({
   const step = steps[index];
   const last = index === total - 1;
 
+  // BOTH languages are prepared, because the listening language is chosen
+  // separately from the reading language (D18) — a learner reading English may
+  // want it explained in Hindi. Switching is then instant and needs no fetch.
+  const speech = { en: stepSpeech(step, "en"), hi: stepSpeech(step, "hi") };
+
   return (
     <section className="flex flex-col gap-xl">
       <div className="flex flex-col gap-sm">
@@ -72,9 +79,12 @@ export function LessonSteps({
             style={{ width: `${((done ? total : index + 1) / total) * 100}%` }}
           />
         </div>
-        <p className="text-caption text-muted">
-          {t("stepOf", { step: done ? total : index + 1, total })}
-        </p>
+        <div className="flex items-center justify-between gap-md">
+          <p className="text-caption text-muted">
+            {t("stepOf", { step: done ? total : index + 1, total })}
+          </p>
+          {!done && <SpeakButton text={speech} />}
+        </div>
       </div>
 
       <div ref={headingRef} tabIndex={-1} className="outline-none">

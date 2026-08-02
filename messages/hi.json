@@ -98,7 +98,10 @@
     "backToChapter": "चैप्टर पर वापस",
     "reveal": "दिखाओ",
     "gotIt": "बिल्कुल सही",
-    "notQuiteHere": "थोड़ा सा रह गया — ये देखो"
+    "notQuiteHere": "थोड़ा सा रह गया — ये देखो",
+    "listen": "सुनो",
+    "stopListening": "रोको",
+    "listenIn": "{lang} में सुनो"
   },
   "tutor": {
     "title": "साथी से पूछो",
