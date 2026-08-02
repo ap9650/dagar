@@ -225,6 +225,17 @@ exits non-zero.
 
 ## Deck & docs — decided, not yet written up (1 Aug)
 
+**Evidence the adaptivity from the data, not from a screenshot.** The ladder is
+invisible in the UI until 4.1c ships, and may not ship — but it is provable from
+`attempts` either way, and a number beats a claim:
+
+> "Across one practice set the ladder moved from difficulty 1 to 3 as the learner
+> got things right, and stepped back down when they didn't. Adaptivity isn't a
+> claim in the deck — it's in the attempts table."
+
+Costs nothing, survives 4.1c being cut, and answers the question a judge is most
+likely to ask about an "adaptive" product.
+
 Not code. Do these while assembling the deck (3.9), not before feature freeze.
 
 **Broaden the secondary persona to parent / guardian / tutor.** The PRD already
@@ -272,6 +283,7 @@ submission. Work 4.1–4.8 **in order** and stop adding features.
 |---|---|---|
 | 4.1 | **Finish whatever slipped** | Most builds need this. **Hard stop at 4pm** — after that, cut it and demo around it rather than debugging into the submission window. |
 | 4.1b | **"Very close — write it as a fraction"** *(agreed 1 Aug, ~40 min)* | A decimal that is close but outside tolerance on a NON-TERMINATING answer currently gets a flat "not quite". For `5/12`, that means `0.42` is rejected with no clue that the maths was right and only the form was wrong. Add a distinct grade reason, pass it through `/api/attempts`, render a specific message, copy in both languages, tests. **Correctness itself does not change** — `0.42` stays wrong, because it is wrong; only the feedback improves. Do it AFTER 4.2 and 4.3; `grading.ts` is the highest-harm file in the product and this is not worth a rushed edit. Cut it without hesitation if the morning runs late. |
+| 4.1c | **Make the adaptive ladder visible** *(agreed 2 Aug, ~30 min)* | Practice steps difficulty 1→3 after two right and back down after two wrong, and a learner cannot perceive any of it — the product's central claim is invisible on the screen where it happens. Show the MOVEMENT, never the level: **"Nice — let's try a harder one"** when it steps up, and **nothing at all** when it steps down. A visible "Level 1" is a rank, which design rule 12 forbids, and "here's an easier one" is a demotion notice to a child who just got two wrong. Asymmetric on purpose. `/api/attempts` already returns the next difficulty, so this is a comparison, one line of copy in each language, and a test. **The quiz is deliberately excluded** — its set is fixed at start so scores stay comparable between attempts, and there is no adaptation there to show. Cut without hesitation if the morning runs late; the deck line below evidences the same thing for free. |
 | 4.2 | **Hindi read-through** — the one manual content task | Run `npm run check:hindi` first so everything mechanical is already fixed, then read every lesson and question stem for **tone only**: does this sound like the NCERT textbook, and would a 12-year-old read it easily? ~65–80 min for all three chapters. **Show it to one Hindi-speaking child or parent if you can** — ten minutes of that beats every rule in the guide. |
 | 4.3 | Full journey on a real phone against the **live** URL | Signup → lesson → tutor → practice → quiz → progress → parent link, in **both languages**. Deploy itself is routine by now — you have been deploying since Day 0. |
 | 4.4 | Seed demo accounts | Realistic partial progress: a 4-day streak, one chapter part-done, two weak concepts. **Purge development test data first** — `learner1@saathi.test` and `learner2@saathi.test` were created on Day 1 to verify slice 1.1, and their `learner_registered` rows in `events` would inflate the activation number on the metrics slide. Delete the users **and** their event rows (`events.student_id` is `on delete set null`, so removing the user leaves the event behind). |
