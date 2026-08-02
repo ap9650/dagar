@@ -151,3 +151,44 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   await expect(page.getByRole("heading", { name: /your progress/i })).toBeVisible();
   await expect(page.getByText(/badges/i).first()).toBeVisible();
 });
+
+/**
+ * A learner can change their class, and the curriculum follows.
+ *
+ * Grade was read-only in Settings for a long time — the same defect the language
+ * picker exists to prevent. Grade decides which chapters exist for you, so a
+ * mis-tap at onboarding meant never reaching your own curriculum, with the app
+ * simply looking as though it had the wrong content in it.
+ *
+ * The assertion that matters is the SECOND one: not that the setting saved, but
+ * that the dashboard changed. A control that writes a row and leaves the learner
+ * looking at Class 6 is the same bug wearing a success state.
+ */
+test("a learner can change class, and the chapters follow", async ({ page }) => {
+  const learner = freshLearner();
+
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Create an account" }).click();
+  await page.getByLabel("Email").fill(learner.email);
+  await page.getByLabel("Password").fill(learner.password);
+  await page.getByRole("button", { name: "Create an account" }).click();
+
+  await page.getByText("Class 6", { exact: true }).click({ timeout: 20_000 });
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.waitForURL(/\/learn$/, { timeout: 20_000 });
+  await expect(page.getByText(/fraction/i).first()).toBeVisible();
+
+  await page.goto("/settings");
+  await expect(page.getByRole("radio", { name: "Class 6" })).toBeChecked();
+
+  await page.getByText("Class 7", { exact: true }).click();
+  await expect(page.getByRole("radio", { name: "Class 7" })).toBeChecked();
+
+  // Survives a reload, so it reached the database and not just React state.
+  await page.reload();
+  await expect(page.getByRole("radio", { name: "Class 7" })).toBeChecked();
+
+  // And the curriculum actually moved.
+  await page.goto("/learn");
+  await expect(page.getByText(/integer/i).first()).toBeVisible({ timeout: 15_000 });
+});

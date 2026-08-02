@@ -8,6 +8,7 @@ import { SignOutButton } from "@/components/auth/SignOutButton";
 import { InviteParentCard } from "@/components/learn/InviteParentCard";
 import { InstallSettings } from "@/components/install/InstallSettings";
 import { HapticsToggle } from "@/components/settings/HapticsToggle";
+import { GradeSetting } from "@/components/settings/GradeSetting";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -61,13 +62,13 @@ export default async function SettingsPage() {
         <LanguagePicker current={locale} />
       </section>
 
+      {/* Was read-only text, which is the same defect the language picker exists
+          to prevent: grade decides which chapters exist for you, so a mis-tap at
+          onboarding meant never reaching your own curriculum — and the app just
+          looked like it had the wrong content in it. */}
       <section className="flex flex-col gap-md">
         <h2 className="text-label text-muted">{t("settings.gradeTitle")}</h2>
-        <Card>
-          <p className="text-body text-ink">
-            {t("onboarding.gradeOption", { grade: profile?.grade ?? 6 })}
-          </p>
-        </Card>
+        <GradeSetting current={profile?.grade ?? 6} />
       </section>
 
       {profile?.display_name && (

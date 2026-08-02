@@ -242,7 +242,8 @@
     "shareTitle": "Share your progress",
     "inviteParentCodeToggle": "Or give them a code for their own account",
     "hapticsTitle": "Feedback",
-    "hapticsLabel": "Buzz when you get something right"
+    "hapticsLabel": "Buzz when you get something right",
+    "gradeHelp": "Your progress is kept. You can switch back any time."
   },
   "install": {
     "title": "Add Saathi to your home screen",
