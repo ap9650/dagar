@@ -78,6 +78,7 @@ type Row = {
   answer_value: string;
   choices: unknown;
   input: unknown;
+  stem_viz: unknown;
 };
 
 function choicesToText(choices: unknown): string {
@@ -112,6 +113,37 @@ function optionsToText(input: unknown): string {
     : "";
 }
 
+/**
+ * The diagram that IS the question (slice 5.2c), described in words.
+ *
+ * Without this the verifier reads "this balance is level, what is x?" with no
+ * balance, and a cold solve of an unanswerable question is not a check — it is a
+ * guess reported as a verification. The learner sees a picture; the model gets
+ * the same information as a sentence.
+ *
+ * Only `balanceScale` is described so far, because it is the only kind authored
+ * into a stem. An undescribed kind returns "" and the question fails the check
+ * loudly rather than being silently waved through.
+ */
+function stemVizToText(stemViz: unknown): string {
+  if (typeof stemViz !== "object" || stemViz === null) return "";
+  const spec = stemViz as {
+    kind?: unknown;
+    left?: { xs?: number; n?: number };
+    right?: { xs?: number; n?: number };
+  };
+  if (spec.kind !== "balanceScale") return "";
+
+  const side = (pan?: { xs?: number; n?: number }) => {
+    const parts: string[] = [];
+    if (pan?.xs) parts.push(pan.xs === 1 ? "x" : `${pan.xs}x`);
+    if (pan?.n) parts.push(String(pan.n));
+    return parts.length ? parts.join(" + ") : "0";
+  };
+
+  return `\n\nThe diagram is a level pan balance: ${side(spec.left)} on the left weighs the same as ${side(spec.right)} on the right.`;
+}
+
 async function solveCold(row: Row): Promise<string> {
   const response = await anthropic.messages.create({
     model: MODEL,
@@ -121,7 +153,7 @@ async function solveCold(row: Row): Promise<string> {
       {
         role: "user",
         // Stem, type and options. NOT the stored answer.
-        content: `Answer type: ${row.answer_type}\n\nQuestion:\n${row.stem_md}${choicesToText(row.choices)}${optionsToText(row.input)}`,
+        content: `Answer type: ${row.answer_type}\n\nQuestion:\n${row.stem_md}${choicesToText(row.choices)}${optionsToText(row.input)}${stemVizToText(row.stem_viz)}`,
       },
     ],
   });
@@ -143,7 +175,7 @@ async function solveCold(row: Row): Promise<string> {
 
 let query = db
   .from("questions")
-  .select("slug, stem_md, answer_type, answer_value, choices, input")
+  .select("slug, stem_md, answer_type, answer_value, choices, input, stem_viz")
   .order("slug");
 if (ONLY) query = query.like("slug", `${ONLY}%`);
 

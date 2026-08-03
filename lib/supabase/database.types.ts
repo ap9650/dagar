@@ -693,6 +693,7 @@ export type Database = {
           slug: string | null
           solution_md: string
           stem_md: string
+          stem_viz: Json | null
         }
         Insert: {
           answer_type: string
@@ -709,6 +710,7 @@ export type Database = {
           slug?: string | null
           solution_md: string
           stem_md: string
+          stem_viz?: Json | null
         }
         Update: {
           answer_type?: string
@@ -725,6 +727,7 @@ export type Database = {
           slug?: string | null
           solution_md?: string
           stem_md?: string
+          stem_viz?: Json | null
         }
         Relationships: [
           {
@@ -976,6 +979,7 @@ export type Database = {
           kind: string | null
           slug: string | null
           stem_md: string | null
+          stem_viz: Json | null
         }
         Insert: {
           answer_type?: string | null
@@ -990,6 +994,7 @@ export type Database = {
           kind?: string | null
           slug?: string | null
           stem_md?: string | null
+          stem_viz?: Json | null
         }
         Update: {
           answer_type?: string | null
@@ -1004,6 +1009,7 @@ export type Database = {
           kind?: string | null
           slug?: string | null
           stem_md?: string | null
+          stem_viz?: Json | null
         }
         Relationships: [
           {

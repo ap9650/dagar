@@ -10,6 +10,8 @@ import { PRACTICE_SET_SIZE, type PracticeQuestion } from "@/lib/learning/practic
 import { HINT_TIERS } from "@/lib/learning/hints";
 import type { Locale } from "@/i18n/config";
 import { MarkdownBody } from "./MarkdownBody";
+import { Viz } from "@/components/learn/viz";
+import { parseStemViz } from "@/lib/learning/questionInput";
 import { AnswerInput } from "./AnswerInput";
 import { FeedbackPanel } from "./FeedbackPanel";
 import { MentorCta } from "./MentorCta";
@@ -118,6 +120,7 @@ export function PracticeSession({
   }, [conceptId]);
 
   const stem = tContent(question, "stem_md", locale);
+  const stemViz = parseStemViz(question.stem_viz);
   const choices = tChoices(question, locale);
   const isLastQuestion = questionNumber >= PRACTICE_SET_SIZE;
 
@@ -310,6 +313,14 @@ export function PracticeSession({
       <div className="text-body text-ink">
         <MarkdownBody markdown={stem} />
       </div>
+
+      {/* The diagram that belongs to the QUESTION (slice 5.2c). Between the stem
+          and the answer control, because that is the reading order: what is being
+          asked, what it looks like, then what you do about it.
+
+          Not translated (D18 §6) — a balance holding three x-boxes is the same
+          balance in Hindi. Its `aria-label` comes from the primitive and is. */}
+      {stemViz && <Viz spec={stemViz} />}
 
       <AnswerInput
         answerType={question.answer_type}

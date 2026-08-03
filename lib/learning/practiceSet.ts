@@ -30,6 +30,12 @@ export type PracticeQuestion = {
    * `parseInput` at the point of use, never trusted on the way in.
    */
   input: unknown;
+  /**
+   * A diagram shown WITH the stem (slice 5.2c) — a balance, a number line.
+   * Null for every question that does not need one. Validated at the point of
+   * use by `parseStemViz`, never trusted on the way in.
+   */
+  stem_viz: unknown;
   i18n: unknown;
 };
 

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { vizSchema } from "./lessonSteps";
+import type { VizSpec } from "@/components/learn/viz/types";
 
 /**
  * How a practice answer is ENTERED (D18, slice 5.2) — never how it is judged.
@@ -135,4 +136,23 @@ function decimalsIn(step: number): number {
  */
 export function shadedValue(spec: ShadeInput, shaded: number): string {
   return `${shaded}/${spec.parts}`;
+}
+
+/**
+ * A diagram that belongs to the QUESTION rather than the answer (slice 5.2c).
+ *
+ * The four input kinds above all put pictures among the OPTIONS. Class 8 needs
+ * the opposite — "the balance is level, what is x?" — where the diagram is the
+ * question and cannot be one of the choices. A learner cannot answer without
+ * seeing it, and offering four balances to pick between would be a different,
+ * weaker question.
+ *
+ * Same shared `vizSchema` as lesson steps, so a balance is a balance everywhere.
+ * Same discipline as `parseInput`: never throws, and a malformed blob simply
+ * means no diagram rather than a broken question.
+ */
+export function parseStemViz(value: unknown): VizSpec | null {
+  if (value == null) return null;
+  const result = vizSchema.safeParse(value);
+  return result.success ? (result.data as VizSpec) : null;
 }

@@ -226,6 +226,7 @@ for (const chapter of chapters) {
         // Additive: a question without one keeps a null here and renders the
         // text field, exactly as before slice 5.2.
         input: (question.input ?? null) as Json,
+        stem_viz: (question.stem_viz ?? null) as Json,
         solution_md: question.solution_md,
         i18n: i18nFor(question.slug),
       };

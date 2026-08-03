@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   parseInput,
+  parseStemViz,
   placedValue,
   shadedValue,
   type PlaceInput,
@@ -130,5 +131,45 @@ describe("shadedValue", () => {
     // An empty answer is rejected before grading; "0/4" is a real wrong answer
     // and should be graded and recorded as one.
     expect(shadedValue(spec, 0)).toBe("0/4");
+  });
+});
+
+/**
+ * The diagram that IS the question (slice 5.2c).
+ *
+ * Class 8 had nothing pictorial because every input kind puts diagrams among
+ * the ANSWERS, and an equation cannot work that way — you cannot offer four
+ * balances and ask which is right. So the balance goes beside the stem.
+ */
+describe("parseStemViz", () => {
+  it("accepts a balance", () => {
+    const spec = parseStemViz({
+      kind: "balanceScale",
+      left: { xs: 2, n: 1 },
+      right: { xs: 1, n: 5 },
+    });
+    expect(spec).not.toBeNull();
+    expect(spec!.kind).toBe("balanceScale");
+  });
+
+  it("accepts the other primitives too — a stem diagram is not balance-only", () => {
+    expect(parseStemViz({ kind: "numberLine", from: -5, to: 5, step: 1 })).not.toBeNull();
+    expect(
+      parseStemViz({ kind: "partWhole", shape: "bar", parts: 4, shaded: 3 }),
+    ).not.toBeNull();
+  });
+
+  it("returns null rather than throwing on anything it cannot vouch for", () => {
+    for (const bad of [null, undefined, 0, "balanceScale", [], {}, { kind: "teapot" }]) {
+      expect(parseStemViz(bad), JSON.stringify(bad)).toBeNull();
+    }
+  });
+
+  it("rejects a balance with more x-boxes than a pan can hold", () => {
+    // Six boxes overflow the pan — the same overflow a test caught in the
+    // BalanceScale geometry, which is why the cap lives in the schema.
+    expect(
+      parseStemViz({ kind: "balanceScale", left: { xs: 9 }, right: { xs: 0, n: 9 } }),
+    ).toBeNull();
   });
 });

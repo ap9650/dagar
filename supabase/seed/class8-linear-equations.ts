@@ -560,6 +560,105 @@ export const class8LinearEquations: SeedChapter = {
   ],
 
   questions: [
+    // ─────────────────────────────────────────────────────────────────────────
+    // THE BALANCE IS THE QUESTION (D18 slice 5.2c)
+    //
+    // Class 8 had no pictorial questions at all, because every input kind puts
+    // diagrams among the ANSWERS and an equation does not work that way — you
+    // cannot offer four balances and ask which one is right. The equation has to
+    // BE the picture, and the learner solves it.
+    //
+    // So the stem does NOT restate the equation. Reading the balance is the
+    // first half of the work; if the prose said "solve 2x + 3 = 11" the diagram
+    // would be decoration.
+    //
+    // Diagrams are never translated (D18 §6) — a pan holding two x-boxes is the
+    // same pan in Hindi.
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      slug: "c8-basics-d1-q3",
+      concept_slug: "linear-equation-basics",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "This balance is level.\n\nWhat is $x$?",
+      stem_viz: { kind: "balanceScale", left: { xs: 1, n: 3 }, right: { xs: 0, n: 8 } },
+      answer_value: "5",
+      input: { kind: "tiles", bank: ["1", "2", "3", "5", "8", "/"] },
+      solution_md: [
+        "The two sides weigh the same — that is what level means.",
+        "",
+        "On the left there is one $x$ and a weight of 3. On the right, 8.",
+        "",
+        "$$\n x + 3 = 8 \n$$",
+        "",
+        "Take 3 off **both** sides and it stays level: $x = 5$.",
+      ].join("\n"),
+    },
+    {
+      slug: "c8-one-d1-q4",
+      concept_slug: "solving-one-side",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "This balance is level.\n\nWhat is **one** $x$ worth?",
+      stem_viz: { kind: "balanceScale", left: { xs: 3, n: 0 }, right: { xs: 0, n: 12 } },
+      answer_value: "4",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "9", "/"] },
+      solution_md: [
+        "Three $x$ boxes together weigh 12.",
+        "",
+        "$$\n 3x = 12 \n$$",
+        "",
+        "The boxes are identical, so share the 12 equally between them: each one is $12 \\div 3 = 4$.",
+        "",
+        "The trap is answering **12** — that is what all three weigh together, not what one is worth.",
+      ].join("\n"),
+    },
+    {
+      slug: "c8-one-d2-q4",
+      concept_slug: "solving-one-side",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "This balance is level.\n\nWhat is $x$?",
+      stem_viz: { kind: "balanceScale", left: { xs: 2, n: 5 }, right: { xs: 0, n: 11 } },
+      answer_value: "3",
+      input: { kind: "tiles", bank: ["1", "2", "3", "5", "6", "/"] },
+      solution_md: [
+        "Two $x$ boxes and a weight of 5 balance 11.",
+        "",
+        "$$\n 2x + 5 = 11 \n$$",
+        "",
+        "Take the 5 off both sides: the boxes alone balance 6. Two boxes weigh 6, so one weighs **3**.",
+        "",
+        "Do the weight first, then the sharing. Halving 11 before removing the 5 gives the wrong answer.",
+      ].join("\n"),
+    },
+    {
+      slug: "c8-both-d1-q3",
+      concept_slug: "variable-both-sides",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "This balance is level.\n\nWhat is $x$?",
+      stem_viz: { kind: "balanceScale", left: { xs: 2, n: 1 }, right: { xs: 1, n: 5 } },
+      answer_value: "4",
+      input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
+      solution_md: [
+        "There are $x$ boxes on **both** sides now.",
+        "",
+        "$$\n 2x + 1 = x + 5 \n$$",
+        "",
+        "Take one $x$ box off each side. It stays level, and the right side has no boxes left:",
+        "",
+        "$$\n x + 1 = 5 \n$$",
+        "",
+        "Then take 1 off both: $x = 4$.",
+        "",
+        "Removing a box from only one side would tip it — and a tipped balance is no longer telling you anything true.",
+      ].join("\n"),
+    },
     // ── linear-equation-basics ──────────────────────────────────────────────
     {
       slug: "c8-basics-d1-q1",

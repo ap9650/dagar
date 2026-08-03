@@ -59,6 +59,8 @@ function toQuizQuestion(row: BankRow): QuizQuestion | null {
       learners. Revisit once pictorial practice has real usage.
     */
     input: null,
+    // See the note above. No quiz question is authored with a diagram yet.
+    stem_viz: null,
     i18n: stripSolutions(row.i18n),
   };
 }

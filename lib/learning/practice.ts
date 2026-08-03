@@ -54,7 +54,7 @@ export async function selectPracticeQuestion({
   const [{ data: bankRows }, { data: attemptRows }] = await Promise.all([
     supabase
       .from("questions_public")
-      .select("id, slug, difficulty, stem_md, answer_type, choices, input, i18n")
+      .select("id, slug, difficulty, stem_md, stem_viz, answer_type, choices, input, i18n")
       .eq("concept_id", conceptId)
       .eq("kind", "practice")
       // Deterministic order, so ties in `selectNextQuestion` break the same way
@@ -82,6 +82,7 @@ export async function selectPracticeQuestion({
             answer_type: row.answer_type,
             choices: row.choices,
             input: row.input,
+            stem_viz: row.stem_viz,
             i18n: stripSolutions(row.i18n),
           } satisfies PracticeQuestion,
         ]

@@ -8,6 +8,7 @@
 
 import type { LessonStep } from "../../lib/learning/lessonSteps.ts";
 import type { QuestionInput } from "../../lib/learning/questionInput.ts";
+import type { VizSpec } from "../../components/learn/viz/types.ts";
 
 export type Choice = { id: string; label: string };
 
@@ -43,6 +44,12 @@ export type SeedQuestion = {
    * by mistake cannot change the quiz.
    */
   input?: QuestionInput;
+  /**
+   * A diagram shown WITH the stem (slice 5.2c). For questions where the picture
+   * IS the question — "the balance is level, what is x?" — which no input kind
+   * can express, because they all put diagrams among the answers.
+   */
+  stem_viz?: VizSpec;
   /** A worked METHOD, not just the answer — the tutor uses it to ground hints. */
   solution_md: string;
 };
