@@ -87,8 +87,15 @@ export const class8LinearEquations: SeedChapter = {
       // the words "an equation is a balance" arrive with the picture, not before.
       steps: [
         {
-          kind: "see",
+          // `reveal`, not `see`. This asked a direct question and then simply
+          // moved on to the next step — the only step in the curriculum that
+          // did. A learner who worked out ₹10 was never told they were right,
+          // and one who could not was never told anything. A question mark is a
+          // promise, and `see` has no way to keep it.
+          kind: "reveal",
           md: "3 pens and a ₹5 eraser cost ₹35. What does one pen cost?",
+          answer:
+            "₹10 a pen. Take the ₹5 eraser off both sides and ₹30 is left for 3 pens. That move — do the same to both sides — is the whole chapter.",
           viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 }, label: "3x + 5 = 35" },
         },
         {

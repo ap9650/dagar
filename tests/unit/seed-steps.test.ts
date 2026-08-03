@@ -152,3 +152,46 @@ describe("authored step text survives TypeScript escaping", () => {
     }
   });
 });
+
+/**
+ * A QUESTION MARK IS A PROMISE.
+ *
+ * Only three step kinds can keep it. `reveal` hides the answer behind "Show me",
+ * `tap` marks a choice, and `worked` walks the solution line by line. A `see`
+ * step has no answer, no input and no reveal — it renders prose and a diagram,
+ * and Continue moves on.
+ *
+ * So a `see` step ending in a question mark asks a learner something and then
+ * changes the subject. Class 8 opened with exactly that: "3 pens and a ₹5 eraser
+ * cost ₹35. What does one pen cost?" — and nothing in the lesson ever said ₹10.
+ * A learner who worked it out was never told they were right; one who could not
+ * was never told anything at all. Reported from a phone, on the very first
+ * screen of the chapter.
+ *
+ * This is a CONTENT rule, not a schema one: the parser cannot know that prose
+ * ends in a question, and a lesson that trips it is still valid and still
+ * renders. It just quietly fails the learner.
+ */
+describe("no step asks a question it cannot answer", () => {
+  const ANSWERING = new Set(["reveal", "tap", "worked"]);
+
+  const steps = chapters.flatMap((chapter) =>
+    chapter.lessons.flatMap((lesson) =>
+      (lesson.steps ?? []).map(
+        (step, i) => [`${lesson.slug} step ${i + 1}`, step] as const,
+      ),
+    ),
+  );
+
+  it("has stepped lessons to check", () => {
+    expect(steps.length).toBeGreaterThan(0);
+  });
+
+  it.each(steps)("%s resolves its own question", (_where, step) => {
+    if (!/\?\s*$/.test(step.md.trim())) return;
+    expect(
+      ANSWERING.has(step.kind),
+      `a "${step.kind}" step cannot answer: ${JSON.stringify(step.md)}`,
+    ).toBe(true);
+  });
+});
