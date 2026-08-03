@@ -29,11 +29,28 @@ import { SpeakButton } from "@/components/learn/SpeakButton";
  * Position is deliberately not persisted. Four minutes is short enough that
  * resume machinery costs more than it saves, and a learner returning to a lesson
  * usually wants the start of it.
+ *
+ * ── THE LAST STEP FINISHES THE LESSON ───────────────────────────────────────
+ * It did not. This player had a `done` state that swapped the step body for the
+ * completion button — and that button carried the SAME label as the last step's,
+ * so finishing a lesson read as:
+ *
+ *     Step 8 of 8 · [Got it — continue]   →   Step 8 of 8 · (nothing at all)
+ *                                              [Got it — continue]
+ *
+ * A blank screen, at full progress, asking again for something already given.
+ * Reported from a phone, and only ever seen on a FIRST visit: a lesson opened
+ * again arrives already complete, so the second screen showed "Practise this"
+ * instead and the fault hid itself.
+ *
+ * The last step's button now IS the finishing action, through `onFinish`.
+ * ────────────────────────────────────────────────────────────────────────────
  */
 export function LessonSteps({
   steps,
   speech,
-  children,
+  onFinish,
+  finishing = false,
 }: {
   steps: LessonStep[];
   /**
@@ -42,21 +59,21 @@ export function LessonSteps({
    * must not offer a language it would have to fake.
    */
   speech: { en: string; hi: string | null }[];
-  /** Rendered once the last step is passed — the lesson-complete action. */
-  children: React.ReactNode;
+  /** Called by the last step's button. This is where the lesson ends. */
+  onFinish: () => void;
+  finishing?: boolean;
 }) {
   const t = useTranslations("lesson");
   const tCommon = useTranslations("common");
 
   const [index, setIndex] = useState(0);
-  const [done, setDone] = useState(false);
   const headingRef = useRef<HTMLDivElement>(null);
 
   // Move focus to the new step, or a keyboard and screen-reader user is left
   // where the old Continue button used to be, on content that no longer exists.
   useEffect(() => {
     headingRef.current?.focus();
-  }, [index, done]);
+  }, [index]);
 
   const total = steps.length;
   const step = steps[index];
@@ -72,50 +89,45 @@ export function LessonSteps({
           role="progressbar"
           aria-valuemin={1}
           aria-valuemax={total}
-          aria-valuenow={done ? total : index + 1}
-          aria-label={t("stepOf", { step: done ? total : index + 1, total })}
+          aria-valuenow={index + 1}
+          aria-label={t("stepOf", { step: index + 1, total })}
         >
           <div
             className="h-full rounded-full bg-primary transition-[width] duration-200 ease-out"
-            style={{ width: `${((done ? total : index + 1) / total) * 100}%` }}
+            style={{ width: `${((index + 1) / total) * 100}%` }}
           />
         </div>
         <div className="flex items-center justify-between gap-md">
           <p className="text-caption text-muted">
-            {t("stepOf", { step: done ? total : index + 1, total })}
+            {t("stepOf", { step: index + 1, total })}
           </p>
-          {!done && speech[index] && <SpeakButton text={speech[index]} />}
+          {speech[index] && <SpeakButton text={speech[index]} />}
         </div>
       </div>
 
       <div ref={headingRef} tabIndex={-1} className="outline-none">
-        {done ? (
-          <div className="flex flex-col gap-lg">{children}</div>
-        ) : (
-          <StepBody key={index} step={step} />
-        )}
+        <StepBody key={index} step={step} />
       </div>
 
-      {!done && (
-        <div className="flex items-center gap-md">
-          {index > 0 && (
-            <Button
-              variant="ghost"
-              onClick={() => setIndex((i) => i - 1)}
-              aria-label={tCommon("back")}
-              className="shrink-0 w-auto px-lg"
-            >
-              <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-            </Button>
-          )}
+      <div className="flex items-center gap-md">
+        {index > 0 && (
           <Button
-            className="flex-1"
-            onClick={() => (last ? setDone(true) : setIndex((i) => i + 1))}
+            variant="ghost"
+            onClick={() => setIndex((i) => i - 1)}
+            aria-label={tCommon("back")}
+            className="shrink-0 w-auto px-lg"
           >
-            {last ? t("complete") : tCommon("continue")}
+            <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
           </Button>
-        </div>
-      )}
+        )}
+        <Button
+          className="flex-1"
+          loading={last && finishing}
+          onClick={() => (last ? onFinish() : setIndex((i) => i + 1))}
+        >
+          {last ? t("complete") : tCommon("continue")}
+        </Button>
+      </div>
     </section>
   );
 }

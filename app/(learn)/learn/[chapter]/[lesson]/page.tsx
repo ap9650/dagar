@@ -12,7 +12,7 @@ import { localisedSteps, parseSteps } from "@/lib/learning/lessonSteps";
 import { stepSpeech } from "@/lib/learning/speakable";
 import { nextAfterLesson, nextStepHref } from "@/lib/learning/nextStep";
 import { LessonBody } from "@/components/learn/LessonBody";
-import { LessonSteps } from "@/components/learn/LessonSteps";
+import { SteppedLesson } from "@/components/learn/SteppedLesson";
 import { LessonProgress } from "@/components/learn/LessonProgress";
 import { LessonCompleteButton } from "@/components/learn/LessonCompleteButton";
 import { TutorSheet } from "@/components/learn/TutorSheet";
@@ -145,14 +145,14 @@ export default async function LessonPage({
           has always been here. Falls back to the English body when Hindi is
           absent too — a learner sees content, never a blank (D16). */}
       {steps ? (
-        <LessonSteps steps={steps} speech={speech}>
-          <LessonCompleteButton
-            lessonId={lesson.id}
-            nextHref={nextHref}
-            nextIsPractice={goesToPractice}
-            alreadyComplete={completedIds.has(lesson.id)}
-          />
-        </LessonSteps>
+        <SteppedLesson
+          lessonId={lesson.id}
+          steps={steps}
+          speech={speech}
+          nextHref={nextHref}
+          nextIsPractice={goesToPractice}
+          alreadyComplete={completedIds.has(lesson.id)}
+        />
       ) : (
         <LessonBody markdown={tContent(lesson, "body_md", locale)} />
       )}
@@ -170,8 +170,8 @@ export default async function LessonPage({
         }))}
       />
 
-      {/* On a stepped lesson this lives inside the player, revealed at the end.
-          Here it is the prose path's own footer. */}
+      {/* The prose path's own footer. A stepped lesson finishes at its last
+          step instead — see SteppedLesson. */}
       {!steps && (
         <LessonCompleteButton
           lessonId={lesson.id}

@@ -1,23 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/Button";
-import { haptic } from "@/lib/haptics";
-import { celebrationFor, type Celebration as Moment } from "@/lib/learning/celebration";
-import { Celebration } from "./Celebration";
-import { FeedbackPrompt } from "./FeedbackPrompt";
+import { LessonActions } from "./LessonActions";
+import { useLessonCompletion } from "./useLessonCompletion";
 
 /**
- * Marks the lesson complete, and reports the lesson as started when it opens.
+ * The finishing action for a PROSE lesson — one button under the text.
  *
- * **The network is assumed to be bad.** Losing a completion to a dropped 4G packet
- * is a real occurrence for this audience, not a hypothetical (spec §7) — so a
- * failed request leaves the lesson looking complete on screen, offers a retry, and
- * never blocks the learner from moving on. The alternative, bouncing them back to
- * "not done" for something that was not their fault, is how an app teaches someone
- * that their effort does not count.
+ * A stepped lesson uses `SteppedLesson` instead, where the last step's button
+ * finishes the lesson. Both end at the same `LessonActions` footer, so the two
+ * shapes cannot drift apart in what they record or what they offer next.
  */
 export function LessonCompleteButton({
   lessonId,
@@ -26,126 +17,12 @@ export function LessonCompleteButton({
   alreadyComplete,
 }: {
   lessonId: string;
-  /** Where "what next" goes — practice, or the next lesson. Never a dead end. */
   nextHref: string;
-  /**
-   * Which of the two it is, so the LABEL CAN TELL THE TRUTH.
-   *
-   * It could not before: the button said "Practise this" and opened the next
-   * lesson, every time except at the end of a chapter. Reported from a phone.
-   * A caller that knows the destination has to say which it is.
-   */
   nextIsPractice: boolean;
   alreadyComplete: boolean;
 }) {
-  const t = useTranslations();
-  const router = useRouter();
-
-  const [complete, setComplete] = useState(alreadyComplete);
-  const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const [moment, setMoment] = useState<Moment | null>(null);
-  const started = useRef(false);
-
-  // Opening the lesson IS starting it. Fire-and-forget: a failed start must never
-  // stop someone reading, and the route handler is idempotent so a retry on the
-  // next visit costs nothing.
-  useEffect(() => {
-    if (started.current || alreadyComplete) return;
-    started.current = true;
-    fetch(`/api/lessons/${lessonId}/start`, { method: "POST" }).catch(() => {});
-  }, [lessonId, alreadyComplete]);
-
-  async function markComplete() {
-    setBusy(true);
-    setFailed(false);
-
-    // Optimistic on purpose — see the note above. The buzz goes with the
-    // optimistic state, not the response: the learner finished the lesson, and
-    // whether our server heard about it is not their news.
-    setComplete(true);
-    haptic("complete");
-
-    try {
-      const response = await fetch(`/api/lessons/${lessonId}/complete`, {
-        method: "POST",
-      });
-      if (!response.ok) {
-        setFailed(true);
-        return;
-      }
-
-      const body = await response.json();
-      // One moment, ranked server-fact-first — see lib/learning/celebration.ts.
-      // Notably it can be null, and on a second lesson the same day it should be.
-      setMoment(celebrationFor(body));
-
-      // Refresh so the dashboard's journey path, streak and goal ring reflect
-      // this on the way back. The server recomputed them; the client just
-      // re-reads.
-      router.refresh();
-    } catch {
-      setFailed(true);
-    } finally {
-      setBusy(false);
-    }
-  }
-
+  const state = useLessonCompletion({ lessonId, alreadyComplete });
   return (
-    /*
-      STICKY, which the design system asked for and this did not do:
-      "Sticky primary action at the bottom of the content area on lesson and
-      practice screens."
-
-      Reported from a real phone: after finishing a lesson, "Practise this" sat
-      at the very bottom of a long scroll with nothing indicating it was there.
-      The comment below used to claim "the next action is always on screen after
-      completion" — it was on the PAGE, which is not the same thing, and on a
-      360×780 screen with a chapter of maths above it, usually was not.
-
-      That matters most at exactly the moment it failed: the learner has just
-      finished something and is deciding whether to carry on. A next step they
-      have to go hunting for is a next step many will not take.
-
-      Sticky also means the way forward is reachable while READING, not only at
-      the end — the tutor button stays in flow above, so this costs one button of
-      height rather than two.
-    */
-    <div
-      className="sticky bottom-0 -mx-lg px-lg pt-md pb-lg flex flex-col gap-md
-                 bg-background border-t border-border"
-    >
-      {!complete ? (
-        <Button onClick={markComplete} loading={busy}>
-          {t("lesson.complete")}
-        </Button>
-      ) : (
-        <>
-          <p className="text-body-sm text-correct">{t("lesson.completed")}</p>
-          <Button onClick={() => router.push(nextHref)}>
-            {nextIsPractice ? t("lesson.practiceNext") : t("lesson.nextLesson")}
-          </Button>
-        </>
-      )}
-
-      {failed && (
-        // Amber, not red: nothing the learner did went wrong, and their progress
-        // is not lost — it just has not reached us yet.
-        <div className="flex flex-col gap-sm">
-          <p role="status" className="text-body-sm text-notquite">
-            {t("errors.offline")}
-          </p>
-          <Button variant="secondary" onClick={markComplete} loading={busy}>
-            {t("common.tryAgain")}
-          </Button>
-        </div>
-      )}
-
-      <Celebration moment={moment} onDismiss={() => setMoment(null)} />
-
-      {/* Only after finishing, and BELOW the next action — so anyone carrying
-          straight on to practice never has to read it. See FeedbackPrompt. */}
-      {complete && <FeedbackPrompt />}
-    </div>
+    <LessonActions state={state} nextHref={nextHref} nextIsPractice={nextIsPractice} />
   );
 }

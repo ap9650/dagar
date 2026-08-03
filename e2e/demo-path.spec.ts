@@ -104,7 +104,7 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   //
   // It also gives the step player its only end-to-end coverage — the loop is
   // bounded so a player that never advances fails here instead of hanging.
-  const complete = page.getByRole("button", { name: /got it — continue/i });
+  const complete = page.getByRole("button", { name: /^got it$/i });
   for (let step = 0; step < 15 && !(await complete.count()); step++) {
     await page.getByRole("button", { name: /^continue$/i }).first().click();
     await page.waitForTimeout(150);
@@ -112,16 +112,20 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   await expect(complete).toBeVisible({ timeout: 10_000 });
 
   /*
-    TWO buttons carry "Got it — continue": the step player's last-step button,
-    and the completion button revealed beneath it. That is why this waits on the
-    REQUEST rather than counting clicks.
+    ONE button finishes a lesson, and this asserts that.
 
-    It has to. Until 2 Aug this was a single `complete.click()`, which only ever
-    ended the steps — the loop above exits the moment the step player's own last
-    button appears, since it shares the label. So `/complete` was never posted,
-    and the demo path had never once covered lesson completion, the streak, or
-    milestone awarding. Everything downstream still passed, which is exactly why
-    it went unnoticed.
+    There used to be two, both labelled "Got it — continue": the step player's
+    last-step button, and a completion button on a blank screen behind it. The
+    test compensated by clicking twice and checking whether the label was still
+    there — which passed either way and therefore proved nothing about how many
+    screens a learner walks through.
+
+    So the click count is the assertion now. If a second confirmation screen ever
+    comes back, `complete` is still on screen after this and the check below
+    fails. Waiting on the REQUEST rather than the label is what caught the
+    original defect: until 2 Aug a single click only ended the steps, `/complete`
+    was never posted, and the demo path had never once covered completion, the
+    streak or milestone awarding. Everything downstream still passed.
   */
   const completed = page.waitForResponse(
     (r) => r.url().includes("/complete") && r.request().method() === "POST",
@@ -129,12 +133,10 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   );
 
   await complete.first().click();
-  await page.waitForTimeout(400);
-  // Still there ⇒ that click ended the steps and this one is the completion.
-  // Gone ⇒ it was a prose lesson and the first click already completed it.
-  if (await complete.count()) await complete.first().click();
-
   expect((await completed).ok()).toBeTruthy();
+
+  // One tap, not two: the finishing button is replaced by what comes next.
+  await expect(complete).toHaveCount(0);
 
   // A first lesson always earns `first_lesson` (D7b), so the celebration is not
   // optional here — this is the one moment in the journey it is guaranteed.

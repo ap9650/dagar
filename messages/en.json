@@ -92,7 +92,7 @@
   "lesson": {
     "stepOf": "Step {step} of {total}",
     "askTutor": "Ask a question",
-    "complete": "Got it — continue",
+    "complete": "Got it",
     "completed": "Lesson complete",
     "practiceNext": "Practise this",
     "backToChapter": "Back to the chapter",

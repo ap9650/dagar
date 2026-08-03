@@ -92,7 +92,7 @@
   "lesson": {
     "stepOf": "{total} में से {step} स्टेप",
     "askTutor": "सवाल पूछो",
-    "complete": "समझ गया — आगे बढ़ो",
+    "complete": "समझ गया",
     "completed": "लेसन पूरा हुआ",
     "practiceNext": "इसकी प्रैक्टिस करो",
     "backToChapter": "चैप्टर पर वापस",

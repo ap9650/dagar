@@ -148,6 +148,28 @@ is authored. Class 6 can be interactive while Classes 7 and 8 stay as they are,
 with no broken state in between. **This is the decision that de-risks the whole
 slice** — real testers are using the deployed app while it is being built.
 
+### One button finishes a lesson
+
+Whichever shape it is. A prose lesson finishes at the button under the text; a
+stepped lesson finishes at **the last step's own button**, not at a screen after
+it.
+
+The first build got this wrong in a way only a first-time learner ever saw. The
+player had a `done` state that swapped the step body for a completion button
+carrying the same label, so finishing read as: full progress bar, *step 8 of 8*,
+**an empty screen**, and a second identical button asking again for something
+already given. Open the lesson a second time and it arrives already complete, so
+the screen said "Practise this" instead and the fault hid itself.
+
+Two rules fall out of it, and both are asserted in `e2e/demo-path.spec.ts`:
+
+- **The finishing action exists exactly once on screen.** After one tap on it,
+  it is gone — replaced by what comes next.
+- **`lesson_started` fires when the lesson opens**, not when it ends. The report
+  lived inside the completion button, which on a stepped lesson was not mounted
+  until the learner reached the last step — so every drop-off partway through was
+  invisible in the funnel that exists to show exactly that.
+
 ---
 
 ## 7. Components
@@ -160,7 +182,10 @@ slice** — real testers are using the deployed app while it is being built.
 | `components/learn/viz/BalanceScale.tsx` | |
 | `components/learn/viz/ArrayGrid.tsx` | |
 | `components/learn/viz/index.tsx` | `<Viz spec={…}/>` — maps a step's `viz` object to the right primitive. The only place the union is resolved. |
-| `components/learn/LessonSteps.tsx` | the step player: progress, current step, Continue, back, transitions |
+| `components/learn/LessonSteps.tsx` | the step player: progress, current step, Continue, back, transitions. The **last step's button finishes the lesson** via `onFinish` — see below |
+| `components/learn/SteppedLesson.tsx` | player + finishing action in one client component, because the last step's button *is* the finishing action and a server component cannot pass a callback across that boundary |
+| `components/learn/useLessonCompletion.ts` | opened / finished, as one piece of state. Shared by both lesson shapes so they cannot drift in what they record |
+| `components/learn/LessonActions.tsx` | the foot of a lesson — finish it, then go somewhere. Rendered by both shapes |
 | `components/learn/steps/*.tsx` | one component per step kind |
 | `components/learn/SpeakButton.tsx` | audio control and language toggle |
 | `lib/learning/lessonSteps.ts` | the `LessonStep` union, and a zod parser — a malformed `steps` blob falls back to `body_md` rather than crashing a lesson |
