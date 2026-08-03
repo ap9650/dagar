@@ -2,10 +2,16 @@
 """
 The persona illustration for slide 5 of the pitch deck.
 
-DRAWN, NOT PHOTOGRAPHED — on purpose. Aarav is a composite persona, not a real
+DRAWN, NOT PHOTOGRAPHED — on purpose. Lakshmi is a composite persona, not a real
 child. A stock photograph of a real 13-year-old standing in for "the underserved
 learner" is both a licensing question and a dignity one; an illustration says
 "this is a composite" without anyone having to read the caption.
+
+She replaced a boy called Aarav on 3 Aug. Girls are over-represented among the
+learners this product is aimed at — the ones pulled out first when money is
+short, and the ones whose education is likeliest to be treated as optional — so
+a boy sitting in the primary-persona slot was quietly describing an easier case
+than the one we say we are building for.
 
 Palette is the product's own (saathi-design), so the deck and the app agree.
 Drawn at 4x and downsampled — PIL has no anti-aliasing on shapes, and a 13-year-old
@@ -48,6 +54,12 @@ def main() -> None:
     # ── the disc the whole portrait sits in ────────────────────────────────
     ellipse(d, 500, 500, 490, 490, PRIMARY_SOFT)
 
+    # ── hair, back layer ──────────────────────────────────────────────────
+    # Wider and far longer than the face, so hair reads on both sides of it and
+    # falls past the shoulders. Drawn BEFORE the shoulders, so the kurta sits
+    # over it and the braids can come back over the top at the end.
+    ellipse(d, 500, 560, 252, 336, HAIR)
+
     # ── shoulders ─────────────────────────────────────────────────────────
     # Clipped by the disc below, so it can overshoot the canvas happily.
     d.ellipse(px(180, 730, 820, 1240), fill=PRIMARY)
@@ -55,21 +67,25 @@ def main() -> None:
     # ── neck ──────────────────────────────────────────────────────────────
     d.rounded_rectangle(px(452, 610, 548, 780), radius=40 * S, fill=SKIN_SHADE)
 
-    # ── collar: a soft V so the tee reads as a tee ─────────────────────────
-    d.polygon(px(430, 745, 500, 830, 570, 745), fill=PRIMARY_STRONG)
-
-    # ── hair, back layer ──────────────────────────────────────────────────
-    ellipse(d, 500, 452, 186, 206, HAIR)
+    # ── collar: a round neckline, the way a kurta sits ────────────────────
+    d.chord(px(414, 700, 586, 838), 0, 180, fill=PRIMARY_STRONG)
 
     # ── face ──────────────────────────────────────────────────────────────
     ellipse(d, 336, 490, 30, 40, SKIN)   # ears
     ellipse(d, 664, 490, 30, 40, SKIN)
     ellipse(d, 500, 480, 166, 192, SKIN)
+    ellipse(d, 332, 520, 11, 11, STREAK)  # small studs
+    ellipse(d, 668, 520, 11, 11, STREAK)
 
-    # ── hair, front: a cap with a sweep across the brow ───────────────────
-    d.pieslice(px(500 - 186, 452 - 206, 500 + 186, 452 + 206), 180, 360, fill=HAIR)
-    d.polygon(px(330, 452, 340, 396, 470, 350, 668, 398, 668, 440,
-                 540, 396, 400, 430),
+    # ── hair, front: a centre parting, not a boy's sweep ──────────────────
+    d.pieslice(px(500 - 190, 452 - 210, 500 + 190, 452 + 210), 180, 360, fill=HAIR)
+    # Two masses falling from the parting to either temple. The gap between
+    # them at the crown IS the parting — no line needed to draw it.
+    d.polygon(px(310, 500, 322, 396, 430, 340, 496, 330, 492, 404, 400, 436,
+                 352, 500),
+              fill=HAIR)
+    d.polygon(px(690, 500, 678, 396, 570, 340, 504, 330, 508, 404, 600, 436,
+                 648, 500),
               fill=HAIR)
 
     # ── eyes, and brows clear of the hairline ─────────────────────────────
@@ -81,6 +97,15 @@ def main() -> None:
     # ── nose and mouth ────────────────────────────────────────────────────
     d.arc(px(478, 512, 522, 566), 20, 160, fill=SKIN_SHADE, width=7 * S)
     d.arc(px(456, 548, 544, 612), 20, 160, fill=(140, 80, 60), width=9 * S)
+
+    # ── braids, over the shoulders ────────────────────────────────────────
+    # Four tapering beads each, so it reads as a plait rather than a rope, with
+    # a ribbon at the end. Drawn last of the portrait layer, on top of the
+    # kurta, because that is where a braid actually falls.
+    for bx, drift in ((300, -14), (700, 14)):
+        for i, r in enumerate((54, 47, 40, 33)):
+            ellipse(d, bx + drift * i, 660 + i * 78, r, r + 8, HAIR)
+        ellipse(d, bx + drift * 4, 660 + 4 * 78 - 26, 22, 16, STREAK)
 
     # ── clip the portrait to the disc ─────────────────────────────────────
     mask = Image.new("L", (W * S, H * S), 0)
@@ -110,7 +135,7 @@ def main() -> None:
     phone = layer.resize((W, H), Image.LANCZOS)
     out.paste(phone, (0, 0), phone)
 
-    path = "docs/deck/persona-aarav.png"
+    path = "docs/deck/persona-lakshmi.png"
     out.save(path)
     print(f"wrote {path}")
 

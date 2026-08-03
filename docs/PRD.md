@@ -238,17 +238,23 @@ Expand Dagar into an accessibility-first learning platform supporting:
 
 ## Primary Persona — Student
 
-### Aarav (Representative Persona)
+### Lakshmi (Representative Persona)
+
+Replaced a boy called Aarav on 3 Aug 2026. Girls are over-represented among the
+learners Dagar exists for — likeliest to be pulled out when money is short, and
+likeliest to have their education treated as optional — so a boy in the primary
+slot was quietly describing an easier case than the one we build for.
 
 | Attribute | Details |
 |---|---|
 | Age | 11–14 years |
 | Grade | Classes 6–8 |
-| Curriculum | NCERT Mathematics |
-| Device | Shared or personal Android smartphone |
+| Curriculum | NCERT Mathematics, **Hindi medium** |
+| Device | Shared Android smartphone — usually a parent's, in the evening |
 | Background | Underserved learner with limited access to personalised academic support |
 | Goals | Understand concepts, improve confidence, complete homework and perform better in school |
 | Frustrations | Classroom teaching moves too quickly, doubts remain unresolved, tuition is unaffordable, and motivation decreases over time |
+| Language | Her textbook is in Hindi; most help she finds online is not |
 
 ### Student Needs
 
@@ -262,13 +268,25 @@ Expand Dagar into an accessibility-first learning platform supporting:
 
 ## Secondary Persona — Parent / Guardian
 
-Parents are active participants in the learner's educational journey.
+### Suresh (Representative Persona)
+
+Lakshmi's father. He cooks at a small restaurant in another city and sends money
+home; he calls on Sunday and asks whether she is studying, and "yes" is the only
+answer available to either of them. **He is not absent, he is uninformed** — and
+the distinction is the whole design of the parent loop: he wants to be included
+in her progress, not merely notified about fees.
+
+He is why the weekly summary needs **no parent account** and arrives on WhatsApp.
+An app to download and an account to create is a barrier for a man working
+split shifts eight hundred kilometres away; a message he can read on a Sunday
+call is not.
+
 | Attribute | Details |
 |---|---|
-| Role | Support, encourage and monitor learning |
-| Goals | Understand learning progress, build consistent study habits and intervene early when required |
-| Challenges | Limited time, limited subject expertise and limited visibility into daily learning |
-| Needs | Simple progress updates, recommendations, learning insights and milestone notifications |
+| Role | Support and encourage; often living apart for work |
+| Goals | Know whether she is actually studying, and be part of it rather than told about it |
+| Challenges | Distance, long shifts, limited subject expertise, no visibility into daily learning |
+| Needs | Simple progress updates that reach him where he already is, with something concrete to ask her about |
 
 ### Parent Value Proposition
 

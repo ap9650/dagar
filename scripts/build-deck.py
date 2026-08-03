@@ -6,7 +6,7 @@ Editable by design: every word on every slide is a real PowerPoint text run, not
 a picture of text. Change a number here and re-run, or change it in PowerPoint
 and never run this again. Both are fine.
 
-The only two images are `persona-aarav.png` (drawn, see
+The only two images are `persona-lakshmi.png` (drawn, see
 `gen-persona-illustration.py`) and `architecture.png`.
 
     python3 scripts/build-deck.py
@@ -117,7 +117,7 @@ def slide_shell(prs, number, kicker, title, subtitle=None):
         y = 2.06
     # footer
     text(s, M, SH - 0.44, 6.0, 0.24,
-         [{"t": f"Dagar  ·  Personalised learning for every underserved learner",
+         [{"t": "Dagar  ·  A personal guide for every learner's journey",
            "size": 8.5, "color": MUTED}])
     text(s, SW - M - 2.0, SH - 0.44, 2.0, 0.24,
          [{"t": str(number), "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
@@ -181,12 +181,13 @@ def cover(prs):
           {"t": "डगर  ·  the trail you walk", "size": 15, "color": PRIMARY,
            "space_after": 0}])
     box(s, 1.12, 3.62, 1.4, 0.05, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
-    text(s, 1.1, 3.95, 9.2, 1.2,
-         [{"t": "Personalised learning for every underserved learner.",
+    text(s, 1.1, 3.95, 9.6, 1.4,
+         [{"t": "No two learners walk the same trail. Dagar walks it with them.",
            "size": 22, "bold": True, "color": INK, "space_after": 10, "line": 1.2},
-          {"t": "An AI learning companion that knows exactly what a learner is "
-                "studying, where they are stuck, and how to help without handing "
-                "over the answer.",
+          {"t": "A personal guide through NCERT mathematics — lessons a learner "
+                "taps, drags and answers rather than scrolls past, a tutor that "
+                "knows which concept they are stuck on, and a weekly note to the "
+                "adult who is not in the room. In Hindi and English. Free.",
            "size": 13, "color": BODY, "line": 1.35}])
     text(s, 1.1, SH - 1.15, 10.0, 0.7,
          [{"t": "Live product  ·  " + APP_URL, "size": 11.5, "bold": True,
@@ -236,10 +237,12 @@ def s1_problem(prs):
 
 def s2_solution(prs):
     s, y = slide_shell(prs, 2, "02 · Solution",
-                       "A companion that knows what you are learning.",
-                       "Dagar is not a chatbot with a syllabus attached. It is a "
-                       "curriculum-aware learning journey — and the AI is grounded "
-                       "in the exact lesson on the learner's screen.")
+                       "A personal guide, not a one-size course.",
+                       "डगर means the trail you walk — and every learner walks a "
+                       "different one. Dagar is not a chatbot with a syllabus "
+                       "attached: it is an interactive route through the "
+                       "curriculum that re-draws itself around what this learner "
+                       "actually understands. Free at the core.")
 
     steps = ["Chapter", "Micro-lesson", "AI Tutor", "Guided practice",
              "Chapter quiz", "Mastery + insights"]
@@ -258,20 +261,25 @@ def s2_solution(prs):
                  align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
 
     y2 = y + 1.02
-    # (title, body, accent, badge, fill). The last card USED to claim the learner
-    # "is offered a real person" — see D8a. No session happens, so the claim is
-    # now the measurement it always was, badged and tinted so the difference
-    # survives a five-second skim.
+    # (title, body, accent, badge, fill).
+    #
+    # The mentor card moved OFF this slide on 3 Aug. It claimed the learner "is
+    # offered a real person", which is not true (D8a) — the honest version now
+    # sits on slide 6, where the slide title introduces it rather than a reader
+    # discovering it. Its place here went to interactivity, which is a real
+    # differentiator and had been buried.
     cards = [
-        ("Grounded, not generic",
-         "Every tutor call carries the current lesson's text and that learner's "
-         "concept mastery. It teaches inside the curriculum, and it hints before "
-         "it answers — a learner handed the answer has learned nothing.",
+        ("Lessons you do, not lessons you read",
+         "A learner taps a fraction into thirds, drags a number onto a line, "
+         "balances an equation. Junior classes need to move something to believe "
+         "it — and most of what is free at this level is still a video to watch "
+         "or a wall of text to scroll.",
          PRIMARY, None, WHITE),
-        ("Adapts to the concept, not the score",
-         "Mastery is tracked per concept, not per chapter. Practice difficulty "
-         "steps up and down on performance, and the next lesson is recommended "
-         "from what is actually weak.", PRIMARY, None, WHITE),
+        ("Grounded in the lesson, aimed at the gap",
+         "Every tutor call carries the lesson on screen and that learner's mastery "
+         "per concept — not per chapter. It hints before it answers, practice "
+         "difficulty moves with performance, and the next lesson is chosen from "
+         "what is actually weak.", PRIMARY, None, WHITE),
         ("Hindi from day one",
          "Full UI, curriculum content and AI tutor in Hindi and English. For a "
          "Hindi-medium learner, language is not a feature — it is the front door. "
@@ -285,11 +293,10 @@ def s2_solution(prs):
          "A closable daily goal, a streak with a grace day, milestones. No hearts, "
          "no leaderboards, no guilt — mechanics that punish invert badly for a "
          "learner who is already behind.", HINT, None, WHITE),
-        ("We measure where AI is not enough",
-         "Repeated struggle is detected and the learner is asked whether they want "
-         "a person. No session happens yet, the app says so plainly, and the ask is "
-         "recorded — so supply is sized on evidence, not promised ahead of it.",
-         AMBER, "not built · demand test", SURFACE),
+        ("Free, and not a trial",
+         "The whole loop — lessons, tutor, practice, quizzes, progress, the parent "
+         "note — costs nothing. A paywall halfway up the trail selects for the "
+         "families who were never the problem.", CORRECT, None, WHITE),
     ]
     w, h, gx, gy = 3.897, 1.56, 0.2, 0.2
     for (cx, cy), (t, b, a, bg, fl) in zip(grid(M, y2, 3, 2, w, h, gx, gy), cards):
@@ -407,57 +414,77 @@ def s4_market_size(prs):
 
 def s5_persona(prs):
     s, y = slide_shell(prs, 5, "05 · Primary persona (MVP)",
-                       "Aarav, 13. He is not bad at maths.")
+                       "Lakshmi, 13. She is not bad at maths.")
 
-    s.shapes.add_picture("docs/deck/persona-aarav.png", Inches(M), Inches(y + 0.02),
-                         height=Inches(3.3))
+    s.shapes.add_picture("docs/deck/persona-lakshmi.png", Inches(M), Inches(y + 0.02),
+                         height=Inches(3.0))
+    # Hindi-medium, not "Hindi at home, English textbook". Her textbook IS in
+    # Hindi, which is what makes D16 a front-door decision rather than a
+    # localisation nicety — an English-only app is not a missing feature for
+    # her, it is a locked door.
     facts = [("Age", "13"), ("Class", "7, government school"),
-             ("Curriculum", "NCERT Mathematics"), ("Device", "his mother's Android"),
-             ("Language", "Hindi at home, English textbook")]
-    yy = y + 3.5
+             ("Curriculum", "NCERT गणित — Hindi medium"),
+             ("Device", "her mother's Android, after dinner"),
+             ("Language", "Hindi at home, Hindi textbook")]
+    yy = y + 3.2
     for i, (k, v) in enumerate(facts):
         text(s, M + 0.02, yy + i * 0.23, 3.5, 0.22,
              [{"t": f"{k}   {v}", "size": 9.5, "color": MUTED}])
 
     x = M + 3.9
     w = SW - x - M
-    text(s, x, y + 0.02, w, 3.4,
-         [{"t": "He is three weeks behind, and nobody noticed which three weeks.",
-           "size": 15, "bold": True, "color": INK, "space_after": 11, "line": 1.2},
-          {"t": "The phone is his mother's. He gets it after dinner, sometimes, and "
+    text(s, x, y + 0.02, w, 2.6,
+         [{"t": "She is three weeks behind, and nobody noticed which three weeks.",
+           "size": 15, "bold": True, "color": INK, "space_after": 10, "line": 1.2},
+          {"t": "The phone is her mother's. She gets it after dinner, sometimes, and "
                 "there is one charger for the house.",
-           "size": 11.5, "color": BODY, "space_after": 8, "line": 1.35},
-          {"t": "When he puts his hand up in class, thirty-eight other children are "
-                "also waiting. So mostly he does not put his hand up.",
-           "size": 11.5, "color": BODY, "space_after": 8, "line": 1.35},
-          {"t": "He has tried YouTube. YouTube is excellent and does not know that "
-                "he never really got equivalent fractions, so it keeps explaining "
+           "size": 11.5, "color": BODY, "space_after": 7, "line": 1.32},
+          {"t": "When she puts her hand up in class, thirty-eight other children are "
+                "also waiting. So mostly she does not put her hand up.",
+           "size": 11.5, "color": BODY, "space_after": 7, "line": 1.32},
+          {"t": "She has tried YouTube. YouTube is excellent and does not know that "
+                "she never really got equivalent fractions, so it keeps explaining "
                 "the wrong thing beautifully.",
-           "size": 11.5, "color": BODY, "space_after": 8, "line": 1.35},
-          {"t": "He has asked a chatbot too. It gave him the answer immediately. He "
-                "copied it down, felt briefly clever, and could not do the next "
+           "size": 11.5, "color": BODY, "space_after": 7, "line": 1.32},
+          {"t": "She has asked a chatbot too. It gave her the answer immediately. "
+                "She copied it down, felt briefly clever, and could not do the next "
                 "question either.",
-           "size": 11.5, "color": BODY, "space_after": 8, "line": 1.35},
-          {"t": "His mother asks how school is going. He says fine. It is the only "
-                "answer he has, because nobody has ever shown either of them what "
-                "he actually does and does not understand.",
-           "size": 11.5, "color": BODY, "line": 1.35}])
+           "size": 11.5, "color": BODY, "space_after": 7, "line": 1.32},
+          {"t": "Her textbook is in Hindi. Most of what she finds online is not, so "
+                "the help is written in a language she is also still learning.",
+           "size": 11.5, "color": BODY, "line": 1.32}])
 
-    needs = [("Someone who knows where he is", PRIMARY),
+    # ── her father, on the same slide, deliberately ───────────────────────
+    # The parent loop is a feature on other slides and an abstraction there.
+    # Here it has a person in it: the adult who wants to be included and is
+    # eight hundred kilometres away. He is why the weekly summary needs no
+    # account and reaches him on WhatsApp.
+    yf = y + 2.72
+    box(s, x, yf, w, 1.06, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, x + 0.26, yf + 0.13, w - 0.52, 0.82,
+         [{"t": "AND HER FATHER, SURESH — 800 KM AWAY",
+           "size": 9, "bold": True, "color": PRIMARY, "space_after": 4},
+          {"t": "He cooks at a small restaurant in another city and sends money "
+                "home. He calls on Sunday and asks if she is studying. She says "
+                "yes. He has no way of knowing more than that — and he wants to be "
+                "included in it, not just informed that fees are due.",
+           "size": 10.2, "color": BODY, "line": 1.28}])
+
+    needs = [("Someone who knows where she is", PRIMARY),
              ("Hints, not answers", PRIMARY),
-             ("To feel like he is winning at something", CORRECT),
-             ("Someone to notice", HINT)]
-    yy2 = y + 3.46
+             ("To learn in her own language", CORRECT),
+             ("Her father in the loop", HINT)]
+    yy2 = y + 3.94
     text(s, x, yy2, w, 0.26,
-         [{"t": "WHAT HE ACTUALLY NEEDS", "size": 9, "bold": True, "color": PRIMARY}])
+         [{"t": "WHAT THEY ACTUALLY NEED", "size": 9, "bold": True, "color": PRIMARY}])
     cw = (w - 0.36) / 4
     for i, (label, colour) in enumerate(needs):
         chip(s, x + i * (cw + 0.12), yy2 + 0.32, cw, 0.5, label,
              fill=PRIMARY_WASH, color=colour, size=9)
 
-    source_note(s, SH - 0.9,
-                "Composite persona from PRD §5. Illustrated rather than photographed — "
-                "Aarav is a representative learner, not a real child.")
+    source_note(s, SH - 0.78,
+                "Composite personas from PRD §5. Illustrated rather than photographed — "
+                "Lakshmi is a representative learner, not a real child.")
 
 
 def s6_features(prs):
@@ -618,40 +645,45 @@ def s7_how(prs):
 
 def s8_next(prs):
     s, y = slide_shell(prs, 9, "09 · Next",
-                       "The next 1–2 months, if the feedback says go.",
-                       "Ordered by what real users have already told us, not by what "
-                       "is fun to build. The first three came out of testing this week.")
+                       "The next 1–2 months, if the data says go.",
+                       "Ordered by what real learners have already told us, not by "
+                       "what is fun to build. Depth before breadth: finish the "
+                       "curriculum a learner is already in before adding another.")
     items = [
-        ("01", "Widen the question bank",
-         "A tester retook a quiz and got the same eight questions — because there "
-         "are only eight per chapter. Order now varies per attempt; the real fix is "
-         "16 per chapter. ~6 hours, most of it verifying answer keys.", AMBER),
-        ("02", "Teach on a rounded decimal instead of failing it",
-         "Grading demands six decimal places on a recurring answer, so 5/12 as 0.42 "
-         "is marked wrong. It should say \"very close — write it as a fraction\". "
-         "Correct arithmetic, useless pedagogy.", AMBER),
-        ("03", "Make the adaptive ladder visible",
-         "Practice already steps difficulty up and down. The learner cannot see it. "
+        ("01", "The whole of Classes 6–8, not one chapter each",
+         "Three chapters prove the model works. A learner runs out of Dagar in a "
+         "week. Full-year mathematics for all three grades is the difference "
+         "between a demo and something a child can actually use in October.",
+         AMBER),
+        ("02", "More ways to interact with a lesson",
+         "Today a learner can shade a fraction, drag a number onto a line and "
+         "balance an equation. Junior classes want more of exactly this — and it "
+         "is the part of the market that is thinnest.", AMBER),
+        ("03", "Hindi written as Hindi, not translated into it",
+         "Today the Hindi comes from the English. A Hindi-medium learner deserves "
+         "lessons authored in Hindi, in the register a 12-year-old actually speaks "
+         "— matching the textbook already open beside them.", PRIMARY),
+        ("04", "A parent who can see more than a summary",
+         "Suresh gets a weekly note. Next he sees which topics she practised and "
+         "where she is improving — enough to ask a real question on Sunday instead "
+         "of \"are you studying?\"", PRIMARY),
+        ("05", "The weekly note, reliably delivered",
+         "The parent summary runs on a WhatsApp sandbox today, which drops a "
+         "parent after three days. Getting onto WhatsApp Business is verification "
+         "paperwork, and it makes the parent loop dependable rather than a demo.",
+         HINT),
+        ("06", "Tell the learner when they level up",
+         "Practice already gets harder as they improve, and they cannot see it. "
          "\"Nice — let's try a harder one\" on the way up, and silence on the way "
-         "down, so nobody is told they are failing.", PRIMARY),
-        ("04", "Let an adult see the practice",
-         "Questions attempted and what the learner answered. Deferred on purpose: "
-         "showing the correct answer beside it needs a server-assembled payload, "
-         "not a new permission on the answer key.", PRIMARY),
-        ("05", "WhatsApp off the sandbox",
-         "The Twilio sandbox expires a parent's session after three days and cannot "
-         "carry a weekly template. Moving to WhatsApp Business is Meta verification "
-         "— paperwork, not engineering. The adapter is already written.", HINT),
-        ("06", "A tutor eval set with an LLM judge",
-         "20–30 real learner questions with a rubric. Until it exists, every prompt "
-         "edit is an untested deploy — and the tutor is the differentiator.", HINT),
-        ("07", "Hindi authored natively, not translated",
-         "Today the Hindi is translated from English. A Hindi-medium learner "
-         "deserves lessons written in Hindi, in the register a 12-year-old actually "
-         "speaks.", CORRECT),
-        ("08", "A cohort dashboard",
-         "The unlock for the first NGO conversation. They will not buy a product "
-         "they cannot report on.", CORRECT),
+         "down, so nobody is told they are failing.", HINT),
+        ("07", "Deeper practice, so nothing repeats",
+         "A tester retook a quiz and met the same eight questions. Enough questions "
+         "per chapter that practice stays practice, and a learner can come back to "
+         "a weak concept twice without seeing a rerun.", CORRECT),
+        ("08", "Then the next subject",
+         "Curriculum is data, not code — adding Science is authoring, not "
+         "rebuilding. It waits until the maths loop shows retention, because "
+         "widening a loop that does not hold just loses people faster.", CORRECT),
     ]
     w, h, gx, gy = (CONTENT_W - 0.6) / 4, 2.04, 0.2, 0.2
     for (cx, cy), (n, t, b, a) in zip(grid(M, y, 4, 2, w, h, gx, gy), items):
@@ -664,48 +696,94 @@ def s9_roadmap(prs):
                        "Curriculum is data — chapters, concepts, lessons and questions "
                        "are rows, not code. Adding a subject is authoring, not "
                        "rebuilding. That is a fact about the schema, not a promise.")
-    phases = [
-        ("Phase 1 — now", "Validate the core loop",
-         "NCERT Mathematics, Classes 6–8  ·  AI Tutor  ·  guided practice  ·  chapter "
-         "quiz  ·  progress and streaks  ·  parent summary  ·  Hindi and English  ·  "
-         "a demand test for human mentoring, which is measured and not yet built.   "
-         "Free, deliberately — no pricing experiment runs until H1–H7 have data.",
-         PRIMARY),
-        ("Phase 2 — expansion", "Widen subjects, languages and stakeholders",
-         "Science and other subjects  ·  more grades  ·  Marathi, Tamil and Bengali "
-         "(the storage model already supports them)  ·  adaptive learning paths  ·  "
-         "teacher dashboard  ·  NGO cohort dashboard  ·  first paid CSR pilots.", HINT),
-        ("Phase 3 — inclusive platform", "The part of the vision the MVP could not reach",
-         "Learners with visual, hearing and speech impairments  ·  neurodiverse "
-         "learners (ADHD, dyslexia)  ·  voice-first learning  ·  offline learning  ·  "
-         "AI-powered accessibility  ·  a verified mentor network.", CORRECT),
+    # Prioritised with ICE, so the order is arguable rather than asserted.
+    # Impact and Confidence are 1–10 as usual; the third column is EFFORT, also
+    # 1–10, because effort is what a reader can sanity-check — "how big is this
+    # piece of work?" is answerable, "how easy is it?" invites a shrug. The
+    # score converts it back the standard way, Ease = 11 − Effort, so a higher
+    # ICE still means do-it-sooner. The footnote states that, because a table of
+    # numbers nobody can reproduce is decoration.
+    # (phase, phase colour, initiative, why it matters, I, C, E)
+    rows = [
+        ("Phase 1", PRIMARY, "Full-year mathematics, Classes 6–8",
+         "One chapter per grade proves the model. A learner exhausts it in a week.",
+         9, 9, 6),
+        ("next 1–2 months", PRIMARY, "More ways to interact with a lesson",
+         "The thinnest part of the market, and the reason juniors stay on a screen.",
+         8, 8, 5),
+        ("", PRIMARY, "Hindi authored natively, parent loop made reliable",
+         "Her textbook is Hindi and her father is in another city. Both are core.",
+         8, 9, 4),
+        ("Phase 2", HINT, "Classes 9–10, then Science",
+         "Curriculum is data, so this is authoring — but only once retention holds.",
+         9, 7, 8),
+        ("expansion", HINT, "Marathi, Tamil and Bengali",
+         "Storage already supports them; each opens a state-sized market.",
+         7, 8, 6),
+        ("", HINT, "Reporting for institutions, first paid pilots",
+         "NGOs and CSR budgets will not fund what they cannot report on.",
+         8, 6, 7),
+        ("Phase 3", CORRECT, "Visual, hearing and speech accessibility",
+         "The part of the vision the MVP could not reach, and the reason for it.",
+         9, 6, 8),
+        ("inclusive platform", CORRECT, "Voice-first and offline learning",
+         "Removes the two hardest constraints: literacy level and a data balance.",
+         8, 5, 9),
+        ("", CORRECT, "A verified mentor network",
+         "Only if the demand test says learners want it. Supply is the hard part.",
+         8, 4, 9),
     ]
-    w, gx = (CONTENT_W - 0.4) / 3, 0.2
-    for i, (t, sub, b, a) in enumerate(phases):
-        x = M + i * (w + gx)
-        box(s, x, y, w, 2.24, fill=WHITE, line=BORDER)
-        box(s, x, y, w, 0.09, fill=a, line=None, shape=MSO_SHAPE.RECTANGLE)
-        text(s, x + 0.26, y + 0.28, w - 0.52, 1.86,
-             [{"t": t, "size": 14, "bold": True, "color": INK, "space_after": 3},
-              {"t": sub, "size": 10, "bold": True, "color": a, "space_after": 9},
-              {"t": b, "size": 9.8, "color": BODY, "line": 1.32}])
 
-    y2 = y + 2.46
-    box(s, M, y2, CONTENT_W, 1.42, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
-    text(s, M + 0.32, y2 + 0.2, CONTENT_W - 0.64, 0.4,
-         [{"t": "WHO DAGAR IS FOR NEXT", "size": 9.5, "bold": True, "color": PRIMARY}])
-    groups = [
-        ("Learners", "Students with visual, hearing or speech impairments  ·  "
-                     "neurodiverse learners  ·  adult literacy learners"),
-        ("Institutions", "Teachers  ·  government schools  ·  NGOs  ·  CSR education "
-                         "programmes  ·  volunteer mentors"),
-    ]
-    for i, (k, v) in enumerate(groups):
-        x = M + 0.32 + i * 6.0
-        text(s, x, y2 + 0.6, 5.7, 0.7,
-             [{"t": k, "size": 11.5, "bold": True, "color": PRIMARY_STRONG,
-               "space_after": 4},
-              {"t": v, "size": 10, "color": BODY, "line": 1.3}])
+    cols = [("PHASE", 1.42), ("INITIATIVE", 3.30), ("WHY IT MATTERS", 4.20),
+            ("IMPACT", 0.74), ("CONF.", 0.74), ("EFFORT", 0.74), ("ICE", 0.86)]
+    xs, acc = [], M + 0.2
+    for _, cw in cols:
+        xs.append(acc)
+        acc += cw
+
+    hh = 0.40
+    box(s, M, y, CONTENT_W, 0.36, fill=SURFACE, line=BORDER)
+    for (label, cw), cx in zip(cols, xs):
+        text(s, cx, y, cw, 0.36,
+             [{"t": label, "size": 8.5, "bold": True, "color": MUTED}],
+             anchor=MSO_ANCHOR.MIDDLE,
+             align=PP_ALIGN.CENTER if cw < 1.0 else PP_ALIGN.LEFT)
+
+    yy = y + 0.36
+    for i, (phase, pc, init, why, imp, conf, eff) in enumerate(rows):
+        box(s, M, yy, CONTENT_W, hh, fill=WHITE if i % 2 else PRIMARY_WASH, line=BORDER)
+        ice = (imp + conf + (11 - eff)) / 3
+        # Banded so the eye finds the top of the list without reading it.
+        ice_colour = CORRECT if ice >= 7 else (HINT if ice >= 6 else AMBER)
+        text(s, xs[0], yy, cols[0][1], hh,
+             [{"t": phase, "size": 9.5, "bold": phase.startswith("Phase"),
+               "color": pc if phase else MUTED}], anchor=MSO_ANCHOR.MIDDLE)
+        text(s, xs[1], yy, cols[1][1] - 0.12, hh,
+             [{"t": init, "size": 9.6, "bold": True, "color": INK, "line": 1.16}],
+             anchor=MSO_ANCHOR.MIDDLE)
+        text(s, xs[2], yy, cols[2][1] - 0.12, hh,
+             [{"t": why, "size": 9.2, "color": BODY, "line": 1.16}],
+             anchor=MSO_ANCHOR.MIDDLE)
+        for cx, (_, cw), val in zip(xs[3:6], cols[3:6], (imp, conf, eff)):
+            text(s, cx, yy, cw, hh,
+                 [{"t": str(val), "size": 10.5, "color": BODY}],
+                 anchor=MSO_ANCHOR.MIDDLE, align=PP_ALIGN.CENTER)
+        text(s, xs[6], yy, cols[6][1], hh,
+             [{"t": f"{ice:.1f}", "size": 12, "bold": True, "color": ice_colour}],
+             anchor=MSO_ANCHOR.MIDDLE, align=PP_ALIGN.CENTER)
+        yy += hh
+
+    yb = yy + 0.18
+    box(s, M, yb, CONTENT_W, 0.78, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, M + 0.32, yb + 0.11, CONTENT_W - 0.64, 0.58,
+         [{"t": "Dagar is direct to the learner. Institutions are how she is "
+                "reached, not who is served.",
+           "size": 11, "bold": True, "color": PRIMARY_STRONG, "space_after": 3},
+          {"t": "A teacher, an NGO or a district forwards a link; the account, the "
+                "progress and the trail belong to the learner, and it stays free to "
+                "her either way.    ICE = (Impact + Confidence + Ease) ÷ 3, scored "
+                "1–10, where Ease = 11 − Effort.",
+           "size": 9.4, "color": BODY, "line": 1.26}])
 
 
 def s10_adoption(prs):
@@ -810,16 +888,20 @@ def s11_competitors(prs):
              anchor=MSO_ANCHOR.MIDDLE)
         yy += hh
 
-    yb = yy + 0.2
-    box(s, M, yb, CONTENT_W, 1.0, fill=PRIMARY, line=None)
-    text(s, M + 0.32, yb + 0.14, CONTENT_W - 0.64, 0.76,
-         [{"t": "Dagar's position:  curriculum-aware, mastery-driven, hints before "
-                "answers, Hindi from day one, free at the core.",
+    yb = yy + 0.14
+    box(s, M, yb, CONTENT_W, 1.28, fill=PRIMARY, line=None)
+    text(s, M + 0.32, yb + 0.14, CONTENT_W - 0.64, 1.04,
+         [{"t": "Dagar's position:  interactive, curriculum-aware, mastery-driven, "
+                "hints before answers, Hindi from day one, free at the core.",
            "size": 12.5, "bold": True, "color": WHITE, "space_after": 5},
-          {"t": "The defensible piece is not the model — anyone can call the same "
-                "API. It is the learner state that grounds every call: which concept "
-                "is weak, what was answered wrong last week, which lesson is open "
-                "right now. That compounds with use and does not transfer.",
+          {"t": "Every category above is strong at its own fragment, and several are "
+                "free and excellent. What almost none of them do at Class 6–8 level "
+                "is let a learner MOVE something — shade a fraction, drag a number, "
+                "balance an equation — and then remember what that told them. The "
+                "defensible piece is not the model, since anyone can call the same "
+                "API. It is the learner state grounding every call: which concept is "
+                "weak, what was wrong last week, which lesson is open now. That "
+                "compounds with use and does not transfer.",
            "size": 10, "color": PRIMARY_SOFT, "line": 1.28}])
 
 
