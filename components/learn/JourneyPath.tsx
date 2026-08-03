@@ -38,6 +38,17 @@ export type JourneyNode = {
  *
  * The number carries the same "not yet" information, adds which lesson it is,
  * and forbids nothing.
+ *
+ * ── why the nodes are BIG ───────────────────────────────────────────────────
+ * They were 36px circles beside a line of text, which reads as a bulleted list
+ * with decorative bullets. A path is only a path if the nodes have enough weight
+ * to be the thing you look at — an 11-year-old should see where they are before
+ * reading a single word.
+ *
+ * What is deliberately NOT copied from Duolingo is the snaking left-right
+ * layout. Its nodes carry no words, so they can wander; ours carry the lesson
+ * title, and alternating sides would leave every other title ragged and halve
+ * the width available to a Hindi title that already runs longer.
  * ────────────────────────────────────────────────────────────────────────────
  */
 export async function JourneyPath({ nodes }: { nodes: JourneyNode[] }) {
@@ -57,19 +68,27 @@ export async function JourneyPath({ nodes }: { nodes: JourneyNode[] }) {
                 aria-hidden
                 className={cn(
                   "flex items-center justify-center rounded-full transition-colors duration-150 ease-out",
+                  // The current node is the biggest thing on the screen after
+                  // the goal ring, and it carries a solid edge like the buttons
+                  // do — the same "this is an object" cue, so the place you are
+                  // meant to tap looks like the things you tap.
                   current
-                    ? "size-11 bg-primary text-white ring-4 ring-primary-soft"
+                    ? "size-16 bg-primary text-white ring-4 ring-primary-soft shadow-[0_4px_0_0_var(--color-primary-strong)]"
                     : node.state === "completed"
-                      ? "size-9 bg-primary text-white"
-                      : "size-9 border-2 border-border text-muted bg-background",
+                      ? "size-14 bg-primary text-white shadow-[0_4px_0_0_var(--color-primary-strong)]"
+                      // FILLED, not outlined. At 36px an outline read as a small
+                      // marker; at 56px it reads as an empty hole in the page.
+                      // A filled node is a stepping stone you have not reached
+                      // yet — which is the true meaning — rather than a gap.
+                      : "size-14 bg-surface border-2 border-border-strong text-body shadow-[0_4px_0_0_var(--color-border-strong)]",
                 )}
               >
                 {node.state === "completed" ? (
-                  <Check size={18} strokeWidth={2.5} />
+                  <Check size={26} strokeWidth={3} />
                 ) : current ? (
-                  <Play size={18} strokeWidth={2.5} />
+                  <Play size={28} strokeWidth={2.5} />
                 ) : (
-                  <span className="text-label tabular-nums">{index + 1}</span>
+                  <span className="text-h3 tabular-nums">{index + 1}</span>
                 )}
               </span>
 
@@ -77,8 +96,12 @@ export async function JourneyPath({ nodes }: { nodes: JourneyNode[] }) {
                 <span
                   aria-hidden
                   className={cn(
-                    "w-0.5 flex-1 min-h-6",
-                    node.state === "completed" ? "bg-primary" : "bg-border",
+                    // Thick enough to read as the road between two places
+                    // rather than a hairline connecting two bullets.
+                    "w-1.5 flex-1 min-h-6 rounded-full",
+                    // `border-strong`, not `border`: at this node size the paler
+                    // grey disappeared and the stones looked unconnected.
+                    node.state === "completed" ? "bg-primary" : "bg-border-strong",
                   )}
                 />
               )}

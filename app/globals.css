@@ -186,21 +186,24 @@ body:lang(hi) {
   line-height: 2.1;
 }
 
-/* KNOWN POLISH ITEM, investigated 1 Aug and deliberately left alone.
+/* FIXED 3 Aug by slashing the content, not by CSS — backlog 0c.
 
-   An inline \frac is ~26px tall in an 18px line and crowds the lines around it,
-   worst in "Fill the box: 2/5 = □/15". Two fixes were tried and neither worked:
-   a Devanagari-specific line-height bump (2.6), and inline-block + vertical-align
-   on the inline .katex. The measured box says it fits; KaTeX builds fractions
-   from nested vlist spans whose visual extent the box does not describe, so
-   neither lever reaches the cause.
+   Two CSS levers were tried on 1 Aug and neither reached the cause: a
+   Devanagari line-height bump, and inline-block + vertical-align on the inline
+   .katex. KaTeX builds fractions from nested vlist spans whose visual extent the
+   measured box does not describe, so neither lever could.
 
-   NOT a Hindi bug — it was found during the Hindi pass, but English at 360px is
-   identical. The honest fix is authoring inline fractions as \tfrac in the seed
-   content, which is a content change, not a CSS one.
+   The note here used to say "legible: no glyphs actually overlap". That was true
+   of lesson bodies and false everywhere else — the 2.1 rule above is scoped to
+   `.lesson-body p`, and a practice OPTION label is a span outside it. With no
+   relief at all the bar landed on the denominator, and 3/4 read as a
+   struck-through 4 on the first question a Class 6 learner ever sees. Found by
+   zooming into a screenshot, not by reading the CSS.
 
-   Left because it is legible: the fraction crowds its neighbours, no glyphs
-   actually overlap, and 2.1 below already buys the room that matters. */
+   222 inline fractions are now authored slashed across both languages. Display
+   maths keeps its stacked form: it has the vertical room, and stacked is correct
+   there. Fractions whose parts are not plain digits were left alone — slashing
+   a compound numerator would be different maths. */
 
 
 /* Celebration is the ONE place motion may be playful, and it is capped at 400ms

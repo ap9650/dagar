@@ -289,7 +289,7 @@ export const class8LinearEquations: SeedChapter = {
         "4x = 7, \\qquad x = \\frac{7}{4}",
         "$$",
         "",
-        "Leave it as $\\frac{7}{4}$. A fraction is an exact answer; a rounded decimal is not.",
+        "Leave it as $7/4$. A fraction is an exact answer; a rounded decimal is not.",
         "",
         "### Worked example",
         "",

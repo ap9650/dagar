@@ -59,16 +59,16 @@ export const class6Fractions: SeedChapter = {
         "",
         "That is what fractions are for. A fraction names **a part of a whole**.",
         "",
-        "Cut one roti into 4 equal pieces and take 1 piece. You have taken $\\frac{1}{4}$ of the roti.",
+        "Cut one roti into 4 equal pieces and take 1 piece. You have taken $1/4$ of the roti.",
         "",
         "The two numbers do different jobs:",
         "",
         "- The **bottom** number (the *denominator*) says how many equal parts the whole was cut into.",
         "- The **top** number (the *numerator*) says how many of those parts you took.",
         "",
-        "So in $\\frac{3}{8}$, the whole was cut into 8 equal parts and you have 3 of them.",
+        "So in $3/8$, the whole was cut into 8 equal parts and you have 3 of them.",
         "",
-        "**The word *equal* is doing real work here.** If you break a roti into 4 pieces and one is huge and three are tiny, no piece is $\\frac{1}{4}$. The parts must be the same size.",
+        "**The word *equal* is doing real work here.** If you break a roti into 4 pieces and one is huge and three are tiny, no piece is $1/4$. The parts must be the same size.",
         "",
         "### Worked example",
         "",
@@ -78,9 +78,9 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{2}{5} \\text{ of the bottle}\n$$",
         "",
-        "And what is left in the bottle? 3 parts out of 5, so $\\frac{3}{5}$.",
+        "And what is left in the bottle? 3 parts out of 5, so $3/5$.",
         "",
-        "Notice that $\\frac{2}{5}$ and $\\frac{3}{5}$ together make the whole bottle — all 5 parts.",
+        "Notice that $2/5$ and $3/5$ together make the whole bottle — all 5 parts.",
         "",
         "Try a few in practice, then come back for the number line.",
       ].join("\n"),
@@ -169,15 +169,15 @@ export const class6Fractions: SeedChapter = {
       body_md: [
         "Fractions are not only pieces of roti. They are **numbers**, and every number has a place on the number line.",
         "",
-        "$\\frac{1}{2}$ is not a piece of something. It is a number that sits exactly halfway between 0 and 1.",
+        "$1/2$ is not a piece of something. It is a number that sits exactly halfway between 0 and 1.",
         "",
         "### How to find a fraction on the line",
         "",
-        "To place $\\frac{3}{5}$:",
+        "To place $3/5$:",
         "",
         "1. Look at the **bottom** number, 5. Cut the gap from 0 to 1 into 5 equal parts.",
         "2. Look at the **top** number, 3. Count 3 parts along from 0.",
-        "3. You have landed on $\\frac{3}{5}$.",
+        "3. You have landed on $3/5$.",
         "",
         "```",
         "0 ....|....|....|....|....| 1",
@@ -190,7 +190,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "The bigger the bottom number, the *smaller* each step. Cutting the same gap into 8 parts makes smaller steps than cutting it into 3.",
         "",
-        "So $\\frac{1}{8}$ sits closer to 0 than $\\frac{1}{3}$ does — even though 8 is a bigger number than 3.",
+        "So $1/8$ sits closer to 0 than $1/3$ does — even though 8 is a bigger number than 3.",
         "",
         "This is the single most common place learners slip, and it is worth holding on to. A bigger bottom number means more parts, and more parts means each one is smaller.",
         "",
@@ -283,7 +283,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{6}{8} = \\frac{6 \\div 2}{8 \\div 2} = \\frac{3}{4}\n$$",
         "",
-        "**Adding does not work.** $\\frac{1}{2}$ and $\\frac{2}{3}$ are not equal, even though you added 1 to the top and 1 to the bottom. Only multiplying and dividing keep the value the same.",
+        "**Adding does not work.** $1/2$ and $2/3$ are not equal, even though you added 1 to the top and 1 to the bottom. Only multiplying and dividing keep the value the same.",
         "",
         "### Simplest form",
         "",
@@ -291,11 +291,11 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{12}{18} = \\frac{6}{9} = \\frac{2}{3}\n$$",
         "",
-        "$\\frac{2}{3}$ is as far as it goes — 2 and 3 share nothing. All three of those fractions are the same amount; $\\frac{2}{3}$ is just the tidiest way to write it.",
+        "$2/3$ is as far as it goes — 2 and 3 share nothing. All three of those fractions are the same amount; $2/3$ is just the tidiest way to write it.",
         "",
         "### Worked example",
         "",
-        "Fill the box: $\\frac{2}{5} = \\frac{\\square}{15}$",
+        "Fill the box: $2/5 = \\frac{\\square}{15}$",
         "",
         "The bottom went from 5 to 15, so it was multiplied by 3. Do the same on top: $2 \\times 3 = 6$.",
         "",
@@ -366,7 +366,7 @@ export const class6Fractions: SeedChapter = {
       title: "Which Fraction Is Bigger?",
       est_minutes: 4,
       body_md: [
-        "Anil ate $\\frac{3}{4}$ of his roti. Bina ate $\\frac{5}{8}$ of hers. Same size rotis. Who ate more?",
+        "Anil ate $3/4$ of his roti. Bina ate $5/8$ of hers. Same size rotis. Who ate more?",
         "",
         "You cannot tell by looking, because the pieces are different sizes. Here is how to decide.",
         "",
@@ -390,7 +390,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{3}{4} = \\frac{6}{8}\n$$",
         "",
-        "Now both are in eighths, so count: $\\frac{6}{8}$ against $\\frac{5}{8}$.",
+        "Now both are in eighths, so count: $6/8$ against $5/8$.",
         "",
         "$$\n\\frac{6}{8} > \\frac{5}{8}\n$$",
         "",
@@ -462,7 +462,7 @@ export const class6Fractions: SeedChapter = {
       title: "Adding and Subtracting Fractions",
       est_minutes: 5,
       body_md: [
-        "You drink $\\frac{1}{5}$ of a bottle in the morning and $\\frac{2}{5}$ at lunch. How much have you drunk?",
+        "You drink $1/5$ of a bottle in the morning and $2/5$ at lunch. How much have you drunk?",
         "",
         "The pieces are all fifths, so just count them: 1 fifth plus 2 fifths is 3 fifths.",
         "",
@@ -486,13 +486,13 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{2} + \\frac{1}{4}\n$$",
         "",
-        "Rewrite $\\frac{1}{2}$ in quarters: $\\frac{1}{2} = \\frac{2}{4}$. Now they match.",
+        "Rewrite $1/2$ in quarters: $1/2 = 2/4$. Now they match.",
         "",
         "$$\n\\frac{2}{4} + \\frac{1}{4} = \\frac{3}{4}\n$$",
         "",
         "### Worked example",
         "",
-        "A jug has $\\frac{3}{4}$ litre of milk. Amma pours $\\frac{1}{3}$ litre into the tea. How much is left?",
+        "A jug has $3/4$ litre of milk. Amma pours $1/3$ litre into the tea. How much is left?",
         "",
         "Quarters and thirds do not match. Twelfths work for both:",
         "",
@@ -500,7 +500,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{9}{12} - \\frac{4}{12} = \\frac{5}{12}\n$$",
         "",
-        "So $\\frac{5}{12}$ litre of milk is left in the jug.",
+        "So $5/12$ litre of milk is left in the jug.",
       ].join("\n"),
       // The bottle is one whole all the way through, so a bar of fifths is the
       // same object in every step — which is what makes "the bottom does not
@@ -643,7 +643,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{2}{4} = \\frac{1}{2}\n$$",
         "",
-        "Both are right. $\\frac{2}{4}$ is what you shaded; $\\frac{1}{2}$ is the same amount written in fewer pieces.",
+        "Both are right. $2/4$ is what you shaded; $1/2$ is the same amount written in fewer pieces.",
       ].join("\n"),
     },
     {
@@ -800,10 +800,10 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "A roti is cut into 4 equal pieces. Riya eats 1 piece.\n\nWhat fraction of the roti did she eat?",
       choices: [
-        { id: "a", label: "$\\frac{1}{4}$" },
-        { id: "b", label: "$\\frac{3}{4}$" }, // the fraction LEFT, not eaten
-        { id: "c", label: "$\\frac{1}{3}$" }, // counted the 3 remaining pieces as the whole
-        { id: "d", label: "$\\frac{4}{1}$" }, // top and bottom swapped
+        { id: "a", label: "$1/4$" },
+        { id: "b", label: "$3/4$" }, // the fraction LEFT, not eaten
+        { id: "c", label: "$1/3$" }, // counted the 3 remaining pieces as the whole
+        { id: "d", label: "$4/1$" }, // top and bottom swapped
       ],
       answer_value: "a",
       solution_md: [
@@ -813,7 +813,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{4}\n$$",
         "",
-        "$\\frac{3}{4}$ is the fraction that is *left over* — a good thing to notice, but not what was asked.",
+        "$3/4$ is the fraction that is *left over* — a good thing to notice, but not what was asked.",
       ].join("\n"),
     },
     {
@@ -823,13 +823,13 @@ export const class6Fractions: SeedChapter = {
       difficulty: 1,
       answer_type: "integer",
       stem_md:
-        "A water bottle is $\\frac{4}{7}$ full.\n\nInto how many equal parts has the bottle been divided?",
+        "A water bottle is $4/7$ full.\n\nInto how many equal parts has the bottle been divided?",
       answer_value: "7",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "7", "/"] },
       solution_md: [
         "The **bottom** number tells you how many equal parts the whole was divided into.",
         "",
-        "In $\\frac{4}{7}$ the bottom number is **7**, so the bottle is thought of as 7 equal parts — and 4 of them have water in.",
+        "In $4/7$ the bottom number is **7**, so the bottle is thought of as 7 equal parts — and 4 of them have water in.",
       ].join("\n"),
     },
     {
@@ -839,11 +839,11 @@ export const class6Fractions: SeedChapter = {
       difficulty: 2,
       answer_type: "integer",
       stem_md:
-        "A bag has 12 laddoos. Meera eats $\\frac{1}{4}$ of them.\n\nHow many laddoos did she eat?",
+        "A bag has 12 laddoos. Meera eats $1/4$ of them.\n\nHow many laddoos did she eat?",
       answer_value: "3",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
-        "$\\frac{1}{4}$ means the 12 laddoos are split into **4 equal groups**, and Meera eats **1** group.",
+        "$1/4$ means the 12 laddoos are split into **4 equal groups**, and Meera eats **1** group.",
         "",
         "$$\n12 \\div 4 = 3\n$$",
         "",
@@ -857,7 +857,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 2,
       answer_type: "mcq",
       stem_md:
-        "Sunita has ₹60. She spends $\\frac{1}{3}$ of it on a notebook.\n\nHow much money does she have **left**?",
+        "Sunita has ₹60. She spends $1/3$ of it on a notebook.\n\nHow much money does she have **left**?",
       choices: [
         { id: "a", label: "₹40" },
         { id: "b", label: "₹20" }, // the amount SPENT
@@ -866,7 +866,7 @@ export const class6Fractions: SeedChapter = {
       ],
       answer_value: "a",
       solution_md: [
-        "First find $\\frac{1}{3}$ of ₹60 — split it into 3 equal parts:",
+        "First find $1/3$ of ₹60 — split it into 3 equal parts:",
         "",
         "$$\n60 \\div 3 = 20\n$$",
         "",
@@ -874,7 +874,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n60 - 20 = 40\n$$",
         "",
-        "So ₹40 is left. Another way to see it: she spent one third, so two thirds are left, and $\\frac{2}{3}$ of 60 is 40.",
+        "So ₹40 is left. Another way to see it: she spent one third, so two thirds are left, and $2/3$ of 60 is 40.",
       ].join("\n"),
     },
     {
@@ -884,13 +884,13 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "integer",
       stem_md:
-        "Ravi ate $\\frac{2}{5}$ of a packet of biscuits. That was 8 biscuits.\n\nHow many biscuits were in the full packet?",
+        "Ravi ate $2/5$ of a packet of biscuits. That was 8 biscuits.\n\nHow many biscuits were in the full packet?",
       answer_value: "20",
       input: { kind: "tiles", bank: ["0", "1", "2", "5", "8", "/"] },
       solution_md: [
         "This one runs backwards — you know the part and you need the whole.",
         "",
-        "$\\frac{2}{5}$ of the packet is 8 biscuits. So **2 parts = 8 biscuits**.",
+        "$2/5$ of the packet is 8 biscuits. So **2 parts = 8 biscuits**.",
         "",
         "One part is therefore $8 \\div 2 = 4$ biscuits.",
         "",
@@ -908,13 +908,13 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "integer",
       stem_md:
-        "A tank holds 40 litres when full. Right now it is $\\frac{3}{4}$ full.\n\nHow many **more** litres are needed to fill it?",
+        "A tank holds 40 litres when full. Right now it is $3/4$ full.\n\nHow many **more** litres are needed to fill it?",
       answer_value: "10",
       input: { kind: "tiles", bank: ["0", "1", "2", "3", "4", "/"] },
       solution_md: [
         "Two steps here.",
         "",
-        "**Step 1 — how much is in the tank now?** Find $\\frac{3}{4}$ of 40:",
+        "**Step 1 — how much is in the tank now?** Find $3/4$ of 40:",
         "",
         "$$\n40 \\div 4 = 10, \\qquad 10 \\times 3 = 30\n$$",
         "",
@@ -924,7 +924,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "So **10** more litres are needed.",
         "",
-        "Shortcut: if the tank is $\\frac{3}{4}$ full then $\\frac{1}{4}$ is empty, and $\\frac{1}{4}$ of 40 is 10.",
+        "Shortcut: if the tank is $3/4$ full then $1/4$ is empty, and $1/4$ of 40 is 10.",
       ].join("\n"),
     },
 
@@ -937,12 +937,12 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 1,
       answer_type: "mcq",
-      stem_md: "Which fraction is equal to $\\frac{1}{2}$?",
+      stem_md: "Which fraction is equal to $1/2$?",
       choices: [
-        { id: "a", label: "$\\frac{2}{3}$" }, // added 1 to top AND bottom
-        { id: "b", label: "$\\frac{2}{4}$" },
-        { id: "c", label: "$\\frac{1}{4}$" }, // doubled only the bottom
-        { id: "d", label: "$\\frac{2}{2}$" }, // doubled only the top
+        { id: "a", label: "$2/3$" }, // added 1 to top AND bottom
+        { id: "b", label: "$2/4$" },
+        { id: "c", label: "$1/4$" }, // doubled only the bottom
+        { id: "d", label: "$2/2$" }, // doubled only the top
       ],
       answer_value: "b",
       solution_md: [
@@ -950,7 +950,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{2} = \\frac{1 \\times 2}{2 \\times 2} = \\frac{2}{4}\n$$",
         "",
-        "Adding to the top and bottom does not work. $\\frac{2}{3}$ is not the same as $\\frac{1}{2}$ — half of 3 is 1.5, not 2.",
+        "Adding to the top and bottom does not work. $2/3$ is not the same as $1/2$ — half of 3 is 1.5, not 2.",
       ].join("\n"),
     },
     {
@@ -959,7 +959,7 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 1,
       answer_type: "integer",
-      stem_md: "$\\frac{1}{3} = \\frac{\\square}{9}$\n\nWhat number goes in the box?",
+      stem_md: "$1/3 = \\frac{\\square}{9}$\n\nWhat number goes in the box?",
       answer_value: "3",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "9", "/"] },
       solution_md: [
@@ -976,7 +976,7 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 2,
       answer_type: "integer",
-      stem_md: "$\\frac{4}{5} = \\frac{12}{\\square}$\n\nWhat number goes in the box?",
+      stem_md: "$4/5 = \\frac{12}{\\square}$\n\nWhat number goes in the box?",
       answer_value: "15",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
@@ -994,12 +994,12 @@ export const class6Fractions: SeedChapter = {
       difficulty: 2,
       answer_type: "mcq",
       stem_md:
-        "Sita says $\\frac{3}{4}$ and $\\frac{9}{12}$ are equal fractions.\n\nIs she right?",
+        "Sita says $3/4$ and $9/12$ are equal fractions.\n\nIs she right?",
       choices: [
         { id: "a", label: "Yes — because $3 \\times 3 = 9$ and $4 \\times 3 = 12$" },
         { id: "b", label: "Yes — because $9 - 3 = 6$ and $12 - 4 = 8$" }, // right answer, wrong reason
         { id: "c", label: "No — the numbers are all different" },
-        { id: "d", label: "No — $\\frac{9}{12}$ is bigger because 9 is bigger than 3" },
+        { id: "d", label: "No — $9/12$ is bigger because 9 is bigger than 3" },
       ],
       answer_value: "a",
       solution_md: [
@@ -1018,7 +1018,7 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 3,
       answer_type: "integer",
-      stem_md: "$\\frac{18}{24} = \\frac{3}{\\square}$\n\nWhat number goes in the box?",
+      stem_md: "$18/24 = \\frac{3}{\\square}$\n\nWhat number goes in the box?",
       answer_value: "4",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
@@ -1047,11 +1047,11 @@ export const class6Fractions: SeedChapter = {
       answer_value: "6",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "6", "/"] },
       solution_md: [
-        "The first team won $\\frac{15}{20}$ of their matches. In its simplest form:",
+        "The first team won $15/20$ of their matches. In its simplest form:",
         "",
         "$$\n\\frac{15}{20} = \\frac{3}{4}\n$$",
         "",
-        "The second team won $\\frac{3}{4}$ of 8 matches.",
+        "The second team won $3/4$ of 8 matches.",
         "",
         "$$\n8 \\div 4 = 2, \\qquad 2 \\times 3 = 6\n$$",
         "",
@@ -1070,8 +1070,8 @@ export const class6Fractions: SeedChapter = {
       answer_type: "mcq",
       stem_md: "Which is bigger?",
       choices: [
-        { id: "a", label: "$\\frac{5}{7}$" },
-        { id: "b", label: "$\\frac{3}{7}$" },
+        { id: "a", label: "$5/7$" },
+        { id: "b", label: "$3/7$" },
         { id: "c", label: "They are equal" },
         { id: "d", label: "You cannot compare them" },
       ],
@@ -1090,10 +1090,10 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 1,
       answer_type: "mcq",
-      stem_md: "Which is bigger, $\\frac{1}{4}$ or $\\frac{1}{6}$?",
+      stem_md: "Which is bigger, $1/4$ or $1/6$?",
       choices: [
-        { id: "a", label: "$\\frac{1}{4}$" },
-        { id: "b", label: "$\\frac{1}{6}$, because 6 is bigger than 4" }, // THE classic error
+        { id: "a", label: "$1/4$" },
+        { id: "b", label: "$1/6$, because 6 is bigger than 4" }, // THE classic error
         { id: "c", label: "They are equal — both have 1 on top" },
         { id: "d", label: "You cannot compare them" },
       ],
@@ -1114,10 +1114,10 @@ export const class6Fractions: SeedChapter = {
       kind: "practice",
       difficulty: 2,
       answer_type: "mcq",
-      stem_md: "Which is bigger, $\\frac{2}{3}$ or $\\frac{3}{5}$?",
+      stem_md: "Which is bigger, $2/3$ or $3/5$?",
       choices: [
-        { id: "a", label: "$\\frac{2}{3}$" },
-        { id: "b", label: "$\\frac{3}{5}$, because both its numbers are bigger" },
+        { id: "a", label: "$2/3$" },
+        { id: "b", label: "$3/5$, because both its numbers are bigger" },
         { id: "c", label: "They are equal" },
         { id: "d", label: "You cannot compare them" },
       ],
@@ -1152,7 +1152,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{3}{5} > \\frac{2}{5}\n$$",
         "",
-        "2 itself does not work, because $\\frac{2}{5}$ is *equal* to $\\frac{2}{5}$, not bigger than it.",
+        "2 itself does not work, because $2/5$ is *equal* to $2/5$, not bigger than it.",
       ].join("\n"),
     },
     {
@@ -1162,7 +1162,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "mcq",
       stem_md: [
-        "Anil ate $\\frac{3}{4}$ of his roti. Bina ate $\\frac{5}{8}$ of hers.",
+        "Anil ate $3/4$ of his roti. Bina ate $5/8$ of hers.",
         "",
         "The rotis were the same size. Who ate more?",
       ].join("\n"),
@@ -1201,17 +1201,17 @@ export const class6Fractions: SeedChapter = {
       answer_value: "5",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
-        "First put both fractions in ninths. The bottom of $\\frac{2}{3}$ goes from 3 to 9, so multiply by 3:",
+        "First put both fractions in ninths. The bottom of $2/3$ goes from 3 to 9, so multiply by 3:",
         "",
         "$$\n\\frac{2}{3} = \\frac{6}{9}\n$$",
         "",
-        "So the box must make a fraction **smaller than** $\\frac{6}{9}$ — the number in it has to be less than 6.",
+        "So the box must make a fraction **smaller than** $6/9$ — the number in it has to be less than 6.",
         "",
         "The largest whole number less than 6 is **5**.",
         "",
         "$$\n\\frac{5}{9} < \\frac{6}{9}\n$$",
         "",
-        "6 itself does not work: $\\frac{6}{9}$ is equal to $\\frac{2}{3}$, not less than it.",
+        "6 itself does not work: $6/9$ is equal to $2/3$, not less than it.",
       ].join("\n"),
     },
 
@@ -1278,7 +1278,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 2,
       answer_type: "mcq",
       stem_md: [
-        "Rahul worked out $\\frac{1}{2} + \\frac{1}{3}$ and got $\\frac{2}{5}$.",
+        "Rahul worked out $1/2 + 1/3$ and got $2/5$.",
         "",
         "What went wrong?",
       ].join("\n"),
@@ -1288,9 +1288,9 @@ export const class6Fractions: SeedChapter = {
           label:
             "He added the tops and the bottoms. The bottoms must be made the same first",
         },
-        { id: "b", label: "Nothing — $\\frac{2}{5}$ is correct" },
+        { id: "b", label: "Nothing — $2/5$ is correct" },
         { id: "c", label: "He should have multiplied instead of adding" },
-        { id: "d", label: "He should have got $\\frac{2}{6}$" },
+        { id: "d", label: "He should have got $2/6$" },
       ],
       answer_value: "a",
       solution_md: [
@@ -1302,7 +1302,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{3}{6} + \\frac{2}{6} = \\frac{5}{6}\n$$",
         "",
-        "One quick check: $\\frac{1}{2}$ on its own is already bigger than $\\frac{2}{5}$, so adding something to it could not possibly give $\\frac{2}{5}$.",
+        "One quick check: $1/2$ on its own is already bigger than $2/5$, so adding something to it could not possibly give $2/5$.",
       ].join("\n"),
     },
     {
@@ -1323,7 +1323,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{10}{12} - \\frac{3}{12} = \\frac{7}{12}\n$$",
         "",
-        "7 and 12 share no common factor, so $\\frac{7}{12}$ is already in its simplest form.",
+        "7 and 12 share no common factor, so $7/12$ is already in its simplest form.",
       ].join("\n"),
     },
     {
@@ -1333,7 +1333,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "fraction",
       stem_md: [
-        "A jug has $\\frac{3}{4}$ litre of milk. Amma pours $\\frac{1}{3}$ litre into the tea.",
+        "A jug has $3/4$ litre of milk. Amma pours $1/3$ litre into the tea.",
         "",
         "How much milk is left in the jug?",
       ].join("\n"),
@@ -1348,7 +1348,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{9}{12} - \\frac{4}{12} = \\frac{5}{12}\n$$",
         "",
-        "So **$\\frac{5}{12}$ litre** of milk is left in the jug.",
+        "So **$5/12$ litre** of milk is left in the jug.",
       ].join("\n"),
     },
 
@@ -1364,7 +1364,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 2,
       answer_type: "integer",
       stem_md:
-        "A class has 30 students. $\\frac{2}{5}$ of them are girls.\n\nHow many girls are in the class?",
+        "A class has 30 students. $2/5$ of them are girls.\n\nHow many girls are in the class?",
       answer_value: "12",
       solution_md: [
         "Split the 30 students into **5** equal groups:",
@@ -1385,7 +1385,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "integer",
       stem_md:
-        "$\\frac{3}{8}$ of a rope is 12 metres long.\n\nHow long is the whole rope, in metres?",
+        "$3/8$ of a rope is 12 metres long.\n\nHow long is the whole rope, in metres?",
       answer_value: "32",
       solution_md: [
         "3 parts of the rope measure 12 m, so one part is:",
@@ -1403,7 +1403,7 @@ export const class6Fractions: SeedChapter = {
       kind: "quiz",
       difficulty: 1,
       answer_type: "integer",
-      stem_md: "$\\frac{2}{5} = \\frac{\\square}{20}$\n\nWhat number goes in the box?",
+      stem_md: "$2/5 = \\frac{\\square}{20}$\n\nWhat number goes in the box?",
       answer_value: "8",
       solution_md: [
         "The bottom went from 5 to 20, so it was multiplied by 4.",
@@ -1419,7 +1419,7 @@ export const class6Fractions: SeedChapter = {
       kind: "quiz",
       difficulty: 2,
       answer_type: "integer",
-      stem_md: "$\\frac{20}{35} = \\frac{4}{\\square}$\n\nWhat number goes in the box?",
+      stem_md: "$20/35 = \\frac{4}{\\square}$\n\nWhat number goes in the box?",
       answer_value: "7",
       solution_md: [
         "The top went from 20 to 4, so it was **divided** by 5.",
@@ -1437,10 +1437,10 @@ export const class6Fractions: SeedChapter = {
       kind: "quiz",
       difficulty: 1,
       answer_type: "mcq",
-      stem_md: "Which is **smaller**, $\\frac{2}{9}$ or $\\frac{2}{7}$?",
+      stem_md: "Which is **smaller**, $2/9$ or $2/7$?",
       choices: [
-        { id: "a", label: "$\\frac{2}{9}$" },
-        { id: "b", label: "$\\frac{2}{7}$" },
+        { id: "a", label: "$2/9$" },
+        { id: "b", label: "$2/7$" },
         { id: "c", label: "They are equal — both have 2 on top" },
         { id: "d", label: "You cannot compare them" },
       ],
@@ -1459,10 +1459,10 @@ export const class6Fractions: SeedChapter = {
       kind: "quiz",
       difficulty: 2,
       answer_type: "mcq",
-      stem_md: "Which is bigger, $\\frac{5}{6}$ or $\\frac{7}{9}$?",
+      stem_md: "Which is bigger, $5/6$ or $7/9$?",
       choices: [
-        { id: "a", label: "$\\frac{5}{6}$" },
-        { id: "b", label: "$\\frac{7}{9}$, because 7 is bigger than 5" },
+        { id: "a", label: "$5/6$" },
+        { id: "b", label: "$7/9$, because 7 is bigger than 5" },
         { id: "c", label: "They are equal" },
         { id: "d", label: "You cannot compare them" },
       ],
@@ -1476,7 +1476,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{15}{18} > \\frac{14}{18}\n$$",
         "",
-        "So $\\frac{5}{6}$ is bigger — only just.",
+        "So $5/6$ is bigger — only just.",
       ].join("\n"),
     },
     {
@@ -1504,7 +1504,7 @@ export const class6Fractions: SeedChapter = {
       difficulty: 3,
       answer_type: "fraction",
       stem_md: [
-        "Ria read $\\frac{1}{3}$ of a book on Monday and $\\frac{2}{5}$ of it on Tuesday.",
+        "Ria read $1/3$ of a book on Monday and $2/5$ of it on Tuesday.",
         "",
         "What fraction of the book has she read altogether?",
       ].join("\n"),
@@ -1516,7 +1516,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{5}{15} + \\frac{6}{15} = \\frac{11}{15}\n$$",
         "",
-        "So Ria has read $\\frac{11}{15}$ of the book — not quite three quarters.",
+        "So Ria has read $11/15$ of the book — not quite three quarters.",
       ].join("\n"),
     },
   ],
