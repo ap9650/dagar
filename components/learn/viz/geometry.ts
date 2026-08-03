@@ -352,3 +352,62 @@ export function tallyGroups(value: number): number[] {
   if (total % 5) groups.push(total % 5);
   return groups;
 }
+
+// ── number grids (Class 7 Ch 6 — Number Play) ────────────────────────────────
+
+export const GRID_CELL = 52;
+export const GRID_GAP = 4;
+/** Room outside the grid for the row and column totals. */
+export const GRID_SUM = 34;
+
+export type GridCell = { x: number; y: number; value?: number; index: number };
+
+export function layoutGrid(
+  rows: number,
+  cols: number,
+  showSums: boolean,
+): { width: number; height: number; cell: (r: number, c: number) => { x: number; y: number } } {
+  const span = (n: number) => n * GRID_CELL + (n - 1) * GRID_GAP;
+  return {
+    width: span(cols) + (showSums ? GRID_SUM + GRID_GAP : 0),
+    height: span(rows) + (showSums ? GRID_SUM + GRID_GAP : 0),
+    cell: (r, c) => ({ x: c * (GRID_CELL + GRID_GAP), y: r * (GRID_CELL + GRID_GAP) }),
+  };
+}
+
+/**
+ * Row and column totals, and `undefined` where a blank makes one unknowable.
+ *
+ * That distinction is the entire pedagogy of a magic square. A row with a gap
+ * has no total yet — printing 0, or the sum of what happens to be filled in, is
+ * a lie that hands the learner a wrong number to reason from. `undefined` draws
+ * as "?" and keeps the puzzle a puzzle.
+ */
+export function gridSums(
+  cells: { value?: number }[],
+  rows: number,
+  cols: number,
+): { rowSums: (number | undefined)[]; colSums: (number | undefined)[] } {
+  const total = (values: (number | undefined)[]) =>
+    values.some((v) => v === undefined) ? undefined : values.reduce((a, b) => a! + b!, 0);
+
+  return {
+    rowSums: Array.from({ length: rows }, (_, r) =>
+      total(Array.from({ length: cols }, (_, c) => cells[r * cols + c]?.value)),
+    ),
+    colSums: Array.from({ length: cols }, (_, c) =>
+      total(Array.from({ length: rows }, (_, r) => cells[r * cols + c]?.value)),
+    ),
+  };
+}
+
+/**
+ * Parity of a whole expression, worked out from the parity of its parts.
+ *
+ * The chapter's real claim is that you never need the total: odd + odd is even
+ * whatever the two odds were. Exported so the lesson content and the tests
+ * agree on the rule rather than each asserting it separately.
+ */
+export function parityOfSum(values: number[]): "even" | "odd" {
+  return values.filter((v) => Math.abs(v) % 2 === 1).length % 2 === 0 ? "even" : "odd";
+}

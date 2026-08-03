@@ -2,6 +2,7 @@
 
 import { BalanceScale } from "./BalanceScale";
 import { Chart } from "./Chart";
+import { NumberGrid } from "./NumberGrid";
 import { NumberLine } from "./NumberLine";
 import { PartWhole } from "./PartWhole";
 import { TokenRow } from "./TokenRow";
@@ -27,6 +28,8 @@ export function Viz({ spec, className }: { spec: VizSpec; className?: string }) 
       return <BalanceScale spec={spec} className={className} />;
     case "chart":
       return <Chart spec={spec} className={className} />;
+    case "numberGrid":
+      return <NumberGrid spec={spec} className={className} />;
     default:
       // Unreachable while the union is exhaustive; reachable the moment a seed
       // file names a shape that has not been built yet.
@@ -39,4 +42,5 @@ export { NumberLine } from "./NumberLine";
 export { TokenRow } from "./TokenRow";
 export { BalanceScale } from "./BalanceScale";
 export { Chart } from "./Chart";
+export { NumberGrid } from "./NumberGrid";
 export * from "./types";

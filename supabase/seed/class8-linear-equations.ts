@@ -20,12 +20,16 @@ import type { SeedChapter } from "./types.ts";
 export const class8LinearEquations: SeedChapter = {
   slug: "class8-linear-equations",
   grade: 8,
-  number: 2,
-  title: "Solving Linear Equations",
+  number: 6,
+  // Renamed from "Solving Linear Equations" on 3 Aug. That title was chosen to
+  // be true in BOTH editions, back when we cited both. Now that the old
+  // edition is gone, the chapter carries the name in the learner's own book —
+  // and Algebra Play does cover solving linear equations.
+  title: "Algebra Play",
   summary:
     "What an equation really says, how to solve it step by step, and how to turn a word problem into one.",
   ncert_ref:
-    "Ganita Prakash Class 8 Part 2 Ch 6 (Algebra Play — no dedicated chapter) · old NCERT Class 8 Ch 2 (Linear Equations in One Variable)",
+    "Ganita Prakash Class 8 Part 2 Ch 6 (Algebra Play)",
   order_index: 1,
 
   concepts: [

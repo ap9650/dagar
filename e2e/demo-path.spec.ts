@@ -246,9 +246,14 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   await page.reload();
   await expect(page.getByRole("radio", { name: "Class 7" })).toBeChecked();
 
-  // And the curriculum actually moved.
+  // And the curriculum actually moved. Number Play, not Integers: Class 7 opens
+  // on Ganita Prakash Part 1 Ch 6, and Operations with Integers is Part 2 Ch 2.
+  // The assertion that matters is that this is a DIFFERENT chapter from the one
+  // Class 6 showed — a control that saves a row and leaves the learner looking
+  // at the same curriculum is the bug this test exists for.
   await page.goto("/learn");
-  await expect(page.getByText(/integer/i).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/number play/i).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/data handling/i)).toHaveCount(0);
 });
 
 /**

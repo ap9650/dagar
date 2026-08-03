@@ -79,11 +79,11 @@ export type SeedConcept = {
 export type SeedChapter = {
   slug: string;
   grade: 6 | 7 | 8;
-  /** Chapter number in the textbook. See `ncert_ref` — the editions disagree (D1). */
+  /** Chapter number in Ganita Prakash. */
   number: number;
   title: string;
   summary: string;
-  /** MUST cite BOTH editions. Learners on old stock are the ones we serve (D1). */
+  /** Ganita Prakash only. The old edition is no longer cited anywhere (D1a). */
   ncert_ref: string;
   order_index: number;
   concepts: SeedConcept[];

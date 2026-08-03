@@ -52,6 +52,44 @@ Class 8's title changes from "Linear Equations in One Variable" (an old-edition
 chapter name) to **"Solving Linear Equations"** — a concept name that is true in
 both editions.
 
+### D1a — Ganita Prakash only, and the old edition is dropped (2026-08-03)
+
+**Superseded the dual-citation rule above.** Requested by the teacher whose
+students are the first real cohort: *"ideally you should only consider new NCERT
+and forget the old NCERT."* She is teaching from Ganita Prakash, her students
+have Ganita Prakash, and a chapter number from a book nobody in the room owns is
+noise.
+
+What changed, verified against the actual books rather than from memory:
+
+| Grade | Chapter | Ganita Prakash |
+|---|---|---|
+| 6 | Data Handling and Presentation | Ch 4 |
+| 6 | Fractions | Ch 7 |
+| 7 | Number Play | Part 1, Ch 6 |
+| 7 | Operations with Integers | Part 2, Ch 2 |
+| 8 | **Algebra Play** | Part 2, Ch 6 |
+
+**Class 8 is renamed to "Algebra Play".** "Solving Linear Equations" was chosen
+precisely *because* it was true in both editions — the moment the old edition
+stops being cited, that reason evaporates and the chapter should carry the name
+in the learner's own book. The content maps: Algebra Play covers solving linear
+equations, factorisation and word problems.
+
+`order_index` now follows the Ganita Prakash numbering within each grade, so a
+learner meets chapters in the order their book has them. That reordered Class 6
+(Ch 4 before Ch 7) and Class 7 (Part 1 Ch 6 before Part 2 Ch 2).
+
+**The reasoning in D1 that still holds:** anchor content to the *concept*, never
+to a chapter number. Editions get renumbered; equivalent fractions do not change.
+The numbers above are a citation, not a dependency.
+
+**What this gives up.** D1 argued that learners on old stock are the ones we
+serve, and that is still true — but a concept-anchored chapter is recognisable
+from either book, which was always the real protection. The dual citation was
+belt and braces, and it was costing clarity in front of the people who actually
+have the new book.
+
 ## D2 — Accounts & parent linking
 
 **Decision:** Student signs up with Supabase Auth. Student profile carries the

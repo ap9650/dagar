@@ -398,6 +398,7 @@
     "tokens": "{positive} धनात्मक और {negative} ऋणात्मक गोटियाँ।",
     "balance": "एक तराज़ू: बाईं ओर {leftX} x डिब्बे और {leftOne} बाट, दाईं ओर {rightX} x डिब्बे और {rightOne} बाट।",
     "chart": "{count} श्रेणियों का चार्ट: {labels}।",
-    "chartKey": "हर गोला {each} के बराबर है।"
+    "chartKey": "हर गोला {each} के बराबर है।",
+    "grid": "{rows} गुणा {cols} की संख्याओं की जाली, जिसमें {filled} भरी हैं।"
   }
 }

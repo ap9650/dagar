@@ -48,6 +48,7 @@ const tokenRow = z.object({
   negative: z.number().int().min(0).max(12),
   pairing: z.boolean().optional(),
   groupsOf: z.number().int().min(1).max(12).optional(),
+  plain: z.boolean().optional(),
   label: z.string().optional(),
 });
 
@@ -86,6 +87,18 @@ const chart = z.object({
   target: z.array(z.number().int()).optional(),
 });
 
+const numberGrid = z.object({
+  kind: z.literal("numberGrid"),
+  rows: z.number().int().min(2).max(4),
+  cols: z.number().int().min(2).max(4),
+  cells: z
+    .array(z.object({ value: z.number().int().optional(), tone: tone.optional() }))
+    .min(4)
+    .max(16),
+  showSums: z.boolean().optional(),
+  label: z.string().optional(),
+});
+
 /**
  * Exported because slice 5.2 reuses it for pictorial PRACTICE options: a
  * `choiceViz` question offers diagrams drawn by the very same primitives. One
@@ -102,6 +115,7 @@ export const vizSchema = z.discriminatedUnion("kind", [
   tokenRow,
   balanceScale,
   chart,
+  numberGrid,
 ]);
 const viz = vizSchema;
 

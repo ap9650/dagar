@@ -398,6 +398,7 @@
     "tokens": "{positive} positive counters and {negative} negative counters.",
     "balance": "A balance: {leftX} x boxes and {leftOne} weights on the left, {rightX} x boxes and {rightOne} weights on the right.",
     "chart": "A chart of {count} categories: {labels}.",
-    "chartKey": "Each circle stands for {each}."
+    "chartKey": "Each circle stands for {each}.",
+    "grid": "A {rows} by {cols} grid of numbers, {filled} filled in."
   }
 }

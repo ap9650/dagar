@@ -24,8 +24,10 @@ export const class7Integers: SeedChapter = {
   summary:
     "Negative numbers on the number line, and how to add, subtract, multiply and divide them without losing a sign.",
   ncert_ref:
-    "Ganita Prakash Class 7 Part 2 Ch 2 (Operations with Integers) · old NCERT Class 7 Ch 1 (Integers)",
-  order_index: 1,
+    "Ganita Prakash Class 7 Part 2 Ch 2 (Operations with Integers)",
+  // 2, not 1: Number Play is Part 1 Ch 6 and Operations with Integers is
+  // Part 2 Ch 2, so a Class 7 learner meets Number Play first.
+  order_index: 2,
 
   concepts: [
     { slug: "integers-number-line", name: "Integers and the Number Line", order_index: 1 },

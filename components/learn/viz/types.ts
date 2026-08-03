@@ -82,6 +82,42 @@ export type TokenRowSpec = {
   pairing?: boolean;
   /** Wrap into rows of n: "three lots of four debts" for multiplication. */
   groupsOf?: number;
+  /**
+   * Unsigned counters — just *things*, with no `+` or `−` on them.
+   *
+   * Class 7 Ch 6 opens on parity, and parity is about a count of objects, not
+   * about sign: seven students pair off into three pairs with one left over,
+   * and that leftover IS oddness. Drawing them as `+1` chips would say
+   * "positive seven", which is a different and irrelevant fact.
+   *
+   * With `groupsOf: 2` this is the whole even/odd picture: full rows mean even,
+   * a stranded chip means odd.
+   */
+  plain?: boolean;
+  label?: string;
+};
+
+/**
+ * A small grid of numbers — Class 7 Ch 6 (Ganita Prakash, Number Play).
+ *
+ * Magic squares, and the grid-filling puzzles the chapter is built on. A blank
+ * cell is the question: the learner works out what belongs there from the sums
+ * that are already fixed.
+ *
+ * `showSums` is what makes it teachable rather than decorative. The magic
+ * square's claim is that every row, every column and both diagonals total the
+ * same — a claim you cannot check unless the totals are on screen next to the
+ * grid they came from.
+ */
+export type NumberGridSpec = {
+  kind: "numberGrid";
+  /** 2–4 each way. Bigger stops being readable at 360px and stops being Class 7. */
+  rows: number;
+  cols: number;
+  /** Row-major, length `rows × cols`. A cell with no value is drawn blank. */
+  cells: { value?: number; tone?: Tone }[];
+  /** Row and column totals, drawn outside the grid. */
+  showSums?: boolean;
   label?: string;
 };
 
@@ -158,7 +194,8 @@ export type VizSpec =
   | NumberLineSpec
   | TokenRowSpec
   | BalanceScaleSpec
-  | ChartSpec;
+  | ChartSpec
+  | NumberGridSpec;
 
 /** Normalises `shaded: 3` and `shaded: [0,1,2]` to one shape for rendering. */
 export function toIndexSet(value: number | number[] | undefined, parts: number): Set<number> {

@@ -44,17 +44,22 @@ export function TokenRow({ spec, className }: { spec: TokenRowSpec; className?: 
               stroke={token.sign === 1 ? "var(--color-primary)" : "var(--color-ink)"}
               strokeWidth="2.5"
             />
-            <text
-              x={token.cx}
-              y={token.cy}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize="20"
-              fontWeight="600"
-              fill={token.sign === 1 ? "var(--color-background)" : "var(--color-ink)"}
-            >
-              {token.sign === 1 ? "+" : "−"}
-            </text>
+            {/* `plain` drops the sign: parity counts THINGS, and a `+` on each
+                one would assert "positive seven", which is a different and
+                irrelevant fact about seven students. */}
+            {!spec.plain && (
+              <text
+                x={token.cx}
+                y={token.cy}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize="20"
+                fontWeight="600"
+                fill={token.sign === 1 ? "var(--color-background)" : "var(--color-ink)"}
+              >
+                {token.sign === 1 ? "+" : "−"}
+              </text>
+            )}
           </g>
         ))}
 
