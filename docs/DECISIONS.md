@@ -992,6 +992,44 @@ distraction to the wait was considered and rejected: the screen is no longer
 blank, a skeleton is up at ~300 ms, and entertaining someone for a second they
 are no longer staring into is exactly the kind of noise D17 exists to refuse.
 
+### 6. The database is in Tokyo, and that is most of the remaining latency
+
+The region we could not read from outside turned out to be **`ap-northeast-1`**
+— Tokyo — while the Vercel functions run in `bom1`, which *is* `ap-south-1`.
+Server and database are on opposite sides of Asia.
+
+Measured, TCP connect to the Supabase region poolers:
+
+| region | round trip |
+|---|---|
+| `ap-south-1` (Mumbai) | 35–51 ms |
+| `ap-northeast-1` (Tokyo) — ours | 146–163 ms |
+
+~115 ms per round trip against ~2 ms if it were co-located. The dashboard makes
+six sequential round trips, so **roughly 690 ms of the ~1.2 s is distance**,
+not work.
+
+**Two fixes were taken now because they need no migration:**
+
+- `proxy.ts` uses `getClaims()` instead of `getUser()`. This project signs
+  with **asymmetric ES256 keys** (verified at `/.well-known/jwks.json`), so the
+  JWT signature is checked in-process via WebCrypto against a JWKS that
+  Cloudflare serves from its Delhi edge with a 10-minute TTL. Zero round trips,
+  same rejection of a forged token. On a project using a legacy *symmetric*
+  secret this silently falls back to a server call and buys nothing — that
+  condition was checked before the change, not assumed.
+- `getCurrentProfile()` in `lib/supabase/server.ts`, cached per request. The
+  layout and each of `/learn`, `/progress`, `/settings` were reading the same
+  `profiles` row twice per navigation.
+
+The proxy runs on **every** request, so together these remove ~230 ms from every
+tap, not just from cold start.
+
+**The migration itself is deferred deliberately.** Supabase has no in-place
+region switch; it means a new project in `ap-south-1` and moving schema, seed
+and `auth.users` across. That is the right change and the wrong week — if the
+demo account does not survive the move there is no demo. Revisit after judging.
+
 ### The rule this leaves behind
 
 **Every interactive element needs an `active:` state, not just `hover:`.** Hover

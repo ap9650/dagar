@@ -67,11 +67,43 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  // getUser() revalidates the token with Supabase. Do not swap it for
-  // getSession(), which trusts the cookie without checking it.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  /*
+    getClaims(), NOT getUser() — and NOT getSession().
+
+    All three answer "is this request signed in?", and the difference is what
+    they cost and what they trust:
+
+      getSession()  reads the cookie and believes it.        0 round trips. Unsafe.
+      getUser()     asks Supabase's auth server.             1 round trip.
+      getClaims()   verifies the JWT signature locally.      0 round trips.
+
+    getClaims is the right one here on both counts. This project signs its
+    tokens with **asymmetric** keys (ES256 — confirmed at
+    /auth/v1/.well-known/jwks.json), so the signature is checked in-process via
+    WebCrypto against a JWKS that Cloudflare serves from its Delhi edge with a
+    10-minute TTL. A forged or tampered cookie fails that check exactly as it
+    would have failed at the auth server. This is nothing like getSession().
+
+    The caveat worth knowing if you ever change projects: on a project still
+    using a legacy SYMMETRIC signing secret, getClaims silently falls back to a
+    server round trip and this optimisation quietly buys nothing.
+
+    Why it matters that this is zero round trips: the database is in
+    `ap-northeast-1` (Tokyo) and the functions run in `bom1` (Mumbai). Measured
+    Mumbai→Tokyo is ~115ms. The proxy runs on EVERY request, so getUser() was
+    ~115ms added to every screen and every tap — the lag on the back button was
+    partly this.
+
+    Session refresh is unaffected: getClaims calls getSession() internally,
+    which refreshes an expiring token before validating it, so the cookie
+    rotation that lib/supabase/server.ts depends on still happens here.
+
+    And none of this is the auth boundary regardless — see the header. The
+    layout still calls getUser() and revalidates against Supabase before any
+    protected content renders.
+  */
+  const { data: claimsData } = await supabase.auth.getClaims();
+  const user = claimsData?.claims?.sub ? claimsData.claims : null;
 
   const { pathname } = request.nextUrl;
   const isProtected = PROTECTED.some(

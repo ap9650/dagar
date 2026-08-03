@@ -273,6 +273,41 @@ test("a launch with no session goes to the language picker, never past it", asyn
   await context.close();
 });
 
+/**
+ * A corrupt session cookie signs you out. It does not take the app down.
+ *
+ * `proxy.ts` decides "signed in?" with `getClaims()`, which verifies the JWT
+ * signature locally instead of paying a Mumbai→Tokyo round trip on every single
+ * request. The behaviour that had to survive that swap is the UNHAPPY one:
+ * `getUser()` answers a garbage cookie with `{ user: null }`, and if getClaims
+ * were to THROW on the same input instead, the proxy would 500 — on every route
+ * it matches, for anyone holding a stale or truncated cookie. That is not a
+ * degraded session, it is a locked front door, and no other test would catch it
+ * because every other test carries either a good cookie or none at all.
+ *
+ * A truncated cookie is the realistic shape of this: Supabase chunks large
+ * session cookies across `.0`, `.1`… and a browser that drops one leaves
+ * exactly this behind.
+ */
+test("a corrupt session cookie redirects, it does not error", async ({ browser }) => {
+  const ref = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname.split(".")[0];
+
+  const context = await browser.newContext();
+  await context.addCookies([
+    { name: "saathi_locale", value: "en", url: "http://localhost:3000" },
+    // Not a JWT at all. Signature verification cannot succeed on this.
+    { name: `sb-${ref}-auth-token`, value: "base64-not-a-real-token", url: "http://localhost:3000" },
+  ]);
+  const page = await context.newPage();
+
+  const response = await page.goto("/learn");
+
+  expect(response?.status()).toBeLessThan(400);
+  await expect(page).toHaveURL(/\/login/);
+
+  await context.close();
+});
+
 test("a signed-out learner who already picked a language goes to sign-in", async ({
   browser,
 }) => {

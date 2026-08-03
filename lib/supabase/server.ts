@@ -72,3 +72,39 @@ export const getCurrentUser = cache(async () => {
   } = await supabase.auth.getUser();
   return user;
 });
+
+/**
+ * The signed-in learner's profile row, or null — **once per request.**
+ *
+ * Same defect as `getCurrentUser` had, one layer up. The route-group layout
+ * reads `profiles` to enforce role, and then `/learn`, `/progress` and
+ * `/settings` each read the SAME row again for `grade` and `display_name`.
+ * Two queries for one row, one after the other, on every learner screen.
+ *
+ * That costs more here than it looks: this project's database is in
+ * `ap-northeast-1` (Tokyo) while the Vercel functions run in `bom1` (Mumbai).
+ * Measured Mumbai→Tokyo is ~115ms per round trip against ~2ms same-region, so
+ * a duplicated query is not a rounding error — it is a tenth of a second on
+ * every navigation, spent fetching a row we already had.
+ *
+ * Selecting the union of the columns the four callers want (`role`,
+ * `display_name`, `grade`) is what lets one row serve all of them. If you add
+ * a caller that needs another column, add it here rather than writing a second
+ * query — a second query is the thing this exists to remove.
+ *
+ * Returns null for "authenticated but no profile row", which is a real state
+ * (onboarding interrupted), not an error. The layout redirects on it.
+ */
+export const getCurrentProfile = cache(async () => {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("role, display_name, grade")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  return data;
+});

@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { loadEnvConfig } from "@next/env";
 
 /**
  * Playwright — the demo path only.
@@ -6,6 +7,13 @@ import { defineConfig, devices } from "@playwright/test";
  * One test that walks sign-up → dashboard → lesson → tutor → practice → quiz →
  * progress. If it is green, the demo works.
  */
+
+// The dev server under `webServer` loads .env.local itself; the TEST process
+// does not. One test needs to know the Supabase project ref to forge a session
+// cookie with the name the client actually looks for. This is Next's own
+// loader, so the test process reads exactly what the app reads — no second
+// copy of the config to drift.
+loadEnvConfig(process.cwd());
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false, // the demo path is one sequential journey

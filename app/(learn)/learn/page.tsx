@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Settings as SettingsIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { createClient, getCurrentProfile, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { selectNextAction } from "@/lib/learning/adaptivity";
 import { dailyGoal } from "@/lib/learning/dailyGoal";
@@ -41,11 +41,8 @@ export default async function LearnPage() {
   const user = await getCurrentUser();
   const studentId = user!.id; // the (learn) layout guarantees this
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("display_name, grade")
-    .eq("id", studentId)
-    .single();
+  // Already fetched by the (learn) layout and cached for this request — free.
+  const profile = await getCurrentProfile();
 
   const grade = profile?.grade ?? 6;
   const todayStart = istDayStart(istDate()).toISOString();

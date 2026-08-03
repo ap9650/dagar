@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight, MessageSquare } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { getCurrentProfile } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { SignOutButton } from "@/components/auth/SignOutButton";
@@ -28,14 +28,8 @@ import { BackLink } from "@/components/ui/BackLink";
  * cannot read a word on the screen.
  */
 export default async function SettingsPage() {
-  const supabase = await createClient();
-  const user = await getCurrentUser();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("display_name, grade")
-    .eq("id", user!.id)
-    .single();
+  // Already fetched by the (learn) layout and cached for this request — free.
+  const profile = await getCurrentProfile();
 
   const t = await getTranslations();
   const locale = (await getLocale()) as Locale;

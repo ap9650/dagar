@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { createClient, getCurrentUser } from "@/lib/supabase/server";
+import { getCurrentProfile, getCurrentUser } from "@/lib/supabase/server";
 
 /**
  * ─────────────────────────────────────────────────────────────────────────────
@@ -25,16 +25,12 @@ export default async function LearnLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createClient();
   const user = await getCurrentUser();
 
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
+  // Cached for the request, so the page below re-reads this row for free.
+  const profile = await getCurrentProfile();
 
   // Authenticated with no profile: onboarding was interrupted. A real state, not
   // an error — finish it rather than dead-ending them in an empty dashboard.
