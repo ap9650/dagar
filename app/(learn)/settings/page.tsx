@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, ChevronRight, MessageSquare } from "lucide-react";
+import { ChevronRight, MessageSquare } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { SignOutButton } from "@/components/auth/SignOutButton";
@@ -10,6 +10,7 @@ import { InstallSettings } from "@/components/install/InstallSettings";
 import { HapticsToggle } from "@/components/settings/HapticsToggle";
 import { GradeSetting } from "@/components/settings/GradeSetting";
 import type { Locale } from "@/i18n/config";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/settings` — slice 1.1a. Small screen, disproportionate importance.
@@ -28,9 +29,7 @@ import type { Locale } from "@/i18n/config";
  */
 export default async function SettingsPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
   const { data: profile } = await supabase
     .from("profiles")
@@ -44,13 +43,7 @@ export default async function SettingsPage() {
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex items-center gap-md">
-        <Link
-          href="/learn"
-          aria-label={t("common.back")}
-          className="inline-flex items-center justify-center size-11 -ml-sm rounded-(--radius-control) text-body hover:bg-surface"
-        >
-          <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-        </Link>
+        <BackLink href="/learn" label={t("common.back")} />
         <h1 className="text-h2 text-ink">{t("settings.title")}</h1>
       </header>
 

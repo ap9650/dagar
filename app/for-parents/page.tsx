@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { ArrowLeft, Check, Eye, EyeOff, Link2 as LinkIcon, Lock } from "lucide-react";
+import { Check, Eye, EyeOff, Link2 as LinkIcon, Lock } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { buttonClasses } from "@/components/ui/Button";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/for-parents` — what this is, and how a parent gets in.
@@ -56,13 +57,7 @@ export default async function ForParentsPage() {
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
-        <Link
-          href="/login"
-          aria-label={t("back")}
-          className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-        >
-          <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-        </Link>
+        <BackLink href="/login" label={t("back")} />
         <h1 className="text-h1 text-ink">{t("title")}</h1>
         <p className="text-body text-body">{t("intro")}</p>
       </header>

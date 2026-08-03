@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import type { Database } from "./database.types";
@@ -41,13 +42,33 @@ export async function createClient() {
 }
 
 /**
- * The session, or null. Prefer this over calling `auth.getUser()` ad hoc so
- * there is one place to change if the shape ever moves.
+ * The signed-in user, or null — **once per request, however many callers ask.**
+ *
+ * ── WHY THIS IS CACHED ──────────────────────────────────────────────────────
+ * `auth.getUser()` is not a cookie read. It revalidates the token against
+ * Supabase's auth server, which is a network round trip, and that is exactly
+ * why it is the right function to call rather than `getSession()`.
+ *
+ * But it was being called TWICE on the way to every learner screen: once by the
+ * route-group layout, which is the auth boundary, and again by the page itself.
+ * Two identical round trips, one after the other, before any content query had
+ * started. Measured on production: 1.4–2.8s of server time per navigation.
+ *
+ * React's `cache()` dedupes within a single request, so the layout and the page
+ * now share one call. The security property is untouched — the token is still
+ * revalidated, just not twice for the same request.
+ *
+ * The client itself is deliberately NOT cached: constructing it is local work
+ * with no network in it, and route handlers create one outside a React render.
+ * ────────────────────────────────────────────────────────────────────────────
+ *
+ * Prefer this over calling `auth.getUser()` ad hoc. A direct call is a second
+ * round trip that this cache cannot help with.
  */
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async () => {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   return user;
-}
+});

@@ -1,11 +1,9 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 // Scoped to the lesson route, not globals.css: the 23KB stylesheet is only paid
 // for on screens that actually render maths.
 import "katex/dist/katex.min.css";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { localisedSteps, parseSteps } from "@/lib/learning/lessonSteps";
@@ -17,6 +15,7 @@ import { LessonProgress } from "@/components/learn/LessonProgress";
 import { LessonCompleteButton } from "@/components/learn/LessonCompleteButton";
 import { TutorSheet } from "@/components/learn/TutorSheet";
 import type { Locale } from "@/i18n/config";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/learn/[chapter]/[lesson]` — the micro-lesson (slice 1.4).
@@ -40,9 +39,7 @@ export default async function LessonPage({
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   const studentId = user!.id;
 
   const [{ data: lessons }, { data: progress }, { data: tutorHistory }] = await Promise.all([
@@ -107,13 +104,7 @@ export default async function LessonPage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <Link
-            href="/learn"
-            aria-label={t("lesson.backToChapter")}
-            className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-          >
-            <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-          </Link>
+          <BackLink href="/learn" label={t("lesson.backToChapter")} />
           {/* The step count belongs to the progress dots below and is NOT
               repeated here — it was, and reading the same sentence twice in two
               places makes a screen feel unfinished. */}

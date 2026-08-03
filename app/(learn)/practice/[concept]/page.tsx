@@ -1,16 +1,15 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 // Scoped to this route, not globals.css: the 23KB stylesheet is only paid for on
 // screens that actually render maths.
 import "katex/dist/katex.min.css";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { selectPracticeQuestion } from "@/lib/learning/practice";
 import { PracticeSession } from "@/components/learn/PracticeSession";
 import type { Locale } from "@/i18n/config";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/practice/[concept]` — guided practice (slice 2.2).
@@ -37,9 +36,7 @@ export default async function PracticePage({
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   const studentId = user!.id;
 
   const { data: concept } = await supabase
@@ -62,13 +59,7 @@ export default async function PracticePage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <Link
-            href="/learn"
-            aria-label={t("lesson.backToChapter")}
-            className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-          >
-            <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-          </Link>
+          <BackLink href="/learn" label={t("lesson.backToChapter")} />
           <span className="text-caption text-muted">{t("practice.title")}</span>
         </div>
 

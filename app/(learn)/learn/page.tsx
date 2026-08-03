@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Settings as SettingsIcon } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { selectNextAction } from "@/lib/learning/adaptivity";
 import { dailyGoal } from "@/lib/learning/dailyGoal";
@@ -38,9 +38,7 @@ export default async function LearnPage() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   const studentId = user!.id; // the (learn) layout guarantees this
 
   const { data: profile } = await supabase

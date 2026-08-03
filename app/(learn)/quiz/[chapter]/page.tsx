@@ -1,16 +1,15 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 // Scoped to this route, not globals.css: the 23KB stylesheet is only paid for on
 // screens that actually render maths.
 import "katex/dist/katex.min.css";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { trackRecommendationArrival } from "@/lib/analytics/track";
 import { QuizRunner } from "@/components/learn/QuizRunner";
 import type { MasteryBand } from "@/lib/learning/mastery";
 import type { Locale } from "@/i18n/config";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/quiz/[chapter]` — the chapter quiz (slice 2.4).
@@ -41,9 +40,7 @@ export default async function QuizPage({
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   const studentId = user!.id; // the (learn) layout guarantees this
 
   const [{ data: chapter }, { count: questionCount }, { data: lastSession }] =
@@ -96,13 +93,7 @@ export default async function QuizPage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <Link
-            href="/learn"
-            aria-label={t("quiz.backToChapter")}
-            className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-          >
-            <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-          </Link>
+          <BackLink href="/learn" label={t("quiz.backToChapter")} />
           <span className="text-caption text-muted">{t("quiz.title")}</span>
         </div>
 

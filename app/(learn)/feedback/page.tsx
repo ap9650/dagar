@@ -1,8 +1,7 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { FeedbackForm, type FeedbackAnswers } from "@/components/learn/FeedbackForm";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/feedback` — what a real user thinks of Dagar (0018).
@@ -23,9 +22,7 @@ export default async function FeedbackPage() {
   const t = await getTranslations("productFeedback");
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
 
   // RLS scopes this to the caller's own row — the `.eq` is the belt to that
   // braces, not the boundary itself.
@@ -38,13 +35,7 @@ export default async function FeedbackPage() {
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
-        <Link
-          href="/learn"
-          aria-label={t("back")}
-          className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-        >
-          <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-        </Link>
+        <BackLink href="/learn" label={t("back")} />
         <h1 className="text-h1 text-ink">{t("title")}</h1>
         <p className="text-body text-body">{t("intro")}</p>
       </header>

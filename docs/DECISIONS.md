@@ -891,6 +891,76 @@ worth trying.
 "empty diagram placeholder". It was not empty — it held an image that text
 extraction could not see. It was replaced on quality grounds, not absence.
 
+## D19 — Navigation feels instant, or the work behind it does not count (2026-08-03)
+
+**Reported from a phone:** *"It's lagging… I do not know whether I have tapped
+it, or it understood that I have tapped it."* Two separate faults, one
+engineering and one design, that happened to produce the same sentence.
+
+### What the measurements said
+
+Production, warm functions, six samples per route:
+
+| | before | after |
+|---|---|---|
+| `/learn` server time (TTFB) | 1396–2334 ms | 556–1125 ms |
+| `/progress` server time | 1381–2806 ms | 539–1333 ms |
+| tap → **anything on screen** | 1.8–3.4 s | ~30–200 ms |
+| tap → lesson fully rendered (prefetched) | 1857 ms | 31 ms |
+
+### 1. Every dynamic route was navigating blind
+
+Next 16's own navigation guide: *"Dynamic Route: prefetching is skipped, or the
+route is partially prefetched if `loading.tsx` is present"*, and without one
+*"the client must wait for the server response before showing the result. This
+can give the users the impression that the app is not responding."*
+
+There was **no `loading.tsx` anywhere in the app**. Every learner route is
+dynamic — it reads a session cookie — so nothing was prefetched and every tap
+left the previous screen frozen for the full server round trip. The learner's
+sentence was a precise description of the framework's documented behaviour.
+
+Six loading boundaries now exist. The `/learn` one is deliberately generic: a
+`loading.tsx` wraps its segment's *children*, so a dashboard-shaped skeleton was
+what flashed when you tapped a lesson — a picture of the screen you were
+leaving. Caught by screenshotting 200 ms after a tap.
+
+### 2. `auth.getUser()` ran twice before any content query
+
+It is a network round trip, not a cookie read — which is exactly why it is the
+right function. But the route-group layout and the page each called it, one
+after the other, before anything useful started. `React.cache()` collapses them
+to one per request; the token is still revalidated, just not twice. **That
+single change halved server time.**
+
+### 3. Functions ran in Washington
+
+`vercel.json` now pins `bom1`. Measured from India this was worth another
+~300 ms per navigation on top of the de-duplication, and it shortens the leg
+that matters most for the actual audience — phone to function.
+
+The Supabase region was never confirmed (the API is Cloudflare-fronted, so DNS
+does not reveal it). If it is **not** `ap-south-1`, aligning it is the largest
+remaining win: the residual ~700 ms is roughly three sequential Supabase hops,
+and they are only that expensive if they cross an ocean.
+
+### 4. A phone has no hover
+
+Seven screens each had their own copy of the back-arrow markup, and every one
+carried `hover:bg-surface` and nothing else. On a touch device that is **no
+feedback at all** — tapping back changed nothing on screen, and with ~2 s behind
+it the app looked like it had ignored the tap.
+
+Seven copies is why it was missing in seven places. `components/ui/BackLink.tsx`
+is why it cannot be missing again. The press is a fill *and* a shrink: colour
+alone is never the only signal (design rule 10), and on a cheap LCD in daylight
+a background change can be invisible while the movement still reads.
+
+### The rule this leaves behind
+
+**Every interactive element needs an `active:` state, not just `hover:`.** Hover
+is the desktop affordance; this product is used with a thumb.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3

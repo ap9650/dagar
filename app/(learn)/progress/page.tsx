@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, Flame } from "lucide-react";
+import { Flame } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { dailyGoal } from "@/lib/learning/dailyGoal";
 import { istDate, istDayStart } from "@/lib/learning/dates";
@@ -14,6 +14,7 @@ import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { MilestoneGrid } from "@/components/learn/MilestoneGrid";
 import { cn } from "@/lib/cn";
 import type { Locale } from "@/i18n/config";
+import { BackLink } from "@/components/ui/BackLink";
 
 /**
  * `/progress` — mastery, streak, milestones (slice 2.5).
@@ -39,9 +40,7 @@ export default async function ProgressPage() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   const studentId = user!.id; // the (learn) layout guarantees this
 
   const { data: profile } = await supabase
@@ -109,13 +108,7 @@ export default async function ProgressPage() {
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <Link
-            href="/learn"
-            aria-label={t("errors.backHome")}
-            className="inline-flex items-center justify-center size-11 -ms-sm rounded-(--radius-control) text-body hover:bg-surface"
-          >
-            <ArrowLeft size={20} strokeWidth={1.75} aria-hidden />
-          </Link>
+          <BackLink href="/learn" label={t("errors.backHome")} />
         </div>
         <h1 className="text-h1 text-ink">{t("progress.title")}</h1>
       </header>
