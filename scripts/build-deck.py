@@ -258,34 +258,43 @@ def s2_solution(prs):
                  align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
 
     y2 = y + 1.02
+    # (title, body, accent, badge, fill). The last card USED to claim the learner
+    # "is offered a real person" — see D8a. No session happens, so the claim is
+    # now the measurement it always was, badged and tinted so the difference
+    # survives a five-second skim.
     cards = [
         ("Grounded, not generic",
          "Every tutor call carries the current lesson's text and that learner's "
          "concept mastery. It teaches inside the curriculum, and it hints before "
-         "it answers — a learner handed the answer has learned nothing.", PRIMARY),
+         "it answers — a learner handed the answer has learned nothing.",
+         PRIMARY, None, WHITE),
         ("Adapts to the concept, not the score",
          "Mastery is tracked per concept, not per chapter. Practice difficulty "
          "steps up and down on performance, and the next lesson is recommended "
-         "from what is actually weak.", PRIMARY),
+         "from what is actually weak.", PRIMARY, None, WHITE),
         ("Hindi from day one",
          "Full UI, curriculum content and AI tutor in Hindi and English. For a "
          "Hindi-medium learner, language is not a feature — it is the front door. "
-         "Personalisation is worthless to someone who cannot read the lesson.", CORRECT),
+         "Personalisation is worthless to someone who cannot read the lesson.",
+         CORRECT, None, WHITE),
         ("A parent loop that needs no parent",
          "A weekly summary reaches a supporting adult through a link — no account, "
          "no app, no login. Because the adult who checks may be a grandmother, an "
-         "older sister, or a teacher.", HINT),
+         "older sister, or a teacher.", HINT, None, WHITE),
         ("Built to keep someone coming back",
          "A closable daily goal, a streak with a grace day, milestones. No hearts, "
          "no leaderboards, no guilt — mechanics that punish invert badly for a "
-         "learner who is already behind.", HINT),
-        ("A human when AI is not enough",
-         "Repeated struggle on one concept is detected, and the learner is offered "
-         "a real person. Framed as an offer, never as a diagnosis.", AMBER),
+         "learner who is already behind.", HINT, None, WHITE),
+        ("We measure where AI is not enough",
+         "Repeated struggle is detected and the learner is asked whether they want "
+         "a person. No session happens yet, the app says so plainly, and the ask is "
+         "recorded — so supply is sized on evidence, not promised ahead of it.",
+         AMBER, "not built · demand test", SURFACE),
     ]
     w, h, gx, gy = 3.897, 1.56, 0.2, 0.2
-    for (cx, cy), (t, b, a) in zip(grid(M, y2, 3, 2, w, h, gx, gy), cards):
-        card(s, cx, cy, w, h, t, b, accent=a, title_size=12.5, body_size=9.8)
+    for (cx, cy), (t, b, a, bg, fl) in zip(grid(M, y2, 3, 2, w, h, gx, gy), cards):
+        card(s, cx, cy, w, h, t, b, accent=a, fill=fl, badge=bg,
+             title_size=12.5, body_size=9.8)
 
 
 def s3_validation(prs):
@@ -453,31 +462,40 @@ def s5_persona(prs):
 
 def s6_features(prs):
     s, y = slide_shell(prs, 6, "06 · Features",
-                       "Eight features. One loop.",
-                       "Everything below is live in the MVP at " + APP_URL +
+                       "Seven features. And one we chose not to fake.",
+                       "The first seven are live at " + APP_URL +
                        " — NCERT Mathematics, Classes 6–8, one chapter per grade, "
-                       "in Hindi and English.")
+                       "in Hindi and English. The eighth card is not a feature, and "
+                       "the app says so too.")
+    # (title, body, accent, badge, fill). The last card is deliberately NOT a
+    # feature — see D8a. It carries a badge and a tinted fill so it cannot be
+    # skim-read as one, and the slide title names it before anyone reaches it.
     feats = [
         ("Curriculum dashboard", "Grade, chapters, lessons as a visible journey "
-         "path, with a recommended next lesson and a closable daily goal.", PRIMARY),
+         "path, with a recommended next lesson and a closable daily goal.",
+         PRIMARY, None, WHITE),
         ("Micro-lessons", "One concept at a time, in the learner's language, with "
-         "KaTeX-rendered maths and worked examples.", PRIMARY),
+         "KaTeX-rendered maths and worked examples.", PRIMARY, None, WHITE),
         ("AI Tutor", "Claude Sonnet 5, grounded in the current lesson text and the "
-         "learner's concept mastery. Streams, hints first, refuses off-curriculum.", PRIMARY),
+         "learner's concept mastery. Streams, hints first, refuses off-curriculum.",
+         PRIMARY, None, WHITE),
         ("Guided practice", "Adaptive difficulty, instant deterministic grading, a "
-         "hint ladder from nudge to worked solution.", PRIMARY),
+         "hint ladder from nudge to worked solution.", PRIMARY, None, WHITE),
         ("Chapter quiz", "Mastery per concept, order varied per attempt, revision "
-         "recommended from what was actually missed.", HINT),
+         "recommended from what was actually missed.", HINT, None, WHITE),
         ("Progress, streaks, milestones", "Personal progress only. No ranks, no "
-         "leaderboards, no lives — a grace day so one bad evening costs nothing.", HINT),
+         "leaderboards, no lives — a grace day so one bad evening costs nothing.",
+         HINT, None, WHITE),
         ("Parent companion", "A weekly summary a supporting adult reads without an "
-         "account. Tutor conversations are never in it.", CORRECT),
-        ("Request a human mentor", "Offered when repeated struggle is detected on "
-         "one concept. An offer, never a diagnosis.", AMBER),
+         "account. Tutor conversations are never in it.", CORRECT, None, WHITE),
+        ("A human mentor", "No session happens. The app tells the learner that, and "
+         "records the ask — so we size real demand before promising supply we do "
+         "not have.", AMBER, "not built · demand test", SURFACE),
     ]
     w, h, gx, gy = 2.96, 1.72, 0.2, 0.2
-    for (cx, cy), (t, b, a) in zip(grid(M, y, 4, 2, w, h, gx, gy), feats):
-        card(s, cx, cy, w, h, t, b, accent=a, title_size=12, body_size=9.6)
+    for (cx, cy), (t, b, a, bg, fl) in zip(grid(M, y, 4, 2, w, h, gx, gy), feats):
+        card(s, cx, cy, w, h, t, b, accent=a, fill=fl, badge=bg,
+             title_size=12, body_size=9.6)
 
     yb = y + 2 * h + gy + 0.2
     box(s, M, yb, CONTENT_W, 0.62, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
@@ -649,9 +667,10 @@ def s9_roadmap(prs):
     phases = [
         ("Phase 1 — now", "Validate the core loop",
          "NCERT Mathematics, Classes 6–8  ·  AI Tutor  ·  guided practice  ·  chapter "
-         "quiz  ·  progress and streaks  ·  parent summary  ·  mentor request  ·  "
-         "Hindi and English.   Free, deliberately — no pricing experiment runs until "
-         "H1–H7 have data.", PRIMARY),
+         "quiz  ·  progress and streaks  ·  parent summary  ·  Hindi and English  ·  "
+         "a demand test for human mentoring, which is measured and not yet built.   "
+         "Free, deliberately — no pricing experiment runs until H1–H7 have data.",
+         PRIMARY),
         ("Phase 2 — expansion", "Widen subjects, languages and stakeholders",
          "Science and other subjects  ·  more grades  ·  Marathi, Tamil and Bengali "
          "(the storage model already supports them)  ·  adaptive learning paths  ·  "

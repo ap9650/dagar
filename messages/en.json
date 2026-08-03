@@ -214,14 +214,14 @@
   },
   "mentor": {
     "ctaTitle": "Want a person to explain this?",
-    "ctaBody": "We can pass this on to a mentor.",
-    "ctaAction": "Ask for help",
+    "ctaBody": "We haven't built this yet. Tell us you want it, and we'll know to.",
+    "ctaAction": "Yes, I want this",
     "dismiss": "Not now",
-    "requested": "A person reads these, so it can take a day or two. Keep going in the meantime — you do not have to wait.",
-    "requestedTitle": "Passed on, with everything you tried",
-    "noteLabel": "Anything you want to tell them?",
+    "requested": "We can't send you a real teacher yet. The more of you ask, the sooner we can. Your tutor is here whenever you're stuck.",
+    "requestedTitle": "Noted — thank you",
+    "noteLabel": "Anything you want to tell us?",
     "notePlaceholder": "I get stuck when the bottom numbers are different…",
-    "send": "Send to a mentor"
+    "send": "Send"
   },
   "settings": {
     "title": "Settings",

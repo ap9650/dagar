@@ -82,6 +82,8 @@ The mentor offer surfaces when **any** of three things is true:
 
 The third is the one that needs persisted conversation state to detect at all, and it is the one that catches the learner who is politely asking the same question five different ways.
 
+**What the offer does, and does not, do.** No mentor session happens. The request is recorded with its full context and nothing notifies anyone, so the card says exactly that — *"We haven't built this yet. Tell us you want it, and we'll know to."* It previously said a mentor would read it within a day or two, which was not true and was being said to a learner who had just admitted they were stuck. The detection is real, the escalation is not, and the count is what tells us whether human escalation is worth building at all.
+
 ### Streaks
 
 - A day counts if the learner completes **one micro-lesson or five practice questions**.

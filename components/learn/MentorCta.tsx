@@ -85,10 +85,17 @@ export function MentorCta({
         <p className="text-label font-medium text-primary-strong">
           {t("mentor.requestedTitle")}
         </p>
-        {/* Honest about the wait. There is no mentor console in the MVP (D8) and
-            requests are read by a person, so promising a fast reply would be a
-            promise the product cannot keep — to a learner who has just admitted
-            they are stuck. */}
+        {/* Says the true thing, which is that nobody is coming yet.
+
+            This card used to say "we can pass this on to a mentor" and "a person
+            reads these, so it can take a day or two". Neither was true: the
+            request is a row in `mentor_requests` and nothing notifies anyone
+            (D8 — capture-only). A learner who has just admitted they are stuck
+            was being told help was on its way, specifically enough to wait for.
+
+            So the offer is now what it always actually was: a demand signal,
+            stated as one. See D8. If a mentor console ever ships, this copy
+            changes back — and NOT before. */}
         <p className="text-body-sm text-body">{t("mentor.requested")}</p>
       </div>
     );

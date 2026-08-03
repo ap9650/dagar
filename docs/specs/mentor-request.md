@@ -1,7 +1,7 @@
 # Spec: Struggle Detection & Mentor Request
 
 **Build slice:** 2.6
-**Implements:** D6 (triggers), D8 (capture only, no mentor UI)
+**Implements:** D6 (triggers), D8 (capture only, no mentor UI), D8a (it says so)
 **Depends on:** attempts (2.2) · tutor (2.3)
 **Design:** `saathi-design` → mentor CTA (always dismissible)
 
@@ -9,9 +9,17 @@
 
 ## 1. What this is, and what it is not
 
-The app notices a learner is stuck and **offers** a human. It captures the request
-with full context. **There is no mentor-side UI in MVP** (D8) — requests are reviewed
-manually.
+The app notices a learner is stuck and **asks whether they want** a human. It
+captures the request with full context. **There is no mentor-side UI in MVP**
+(D8) — requests are reviewed manually, and nothing notifies anyone that one has
+arrived.
+
+**The copy must not promise a mentor** (D8a). It said "we can pass this on to a
+mentor" and "a person reads these, so it can take a day or two" until 3 Aug;
+neither was true, and the second was specific enough for a stuck learner to wait
+on. It now states that the thing is not built and that asking is what tells us to
+build it. **If a mentor console ever ships, this copy changes back — and not
+before.**
 
 Being honest about that in the demo is a strength: the detection and the context
 capture are the hard parts, and they are real.

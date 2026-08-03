@@ -676,6 +676,43 @@ tutor transcript) into `mentor_requests` and confirms to the learner. There is
 **no mentor-side UI in MVP** — requests are reviewed manually. Status enum:
 `open → acknowledged → resolved`.
 
+### D8a — It is a demand test, and it now says so (2026-08-03)
+
+**The copy was making a promise the product cannot keep.** The card said *"We
+can pass this on to a mentor"*, the button said *"Send to a mentor"*, and the
+confirmation said *"A person reads these, so it can take a day or two."* None of
+that was true. The request is a row; nothing notifies anyone. "A day or two" is
+specific enough to wait for, and it was being said to a learner who had just
+admitted they were stuck — which for an 11–14-year-old is the hardest thing on
+that screen.
+
+**The feature is not cut. Its framing is corrected.** It now states that the
+thing does not exist yet and that asking is how we learn it is wanted:
+
+> We haven't built this yet. Tell us you want it, and we'll know to.
+> → *Noted — thank you.* We can't send you a real teacher yet. The more of you
+> ask, the sooner we can. Your tutor is here whenever you're stuck.
+
+**Why not hide it instead**, which was the alternative considered:
+
+- The count is the only evidence of whether human escalation is worth building.
+  Hiding the card deletes the experiment, not just the promise.
+- The pricing model already commits to *"gated on verified mentor supply — never
+  sold ahead of capacity."* The old copy sold ahead of capacity inside the app,
+  contradicting our own stated principle.
+- A discovered overstatement in a demo costs more than the feature is worth: one
+  "what happens if I tap this?" and every other claim gets re-examined.
+
+**The trigger is unchanged** — the offer still surfaces on a D6 struggle signal.
+That is the moment the signal carries the most meaning, and a learner who is
+told "not yet, but your asking counts" is being treated as someone who can take
+an honest answer. Same instinct as no hearts and no guilt notifications (D17).
+
+**This is copy-only.** Schema, route, context assembly, rate limiting and the
+`mentor_request_submitted` event are untouched, so the demand data is continuous
+across the change. **If a mentor console ever ships, this copy changes back —
+and not before.**
+
 ## D9 — Stack
 
 | Layer | Choice |
