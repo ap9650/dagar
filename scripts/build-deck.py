@@ -42,7 +42,10 @@ CELEBRATE_BG = RGBColor(0xFF, 0xFB, 0xEB)
 # master if you want something warmer.
 FONT = "Arial"
 
-APP_URL = "saathi-ap19.vercel.app"
+APP_URL = "dagar-ap19.vercel.app"
+# The repo is still named `saathi` on GitHub and this is deliberately the TRUE
+# url, not the aspirational one. A repo link on a slide that 404s in front of a
+# judge is worse than an old name. Rename the repo and change this together.
 REPO_URL = "github.com/ap9650/saathi"
 
 SW, SH = 13.333, 7.5      # 16:9
@@ -172,7 +175,11 @@ def cover(prs):
     text(s, 1.1, 2.05, 8.6, 1.0,
          [{"t": "Dagar", "size": 62, "bold": True, "color": PRIMARY_STRONG,
            "space_after": 6, "line": 1.0},
-          {"t": "साथी  ·  companion", "size": 15, "color": PRIMARY, "space_after": 0}])
+          # डगर, the wordmark the app itself carries. "साथी · companion" was the
+          # old name's gloss and survived the rename here — a cover slide
+          # glossing the wrong word is the one place nobody would think to look.
+          {"t": "डगर  ·  the trail you walk", "size": 15, "color": PRIMARY,
+           "space_after": 0}])
     box(s, 1.12, 3.62, 1.4, 0.05, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
     text(s, 1.1, 3.95, 9.2, 1.2,
          [{"t": "Personalised learning for every underserved learner.",
@@ -445,7 +452,7 @@ def s5_persona(prs):
 
 
 def s6_features(prs):
-    s, y = slide_shell(prs, 6, "06 · Product",
+    s, y = slide_shell(prs, 6, "06 · Features",
                        "Eight features. One loop.",
                        "Everything below is live in the MVP at " + APP_URL +
                        " — NCERT Mathematics, Classes 6–8, one chapter per grade, "
@@ -482,8 +489,62 @@ def s6_features(prs):
            "size": 10, "color": PRIMARY_STRONG}], anchor=MSO_ANCHOR.MIDDLE)
 
 
+def s6b_screens(prs):
+    """The product, photographed.
+
+    Six slides describe this app and, until now, none of them showed it. A judge
+    reading "guided practice with pictorial input" has to take our word for it.
+    These are real screenshots of the real thing at 360px — captured by driving
+    the app with `npm run deck:shots`, not composited in a design tool, so a
+    screen that breaks cannot quietly keep looking good on this slide.
+    """
+    s, y = slide_shell(prs, 7, "07 · The product",
+                       "What it actually looks like, on the phone it is used on.",
+                       "Every screen below is a real screenshot at 360px — the width of the "
+                       "shared Android phone this was designed for. Nothing here is a mockup.")
+
+    screens = [
+        ("dashboard-en", "A journey, not a list",
+         "Streak, one closable daily goal, and a path with a visible “you are here”."),
+        ("lesson-step", "One idea per step",
+         "Eight steps, a diagram for each, read aloud on request. The tutor is one tap away."),
+        ("practice-choiceviz", "Answer with a picture",
+         "No keyboard. Distractors are real misconceptions, not random wrong numbers."),
+        # Titles are kept under ~24 characters. The caption column is 1.7" wide,
+        # so a longer one wraps to a second line, pushes its body down, and runs
+        # into the source note at the foot of the slide.
+        ("practice-balance", "The diagram asks",
+         "Class 8 meets equations as a balance before it meets them as algebra."),
+        ("dashboard-hi", "Hindi is not a Phase 2",
+         "Every screen, both languages, from day one — including the maths."),
+    ]
+
+    # 1080×2280 screenshots — a 0.4737 aspect. Height first, then width from it,
+    # so five phones and their captions fit the slide without cropping.
+    ph = 3.62
+    pw = ph * 0.4737
+    gap = (CONTENT_W - 5 * pw) / 4
+
+    for i, (name, title, body) in enumerate(screens):
+        x = M + i * (pw + gap)
+        # A hairline frame: without it a white app screen dissolves into a white
+        # slide and the phone stops reading as a phone.
+        box(s, x - 0.045, y - 0.045, pw + 0.09, ph + 0.09, fill=None, line=BORDER, line_w=1.0,
+            radius=0.05)
+        s.shapes.add_picture(f"docs/deck/screens/{name}.png", Inches(x), Inches(y),
+                             height=Inches(ph))
+        text(s, x, y + ph + 0.16, pw, 0.9,
+             [{"t": title, "size": 11.5, "bold": True, "color": INK, "space_after": 4,
+               "line": 1.1},
+              {"t": body, "size": 9.2, "color": BODY, "line": 1.22}])
+
+    source_note(s, SH - 0.74,
+                "Captured from the running app by `npm run deck:shots`, which signs in and "
+                "walks to each screen — so these cannot drift from what ships.")
+
+
 def s7_how(prs):
-    s, y = slide_shell(prs, 7, "07 · How we built it",
+    s, y = slide_shell(prs, 8, "08 · How we built it",
                        "Four days. Every constraint met as a decision.")
 
     # The stack gets its own full-width strip so the architecture diagram and the
@@ -538,7 +599,7 @@ def s7_how(prs):
 
 
 def s8_next(prs):
-    s, y = slide_shell(prs, 8, "08 · Next",
+    s, y = slide_shell(prs, 9, "09 · Next",
                        "The next 1–2 months, if the feedback says go.",
                        "Ordered by what real users have already told us, not by what "
                        "is fun to build. The first three came out of testing this week.")
@@ -580,7 +641,7 @@ def s8_next(prs):
 
 
 def s9_roadmap(prs):
-    s, y = slide_shell(prs, 9, "09 · Roadmap",
+    s, y = slide_shell(prs, 10, "10 · Roadmap",
                        "One subject proves it. The rest is authoring.",
                        "Curriculum is data — chapters, concepts, lessons and questions "
                        "are rows, not code. Adding a subject is authoring, not "
@@ -629,7 +690,7 @@ def s9_roadmap(prs):
 
 
 def s10_adoption(prs):
-    s, y = slide_shell(prs, 10, "10 · Adoption",
+    s, y = slide_shell(prs, 11, "11 · Adoption",
                        "Reach learners through the adults who already have them.",
                        "Paid consumer acquisition contradicts the targeting: you "
                        "cannot buy your way to users selected for being unable to pay. "
@@ -684,7 +745,7 @@ def s10_adoption(prs):
 
 
 def s11_competitors(prs):
-    s, y = slide_shell(prs, 11, "11 · Competition",
+    s, y = slide_shell(prs, 12, "12 · Competition",
                        "Everyone solves a fragment. The gap is joining them up.")
     rows = [
         ("Video platforms", "YouTube, Khan Academy",
@@ -744,7 +805,7 @@ def s11_competitors(prs):
 
 
 def s12_pricing(prs):
-    s, y = slide_shell(prs, 12, "12 · Pricing",
+    s, y = slide_shell(prs, 13, "13 · Pricing",
                        "Learners never pay for the core. Institutions pay for reach.",
                        "The MVP is free, deliberately — a pricing experiment now would "
                        "contaminate the activation and retention numbers that decide "
@@ -814,7 +875,7 @@ def s12_pricing(prs):
 
 
 def s13_testimonials(prs):
-    s, y = slide_shell(prs, 13, "13 · What users said",
+    s, y = slide_shell(prs, 14, "14 · What users said",
                        "Real feedback from real users.",
                        "Collected in-app from students, parents and teachers using "
                        "Dagar on their own phones. Replace the placeholders below "
@@ -849,13 +910,18 @@ def s13_testimonials(prs):
               {"t": label, "size": 9, "color": MUTED, "line": 1.2}])
 
 
+# The deck, in order. `preview-deck.py` reads THIS rather than keeping its own
+# copy — it had one, and a slide added here was simply missing from every
+# preview until someone noticed. The one place a slide is registered.
+SLIDES = [cover, s1_problem, s2_solution, s3_validation, s4_market_size, s5_persona,
+          s6_features, s6b_screens, s7_how, s8_next, s9_roadmap, s10_adoption,
+          s11_competitors, s12_pricing, s13_testimonials]
+
+
 def main() -> None:
     prs = Presentation()
     prs.slide_width, prs.slide_height = Inches(SW), Inches(SH)
-    cover(prs)
-    for fn in (s1_problem, s2_solution, s3_validation, s4_market_size, s5_persona,
-               s6_features, s7_how, s8_next, s9_roadmap, s10_adoption,
-               s11_competitors, s12_pricing, s13_testimonials):
+    for fn in SLIDES:
         fn(prs)
     out = "docs/deck/Dagar-Pitch-Deck.pptx"
     prs.save(out)

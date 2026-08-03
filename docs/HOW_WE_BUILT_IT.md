@@ -3,7 +3,7 @@
 **An AI learning companion for underserved learners.**
 Buildathon MVP · August 2026 · Built by Akriti Panwar
 
-Live product: **saathi-ap19.vercel.app** · Source: **github.com/ap9650/saathi**
+Live product: **dagar-ap19.vercel.app** · Source: **github.com/ap9650/saathi**
 
 <!-- pagebreak -->
 
@@ -275,7 +275,9 @@ Recorded because the reasoning is more useful than the fix.
 
 **Stored quiz order was not served quiz order.** Quiz question order is randomised per attempt so a retake is not a memory test. The shuffle was correct, the unit tests were green, the compiled code was right — and the API still returned questions in slug order, because one return path used the unshuffled variable. Unit tests cannot catch a wiring mistake between two correct things. Exercising the real endpoint can.
 
-**Making the fraction rendering smaller made it worse.** Inline stacked fractions crowd the lines around them, so we reduced their size — and a real phone reported within the hour that the digits had fallen below readable. Reverted to byte-identical rules. There is no correct *size* for a stacked fraction in running text; typesetting solves it by writing inline fractions slashed and reserving stacked ones for display maths. That is a content change across three chapters in two languages, and it is in the backlog rather than rushed into a deadline week.
+**Making the fraction rendering smaller made it worse — and reading the CSS hid the real bug for two days.** Inline stacked fractions crowd the lines around them, so we reduced their size; a real phone reported within the hour that the digits had fallen below readable. Reverted. Two CSS levers were tried and neither reached the cause, because KaTeX builds a fraction from nested spans whose visual extent its measured box does not describe.
+
+Then a screenshot, zoomed, showed `3/4` rendering as a **struck-through 4** on the first practice question a Class 6 learner ever sees. The line-height relief we had written was scoped to lesson paragraphs; a practice option label is a span outside that scope and got none. A comment in the stylesheet said "no glyphs actually overlap" — true where we had looked, false everywhere else. The fix was the typographic one all along: 222 inline fractions are now authored slashed (`3/4` on one line) across both languages, and stacked fractions are reserved for display maths, which has the vertical room. **Reading the code was reassuring and wrong twice; looking at the pixels took a minute.**
 
 **The lesson's next step was below the fold.** Reported from a real phone: after finishing a lesson, the "practise this" action sat at the bottom of a scroll with nothing indicating it was there. A sticky footer fixed it. No test would have caught this, and no amount of looking at it on a laptop would have either.
 
@@ -299,13 +301,12 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 |---|---|
 | **A wider question bank** | There are 8 quiz questions per chapter and the quiz is all 8, so a retake cannot contain anything new. Order now varies per attempt, which is the cheap half. The real fix is 16 per chapter: roughly 6 hours, most of it verifying answer keys, because a wrong key marks a correct learner wrong, silently. Not a job to rush. |
 | **Better feedback on rounded decimals** | Grading compares decimals within a tight tolerance, which is right for exact values but quietly demands six decimal places on a recurring one — `5/12` as `0.42` is marked wrong. Correct arithmetic, unhelpful pedagogy. The fix is to detect "close but the expected value is non-terminating" and say *very close — write it as a fraction*. Not touched during feature freeze, because grading is the highest-harm file in the product. |
-| **Slashed inline fractions** | See §11. A content change across three chapters in two languages. |
 | **A visible adaptive ladder** | Practice already steps difficulty up and down; the learner cannot see it. "Nice — let's try a harder one" on the way up, and deliberate silence on the way down, so nobody is told they are failing. |
 | **"See their practice" for a supporting adult** | Blocked on the answer-key design problem in §5, not on effort. |
 | **An admin metrics dashboard** | The events are recorded; only the view is missing. First item on the cut list — a PM tool with no learner value. |
 | **Difficulty shown on questions** | Practice adapts difficulty but never displays it. Arguably it should stay hidden; that is a product question we have not answered. |
 | **A tutor evaluation set** | 20–30 real learner questions with a rubric and an LLM judge. Until it exists, every prompt edit is an untested deploy — and the tutor is the differentiator. First thing after submission. |
-| **A different product name** | "Dagar" is used by at least one other product. साथी is an ordinary Hindi word meaning companion, which is why several products share it and why nobody holds a strong claim. We measured the change — 56 user-visible strings, 4 in the AI prompts, 40 in code, 2 in icons and manifest — and deliberately deferred it to the point where it starts to cost something: a real app-store listing, where collisions are enforced and a trademark check belongs in the same piece of work. |
+| **A domain of our own** | The product was renamed from Saathi to **Dagar** (डगर, *the trail*) on 2 August, before the link went anywhere: 34 strings per language, the AI prompts, the icons and the manifest, plus the Vercel project and the Supabase auth URLs. It runs on a `vercel.app` subdomain. A real domain is additive — a custom domain is added alongside the existing one rather than replacing it, so no learner data, analytics or auth breaks when it lands. Deferred 2–3 months, to the point where an app-store listing makes a trademark check part of the same piece of work. |
 
 ---
 

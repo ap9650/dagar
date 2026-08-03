@@ -225,8 +225,13 @@ export type PanItem =
 export function layoutPan(xs: number, n: number | undefined, centre: number): PanItem[] {
   const boxes = Math.max(0, Math.min(xs, 4));
   const { boxW, gap } = PAN_ITEM;
+  // A zero weight is not a weight. `n: 0` used to draw a real block labelled
+  // "0" sitting on the pan beside the x-boxes — seen for the first time on a
+  // screenshot of `3x = 12`, where it read as a fourth object with a value.
+  // Zero is the absence of a thing, and the picture has to say that.
+  const hasWeight = n !== undefined && n !== 0;
   // Wide enough for three digits without the text touching the edges.
-  const weightW = n === undefined ? 0 : Math.max(28, String(n).length * 12 + 12);
+  const weightW = hasWeight ? Math.max(28, String(n).length * 12 + 12) : 0;
 
   const total = boxes * (boxW + gap) + (weightW ? weightW + gap : 0) - (boxes || weightW ? gap : 0);
   let cursor = centre - total / 2;
@@ -236,6 +241,6 @@ export function layoutPan(xs: number, n: number | undefined, centre: number): Pa
     items.push({ kind: "x", x: cursor, w: boxW });
     cursor += boxW + gap;
   }
-  if (n !== undefined) items.push({ kind: "n", x: cursor, w: weightW, value: n });
+  if (hasWeight) items.push({ kind: "n", x: cursor, w: weightW, value: n! });
   return items;
 }

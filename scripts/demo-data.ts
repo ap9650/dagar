@@ -76,6 +76,20 @@ const JUNK_EMAIL_PATTERNS = [
   /^rls_/i, // tests/integration/rls.test.ts
   /^privacy_/i, // tests/integration/privacy-promise.test.ts
   /^budget_/i, // tests/integration/ai-budget.test.ts
+
+  // Hand-made accounts from verifying slices on a live screen. Each one exists
+  // because a screen could not be trusted from the code alone — and each one is
+  // then a stray child-shaped row in a production database, which is exactly
+  // what this list is for. Add the prefix here the day you invent it.
+  /^cutover_/i, // the Dagar rename, 2 Aug
+  /^celeb_/i, // 5.2 celebration moments
+  /^tiles_/i, // 5.2a tiles input
+  /^cviz_/i, // 5.2 pictorial options
+  /^stem_/i, // 5.2c stem diagrams
+  /^look\d*_/i, // design passes
+  /^c52a\d*_/i, // 5.2a walkthroughs
+  /^dump_/i, // network-response dumps for the answer-key check
+  /^fr_/i, // the inline-fraction rendering bug
 ];
 
 const DEMO_EMAIL = env.DEMO_EMAIL ?? "demo@saathi.app";
@@ -383,8 +397,13 @@ if (!purgeOnly) {
   const demo = await seedDemoLearner();
   console.log("\n─────────────────────────────────────────────────────────");
   console.log(`  demo account : ${demo.email}`);
-  console.log(`  password     : ${demo.password}`);
-  if (!demo.reused) {
+  // A password you already hold is not news, and printing it puts it into the
+  // terminal scrollback, the CI log, and any transcript of the session. Only a
+  // NEWLY minted one is worth showing, because nobody has it yet.
+  if (demo.reused) {
+    console.log(`  password     : (unchanged — the DEMO_PASSWORD in .env.local)`);
+  } else {
+    console.log(`  password     : ${demo.password}`);
     console.log("\n  Save it to .env.local as DEMO_PASSWORD to keep it stable");
     console.log("  across re-runs. Without it, every run mints a new one.");
   }

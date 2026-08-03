@@ -15,16 +15,18 @@
     "typecheck": "tsc --noEmit",
     "seed": "node --no-warnings scripts/seed.ts",
     "check:keys": "node --no-warnings scripts/check-arithmetic-keys.ts",
-    "db:types": "npx supabase gen types typescript --linked > /tmp/dagar-db-types.ts && grep -q 'export type Database' /tmp/dagar-db-types.ts && mv /tmp/dagar-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED \u2014 database.types.ts left untouched' && cat /tmp/dagar-db-types.ts && exit 1)",
+    "db:types": "npx supabase gen types typescript --linked > /tmp/dagar-db-types.ts && grep -q 'export type Database' /tmp/dagar-db-types.ts && mv /tmp/dagar-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED — database.types.ts left untouched' && cat /tmp/dagar-db-types.ts && exit 1)",
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
     "check:hindi": "node --no-warnings scripts/check-hindi.ts",
     "icons": "node --no-warnings scripts/generate-icons.ts",
     "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts",
     "demo:data": "node --no-warnings scripts/demo-data.ts",
     "feedback:export": "node --no-warnings scripts/export-feedback.ts",
-    "deck": "python3 scripts/gen-persona-illustration.py && python3 scripts/build-deck.py && python3 scripts/build-how-doc.py",
+    "deck": "python3 scripts/gen-architecture-diagram.py && python3 scripts/gen-persona-illustration.py && python3 scripts/build-deck.py && python3 scripts/build-how-doc.py",
     "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview",
-    "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts"
+    "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts",
+    "deck:shots": "node --no-warnings scripts/capture-screens.ts",
+    "deck:pdf": "node --no-warnings scripts/build-pdfs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

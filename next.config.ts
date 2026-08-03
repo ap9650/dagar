@@ -2,6 +2,16 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const nextConfig: NextConfig = {
+  /**
+   * The dev-mode route indicator, off.
+   *
+   * It is a floating badge pinned bottom-left, and this app is developed at
+   * 360px — where bottom-left is the sticky primary action. It covers "Check
+   * answer" on the practice screen and lands in every screenshot taken for the
+   * deck. Compile and runtime errors are still surfaced; only the badge goes.
+   */
+  devIndicators: false,
+
   async headers() {
     return [
       {

@@ -157,7 +157,8 @@ def cover(doc, lines):
     add_runs(p, "Dagar", size=44, color=PRIMARY_STRONG, bold=True)
     p = para(doc, space_after=22)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    add_runs(p, "साथी  ·  companion", size=12, color=PRIMARY)
+    # The old name's gloss, which survived the rename here. Dagar is the trail.
+    add_runs(p, "डगर  ·  the trail you walk", size=12, color=PRIMARY)
     p = para(doc, space_after=20)
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     add_runs(p, "How We Built It", size=24, color=INK, bold=True)

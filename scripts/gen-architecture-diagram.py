@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PIL import Image, ImageDraw, ImageFont
 
 W, H = 1800, 1180
@@ -158,5 +160,12 @@ band(1084, "MEASUREMENT")
 box(L, 1036, R, 1146, ANA, "Analytics Layer",
     "Captures product events for continuous improvement  ·  feeds the MVP validation plan")
 
-img.resize((W, H), Image.LANCZOS).save("architecture.png")
-print("saved architecture.png", W, "x", H)
+# docs/, not the working directory.
+#
+# This wrote to `architecture.png` beside wherever it was run, so the rename to
+# Dagar reached the generator and never reached the diagram: the deck and the
+# how-doc went on embedding a stale `docs/architecture.png` that still said
+# "Saathi Learning Experience". Found on a screenshot of the built PDF.
+OUT = Path(__file__).resolve().parent.parent / "docs" / "architecture.png"
+img.resize((W, H), Image.LANCZOS).save(OUT)
+print(f"saved {OUT.relative_to(Path.cwd())} {W} x {H}")

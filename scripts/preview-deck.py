@@ -24,10 +24,10 @@ spec = importlib.util.spec_from_file_location("builddeck", "scripts/build-deck.p
 bd = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bd)
 
-SLIDES = [bd.cover, bd.s1_problem, bd.s2_solution, bd.s3_validation,
-          bd.s4_market_size, bd.s5_persona, bd.s6_features, bd.s7_how,
-          bd.s8_next, bd.s9_roadmap, bd.s10_adoption, bd.s11_competitors,
-          bd.s12_pricing, bd.s13_testimonials]
+# From the deck itself, not a second copy of the list. The copy that used to
+# live here silently omitted any slide added after it was written — so the one
+# tool for looking at the deck was the tool least likely to show a new slide.
+SLIDES = bd.SLIDES
 
 
 def main() -> None:

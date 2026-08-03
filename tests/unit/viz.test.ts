@@ -222,4 +222,19 @@ describe("layoutPan", () => {
     const { layoutPan } = await import("@/components/learn/viz/geometry");
     expect(layoutPan(2, undefined, 100).every((i) => i.kind === "x")).toBe(true);
   });
+
+  it("treats an authored zero the same as no constant at all", async () => {
+    // `left: { xs: 3, n: 0 }` is a natural way to write "3x and nothing else",
+    // and it drew a block labelled "0" sitting on the pan — a fourth object
+    // with a value, in a picture whose entire job is that objects have weight.
+    // Caught on a screenshot of `3x = 12`, not by reading the code.
+    const { layoutPan } = await import("@/components/learn/viz/geometry");
+    expect(layoutPan(3, 0, 100).every((i) => i.kind === "x")).toBe(true);
+    // And what remains is still centred, rather than shoved left by a gap that
+    // was reserved for a weight nobody drew.
+    const items = layoutPan(3, 0, 100);
+    const left = Math.min(...items.map((i) => i.x));
+    const right = Math.max(...items.map((i) => i.x + i.w));
+    expect(Math.round((left + right) / 2)).toBe(100);
+  });
 });
