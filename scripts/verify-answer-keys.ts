@@ -198,13 +198,21 @@ type Disagreement = {
 
 const disagreements: Disagreement[] = [];
 let agreed = 0;
-let unreadable = 0;
+/**
+ * Questions the model would not answer at all.
+ *
+ * These used to be counted and then forgotten, and the run still finished with
+ * "agrees with every stored answer key" — which is not true of a question that
+ * was never checked. An unverified key is not a verified one, so they are named
+ * and the run does not claim success.
+ */
+const unreadable: string[] = [];
 
 for (const [index, row] of questions.entries()) {
   const modelAnswer = await solveCold(row as Row);
 
   if (!modelAnswer) {
-    unreadable++;
+    unreadable.push(row.slug ?? "(no slug)");
     continue;
   }
 
@@ -229,7 +237,15 @@ console.log(`\nCold-solve verification`);
 console.log(`  questions      : ${questions.length}`);
 console.log(`  agreed         : ${agreed}`);
 console.log(`  disagreed      : ${disagreements.length}`);
-console.log(`  no answer given: ${unreadable}`);
+console.log(`  no answer given: ${unreadable.length}`);
+if (unreadable.length > 0) {
+  console.log(`\n  NOT CHECKED — the model gave no answer for these:`);
+  for (const slug of unreadable) console.log(`    ${slug}`);
+  console.log(
+    `  A question the verifier cannot answer is usually a question a learner\n` +
+      `  cannot answer either. Read them by hand.`,
+  );
+}
 
 if (disagreements.length > 0) {
   console.log(`\nReview these by hand — the model and the stored key differ:\n`);
@@ -250,4 +266,12 @@ if (disagreements.length > 0) {
   process.exit(1);
 }
 
-console.log(`\n✓ An independent cold solve agrees with every stored answer key.`);
+if (unreadable.length === 0) {
+  console.log(`\n✓ An independent cold solve agrees with every stored answer key.`);
+} else {
+  // Not a pass. Saying "every key" while one was skipped is exactly the kind
+  // of green report this script exists to avoid.
+  console.log(
+    `\n⚠ ${agreed} keys verified. ${unreadable.length} NOT checked — see above.`,
+  );
+}

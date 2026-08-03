@@ -559,6 +559,65 @@ export const class6Fractions: SeedChapter = {
   // QUESTIONS
   // ═══════════════════════════════════════════════════════════════════════════
   questions: [
+    {
+      slug: "c6-eqf-d2-q4",
+      concept_slug: "equivalent-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "fraction",
+      stem_md: "Which picture shows $6/8$?",
+      answer_value: "6/8",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "6/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 6 } },
+          // Shaded what is LEFT OVER. The single most common slip in the whole
+          // chapter, and the one worth meeting again at difficulty 2 — knowing
+          // the rule and still reading the wrong part of the picture are
+          // different failures.
+          { value: "2/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 2 } },
+          // Miscounted by one. Not a misunderstanding — just what happens when
+          // eight narrow pieces are counted with a thumb in the way, and worth
+          // making the learner look twice.
+          { value: "5/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 5 } },
+        ],
+      },
+      solution_md: [
+        "Read the **bottom** first: how many equal pieces is the whole cut into? Eight.",
+        "",
+        "Then the **top**: how many are filled? Six.",
+        "",
+        "The two left empty are not part of the answer. They are what is *not* taken, and $2/8$ is the answer to a different question.",
+      ].join("\n"),
+    },
+    {
+      slug: "c6-add-d2-q3",
+      concept_slug: "adding-subtracting-fractions",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "fraction",
+      stem_md: "$$\n\\frac{3}{4} - \\frac{1}{4}\n$$\n\nWhich picture shows the answer?",
+      answer_value: "2/4",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "2/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 2 } },
+          // Subtracted the bottoms as well: 3-1 over 4-4... which is nothing, so
+          // the nearest wrong picture a learner actually draws is quarters
+          // turning into something smaller.
+          { value: "2/8", viz: { kind: "partWhole", shape: "bar", parts: 8, shaded: 2 } },
+          // Added instead of subtracting.
+          { value: "4/4", viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 4 } },
+        ],
+      },
+      solution_md: [
+        "Both are **quarters**, so the pieces are already the same size. Start with 3 of them and take 1 away.",
+        "",
+        "$$\n\\frac{3}{4} - \\frac{1}{4} = \\frac{2}{4}\n$$",
+        "",
+        "The bottom stays 4 throughout. Taking pieces away does not make the remaining pieces smaller — there are just fewer of them.",
+      ].join("\n"),
+    },
     // ── SHADE — the learner MAKES the fraction rather than recognising one ────
     {
       slug: "c6-eqf-d1-q4",

@@ -135,3 +135,47 @@ describe("authored question input", () => {
     expect(new Set(values).size).toBe(values.length);
   });
 });
+
+/**
+ * TWO OPTIONS THAT ARE MATHEMATICALLY EQUAL BOTH GRADE CORRECT.
+ *
+ * The check above only catches identical STRINGS. But `3/4` and `6/8` are
+ * different strings and the same number, and D3 grades fractions by value — so
+ * offering both would mean two right answers, with the learner graded on which
+ * of two correct pictures they happened to tap.
+ *
+ * Nearly shipped: a distractor for "which picture shows 6/8?" was very nearly
+ * the simplified `3/4`, which is the same fraction wearing different numbers.
+ */
+describe("no two pictorial options are the same number", () => {
+  const asNumber = (value: string): number | null => {
+    const fraction = value.match(/^(-?\d+)\/(\d+)$/);
+    if (fraction) return Number(fraction[1]) / Number(fraction[2]);
+    const plain = Number(value);
+    return Number.isFinite(plain) ? plain : null;
+  };
+
+  const pictorial = chapters.flatMap((chapter) =>
+    chapter.questions
+      .map((q) => [q.slug, parseInput(q.input)] as const)
+      .filter(([, spec]) => spec?.kind === "choiceViz"),
+  );
+
+  it("has pictorial questions to check", () => {
+    expect(pictorial.length).toBeGreaterThan(0);
+  });
+
+  it.each(pictorial)("%s offers no two options of equal value", (_slug, spec) => {
+    if (spec?.kind !== "choiceViz") return;
+    const values = spec.options.map((o) => asNumber(o.value));
+    for (let i = 0; i < values.length; i++) {
+      for (let j = i + 1; j < values.length; j++) {
+        if (values[i] === null || values[j] === null) continue;
+        expect(
+          values[i],
+          `options ${i + 1} and ${j + 1} are both ${values[i]} — two correct answers`,
+        ).not.toBe(values[j]);
+      }
+    }
+  });
+});

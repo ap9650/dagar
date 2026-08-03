@@ -591,6 +591,75 @@ export const class7Integers: SeedChapter = {
   ],
 
   questions: [
+    {
+      slug: "c7-add-d2-q3",
+      concept_slug: "adding-subtracting-integers",
+      kind: "practice",
+      difficulty: 2,
+      answer_type: "integer",
+      stem_md: "$$\n-2 - 3\n$$\n\nWhich picture shows where you land?",
+      answer_value: "-5",
+      input: {
+        kind: "choiceViz",
+        options: [
+          {
+            value: "-5",
+            viz: { kind: "numberLine", from: -8, to: 4, step: 1,
+                   jumps: [{ from: -2, to: -5 }], marks: [{ at: -5, tone: "correct" }] },
+          },
+          {
+            // Read "minus 3" as cancelling the minus and moved RIGHT. The
+            // two-minuses-make-a-plus rule, applied where it does not belong.
+            value: "1",
+            viz: { kind: "numberLine", from: -8, to: 4, step: 1,
+                   jumps: [{ from: -2, to: 1 }], marks: [{ at: 1 }] },
+          },
+          {
+            // Subtracted 3 from 2 and then put the minus back on: -1 rather
+            // than counting three steps from where they actually were.
+            value: "-1",
+            viz: { kind: "numberLine", from: -8, to: 4, step: 1,
+                   jumps: [{ from: -2, to: -1 }], marks: [{ at: -1 }] },
+          },
+        ],
+      },
+      solution_md: [
+        "**Taking away** always moves you **left**, no matter which side of zero you start on.",
+        "",
+        "From $-2$, three steps left: $-3$, $-4$, $-5$.",
+        "",
+        "$$\n-2 - 3 = -5\n$$",
+        "",
+        "Two minuses only make a plus when the second one is attached to the *number* — $-2 - (-3)$. Here the 3 is being taken away, so it is still a walk to the left.",
+      ].join("\n"),
+    },
+    {
+      slug: "c7-div-d1-q3",
+      concept_slug: "dividing-integers",
+      kind: "practice",
+      difficulty: 1,
+      answer_type: "integer",
+      stem_md: "Six friends share a debt of $₹6$ equally.\n\nWhich picture shows what **one** person owes?",
+      answer_value: "-1",
+      input: {
+        kind: "choiceViz",
+        options: [
+          { value: "-1", viz: { kind: "tokenRow", positive: 0, negative: 1 } },
+          // Gave the whole debt to one person — did not divide at all.
+          { value: "-6", viz: { kind: "tokenRow", positive: 0, negative: 6, groupsOf: 1 } },
+          // Divided correctly and then dropped the sign, which turns a debt
+          // into money owned.
+          { value: "1", viz: { kind: "tokenRow", positive: 1, negative: 0 } },
+        ],
+      },
+      solution_md: [
+        "A debt of 6 shared between 6 people is one each.",
+        "",
+        "$$\n(-6) \\div 6 = -1\n$$",
+        "",
+        "It stays a **debt** after sharing. Dividing changes how much each person owes, never whether they owe it — so the answer keeps its minus sign.",
+      ].join("\n"),
+    },
     // ── PLACE — the answer is a POSITION, which is how the line is taught ─────
     {
       slug: "c7-nl-d1-q4",
