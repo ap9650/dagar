@@ -38,9 +38,24 @@ const SETTING_KEY = "saathi.haptics";
  * not ours to make.
  */
 export const PATTERNS = {
-  /** One correct practice answer. The lightest touch that still registers. */
-  correct: [18],
-  /** A lesson finished. Slightly more presence, still one pulse. */
+  /**
+   * A lesson finished. One pulse.
+   *
+   * ── THERE IS NO `correct` PATTERN, AND THAT IS THE POINT ──────────────────
+   * There was. Every correct practice answer buzzed, and across a five-question
+   * set on a shared phone that is up to five buzzes a minute for something that
+   * is simply the expected outcome. Reported after living with it: *"I don't
+   * want that vibration in each and every question — it seems unnecessary."*
+   *
+   * A buzz has to stay rare to stay felt. Spending it on the common case is how
+   * it stops meaning anything by the time something uncommon happens. So the
+   * phone now moves for units of WORK — a lesson finished, a milestone earned —
+   * and a correct answer is answered in words on the screen instead.
+   *
+   * Removed rather than left unused, for the same reason there is no `wrong`
+   * pattern: a name in this object is an invitation to call it.
+   * ─────────────────────────────────────────────────────────────────────────
+   */
   complete: [28],
   /**
    * A milestone. The only place a pattern is allowed to be playful.

@@ -43,6 +43,23 @@ describe("PATTERNS", () => {
     expect(Object.keys(PATTERNS)).not.toContain("error");
   });
 
+  it("has NO pattern for a single correct answer", () => {
+    // It had one, and every right answer in a practice set buzzed. Reported
+    // after living with it: five buzzes a minute for the outcome a learner
+    // expects, which spends the signal on the common case and leaves nothing
+    // for the uncommon one. The phone now moves for units of WORK — a lesson
+    // finished, a milestone earned — and a correct answer is answered in words.
+    //
+    // Structural for the same reason as the rule above: a name in this object
+    // is an invitation to call it.
+    expect(Object.keys(PATTERNS)).not.toContain("correct");
+    expect(Object.keys(PATTERNS)).not.toContain("right");
+  });
+
+  it("buzzes only for a finished unit of work", () => {
+    expect(Object.keys(PATTERNS).sort()).toEqual(["complete", "milestone"]);
+  });
+
   it("keeps every buzz short", () => {
     // A long vibration on a shared phone announces to the room that a child is
     // doing schoolwork. That is not ours to announce.
@@ -99,13 +116,13 @@ describe("haptic", () => {
 
   it("does nothing under reduced motion", () => {
     const vibrate = stubEnvironment({ reducedMotion: true });
-    haptic("correct");
+    haptic("complete");
     expect(vibrate).not.toHaveBeenCalled();
   });
 
   it("does nothing when switched off", () => {
     const vibrate = stubEnvironment({ stored: "off" });
-    haptic("correct");
+    haptic("complete");
     expect(vibrate).not.toHaveBeenCalled();
   });
 

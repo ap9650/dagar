@@ -546,6 +546,36 @@ invert when you change that premise.
 | **Guilt-based notifications** | The passive-aggressive-owl pattern. Wrong for a child, and worse on a shared phone where a parent sees it. Notifications, when added, encourage — they never shame. **See D17b: encouraging reminders are in scope; countdowns are not.** |
 | **XP / points / levels** | Adds a second scoring system competing with concept mastery, which is the score that actually means something. |
 
+### D17c — The phone buzzes for finished work, not for a right answer
+
+**Decision (3 Aug 2026, revising the first haptics build.)** Haptics were added
+because a real user asked for them after using Duolingo — *"my phone also
+vibrates and it gives a feel"* — and the first version buzzed on every correct
+practice answer. Living with it produced the opposite verdict: *"I don't want
+that vibration in each and every question — it seems unnecessary."*
+
+Both reactions are right, and the difference between them is **frequency**. A
+five-question practice set is up to five buzzes a minute, for the outcome a
+learner expects. A signal spent on the common case has nothing left for the
+uncommon one — and on a shared phone in a quiet room, each buzz also announces
+to everyone present that a child is doing schoolwork.
+
+So the phone moves for a **finished unit of work**: a lesson completed, a
+milestone earned. There is no `correct` pattern in `lib/haptics.ts` any more,
+deleted rather than left unused for the same reason there has never been a
+`wrong` one — a name in that object is an invitation to call it. A test asserts
+both absences.
+
+A correct answer is answered **in words instead**, and the words rotate — three
+warm remarks, chosen by question number so they never change under the learner.
+Identical praise twenty times in a session stops being read at all, which is the
+same deadening in a different sense.
+
+**No sound.** It was considered and rejected: a tone on every correct answer is
+the buzz's problem made louder, and it lands in a classroom, on a bus, or beside
+a sleeping sibling. The app's only audio stays the one the learner asks for by
+tapping *Listen*.
+
 ## D17b — Reminder notifications **are** in scope, as encouragement
 
 **Decision (2026-07-30):** Dagar sends a **daily reminder notification**, opt-in,

@@ -69,7 +69,10 @@ export function HapticsToggle() {
     const next = !on;
     setHapticsEnabled(next);
     refresh();
-    if (next) haptic("correct");
+    // A sample of what turning this on actually buys, which since the buzz left
+    // practice is `complete` — the shortest pattern still in use. Previewing a
+    // pattern the learner will never meet is a demonstration of nothing.
+    if (next) haptic("complete");
   }
 
   return (

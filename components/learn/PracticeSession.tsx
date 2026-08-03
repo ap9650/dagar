@@ -348,6 +348,7 @@ export function PracticeSession({
           isCorrect={result.is_correct}
           hints={hints}
           solutionMd={result.solution_md}
+          questionNumber={questionNumber}
         />
       )}
 

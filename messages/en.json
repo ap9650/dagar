@@ -143,6 +143,8 @@
   },
   "feedback": {
     "correct": "Correct!",
+    "correctWell": "Well done!",
+    "correctNice": "Nice one!",
     "notQuite": "Not quite — here is a hint",
     "hintTitle": "Hint",
     "solutionTitle": "How it works",

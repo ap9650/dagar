@@ -143,6 +143,8 @@
   },
   "feedback": {
     "correct": "सही! 🎉",
+    "correctWell": "बढ़िया!",
+    "correctNice": "शाबाश!",
     "notQuite": "अरे, थोड़ा सा रह गया — ये देखो",
     "hintTitle": "हिंट",
     "solutionTitle": "ऐसे होता है",
