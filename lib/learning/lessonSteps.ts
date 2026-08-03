@@ -65,16 +65,43 @@ const balanceScale = z.object({
   label: z.string().optional(),
 });
 
+const chart = z.object({
+  kind: z.literal("chart"),
+  variant: z.enum(["bar", "pictograph", "tally"]),
+  // Two is the fewest that can be compared, six the most that fits 360px.
+  categories: z
+    .array(
+      z.object({
+        label: z.string().min(1).max(24),
+        value: z.number().int().min(0).max(999),
+        tone: tone.optional(),
+      }),
+    )
+    .min(2)
+    .max(6),
+  each: z.number().int().min(1).max(100).optional(),
+  max: z.number().int().min(1).max(1000).optional(),
+  label: z.string().optional(),
+  interactive: z.boolean().optional(),
+  target: z.array(z.number().int()).optional(),
+});
+
 /**
  * Exported because slice 5.2 reuses it for pictorial PRACTICE options: a
  * `choiceViz` question offers diagrams drawn by the very same primitives. One
  * schema, so a diagram cannot be valid in a lesson and invalid in practice.
+ *
+ * Adding a shape to `VizSpec` and forgetting it HERE is the expensive mistake:
+ * nothing fails to compile, the seed loads, and every lesson using it quietly
+ * renders `body_md` instead of the interactive version. `tests/unit/seed-*`
+ * guard against it by parsing every authored step.
  */
 export const vizSchema = z.discriminatedUnion("kind", [
   partWhole,
   numberLine,
   tokenRow,
   balanceScale,
+  chart,
 ]);
 const viz = vizSchema;
 
@@ -209,8 +236,40 @@ export type StepText = {
   lines?: string[];
   /** `tap` only — option labels, positional. Diagram options have none. */
   options?: { label?: string }[];
+  /**
+   * The one part of a DIAGRAM that is language, not notation.
+   *
+   * "A circle cut into four" is the same picture everywhere, and that is why
+   * diagrams are authored once. But a chart's category is a **word** — Kabaddi,
+   * Cricket, Mango — and a Hindi learner reading Hindi prose above an English
+   * axis is exactly the half-translated screen this file exists to prevent.
+   * Caught on a real screenshot of the Hindi lesson, where the tally rows still
+   * said "Kabaddi" and "Chess".
+   *
+   * Positional, and labels only: values, keys and scales are numbers and stay
+   * where the English put them, so a translation can never move a bar.
+   */
+  viz?: { categories?: { label?: string }[] };
   speak?: string;
 };
+
+/** Translate the words on a chart, and nothing else about it. */
+function localiseViz(step: LessonStep, tr: StepText): LessonStep {
+  if (!("viz" in step) || !step.viz || step.viz.kind !== "chart") return step;
+  if (!tr.viz?.categories) return step;
+
+  // Positional. Values are untouched — a translator names a bar, never moves it.
+  const categories = step.viz.categories.map((category, i) => ({
+    ...category,
+    label: tr.viz?.categories?.[i]?.label ?? category.label,
+  }));
+
+  // The cast is doing one narrow job. `step` has already been proved to carry a
+  // chart, but spreading into a discriminated union widens `viz` back to the
+  // union of every shape, and TypeScript then rejects a chart in the slot it
+  // just proved holds a chart. Only `categories[].label` differs from the input.
+  return { ...step, viz: { ...step.viz, categories } } as LessonStep;
+}
 
 /**
  * Apply translated prose to the English steps.
@@ -230,27 +289,36 @@ export function mergeStepText(steps: LessonStep[], text: StepText[] | undefined)
     const tr = text[i] ?? {};
     const merged = { ...step, md: tr.md ?? step.md, speak: tr.speak ?? step.speak };
 
-    switch (merged.kind) {
-      case "reveal":
-        return { ...merged, answer: tr.answer ?? merged.answer };
-      case "worked":
-        return {
-          ...merged,
-          lines: tr.lines?.length === merged.lines.length ? tr.lines : merged.lines,
-        };
-      case "tap":
-        return {
-          ...merged,
-          why: tr.why ?? merged.why,
-          options: merged.options.map((option, j) => ({
-            ...option,
-            // Only a text label is translatable; a diagram option has none.
-            label: option.label === undefined ? undefined : (tr.options?.[j]?.label ?? option.label),
-          })),
-        };
-      default:
-        return merged;
-    }
+    // The prose first, inside the switch so each kind keeps its own type…
+    const translated = ((): LessonStep => {
+      switch (merged.kind) {
+        case "reveal":
+          return { ...merged, answer: tr.answer ?? merged.answer };
+        case "worked":
+          return {
+            ...merged,
+            lines: tr.lines?.length === merged.lines.length ? tr.lines : merged.lines,
+          };
+        case "tap":
+          return {
+            ...merged,
+            why: tr.why ?? merged.why,
+            options: merged.options.map((option, j) => ({
+              ...option,
+              // Only a text label is translatable; a diagram option has none.
+              label:
+                option.label === undefined ? undefined : (tr.options?.[j]?.label ?? option.label),
+            })),
+          };
+        default:
+          return merged;
+      }
+    })();
+
+    // …then the one part of the DIAGRAM that is language rather than notation.
+    // Applied afterwards, and to every kind at once, so a chart's categories are
+    // translated wherever a chart is allowed to appear.
+    return localiseViz(translated, tr);
   });
 }
 

@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { localisedSteps, parseSteps, progressAt } from "@/lib/learning/lessonSteps";
+import {
+  localisedSteps,
+  mergeStepText,
+  parseSteps,
+  progressAt,
+} from "@/lib/learning/lessonSteps";
 
 /**
  * The parser's job is to be UNTRUSTING.
@@ -206,5 +211,65 @@ describe("localisedSteps", () => {
 
   it("is null when there are no steps at all", () => {
     expect(localisedSteps({ steps: null, i18n: { hi: { steps: hi } } }, "hi")).toBeNull();
+  });
+});
+
+describe("mergeStepText — a chart's words are language, its numbers are not", () => {
+  const steps = [
+    {
+      kind: "see" as const,
+      md: "Votes so far.",
+      viz: {
+        kind: "chart" as const,
+        variant: "bar" as const,
+        categories: [
+          { label: "Kabaddi", value: 12 },
+          { label: "Chess", value: 3 },
+        ],
+      },
+    },
+  ];
+
+  it("translates category labels", () => {
+    // The defect this exists for, found on a screenshot of the Hindi lesson:
+    // Hindi prose sitting above a chart whose rows still said "Kabaddi" and
+    // "Chess". Half a translated screen is worse than none — the learner cannot
+    // tell whether they have missed something.
+    const merged = mergeStepText(steps, [
+      { md: "अब तक के वोट।", viz: { categories: [{ label: "कबड्डी" }, { label: "शतरंज" }] } },
+    ]);
+    const viz = (merged?.[0] as { viz?: unknown }).viz as { categories: { label: string; value: number }[] };
+    expect(viz.categories.map((c) => c.label)).toEqual(["कबड्डी", "शतरंज"]);
+  });
+
+  it("never lets a translation move a bar", () => {
+    // Values are the maths. A translator must not be able to change what the
+    // chart says, only what it is called.
+    const merged = mergeStepText(steps, [
+      { md: "…", viz: { categories: [{ label: "कबड्डी" }, { label: "शतरंज" }] } },
+    ]);
+    const viz = (merged?.[0] as { viz?: unknown }).viz as { categories: { value: number }[] };
+    expect(viz.categories.map((c) => c.value)).toEqual([12, 3]);
+  });
+
+  it("keeps the English label when a translation omits one", () => {
+    const merged = mergeStepText(steps, [{ md: "…", viz: { categories: [{ label: "कबड्डी" }] } }]);
+    const viz = (merged?.[0] as { viz?: unknown }).viz as { categories: { label: string }[] };
+    expect(viz.categories.map((c) => c.label)).toEqual(["कबड्डी", "Chess"]);
+  });
+
+  it("leaves a non-chart diagram untouched", () => {
+    const partWhole = [
+      {
+        kind: "see" as const,
+        md: "A quarter.",
+        viz: { kind: "partWhole" as const, shape: "circle" as const, parts: 4, shaded: 1 },
+      },
+    ];
+    const merged = mergeStepText(partWhole, [
+      { md: "एक चौथाई।", viz: { categories: [{ label: "x" }] } },
+    ]);
+    // Cast because a `tap` step in the union has no top-level viz.
+    expect((merged?.[0] as { viz?: unknown }).viz).toEqual(partWhole[0].viz);
   });
 });

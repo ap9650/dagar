@@ -31,7 +31,9 @@ export const class6Fractions: SeedChapter = {
     "What fractions mean, how to spot equal fractions, how to compare them, and how to add and subtract them.",
   ncert_ref:
     "Ganita Prakash Class 6 Ch 7 (Fractions) · old NCERT Class 6 Ch 7 (Fractions)",
-  order_index: 1,
+  // 2, not 1: Fractions is Ganita Prakash Ch 7 and Data Handling is Ch 4, so a
+  // Class 6 learner meets them in the order their own book has them.
+  order_index: 2,
 
   concepts: [
     { slug: "fraction-basics", name: "Fraction Basics", order_index: 1 },

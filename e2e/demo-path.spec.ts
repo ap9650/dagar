@@ -210,7 +210,12 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   await page.getByText("Class 6", { exact: true }).click({ timeout: 20_000 });
   await page.getByRole("button", { name: "Continue" }).click();
   await page.waitForURL(/\/learn$/, { timeout: 20_000 });
-  await expect(page.getByText(/fraction/i).first()).toBeVisible();
+  // Data Handling, not Fractions. The dashboard shows the CURRENT chapter's
+  // journey rather than every chapter, and Class 6 now opens on Ganita Prakash
+  // Ch 4 because Fractions is Ch 7 — a learner meets them in the order their own
+  // book has them. This assertion moved when the chapter landed on 3 Aug, which
+  // is the point of asserting a real chapter name rather than "some text".
+  await expect(page.getByText(/data handling/i).first()).toBeVisible();
 
   await page.goto("/settings");
   await expect(page.getByRole("radio", { name: "Class 6" })).toBeChecked();
