@@ -21,7 +21,13 @@ export default function manifest(): MetadataRoute.Manifest {
     short_name: "Dagar",
     description:
       "Your learning companion. NCERT mathematics for Classes 6 to 8, in English and Hindi.",
-    start_url: "/",
+    // `/learn`, not `/`. `/` renders nothing and exists only to redirect, so
+    // launching through it meant a blank screen for a whole extra round trip
+    // before the real one was even requested — measured at 500–800 ms, and it
+    // is what a cold start felt like. A signed-out launch is redirected by
+    // `proxy.ts`, which sends a learner with no locale cookie to the language
+    // picker so D16's "language first" survives the change.
+    start_url: "/learn",
     // No browser chrome — the thing that makes it feel like an app rather than
     // a bookmark.
     display: "standalone",

@@ -245,3 +245,47 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   await page.goto("/learn");
   await expect(page.getByText(/integer/i).first()).toBeVisible({ timeout: 15_000 });
 });
+
+/**
+ * The launch path, for someone who is not signed in.
+ *
+ * The PWA's `start_url` is `/learn`, not `/` — `/` renders nothing and existed
+ * only to redirect, which cost a blank screen and a whole round trip on every
+ * cold launch. That made `proxy.ts` responsible for a rule it did not have
+ * before: **a learner who has never chosen a language must meet the picker,
+ * not an English login form** (D16).
+ *
+ * It is a redirect rule with no UI of its own, which is exactly the kind of
+ * thing that regresses silently. Both branches are asserted.
+ */
+test("a launch with no session goes to the language picker, never past it", async ({
+  browser,
+}) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+
+  // Nothing at all: no session, no language ever chosen. A second child on a
+  // shared phone, or a cleared browser.
+  await page.goto("/learn");
+  await expect(page).toHaveURL(/\/welcome$/);
+  await expect(page.getByRole("radio", { name: "हिंदी" })).toBeVisible();
+
+  await context.close();
+});
+
+test("a signed-out learner who already picked a language goes to sign-in", async ({
+  browser,
+}) => {
+  const context = await browser.newContext();
+  // Kept as `saathi_locale` after the rename on purpose — see i18n/config.ts.
+  await context.addCookies([
+    { name: "saathi_locale", value: "en", url: "http://localhost:3000" },
+  ]);
+  const page = await context.newPage();
+
+  await page.goto("/learn");
+  // …and back to where they were headed once they are in.
+  await expect(page).toHaveURL(/\/login\?next=%2Flearn$/);
+
+  await context.close();
+});

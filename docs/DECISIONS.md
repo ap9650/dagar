@@ -956,6 +956,42 @@ is why it cannot be missing again. The press is a fill *and* a shrink: colour
 alone is never the only signal (design rule 10), and on a cheap LCD in daylight
 a background change can be invisible while the movement still reads.
 
+### 5. The cold launch spent its first round trip drawing nothing
+
+Reported separately, after the above shipped: *"by opening the app there is
+still a cold start time, and it's quite visible."* True, and it was a different
+fault from the navigation one.
+
+`start_url` was `/`, a page that renders **nothing** and exists only to choose a
+destination — and it chose by calling `getUser()` and then querying `profiles`.
+So every launch from the home-screen icon was: three Supabase round trips, a
+307, and only then a request for the screen the learner actually wanted. All of
+it in front of a blank white page, because `/` has no UI to show while it thinks.
+
+| launch path | first pixels | content |
+|---|---|---|
+| `/` → 307 → `/learn` (before) | ~400 ms | ~2000 ms |
+| `/learn` (now) | **~300 ms** | ~1200–1800 ms |
+
+Two changes. `start_url` is now `/learn`, so the common case — an installed app,
+already signed in — has no redirect at all. And `/` itself now decides from the
+**presence of the auth cookie alone**, with no I/O: it is an optimistic
+redirect exactly like `proxy.ts`, and every outcome the old four-way branch
+produced still happens one screen later, at the layout, which revalidates
+properly.
+
+Moving `start_url` made `proxy.ts` responsible for a rule `/` used to own: a
+learner with **no locale cookie** is sent to `/welcome`, not `/login`. Language
+first, always (D16) — a second child on a shared phone must not meet an English
+login form. Both branches are asserted in `e2e/demo-path.spec.ts`.
+
+**What is left, and why we stopped.** The residual ~1.2 s is server render, and
+it is dominated by sequential Supabase round trips. The next real lever is the
+database region, which we could not confirm from outside — see §3. Adding a
+distraction to the wait was considered and rejected: the screen is no longer
+blank, a skeleton is up at ~300 ms, and entertaining someone for a second they
+are no longer staring into is exactly the kind of noise D17 exists to refuse.
+
 ### The rule this leaves behind
 
 **Every interactive element needs an `active:` state, not just `hover:`.** Hover

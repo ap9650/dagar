@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import type { Database } from "@/lib/supabase/database.types";
+import { LOCALE_COOKIE } from "@/i18n/config";
 
 /**
  * Next.js 16 renamed `middleware` to `proxy`. Same file location, same job.
@@ -79,6 +80,27 @@ export async function proxy(request: NextRequest) {
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
+
+    /*
+      LANGUAGE FIRST, ALWAYS — for someone who has never chosen one.
+
+      This matters because the PWA's `start_url` is now `/learn`, so a launch
+      from the home-screen icon arrives here rather than at `/`, and `/` was
+      what used to send a brand-new learner to the picker.
+
+      The locale cookie is the signal: anyone who has used this app has one, so
+      a signed-out returning learner still gets `/login` and their place back.
+      Someone arriving with no cookie at all — a second child on a shared phone,
+      or a cleared browser — meets the language picker instead of an English
+      login form. That is the wall at the front door D16 exists to remove, and
+      it costs a cookie read here.
+    */
+    if (!request.cookies.get(LOCALE_COOKIE)?.value) {
+      url.pathname = "/welcome";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
+
     url.pathname = "/login";
     url.searchParams.set("next", pathname); // return them where they were headed
     return NextResponse.redirect(url);
