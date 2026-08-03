@@ -1022,8 +1022,26 @@ not work.
   layout and each of `/learn`, `/progress`, `/settings` were reading the same
   `profiles` row twice per navigation.
 
-The proxy runs on **every** request, so together these remove ~230 ms from every
-tap, not just from cold start.
+The proxy runs on **every** request, so together these come off every tap, not
+just cold start. Measured as a real before/after — both commits built and run
+against the same live Tokyo database, eight authenticated navigations each:
+
+| screen | before | after |
+|---|---|---|
+| `/learn` | 613 ms | **372 ms** |
+| `/progress` | 587 ms | **392 ms** |
+
+The **tail** moved more than the median, which is what a learner actually
+feels: worst-of-eight fell from 860 ms to 385 ms on `/learn`, and from 1181 ms
+to 401 ms on `/progress`. Fewer sequential hops means fewer chances for one slow
+hop to land. Production confirms it at 421 ms / 402 ms median.
+
+**Note on benchmarking this.** The first attempt measured `/welcome`
+anonymously and showed nothing, because with no session cookie at all
+`getUser()` already returns null locally without calling Supabase. Only an
+**authenticated** request pays the round trip. A preview deployment was the
+next idea and also failed — previews do not carry the production env vars.
+Local production builds of both commits was the method that worked.
 
 **The migration itself is deferred deliberately.** Supabase has no in-place
 region switch; it means a new project in `ap-south-1` and moving schema, seed
