@@ -139,7 +139,9 @@
     "optionShowing": "The option showing {value}",
     "shadeCount": "{shaded} of {parts} filled",
     "placeHint": "Tap the line where the number belongs",
-    "placePicked": "You chose {value}"
+    "placePicked": "You chose {value}",
+    "barUp": "Raise the {label} bar",
+    "barDown": "Lower the {label} bar"
   },
   "feedback": {
     "correct": "Correct!",

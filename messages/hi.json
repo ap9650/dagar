@@ -139,7 +139,9 @@
     "optionShowing": "{value} दिखाने वाला विकल्प",
     "shadeCount": "{parts} में से {shaded} भरे",
     "placeHint": "लाइन पर वहाँ दबाओ जहाँ संख्या आती है",
-    "placePicked": "तुमने {value} चुना"
+    "placePicked": "तुमने {value} चुना",
+    "barUp": "{label} का दंड बढ़ाओ",
+    "barDown": "{label} का दंड घटाओ"
   },
   "feedback": {
     "correct": "सही! 🎉",

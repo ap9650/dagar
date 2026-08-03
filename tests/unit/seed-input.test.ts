@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { chapters } from "@/supabase/seed";
-import { parseInput } from "@/lib/learning/questionInput";
+import { barsFromValue, barsValue, parseInput } from "@/lib/learning/questionInput";
+import { grade } from "@/lib/learning/grading";
 
 /**
  * The authored pictorial inputs, checked at test time.
@@ -177,5 +178,58 @@ describe("no two pictorial options are the same number", () => {
         ).not.toBe(values[j]);
       }
     }
+  });
+});
+
+/**
+ * A built bar graph that is right must GRADE right.
+ *
+ * `buildBars` is the first input kind whose value is a list, and it rides on
+ * `answer_type: "expression"` — an exact string compare. That makes it the kind
+ * most likely to mark a correct learner wrong over a formatting detail, which is
+ * the highest-harm failure in the product (D3). So every authored question of
+ * this kind is graded here against the exact string the component would submit.
+ */
+describe("buildBars answers survive the real grader", () => {
+  const questions = chapters
+    .flatMap((chapter) => chapter.questions)
+    .filter((q) => (q.input as { kind?: string } | undefined)?.kind === "buildBars");
+
+  it("has some to check", () => {
+    expect(questions.length).toBeGreaterThan(0);
+  });
+
+  it("grades the component's own output as correct", () => {
+    for (const question of questions) {
+      const spec = parseInput(question.input) as { categories: string[] } | null;
+      expect(spec, question.slug).not.toBeNull();
+
+      // Exactly what BuildBarsInput submits when the bars are set correctly.
+      const submitted = barsValue(barsFromValue(question.answer_value, spec!.categories.length));
+      const correct = grade(question.answer_value, question.answer_type, submitted);
+      expect(correct, `${question.slug}: submitted "${submitted}"`).toBe(true);
+    }
+  });
+
+  it("has one height per bar, so the graph can actually be drawn", () => {
+    for (const question of questions) {
+      const spec = parseInput(question.input) as { categories: string[]; max: number } | null;
+      const heights = question.answer_value.split(",");
+      expect(heights.length, question.slug).toBe(spec!.categories.length);
+
+      // And every one is reachable on the axis the learner is given. An answer
+      // above `max` cannot be built at all — the learner is stuck, not wrong.
+      for (const height of heights) {
+        expect(Number(height), `${question.slug}: ${height} exceeds max`).toBeLessThanOrEqual(
+          spec!.max,
+        );
+      }
+    }
+  });
+
+  it("marks a wrong graph wrong", () => {
+    // Guards against the list somehow grading everything correct.
+    const question = questions[0];
+    expect(grade(question.answer_value, question.answer_type, "1,1,1")).toBe(false);
   });
 });

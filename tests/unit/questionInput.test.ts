@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  barsFromValue,
+  barsValue,
   parseInput,
   parseStemViz,
   placedValue,
@@ -170,6 +172,54 @@ describe("parseStemViz", () => {
     // BalanceScale geometry, which is why the cap lives in the schema.
     expect(
       parseStemViz({ kind: "balanceScale", left: { xs: 9 }, right: { xs: 0, n: 9 } }),
+    ).toBeNull();
+  });
+});
+
+describe("buildBars — drawing the graph", () => {
+  it("joins heights with no spaces, because the grader compares exactly", () => {
+    // A stray space here marks a learner wrong for a picture that is right,
+    // which is the worst failure this product has. Canonical form lives in one
+    // function so no call site can get it wrong.
+    expect(barsValue([12, 17, 8])).toBe("12,17,8");
+  });
+
+  it("never submits a negative or fractional height", () => {
+    // Heights come from a stepper that clamps, but the value is what the SERVER
+    // sees, and it must be a list of whole counts whatever reaches this.
+    expect(barsValue([-3, 2.6, 0])).toBe("0,3,0");
+  });
+
+  it("round-trips: what is submitted reads back as what was built", () => {
+    const built = [4, 0, 9];
+    expect(barsFromValue(barsValue(built), 3)).toEqual(built);
+  });
+
+  it("starts every bar at zero before the learner has touched it", () => {
+    // The empty string is the initial value of the answer field.
+    expect(barsFromValue("", 3)).toEqual([0, 0, 0]);
+  });
+
+  it("survives a value with the wrong number of parts", () => {
+    // Missing entries are zero, extras are ignored — a bad value must degrade
+    // to a usable control, never to a crash mid-question.
+    expect(barsFromValue("5", 3)).toEqual([5, 0, 0]);
+    expect(barsFromValue("1,2,3,4,5", 2)).toEqual([1, 2]);
+  });
+
+  it("treats junk as zero rather than NaN", () => {
+    // "NaN" reaching the grader would be submitted as a literal answer.
+    expect(barsFromValue("abc,,-4", 3)).toEqual([0, 0, 0]);
+    expect(barsValue(barsFromValue("abc", 1))).toBe("0");
+  });
+
+  it("parses an authored spec, and rejects one with too many bars", () => {
+    expect(
+      parseInput({ kind: "buildBars", categories: ["A", "B"], max: 20 })?.kind,
+    ).toBe("buildBars");
+    // Five steppers do not fit across 360px.
+    expect(
+      parseInput({ kind: "buildBars", categories: ["A", "B", "C", "D", "E"], max: 20 }),
     ).toBeNull();
   });
 });

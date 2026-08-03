@@ -11,6 +11,7 @@ import { spokenMath } from "@/lib/mathText";
 import { MarkdownBody } from "./MarkdownBody";
 import { ChoiceVizInput } from "./answer/ChoiceVizInput";
 import { PlaceInput } from "./answer/PlaceInput";
+import { BuildBarsInput } from "./answer/BuildBarsInput";
 import { ShadeInput } from "./answer/ShadeInput";
 import { TilesInput } from "./answer/TilesInput";
 
@@ -86,6 +87,10 @@ export function AnswerInput({
 
   if (spec?.kind === "place") {
     return <PlaceInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
+  }
+
+  if (spec?.kind === "buildBars") {
+    return <BuildBarsInput spec={spec} value={value} onChange={onChange} disabled={disabled} />;
   }
 
   if (answerType === "mcq") {

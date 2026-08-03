@@ -790,6 +790,36 @@ export const class6DataHandling: SeedChapter = {
       answer_value: "25",
       solution_md: "The 6C bar sits between 20 and 30, halfway — it is 25.",
     },
+    // The chapter's actual assessed skill: given the numbers, DRAW the graph.
+    // Every other question here has the learner read a chart somebody else
+    // made. `answer_type` is `expression` because the submitted value is a list
+    // — the grader compares it exactly, and `grading.ts` is untouched.
+    {
+      slug: "c6-dh-bar-p7",
+      concept_slug: "bar-graphs",
+      kind: "practice",
+      difficulty: 2,
+      stem_md:
+        "Draw the bar graph. 6 students walk to school, 9 come by cycle and 4 come by bus.",
+      answer_type: "expression",
+      answer_value: "6,9,4",
+      input: { kind: "buildBars", categories: ["Walk", "Cycle", "Bus"], max: 10 },
+      solution_md:
+        "Set each bar to its own number: walk 6, cycle 9, bus 4. Read the value off the scale as you go — the bar's top should sit on the line for that number.",
+    },
+    {
+      slug: "c6-dh-bar-p8",
+      concept_slug: "bar-graphs",
+      kind: "practice",
+      difficulty: 3,
+      stem_md:
+        "A tally shows kabaddi with 2 full bundles, cricket with 3 full bundles and 1 mark, and chess with 4 marks. Draw the bar graph.",
+      answer_type: "expression",
+      answer_value: "10,16,4",
+      input: { kind: "buildBars", categories: ["Kabaddi", "Cricket", "Chess"], max: 20, step: 2 },
+      solution_md:
+        "Read each tally first: kabaddi $2 \\times 5 = 10$, cricket $3 \\times 5 + 1 = 16$, chess 4. Then set each bar to that number. The bars move in 2s here, so the scale counts in 2s too.",
+    },
     {
       slug: "c6-dh-bar-p5",
       concept_slug: "bar-graphs",

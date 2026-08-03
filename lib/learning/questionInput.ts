@@ -85,13 +85,38 @@ const place = z.object({
   step: z.number().positive(),
 });
 
-const input = z.discriminatedUnion("kind", [tiles, choiceViz, shade, place]);
+/**
+ * Set the height of each bar until the graph matches the data — Class 6 Ch 4.
+ *
+ * The other four kinds all have the learner *choose* or *assemble* an answer.
+ * This one has them **draw** one, which is the skill the chapter is actually
+ * assessed on: given a table of numbers, produce the graph.
+ *
+ * Submits the heights joined with commas — `"12,17,8"` — and is authored with
+ * `answer_type: "expression"`, whose grader is an exact compare after stripping
+ * brackets. So `grading.ts` is untouched, exactly as with the other four.
+ */
+const buildBars = z.object({
+  kind: z.literal("buildBars"),
+  /**
+   * 2–4 bars. Each needs a stepper with two 44px targets under it, and five of
+   * those do not fit across a 360px screen.
+   */
+  categories: z.array(z.string().min(1).max(16)).min(2).max(4),
+  /** Axis top — the scale the learner is building against. */
+  max: z.number().int().min(2).max(100),
+  /** How much one tap moves a bar. Defaults to 1. */
+  step: z.number().int().min(1).max(10).optional(),
+});
+
+const input = z.discriminatedUnion("kind", [tiles, choiceViz, shade, place, buildBars]);
 
 export type QuestionInput = z.infer<typeof input>;
 export type TilesInput = z.infer<typeof tiles>;
 export type ChoiceVizInput = z.infer<typeof choiceViz>;
 export type ShadeInput = z.infer<typeof shade>;
 export type PlaceInput = z.infer<typeof place>;
+export type BuildBarsInput = z.infer<typeof buildBars>;
 
 /**
  * Validate an authored `questions.input` blob.
@@ -136,6 +161,34 @@ function decimalsIn(step: number): number {
  */
 export function shadedValue(spec: ShadeInput, shaded: number): string {
   return `${shaded}/${spec.parts}`;
+}
+
+/**
+ * The string a built bar graph submits: every height, in the authored category
+ * order, joined with commas and no spaces.
+ *
+ * Canonical form matters more here than anywhere else in this file, because the
+ * expression grader is an exact compare. A stray space would mark a learner
+ * wrong for a picture that is right — the single worst failure this product has.
+ * So the joining lives here, once, rather than at the call site.
+ */
+export function barsValue(heights: number[]): string {
+  return heights.map((h) => String(Math.max(0, Math.round(h)))).join(",");
+}
+
+/**
+ * Read heights back out of a submitted value.
+ *
+ * The component holds no second copy of the truth — the value IS the state, as
+ * in `ShadeInput`. A value that has not been built yet, or that arrived from
+ * somewhere unexpected, yields a row of zeroes rather than throwing.
+ */
+export function barsFromValue(value: string, count: number): number[] {
+  const parts = value.split(",");
+  return Array.from({ length: count }, (_, i) => {
+    const parsed = Number(parts[i]);
+    return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+  });
 }
 
 /**
