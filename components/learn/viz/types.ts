@@ -112,7 +112,53 @@ export type BalanceScaleSpec = {
   label?: string;
 };
 
-export type VizSpec = PartWholeSpec | NumberLineSpec | TokenRowSpec | BalanceScaleSpec;
+/**
+ * One set of counts, drawn three ways — Class 6 Ch 4 (Ganita Prakash).
+ *
+ * ── WHY ONE SPEC AND NOT THREE COMPONENTS ───────────────────────────────────
+ * Tally marks, a pictograph and a bar graph are the SAME DATA at three levels
+ * of abstraction, and the chapter's whole argument is that they are: you tally
+ * because counting raw marks is hard, you draw a pictograph because a tally is
+ * hard to compare, you draw a bar because a pictograph gets silly at scale.
+ *
+ * Authoring them as one spec with a `variant` means a lesson can show the same
+ * five categories tallied, then pictured, then barred, and a learner sees the
+ * translation rather than three unrelated pictures. It is also the same trick
+ * `PartWhole` plays with circle/bar/grid, for the same reason.
+ * ────────────────────────────────────────────────────────────────────────────
+ *
+ * `label` on a category is a WORD, and words get translated — so categories
+ * carry an index the Hindi seed can key against rather than the English text.
+ */
+export type ChartVariant = "bar" | "pictograph" | "tally";
+
+export type ChartSpec = {
+  kind: "chart";
+  variant: ChartVariant;
+  /** 2–6 categories. More than six stops fitting a 360px screen. */
+  categories: { label: string; value: number; tone?: Tone }[];
+  /**
+   * Pictograph only: how many things one icon stands for. This is the single
+   * most-missed idea in the chapter — a learner who reads the key as "one" gets
+   * every question wrong — so it is required rather than defaulted.
+   */
+  each?: number;
+  /** Bar only: axis top. Omit and it is computed from the tallest bar. */
+  max?: number;
+  /** Drawn under the chart. Notation or a short title, never a sentence. */
+  label?: string;
+  /** Bar only: learner drags each bar to height. One interactive viz per step. */
+  interactive?: boolean;
+  /** For `interactive`: the values that count as done. */
+  target?: number[];
+};
+
+export type VizSpec =
+  | PartWholeSpec
+  | NumberLineSpec
+  | TokenRowSpec
+  | BalanceScaleSpec
+  | ChartSpec;
 
 /** Normalises `shaded: 3` and `shaded: [0,1,2]` to one shape for rendering. */
 export function toIndexSet(value: number | number[] | undefined, parts: number): Set<number> {

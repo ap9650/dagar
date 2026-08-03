@@ -396,6 +396,8 @@
     "shadedCount": "{parts} में से {shaded} हिस्से रंगे हैं",
     "numberLine": "{from} से {to} तक की संख्या रेखा।",
     "tokens": "{positive} धनात्मक और {negative} ऋणात्मक गोटियाँ।",
-    "balance": "एक तराज़ू: बाईं ओर {leftX} x डिब्बे और {leftOne} बाट, दाईं ओर {rightX} x डिब्बे और {rightOne} बाट।"
+    "balance": "एक तराज़ू: बाईं ओर {leftX} x डिब्बे और {leftOne} बाट, दाईं ओर {rightX} x डिब्बे और {rightOne} बाट।",
+    "chart": "{count} श्रेणियों का चार्ट: {labels}।",
+    "chartKey": "हर गोला {each} के बराबर है।"
   }
 }

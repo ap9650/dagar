@@ -244,3 +244,111 @@ export function layoutPan(xs: number, n: number | undefined, centre: number): Pa
   if (hasWeight) items.push({ kind: "n", x: cursor, w: weightW, value: n! });
   return items;
 }
+
+// ── charts (Class 6 Ch 4 — Data Handling and Presentation) ───────────────────
+
+export const CHART_W = 320;
+export const CHART_H = 190;
+/** Room under the axis for a category word, which in Hindi runs taller. */
+export const CHART_LABEL_H = 34;
+export const CHART_LEFT = 30;
+/**
+ * Headroom above the tallest bar.
+ *
+ * Without it a full-height bar starts at y=0, and both the top axis number and
+ * the bar's own value label are drawn off the top of the viewBox — clipped, so
+ * the chart silently loses the largest number on it. Caught on a screenshot,
+ * not in a test, which is why the test below now asserts the ceiling.
+ */
+export const CHART_TOP = 16;
+
+/** Where a value sits vertically. Shared by the bars and the gridlines, so the
+ *  two cannot drift apart — a bar that misses its own gridline is a wrong
+ *  answer with a correct-looking picture. */
+export function chartY(value: number, max: number, plotH: number): number {
+  if (max <= 0) return plotH;
+  return plotH - (Math.max(0, value) / max) * (plotH - CHART_TOP);
+}
+
+export type Bar = { x: number; y: number; w: number; h: number; value: number; label: string };
+
+/**
+ * A nice axis top: the smallest of 5, 10, 20, 25, 50, 100… that clears the data.
+ *
+ * Scaling to the tallest bar exactly is what a chart library does and it is
+ * wrong here. The learner has to READ values off this axis, so the gridlines
+ * have to land on numbers a 11-year-old counts in. An axis topping out at 7
+ * with lines at 1.75 teaches nothing except that charts are hard.
+ */
+export function chartMax(values: number[], override?: number): number {
+  const peak = Math.max(1, ...values);
+  if (override && override >= peak) return override;
+  for (const step of [5, 10, 20, 25, 50, 100, 200, 500, 1000]) {
+    if (peak <= step) return step;
+  }
+  return Math.ceil(peak / 1000) * 1000;
+}
+
+/** Gridline values, always including 0 and the top. Never more than 6 lines. */
+export function chartTicks(max: number): number[] {
+  const divisions = max % 4 === 0 ? 4 : 5;
+  const gap = max / divisions;
+  return Array.from({ length: divisions + 1 }, (_, i) => round(i * gap));
+}
+
+export function layoutBars(
+  categories: { label: string; value: number }[],
+  max: number,
+): { bars: Bar[]; plotH: number } {
+  const plotH = CHART_H - CHART_LABEL_H;
+  const n = Math.max(1, categories.length);
+  const usable = CHART_W - CHART_LEFT - 10;
+  // Gap is a third of the slot: wide enough that bars read as separate objects,
+  // narrow enough that six of them still have width at 360px.
+  const slot = usable / n;
+  const w = slot * 0.66;
+
+  return {
+    plotH,
+    bars: categories.map((c, i) => {
+      const y = chartY(c.value, max, plotH);
+      const h = plotH - y;
+      return {
+        x: CHART_LEFT + i * slot + (slot - w) / 2,
+        y,
+        w,
+        h,
+        value: c.value,
+        label: c.label,
+      };
+    }),
+  };
+}
+
+/**
+ * Whole icons plus the fraction of one left over.
+ *
+ * The half-icon is the entire reason a pictograph is worth teaching: it is
+ * where the key stops being decoration and starts being arithmetic. 12 with a
+ * key of 5 is two icons and a bit — and a learner who cannot say what "a bit"
+ * is worth has not understood the key.
+ */
+export function layoutIcons(value: number, each: number): { full: number; part: number } {
+  const per = Math.max(1, each);
+  const full = Math.floor(Math.max(0, value) / per);
+  return { full, part: round((Math.max(0, value) - full * per) / per) };
+}
+
+/**
+ * Tally marks: groups of five, the fifth struck diagonally across the four.
+ *
+ * Returned as group sizes rather than a flat count so the renderer never has to
+ * work out where a bundle ends — an off-by-one there draws six-bar bundles,
+ * which is the one thing a tally must never do.
+ */
+export function tallyGroups(value: number): number[] {
+  const total = Math.max(0, Math.floor(value));
+  const groups = Array.from({ length: Math.floor(total / 5) }, () => 5);
+  if (total % 5) groups.push(total % 5);
+  return groups;
+}
