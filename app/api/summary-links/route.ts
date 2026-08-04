@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/security/authGuard";
 import { memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 import { generateShareToken, isShareLinkExpired } from "@/lib/parent/shareToken";
+import { track } from "@/lib/analytics/track";
 
 /**
  * The learner's control over their own share link (migration 0014).
@@ -70,6 +71,15 @@ export async function POST() {
       { status: 500 },
     );
   }
+
+  // The parent funnel's first step, which had none: only `parent_linked`
+  // existed, so an invite nobody redeemed was indistinguishable from an invite
+  // nobody made — and those call for opposite fixes.
+  //
+  // NOT on the reuse path above. Handing out the same link twice is one learner
+  // reaching for a parent once, and this number is a count of learners who
+  // tried. The token itself never goes near an event: it is the secret.
+  await track("parent_invite_created", { kind: "summary_link" });
 
   return NextResponse.json({
     token: created.token,

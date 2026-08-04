@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAuth } from "@/lib/security/authGuard";
 import { parseBody, productFeedbackSchema } from "@/lib/security/validation";
 import { LIMITS, memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
+import { track } from "@/lib/analytics/track";
 
 /**
  * POST /api/feedback — what a real user thinks of Dagar (0018).
@@ -68,7 +69,17 @@ export async function POST(request: Request) {
     );
   }
 
-  // No analytics event. The row IS the record, and inventing a name outside the
-  // canonical list in DATA_MODEL.md is how metrics quietly break.
+  // The row is still the record — the answers live in `product_feedback` and
+  // this event carries none of them. What it adds is a place on the FUNNEL:
+  // `feedback_shown` counts who was asked, this counts who answered, and the
+  // ratio is the number that says whether the ask is working. Without it the
+  // response rate was uncomputable, which is the same hole `dashboard_viewed`
+  // was added to fill for Recommendation Acceptance.
+  //
+  // `respondent_role` is the only prop: a learner and a teacher answering are
+  // different signals. Nothing free-text goes near this — `track()` would
+  // scrub it anyway, and it should never get the chance.
+  await track("feedback_submitted", { respondent_role });
+
   return NextResponse.json({ ok: true });
 }

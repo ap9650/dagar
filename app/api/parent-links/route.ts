@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireRole } from "@/lib/security/authGuard";
 import { memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 import { generateLinkCode, isLinkCodeExpired } from "@/lib/parent/linkCode";
+import { track } from "@/lib/analytics/track";
 
 /**
  * POST /api/parent-links — the learner asks for a code to give a parent.
@@ -57,6 +58,11 @@ export async function POST() {
       .single();
 
     if (!error && created) {
+      // Same reasoning as the share link: created only, never the reuse path
+      // above, and the code itself is never a prop — it is the secret that
+      // grants an adult access to a child's progress.
+      await track("parent_invite_created", { kind: "link_code" });
+
       return NextResponse.json({
         link_code: created.link_code,
         created_at: created.created_at,

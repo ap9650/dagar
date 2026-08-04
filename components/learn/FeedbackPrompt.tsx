@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { MessageSquare, X } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -63,6 +63,30 @@ export function FeedbackPrompt() {
   const seen = useSyncExternalStore(subscribe, hasSeenPrompt, () => true);
   // Set from a click handler, which is ordinary state, not an effect.
   const [dismissed, setDismissed] = useState(false);
+
+  /**
+   * The denominator for feedback conversion.
+   *
+   * The submission says "feedback from N real users". N alone is a number
+   * without a shape — out of twelve asks it is a strong signal, out of two
+   * hundred it is a different product. `feedback_submitted` fires in the API
+   * route; this is the other half.
+   *
+   * Fires only when the card actually renders, which localStorage already
+   * limits to once per browser — so this counts PEOPLE ASKED, not impressions.
+   * Ref-guarded for the same reason as `MentorCta`: Strict Mode runs effects
+   * twice in development and a denominator must not be double there.
+   */
+  const counted = useRef(false);
+  useEffect(() => {
+    if (seen || dismissed || counted.current) return;
+    counted.current = true;
+    fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "feedback_shown" }),
+    }).catch(() => {});
+  }, [seen, dismissed]);
 
   function close() {
     setDismissed(true);

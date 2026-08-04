@@ -8,6 +8,7 @@ import { anthropic, TUTOR_MODEL } from "@/lib/ai/client";
 import { costInr } from "@/lib/ai/pricing";
 import { containsAnswer, hintSystemPrompt, hintUserPrompt } from "@/lib/ai/prompts/hints";
 import { methodHint } from "@/lib/learning/hints";
+import { track } from "@/lib/analytics/track";
 import { t as tContent, tChoices } from "@/lib/i18n/content";
 import type { Locale } from "@/i18n/config";
 
@@ -40,6 +41,15 @@ export async function POST(request: Request) {
   const { question_id, tier } = parsed.data;
   const locale = (await getLocale()) as Locale;
   const admin = createAdminClient();
+
+  // "Hints before answers" is a claim this product makes, and nothing measured
+  // whether anyone takes them. `tier` is the interesting half: a learner who
+  // escalates to the worked step is a different learner from one who reads the
+  // nudge and gets it. The question id is a curriculum id, not learner data —
+  // which question is hard is exactly what we want to know.
+  //
+  // Emitted BEFORE the AI call, so a hint that times out still counts as asked.
+  await track("hint_requested", { question_id, tier });
 
   // Service role: one of the three places in the product that read the base
   // `questions` table — the others being practice grading in `/api/attempts` and

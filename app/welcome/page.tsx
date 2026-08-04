@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
 import { GoodbyeCard } from "@/components/settings/GoodbyeCard";
+import { trackAnonymous } from "@/lib/analytics/track";
 import { EXIT_COOKIE } from "@/lib/exit";
 import type { Locale } from "@/i18n/config";
 
@@ -40,6 +41,13 @@ export default async function WelcomePage() {
 
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
+
+  // The top of the funnel. Everything above this line has already returned for
+  // anyone who has an account, so this counts arrivals who do not — the people
+  // who were previously invisible entirely. No identifier is recorded; see
+  // `trackAnonymous`. The locale is the cookie's, which for a first-time
+  // arrival is the browser default rather than a choice they have made yet.
+  await trackAnonymous("welcome_viewed", { locale });
 
   // Set by DELETE /api/account and cleared once a reason is given. Its presence
   // is the only thing that turns this screen into a goodbye.

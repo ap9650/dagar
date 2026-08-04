@@ -33,9 +33,75 @@ export const EVENT_NAMES = [
   "streak_extended",
   "milestone_earned",
   "tutor_feedback_given",
+
+  // ── Added 4 Aug 2026, from an end-to-end audit of the journey ─────────────
+  // The list above measures what a learner does once they are INSIDE. It could
+  // not answer the three questions the first real cohort will actually raise:
+  // how many people who opened the link never got an account, how many got an
+  // account and never started, and how many finished the thing they came for.
+  //
+  // Names are grouped by the question they answer, not by where they fire.
+
+  // Before an account exists. Written with NO student_id and no identifier of
+  // any kind — see `trackAnonymous` below for why that is the whole design.
+  "welcome_viewed",
+  "login_viewed",
+
+  // Has an account, has not finished signing up. The gap between this and
+  // `learner_registered` is the onboarding drop-off, which was previously
+  // invisible: someone who authenticated and closed the tab at the grade picker
+  // left no trace at all.
+  "onboarding_started",
+
+  // The outcome the product exists for. Derivable from counting
+  // `lesson_completed` against the curriculum, but derived metrics drift when
+  // chapters gain lessons — and this one goes in front of judges.
+  "chapter_completed",
+
+  // Pedagogy. "Hints before answers" is a claim the product makes (D3, the AI
+  // skill) and nothing measured whether learners take them.
+  "hint_requested",
+
+  // `quiz_submitted` had no denominator, so quiz abandonment read as zero.
+  "quiz_started",
+
+  // The DENOMINATOR for mentor demand (D8a). "Six people asked for a human" is
+  // a different story out of eight offers than out of two hundred, and the deck
+  // makes a claim about demand. Being *offered* help is not the same as
+  // declining it: dismissal is still deliberately unrecorded (mentor-request
+  // spec §7) — a learner turning down help is not a failed conversion.
+  "mentor_cta_shown",
+
+  // Feedback conversion. The submission quotes real users; this is how we know
+  // whether nine responses came from twelve asks or from two hundred.
+  "feedback_shown",
+  "feedback_submitted",
+
+  // Did anyone switch language or class after onboarding? A learner who moves
+  // to Hindi on day two is evidence about D16 that the signup locale hides.
+  "settings_changed",
+
+  // The parent funnel's first step. Only `parent_linked` existed, so a link
+  // nobody redeemed was indistinguishable from a link nobody created.
+  "parent_invite_created",
 ] as const;
 
 export type EventName = (typeof EVENT_NAMES)[number];
+
+/**
+ * The events that may be recorded with no learner attached.
+ *
+ * ── WHY THIS IS A SEPARATE, TINY LIST ───────────────────────────────────────
+ * These fire before an account exists, so they are written with the service
+ * role and `student_id: null`. That combination is exactly the shape of an
+ * impersonation surface, so it is fenced by its own type: `trackAnonymous`
+ * cannot be called with `lesson_completed`, and `track` cannot be called with
+ * `welcome_viewed`.
+ * ────────────────────────────────────────────────────────────────────────────
+ */
+export const ANONYMOUS_EVENTS = ["welcome_viewed", "login_viewed"] as const;
+
+export type AnonymousEventName = (typeof ANONYMOUS_EVENTS)[number];
 
 /**
  * Event properties.
@@ -118,6 +184,49 @@ export async function trackForStudent(
     const { error } = await admin
       .from("events")
       .insert({ student_id: studentId, name, props: scrub(props) });
+
+    if (error) console.error(`[track] ${name} failed:`, error.message);
+  } catch (error) {
+    console.error(`[track] ${name} threw:`, error);
+  }
+}
+
+/**
+ * Record that a screen was opened by somebody who has no account.
+ *
+ * ── THE TOP OF THE FUNNEL, AND THE ONLY HONEST WAY TO MEASURE IT ────────────
+ * Without this, the first two steps of the funnel are unmeasurable: `track()`
+ * returns early when there is no session, so a person who opened the link and
+ * never signed up was indistinguishable from a person who never opened it.
+ *
+ * The row it writes carries a name, a locale and a timestamp. That is all.
+ *
+ *   - No `student_id` — the column is left null.
+ *   - No session id, no cookie, no IP, no user agent, no fingerprint.
+ *   - Nothing that could be joined to anything, now or later.
+ *
+ * That is the difference between a TALLY and TRACKING, and it is the reason
+ * this is acceptable for a product used by children. DPDP §9(3) prohibits
+ * behavioural monitoring of a child even with parental consent; a counter that
+ * cannot distinguish two visitors from one visitor twice does not monitor
+ * anybody. The cost of that choice is real and is stated where the number is
+ * shown: these count SCREEN OPENS, not people, and a reload counts twice.
+ *
+ * Called directly from server components rather than through an API route, on
+ * purpose. An unauthenticated endpoint that writes rows with the service role
+ * would be an abuse surface; a server render is not reachable that way.
+ * ────────────────────────────────────────────────────────────────────────────
+ */
+export async function trackAnonymous(
+  name: AnonymousEventName,
+  props: EventProps = {},
+): Promise<void> {
+  try {
+    const { createAdminClient } = await import("@/lib/supabase/admin");
+    const admin = createAdminClient();
+    const { error } = await admin
+      .from("events")
+      .insert({ student_id: null, name, props: scrub(props) });
 
     if (error) console.error(`[track] ${name} failed:`, error.message);
   } catch (error) {

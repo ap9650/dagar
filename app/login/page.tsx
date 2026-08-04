@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { buttonClasses } from "@/components/ui/Button";
 import { EmailAuthForm } from "@/components/auth/EmailAuthForm";
 import { safeNextPath } from "@/lib/security/nextPath";
+import { trackAnonymous } from "@/lib/analytics/track";
 
 /**
  * `/login` — Google primary, email below a divider (D2).
@@ -45,6 +46,13 @@ export default async function LoginPage({
   }
 
   const t = await getTranslations();
+
+  // Funnel step 2, and the last one we can see before the learner leaves for
+  // Google. Anonymous by construction — see `trackAnonymous`. What happens on
+  // Google's screen is not measurable from here and never will be: someone who
+  // backs out of the account chooser is a gap between this event and
+  // `onboarding_started`, not a number we can read directly.
+  await trackAnonymous("login_viewed", { failed: error === "oauth" });
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-xl">

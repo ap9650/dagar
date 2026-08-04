@@ -86,6 +86,58 @@ export async function POST(
 
   await track("lesson_completed", { lesson_id: id });
 
+  // ── did that finish the whole chapter? ───────────────────────────────────
+  // The outcome the product exists for, and the number a judge asks for first.
+  //
+  // Computed here rather than counted later from `lesson_completed`, because a
+  // derived count silently goes wrong the moment a chapter gains a lesson: an
+  // old cohort's five completions would keep reading as "finished" against a
+  // six-lesson chapter, or stop reading as finished depending which way you
+  // wrote the comparison. Recording the fact at the moment it becomes true
+  // survives the curriculum changing underneath it.
+  //
+  // Wrapped like the streak block below, and for the same reason: the lesson is
+  // already complete and stays complete whatever happens in here.
+  try {
+    const { data: lesson } = await supabase
+      .from("lessons")
+      .select("chapter_id")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (lesson?.chapter_id) {
+      const { data: siblings } = await supabase
+        .from("lessons")
+        .select("id")
+        .eq("chapter_id", lesson.chapter_id);
+
+      const lessonIds = (siblings ?? []).map((row) => row.id);
+
+      if (lessonIds.length > 0) {
+        // RLS scopes this to the learner's own rows, so the count is theirs.
+        const { count } = await supabase
+          .from("lesson_progress")
+          .select("lesson_id", { count: "exact", head: true })
+          .eq("student_id", auth.userId)
+          .eq("status", "completed")
+          .in("lesson_id", lessonIds);
+
+        // Exactly equal, never `>=`. This route already returned early when the
+        // lesson was previously complete, so the count can only reach the total
+        // on the call that completed the last one — which makes the event fire
+        // once per learner per chapter without needing a uniqueness check.
+        if (count === lessonIds.length) {
+          await track("chapter_completed", {
+            chapter_id: lesson.chapter_id,
+            lessons: lessonIds.length,
+          });
+        }
+      }
+    }
+  } catch (error) {
+    console.error("[lessons/complete] chapter check failed:", error);
+  }
+
   // ── streak + milestones ──────────────────────────────────────────────────
   // Both are SECURITY DEFINER functions, so they run through the admin client.
   // Wrapped in try/catch on purpose: **completion is the source of truth and

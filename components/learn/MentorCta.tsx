@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { LifeBuoy, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
@@ -73,6 +73,37 @@ export function MentorCta({
     "offered" | "composing" | "sending" | "sent" | "dismissed"
   >("offered");
   const [note, setNote] = useState("");
+
+  /**
+   * ── THE DENOMINATOR, AND WHY IT IS NOT A DISMISSAL EVENT ──────────────────
+   * D8a says Dagar measures demand for a human rather than pretending to supply
+   * one. `mentor_request_submitted` alone cannot support that claim: six
+   * requests out of eight offers and six out of two hundred are opposite
+   * findings, and only one of them is worth acting on.
+   *
+   * This records that the offer was MADE. It is deliberately not the inverse of
+   * a dismissal event, which the spec (§7) rules out and which stays ruled out:
+   * declining help is a normal thing to do and is not a failure to convert. The
+   * difference is what the number is for — this one sizes the ask, it does not
+   * grade the learner who said no.
+   *
+   * Fires once per mount, guarded by a ref rather than by the empty dependency
+   * array alone: React runs effects twice in development Strict Mode, and a
+   * denominator that is double in dev and single in production is worse than no
+   * denominator at all.
+   */
+  const counted = useRef(false);
+  useEffect(() => {
+    if (counted.current) return;
+    counted.current = true;
+    fetch("/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: "mentor_cta_shown", props: { trigger } }),
+      // The offer is the point of this component; the event is bookkeeping.
+      // A failed write must never surface to a learner who is already stuck.
+    }).catch(() => {});
+  }, [trigger]);
 
   if (state === "dismissed") return null;
 

@@ -97,6 +97,15 @@ export async function PATCH(request: Request) {
     );
   }
 
+  // WHICH field moved, never what it moved to for anything free-text. Locale is
+  // the one worth knowing by value: a learner who signs up in English and
+  // switches to Hindi on day two is direct evidence for D16 that the signup
+  // locale cannot show, because at signup nobody has read a lesson yet.
+  await track("settings_changed", {
+    field: Object.keys(updates).sort().join(","),
+    locale: updates.locale ?? null,
+  });
+
   const response = NextResponse.json({ ok: true, changed: true });
   if (updates.locale) setLocaleCookie(response, updates.locale);
   return response;

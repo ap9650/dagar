@@ -101,13 +101,66 @@ Index on (`name`,`created_at`) and (`student_id`,`created_at`).
 Canonical event names — **use these exact strings**, they map to PRD §12:
 
 ```
+welcome_viewed       login_viewed        onboarding_started
 learner_registered   lesson_started      lesson_completed
-ai_question_asked    practice_started    practice_completed
-quiz_submitted       dashboard_viewed    recommendation_clicked
-parent_linked        parent_summary_sent  parent_summary_viewed
-mentor_request_submitted  streak_extended  milestone_earned
-tutor_feedback_given
+chapter_completed    ai_question_asked   hint_requested
+practice_started     practice_completed
+quiz_started         quiz_submitted
+dashboard_viewed     recommendation_clicked
+parent_invite_created  parent_linked
+parent_summary_sent  parent_summary_viewed
+mentor_cta_shown     mentor_request_submitted
+feedback_shown       feedback_submitted
+streak_extended      milestone_earned    tutor_feedback_given
+settings_changed
 ```
+
+### Anonymous events
+
+`welcome_viewed` and `login_viewed` are written with `student_id` **null**, via
+the service role, from the server render of `/welcome` and `/login`. They carry a
+name, a locale and a timestamp — **no session id, no cookie, no IP, no user
+agent, nothing joinable to anything**. That is deliberate and is the reason they
+are acceptable in a product used by children: DPDP §9(3) prohibits behavioural
+monitoring of a child even with parental consent, and a counter that cannot tell
+two visitors from one visitor twice does not monitor anyone.
+
+The cost is real and must be stated wherever the number is shown: these count
+**screen opens, not people**, and a reload counts twice. `ANONYMOUS_EVENTS` in
+`lib/analytics/track.ts` is a separate type so `trackAnonymous` cannot be called
+with a learner event, or `track` with one of these.
+
+### Which of these a browser may send
+
+`/api/events` accepts exactly four names — `practice_started`,
+`practice_completed`, `mentor_cta_shown`, `feedback_shown`. Everything else is
+emitted by the route handler that performed the write, where it cannot be faked.
+
+### Counting rules that are not obvious
+
+| Event | Count | Because |
+|---|---|---|
+| `onboarding_started` | distinct `student_id` | a reload of the grade picker emits again |
+| `dashboard_viewed` | distinct learner per minute | the auth redirect and the render both land |
+| `quiz_started` | distinct `session_id` | it fires on resume as well as start |
+| `parent_invite_created` | distinct `student_id` | the reuse path does not emit at all |
+| `welcome_viewed`, `login_viewed` | raw rows only | there is no identifier to dedupe by, on purpose |
+
+### Deliberately not events
+
+**Account deletion.** `exit_reasons` is anonymous by construction (0023) and an
+event carrying `student_id` would undo that — and the row would be orphaned a
+moment later anyway.
+
+**Dismissing the mentor offer.** Declining help is a normal thing to do, not a
+failed conversion (`docs/specs/mentor-request.md` §7). `mentor_cta_shown` sizes
+the ask; it does not grade the learner who said no.
+
+**Individual practice attempts.** Every attempt is already a row in `attempts`
+with its correctness and timestamp. An event would duplicate it less well.
+
+**Signing in.** `dashboard_viewed` already stamps a day per learner, so return
+rate is computable without a second session marker.
 
 `dashboard_viewed` was added on 31 Jul 2026. Recommendation Acceptance (PRD §12,
 ≥30%) is defined as `recommendation_clicked ÷ dashboard views`, but only the

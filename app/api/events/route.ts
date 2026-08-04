@@ -21,7 +21,19 @@ import { track } from "@/lib/analytics/track";
  * listed; everything derived — completions, streaks, milestones — is emitted by
  * the route handler that performed the write, where it cannot be faked.
  */
-const CLIENT_EVENTS = ["practice_started", "practice_completed"] as const;
+const CLIENT_EVENTS = [
+  "practice_started",
+  "practice_completed",
+  // Two "this was put in front of somebody" events, added 4 Aug 2026. Both are
+  // rendered by a client component on a condition the server never evaluates —
+  // struggle detection for one, a localStorage flag for the other — so the
+  // browser is genuinely the only place that knows they happened.
+  //
+  // Neither is worth faking: inflating them makes the mentor-demand and
+  // feedback-conversion rates read WORSE, because they are denominators.
+  "mentor_cta_shown",
+  "feedback_shown",
+] as const;
 
 const eventSchema = z.object({
   name: z.enum(CLIENT_EVENTS),

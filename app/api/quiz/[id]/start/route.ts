@@ -4,6 +4,7 @@ import { requireAuth } from "@/lib/security/authGuard";
 import { zUuid } from "@/lib/security/validation";
 import { LIMITS, memoryLimit, tooManyRequests } from "@/lib/security/rateLimiter";
 import { startOrResumeQuiz } from "@/lib/learning/quiz";
+import { track } from "@/lib/analytics/track";
 
 /**
  * POST /api/quiz/[id]/start — open a chapter quiz, or rejoin an abandoned one.
@@ -60,6 +61,17 @@ export async function POST(
         { status: 404 },
       );
     }
+
+    // `quiz_submitted` had no denominator, so a quiz somebody opened and
+    // abandoned looked identical to a quiz nobody opened. Fires after the
+    // session exists, so it counts started quizzes rather than attempts to
+    // start one — and `startOrResumeQuiz` is a resume, so a learner returning
+    // to an unfinished quiz emits again. Count distinct sessions, not rows.
+    await track("quiz_started", {
+      chapter_id: id,
+      session_id: start.sessionId,
+      questions: start.questions.length,
+    });
 
     return NextResponse.json({
       session_id: start.sessionId,
