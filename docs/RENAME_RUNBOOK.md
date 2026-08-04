@@ -107,6 +107,18 @@ pure geometry with no letterform, so it needs no redraw.
 
 The old `saathi-*.vercel.app` addresses keep working throughout. Nothing breaks.
 
+> **Retired 4 Aug 2026.** `saathi-ap19.vercel.app` and
+> `saathi-akritipanwar94-8076-ap19.vercel.app` were removed the day before the
+> link went to the first cohort. They had stayed pointed at the 5 August build
+> from before the rename, so they still opened — and served an app with no
+> privacy page, no Delete my account, and neither of the two new chapters.
+>
+> A dead link is annoying and obvious. A link that works and is a week out of
+> date is neither, and a learner following one would never know. With nothing
+> yet distributed there was no installed base to protect, which made retiring
+> them free — and the moment before distribution is the only cheap moment to do
+> it. **`dagar-ap19.vercel.app` is now the only address.**
+
 ## 2b. Vercel — Route B (project rename)
 
 1. **Vercel → project `saathi` → Settings → General → Project Name** → `dagar` → Save.
