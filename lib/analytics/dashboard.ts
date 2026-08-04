@@ -78,7 +78,10 @@ export async function loadMetrics(window: MetricWindow = "all", now: Date = new 
     admin.from("lessons").select("id, chapter_id, title, order_index"),
     admin.from("lesson_progress").select("student_id, lesson_id, status"),
     admin.from("exit_reasons").select("reason, locale"),
-    admin.from("product_feedback").select("respondent_role, understood, would_return"),
+    // `user_id` is read only to scope these rows to the window's cohort, and
+    // never leaves this module — without it a windowed view would show every
+    // answer ever given beside a conversion rate for one week.
+    admin.from("product_feedback").select("user_id, respondent_role, understood, would_return"),
   ]);
 
   if (eventsResult.error) {
@@ -136,12 +139,20 @@ export async function loadMetrics(window: MetricWindow = "all", now: Date = new 
       ...conversion(cohortRows, "mentor_cta_shown", "mentor_request_submitted"),
       byTrigger: Object.fromEntries(byProp(cohortRows, "mentor_request_submitted", "trigger")),
     },
-    feedback: {
-      ...conversion(cohortRows, "feedback_shown", "feedback_submitted"),
-      understood: tally(feedback.data ?? [], "understood"),
-      wouldReturn: tally(feedback.data ?? [], "would_return"),
-      byRole: tally(feedback.data ?? [], "respondent_role"),
-    },
+    feedback: (() => {
+      const mine = (feedback.data ?? []).filter((row) => members.has(row.user_id));
+      return {
+        // The rate comes from EVENTS, which only began recording who was asked
+        // on 4 Aug 2026. The answers come from the feedback TABLE, which has
+        // every response ever given. So `answers` can exceed `acted`, and the
+        // page says so rather than quietly reconciling two different histories.
+        ...conversion(cohortRows, "feedback_shown", "feedback_submitted"),
+        answers: mine.length,
+        understood: tally(mine, "understood"),
+        wouldReturn: tally(mine, "would_return"),
+        byRole: tally(mine, "respondent_role"),
+      };
+    })(),
     // No learner column exists on this table at all (migration 0023), so this
     // section is aggregate by construction rather than by our restraint.
     exitReasons: tally(exits.data ?? [], "reason"),
