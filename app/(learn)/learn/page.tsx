@@ -8,11 +8,10 @@ import { dailyGoal } from "@/lib/learning/dailyGoal";
 import { istDate, istDayStart } from "@/lib/learning/dates";
 import { fromRow, streakStatus } from "@/lib/learning/streaks";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
 import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { StreakBadge } from "@/components/learn/StreakBadge";
-import { JourneyPath, type JourneyNode } from "@/components/learn/JourneyPath";
+import { ChapterCard } from "@/components/learn/ChapterCard";
 import { NextLessonCard } from "@/components/learn/NextLessonCard";
 import { track } from "@/lib/analytics/track";
 import { InstallPrompt } from "@/components/InstallPrompt";
@@ -92,7 +91,32 @@ export default async function LearnPage() {
       .gte("created_at", todayStart),
   ]);
 
-  const chapter = chapters?.[0];
+  const allChapters = [...(chapters ?? [])].sort((a, b) => a.order_index - b.order_index);
+
+  const completedLessonIds = new Set(
+    (progress ?? []).filter((p) => p.status === "completed").map((p) => p.lesson_id),
+  );
+
+  /**
+   * ── WHICH CHAPTER THE RECOMMENDATION LIVES IN ─────────────────────────────
+   * The first chapter, in NCERT order, that still has an unfinished lesson —
+   * falling back to the last one when everything is done.
+   *
+   * This line used to read `chapters?.[0]`, and every other chapter was fetched
+   * and thrown away. With one chapter per class that was invisible; the day a
+   * second was seeded it made half the curriculum unreachable, because no
+   * screen rendered a link to a lesson outside the first chapter. The chapter
+   * list below is the fix — this now chooses what to RECOMMEND, not what to show.
+   *
+   * Order is NCERT order, never progress order. Chapter 4 stays where chapter 4
+   * always is; a list that reshuffles as you work is one you cannot learn the
+   * shape of.
+   */
+  const chapter =
+    allChapters.find((c) =>
+      c.lessons.some((lesson) => !completedLessonIds.has(lesson.id)),
+    ) ?? allChapters[allChapters.length - 1];
+
   const goal = dailyGoal(lessonsToday ?? 0, practiceToday ?? 0);
 
   // Whether the STORED streak is still alive today — see streaks.ts. It lived
@@ -168,31 +192,11 @@ export default async function LearnPage() {
     concepts: concepts.map((c) => c.id),
   });
 
-  const completedIds = new Set(
-    (progress ?? []).filter((p) => p.status === "completed").map((p) => p.lesson_id),
-  );
-
-  // Count only THIS chapter's lessons. `progress` holds every lesson the learner
-  // has ever finished, including other grades — a learner who changes grade in
-  // Settings keeps their old progress (spec §7), and counting it here showed
-  // "2 of 5" on a chapter they had not opened.
-  const completedInChapter = lessons.filter((l) => completedIds.has(l.id)).length;
-
-  const currentLessonId = action.kind === "lesson" ? action.lessonId : null;
-
-  const nodes: JourneyNode[] = lessons.map((lesson) => ({
-    lessonId: lesson.id,
-    title: tContent(lesson, "title", locale),
-    state: completedIds.has(lesson.id)
-      ? "completed"
-      : lesson.id === currentLessonId
-        ? "current"
-        : "upcoming",
-    href: `/learn/${chapter.id}/${lesson.id}`,
-  }));
-
+  // The journey path, the per-lesson nodes and the concept mastery list all
+  // moved to `/learn/[chapter]`. What is left here is the ONE next action and
+  // the chapter list — this screen answers "what now?" and "what else is
+  // there?", and a chapter answers "how is this one going?".
   const conceptById = new Map(concepts.map((c) => [c.id, c]));
-  const masteryByConcept = new Map((mastery ?? []).map((m) => [m.concept_id, m]));
 
   const nextCard = (() => {
     if (action.kind === "lesson") {
@@ -260,67 +264,42 @@ export default async function LearnPage() {
       {/* Only after a first lesson is completed (D15). A learner who has not yet
           got anything out of Dagar has no reason to install it, and asking then
           teaches them to dismiss prompts without reading. */}
-      <InstallPrompt show={completedIds.size > 0} />
+      <InstallPrompt show={completedLessonIds.size > 0} />
 
-      <section className="flex flex-col gap-lg">
-        <div className="flex flex-col gap-xs">
-          <h2 className="text-h3 text-ink">{tContent(chapter, "title", locale)}</h2>
-          <p className="text-body-sm text-muted">
-            {t("dashboard.lessonsProgress", {
-              done: completedInChapter,
-              total: lessons.length,
-            })}
-          </p>
-        </div>
+      {/*
+        EVERY chapter, in NCERT order. This section is the fix for the bug that
+        made half the curriculum unreachable — see the `chapter` selection above.
 
-        <JourneyPath nodes={nodes} />
-      </section>
-
+        Compact cards rather than an expanded path each: at two chapters the
+        paths looked generous, at eight they are a wall, and NCERT runs to a
+        dozen chapters a class. The path now lives on `/learn/[chapter]`, which
+        is where SCREENS.md always said it should be.
+      */}
       <section className="flex flex-col gap-md">
-        <h2 className="text-label text-muted">{t("dashboard.conceptsTitle")}</h2>
-        <ul className="flex flex-col gap-sm">
-          {concepts.map((concept) => {
-            const m = masteryByConcept.get(concept.id);
-            // A never-attempted concept has NO mastery row. It shows no badge at
-            // all — rendering it as 0% reads as failure rather than "not started"
-            // (spec §7), and this learner does not need that on day one.
-            const band = !m || m.attempts_count === 0
-              ? null
-              : m.is_mastered
-                ? "mastered"
-                : m.score >= 0.5
-                  ? "developing"
-                  : "needs_revision";
-
-            return (
-              <li
-                key={concept.id}
-                className="flex items-center justify-between gap-md min-h-11"
-              >
-                <span className="text-body text-body min-w-0">
-                  {tContent(concept, "name", locale)}
-                </span>
-                {band && (
-                  <Badge tone={band} className="shrink-0">
-                    {t(`mastery.${band}`)}
-                  </Badge>
-                )}
-              </li>
-            );
-          })}
+        <h2 className="text-label text-muted">{t("dashboard.chaptersTitle")}</h2>
+        <ul className="flex flex-col gap-sm list-none m-0 p-0">
+          {allChapters.map((c) => (
+            <li key={c.id}>
+              <ChapterCard
+                href={`/learn/${c.id}`}
+                title={tContent(c, "title", locale)}
+                done={c.lessons.filter((lesson) => completedLessonIds.has(lesson.id)).length}
+                total={c.lessons.length}
+                // At most one card is marked, and it is the chapter the single
+                // next action lives in — so the quiet marker and the loud card
+                // above can never point at different places.
+                recommended={c.id === chapter.id}
+              />
+            </li>
+          ))}
         </ul>
       </section>
 
-      <div className="flex flex-col gap-md">
-        <Link href={`/quiz/${chapter.id}`} className={buttonClasses("secondary")}>
-          {t("chapter.quizStart")}
-        </Link>
-        {/* Spelled out as well as reachable through the flame: a learner who does
-            not think to tap a badge should still be able to find the screen. */}
-        <Link href="/progress" className={buttonClasses("ghost")}>
-          {t("progress.open")}
-        </Link>
-      </div>
+      {/* Spelled out as well as reachable through the flame: a learner who does
+          not think to tap a badge should still be able to find the screen. */}
+      <Link href="/progress" className={buttonClasses("ghost")}>
+        {t("progress.open")}
+      </Link>
     </main>
   );
 }

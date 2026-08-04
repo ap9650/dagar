@@ -62,6 +62,13 @@ export const EVENT_NAMES = [
   // skill) and nothing measured whether learners take them.
   "hint_requested",
 
+  // Added 4 Aug 2026 with the chapter picker. Choosing a chapter is a new step
+  // between the dashboard and a lesson, so it is a new place to lose people —
+  // "opened a chapter and started nothing" was not a state that could exist
+  // before. Shipped with the screen rather than after it, so its history starts
+  // when the screen's does.
+  "chapter_opened",
+
   // `quiz_submitted` had no denominator, so quiz abandonment read as zero.
   "quiz_started",
 

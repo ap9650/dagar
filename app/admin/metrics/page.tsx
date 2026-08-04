@@ -228,7 +228,7 @@ export default async function MetricsPage({
         <FunnelBars
           stages={m.funnel}
           labels={STAGE_LABELS}
-          boundaryNote="Below this line the numbers are PEOPLE. Above it they are screen opens — we record nothing that identifies anyone before they have an account, so a reload counts twice. The two are never divided into each other."
+          boundaryNote="Below this line the numbers are PEOPLE. Above it they are screen opens — we record nothing that identifies anyone before they have an account, so a reload counts twice. The top two carry no percentage on purpose: they are two separate counters, not steps. Sign-in can be opened directly, without the first screen, so it can legitimately be the larger number."
         />
       </Panel>
 

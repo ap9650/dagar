@@ -89,7 +89,8 @@
     "quizTitle": "Chapter quiz",
     "quizStart": "Take the chapter quiz",
     "quizLocked": "Finish the lessons first",
-    "lessonNode": "Lesson {number}"
+    "lessonNode": "Lesson {number}",
+    "noLessons": "The lessons for this chapter are being written."
   },
   "lesson": {
     "stepOf": "Step {step} of {total}",

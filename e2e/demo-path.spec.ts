@@ -83,8 +83,19 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   // The daily goal is the D17 return mechanic and the first thing on the screen.
   await expect(page.getByText(/today's goal/i)).toBeVisible();
 
-  // One obvious next action, never a menu. A brand-new learner gets "Start here".
-  const nextAction = page.getByRole("link", { name: /start here|continue/i }).first();
+  /*
+    One obvious next action, never a menu.
+
+    Selected by the `from=rec` marker rather than by its label. Since the
+    chapter list landed, the recommended chapter's card also reads "Start here"
+    — so a name-based selector could match either, and `.first()` would have
+    been relying on DOM order to tell a lesson link from a chapter link.
+
+    The marker is also the thing Recommendation Acceptance is built on
+    (`RECOMMENDATION_MARKER`), so asserting on it covers the metric's wiring at
+    the same time: no marker, no numerator, and this test says so.
+  */
+  const nextAction = page.locator('a[href*="from=rec"]').first();
   await expect(nextAction).toBeVisible();
   await nextAction.click();
 
@@ -210,12 +221,20 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   await page.getByText("Class 6", { exact: true }).click({ timeout: 20_000 });
   await page.getByRole("button", { name: "Continue" }).click();
   await page.waitForURL(/\/learn$/, { timeout: 20_000 });
-  // Data Handling, not Fractions. The dashboard shows the CURRENT chapter's
-  // journey rather than every chapter, and Class 6 now opens on Ganita Prakash
-  // Ch 4 because Fractions is Ch 7 — a learner meets them in the order their own
-  // book has them. This assertion moved when the chapter landed on 3 Aug, which
-  // is the point of asserting a real chapter name rather than "some text".
+  /*
+    ── THE REGRESSION GUARD FOR THE BUG THIS SCREEN WAS REBUILT FOR ──────────
+    EVERY chapter of the learner's class is listed, not just the first.
+
+    Until 4 Aug the dashboard rendered `chapters[0]` and discarded the rest. It
+    looked fine while each class had one chapter; the day Data Handling was
+    seeded alongside Fractions, Fractions became unreachable — no screen
+    anywhere rendered a link to a lesson outside the first chapter.
+
+    So both names are asserted, not one. A test that only checked the first
+    chapter is precisely the test that passed throughout the bug.
+  */
   await expect(page.getByText(/data handling/i).first()).toBeVisible();
+  await expect(page.getByText(/fractions/i).first()).toBeVisible();
 
   await page.goto("/settings");
   await expect(page.getByRole("radio", { name: "Class 6" })).toBeChecked();
@@ -253,7 +272,26 @@ test("a learner can change class, and the chapters follow", async ({ page }) => 
   // at the same curriculum is the bug this test exists for.
   await page.goto("/learn");
   await expect(page.getByText(/number play/i).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/integers/i).first()).toBeVisible();
   await expect(page.getByText(/data handling/i)).toHaveCount(0);
+
+  /*
+    ── A CHAPTER THAT IS NOT THE FIRST ONE OPENS ────────────────────────────
+    Integers is Class 7's SECOND chapter, and it was the unreachable one: the
+    dashboard never rendered it and `/progress` linked only to practice, so
+    there was no path to an Integers lesson from anywhere in the app.
+
+    Deliberately the second chapter and not the first — clicking the first
+    would have passed all through the bug.
+  */
+  await page.getByRole("link", { name: /integers/i }).first().click();
+  await page.waitForURL(/\/learn\/[^/]+$/, { timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: /integers/i })).toBeVisible();
+
+  // And from the chapter, a lesson. This is the link that did not exist.
+  await page.getByRole("link", { name: /lesson 1/i }).first().click();
+  await page.waitForURL(/\/learn\/[^/]+\/[^/]+/, { timeout: 15_000 });
+  await expect(page.getByRole("button", { name: /ask a question/i })).toBeVisible();
 });
 
 /**

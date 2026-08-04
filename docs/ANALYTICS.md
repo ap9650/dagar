@@ -121,6 +121,7 @@ reason, and because the grade picker has a session to attribute it to.
 |---|---|---|---|
 | `dashboard_viewed` | every `/learn` render | `recommendation`, `reason` | Return days, Recommendation Acceptance denominator |
 | `recommendation_clicked` | at the **destination** of the next-action card | `target` | Recommendation Acceptance numerator |
+| `chapter_opened` | `/learn/[chapter]` render | `chapter_id`, `lessons` | Chapter-picker drop-off |
 | `lesson_started` | `POST /api/lessons/[id]/start` | `lesson_id` | Funnel stage 5 |
 | `lesson_completed` | `POST /api/lessons/[id]/complete`, first time only | `lesson_id` | Funnel stage 6, activation |
 | `chapter_completed` | same route, when the last lesson of a chapter completes | `chapter_id`, `lessons` | Funnel stage 7 — the outcome |
@@ -328,6 +329,13 @@ is the finding — a stage that falls to 50% is this week's work.
 **The one caveat that must be printed on it:** the first two rows are visits and
 the rest are people. The boundary is drawn on the chart, and no headline
 percentage spans it.
+
+**And the first two rows carry no percentage at all.** They are two independent
+counters, not consecutive steps: `/login` is reachable directly — a bookmark, a
+pasted link, the signed-out redirect with `?next=`. Measured on 4 August 2026
+the second count was *higher* than the first (180 against 167), and the funnel
+was rendering "108%". A percentage between them asserts a containment that does
+not exist.
 
 Stages 1→2 and 2→3 have a gap that is **not measurable and never will be**: what
 happens on Google's account chooser is off our origin. A drop between "reached

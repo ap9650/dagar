@@ -285,12 +285,23 @@ export function funnel(windowed: EventRow[], cohortRows: EventRow[]): FunnelStag
 
   const stages: FunnelStage[] = [];
 
-  visits.forEach((stage, i) => {
-    stages.push({
-      ...stage,
-      unit: "visits",
-      ofPrevious: i === 0 ? null : share(stage.count, visits[i - 1].count),
-    });
+  /**
+   * ── THE TWO VISIT STAGES ARE NOT A FUNNEL ─────────────────────────────────
+   * They are two independent counters, so NEITHER carries a percentage.
+   *
+   * `login_viewed` is not a subset of `welcome_viewed`. `/login` is reachable
+   * directly — from a bookmark, from a link someone pasted, and from the
+   * signed-out redirect that carries `?next=`. Measured against live data on
+   * 4 Aug 2026 the second count was HIGHER than the first (180 vs 167), and
+   * the funnel was about to render "108%".
+   *
+   * A percentage between them asserts a containment that does not exist. The
+   * counts are still worth having — they are the only view of the top of the
+   * funnel we can get without identifying anybody — but they are two numbers,
+   * not a rate.
+   */
+  visits.forEach((stage) => {
+    stages.push({ ...stage, unit: "visits", ofPrevious: null });
   });
 
   people.forEach((stage, i) => {

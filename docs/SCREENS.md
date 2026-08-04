@@ -56,7 +56,7 @@ Learner routes live under `app/(learn)/`, parent under `app/(parent)/`.
          │          → learner_registered
          ▼
   ┌─────────────┐
-  │   /learn    │   Dashboard, chapter for their grade, nothing completed
+  │   /learn    │   Dashboard: one next action + EVERY chapter of their grade
   └─────────────┘
 ```
 
@@ -114,7 +114,8 @@ This is the demo, and the four screens that must never be cut.
 
 | Screen | State it needs | Events |
 |---|---|---|
-| `/learn` | grade, chapter progress, streak, today's goal status | — |
+| `/learn` | grade, progress across ALL chapters, streak, today's goal | `dashboard_viewed` `recommendation_clicked` |
+| `/learn/[chapter]` | that chapter's lessons + concept mastery | `chapter_opened` |
 | `/learn/[ch]/[lesson]` | `body_md` in locale, step n of m | `lesson_started` `lesson_completed` |
 | Tutor sheet | lesson `body_md` + concept mastery (**grounding, always**) | `ai_question_asked` `tutor_feedback_given` |
 | `/practice/[concept]` | questions via `questions_public`, current difficulty | `practice_started` `practice_completed` |

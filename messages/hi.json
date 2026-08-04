@@ -89,7 +89,8 @@
     "quizTitle": "चैप्टर क्विज़",
     "quizStart": "चैप्टर क्विज़ दो",
     "quizLocked": "पहले लेसन पूरे करो",
-    "lessonNode": "लेसन {number}"
+    "lessonNode": "लेसन {number}",
+    "noLessons": "इस चैप्टर के लेसन अभी लिखे जा रहे हैं।"
   },
   "lesson": {
     "stepOf": "{total} में से {step} स्टेप",

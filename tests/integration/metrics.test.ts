@@ -54,18 +54,24 @@ d("loadMetrics against the real project", () => {
     expect(serialised).not.toMatch(/[\w.+-]+@[\w-]+\.[\w.]+/);
   }, 30_000);
 
-  it("keeps the funnel monotonic within each unit", async () => {
-    const stages = (await loadMetrics("all")).funnel;
-    const visits = stages.filter((stage) => stage.unit === "visits");
-    const people = stages.filter((stage) => stage.unit === "people");
+  it("keeps the PEOPLE stages monotonic", async () => {
+    const people = (await loadMetrics("all")).funnel.filter((s) => s.unit === "people");
 
     // Nobody finishes a chapter without picking a class. A rise here means a
     // counting rule is wrong, not that learners time-travelled.
-    for (const group of [visits, people]) {
-      for (let i = 1; i < group.length; i++) {
-        expect(group[i].count).toBeLessThanOrEqual(group[i - 1].count);
-      }
+    for (let i = 1; i < people.length; i++) {
+      expect(people[i].count).toBeLessThanOrEqual(people[i - 1].count);
     }
+  }, 30_000);
+
+  it("never puts a percentage on the visit stages", async () => {
+    // They are two independent counters, not a funnel: `/login` is reachable
+    // without ever seeing `/welcome`. This assertion exists because the live
+    // data proved it — 180 sign-in views against 167 app opens, which the
+    // funnel was rendering as "108%".
+    const visits = (await loadMetrics("all")).funnel.filter((s) => s.unit === "visits");
+    expect(visits.length).toBeGreaterThan(0);
+    for (const stage of visits) expect(stage.ofPrevious).toBeNull();
   }, 30_000);
 
   it("never reports a share above 100%", async () => {
