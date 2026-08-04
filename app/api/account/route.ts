@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/security/authGuard";
+import { EXIT_COOKIE } from "@/lib/exit";
 
 /**
  * DELETE /api/account — the learner deletes themselves, and it actually happens.
@@ -68,5 +69,28 @@ export async function DELETE() {
 
   // Deliberately no analytics event. "This learner deleted themselves" is a row
   // about a person who just asked to stop being a row.
-  return NextResponse.json({ ok: true });
+  const response = NextResponse.json({ ok: true });
+
+  /*
+    A one-time pass to say why they left.
+
+    The reason is asked AFTER deletion, so the request that carries it has no
+    session — which is the point (see `0023_exit_reasons.sql`) and also the
+    problem: an unauthenticated write endpoint with nothing guarding it is an
+    open door to anyone who finds it.
+
+    This cookie is the guard. It proves only "this browser just deleted an
+    account", carries no identity, expires in thirty minutes, and is cleared the
+    moment a reason is submitted. It cannot be used to link the reason to the
+    person, because by the time it exists the person is already gone.
+  */
+  response.cookies.set(EXIT_COOKIE, crypto.randomUUID(), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 30,
+  });
+
+  return response;
 }

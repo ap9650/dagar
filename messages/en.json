@@ -451,5 +451,20 @@
     "confirm": "Yes, delete everything",
     "deleting": "Deleting…",
     "failed": "Something went wrong on our side and nothing was deleted. Try again?"
+  },
+  "goodbye": {
+    "title": "Your account is deleted",
+    "body": "Everything we had is gone — your lessons, your practice, your streak and your badges.",
+    "ask": "If you have a moment, what made you leave? One tap, and it is not linked to you.",
+    "skip": "No thanks",
+    "thanks": "Thank you — that helps us make it better for someone else.",
+    "reasons": {
+      "too_hard": "It was too hard",
+      "too_easy": "It was too easy",
+      "confusing": "I could not work out how to use it",
+      "not_useful": "It did not help me",
+      "duplicate": "I made another account by mistake",
+      "other": "Something else"
+    }
   }
 }

@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { LanguagePicker } from "@/components/ui/LanguagePicker";
+import { GoodbyeCard } from "@/components/settings/GoodbyeCard";
+import { EXIT_COOKIE } from "@/lib/exit";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -38,10 +41,30 @@ export default async function WelcomePage() {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations();
 
+  // Set by DELETE /api/account and cleared once a reason is given. Its presence
+  // is the only thing that turns this screen into a goodbye.
+  const justDeleted = Boolean((await cookies()).get(EXIT_COOKIE)?.value);
+
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-3xl">
       {/* Reads the same in both scripts, so it needs no translation. */}
       <h1 className="text-h1 text-primary-strong text-center">Dagar</h1>
+
+      {/*
+        ABOVE the picker, which looks like a violation of this screen's one rule
+        and is not.
+
+        The rule exists so that a learner who cannot read English is not made to
+        get through an English screen to reach the language choice. This card
+        renders ONLY for someone who has just deleted an account — which means
+        they have used Dagar, which means they already have a locale cookie and
+        are reading their own language. A brand-new arrival never sees it.
+
+        It goes above rather than below because it is the answer to the thing
+        they just did. Underneath the picker it would read as a footnote to a
+        screen they did not ask for.
+      */}
+      {justDeleted && <GoodbyeCard />}
 
       <LanguagePicker current={locale} continueHref="/login" />
 

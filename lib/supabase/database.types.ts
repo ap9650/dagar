@@ -316,6 +316,27 @@ export type Database = {
           },
         ]
       }
+      exit_reasons: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string | null
+          reason: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          reason: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string | null
+          reason?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           completed_at: string | null
