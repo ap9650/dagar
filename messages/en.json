@@ -39,7 +39,9 @@
     "checkEmail": "Check your email for a link to sign in.",
     "failed": "That did not work. Check your email and password and try again.",
     "parentCode": "I have a parent code",
-    "parentHow": "How does this work?"
+    "parentHow": "How does this work?",
+    "privacyNotice": "We keep only what is needed to remember your learning, and never share it.",
+    "privacyLink": "See exactly what we keep"
   },
   "onboarding": {
     "gradeTitle": "Which class are you in?",
@@ -402,5 +404,42 @@
     "chart": "A chart of {count} categories: {labels}.",
     "chartKey": "Each circle stands for {each}.",
     "grid": "A {rows} by {cols} grid of numbers, {filled} filled in."
+  },
+  "privacy": {
+    "back": "Back",
+    "title": "What we keep",
+    "intro": "Dagar keeps a small amount of information so it can remember where you are in your learning. Here is all of it, in plain words.",
+    "account": {
+      "title": "Your account",
+      "email": "The email address used to sign in.",
+      "grade": "Your class — 6, 7 or 8 — so we show the right chapters.",
+      "language": "Which language you chose to learn in."
+    },
+    "learning": {
+      "title": "Your learning",
+      "lessons": "Which lessons you have opened and finished.",
+      "answers": "The answers you give in practice and quizzes, so we know what to help with.",
+      "streak": "Your daily goal, streak and badges."
+    },
+    "tutor": {
+      "title": "Your questions to the tutor",
+      "questions": "What you ask the tutor, and what it answers.",
+      "retention": "These are kept for 90 days and then deleted. They are never put into reports."
+    },
+    "promises": {
+      "title": "Three things we do not do",
+      "thirdParty": "We never share your information with anyone else. There is no advertising company, no tracking service, and no other business receiving any of it.",
+      "noAds": "There are no adverts in Dagar, and nothing here is used to sell you anything.",
+      "free": "Dagar is free. We do not ask for money, and we do not ask for payment details."
+    },
+    "delete": {
+      "title": "Getting rid of it",
+      "body": "You can ask us to delete everything at any time, and we will. Tell the teacher or the adult who shared Dagar with you, and they will pass it on."
+    },
+    "parents": {
+      "title": "For parents",
+      "body": "If you are a parent or guardian, you can see how your child is getting on through a weekly summary, without creating an account yourself. You can also ask us to delete your child's information at any time.",
+      "link": "How the parent summary works"
+    }
   }
 }

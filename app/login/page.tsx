@@ -97,6 +97,29 @@ export default async function LoginPage({
           {t("login.parentHow")}
         </a>
       </div>
+
+      {/*
+        WHAT WE KEEP, said before an account exists rather than after.
+
+        Until 3 Aug this screen said nothing at all: no notice, no privacy page,
+        no terms. For a product whose every user is 11–14 that is indefensible
+        however careful the engineering behind it is — a learner, or the parent
+        whose phone it is, could not find out what was collected even if they
+        went looking.
+
+        Deliberately one sentence and a link. A wall of policy text above the
+        sign-in button would be read by nobody and would push the actual control
+        below the fold, which is how disclosure becomes theatre.
+      */}
+      <p className="text-caption text-muted text-center text-balance">
+        {t("login.privacyNotice")}{" "}
+        <a
+          href="/privacy"
+          className="text-primary-strong underline underline-offset-4"
+        >
+          {t("login.privacyLink")}
+        </a>
+      </p>
     </main>
   );
 }

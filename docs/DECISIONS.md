@@ -121,6 +121,53 @@ Link-managed Google account. Those accounts sign in normally. On a shared phone 
 Google account may belong to the parent — acceptable, and it pairs naturally with
 the parent link code.
 
+### D2a — Parental consent: a notice now, verifiable consent before wide release (2026-08-03)
+
+**Prompted by a real Brilliant signup**, screenshotted by the user. Brilliant
+takes a parent's email, mails them an itemised list of what will be collected,
+activates the account only when the parent clicks **Give permission**, and
+**deletes everything after 14 days if permission never comes**. That is
+verifiable parental consent, and it is what India's DPDP Act §9(1) requires for
+under-18s — which in India means every single Dagar learner.
+
+**Dagar had nothing.** No consent flow, and — found while checking — no privacy
+page, no terms page, and no notice of any kind at signup. A learner or the
+parent whose phone it is could not have found out what was collected even if
+they went looking. For a product whose entire user base is 11–14 that is
+indefensible however careful the engineering behind it is.
+
+**What ships now**, before the class uses it on 5 Aug:
+
+- `/privacy` — everything kept, in words a 12-year-old and a parent can both
+  read, in Hindi and English. Three promises stated plainly: nothing is shared
+  with anyone, there are no adverts, it is free.
+- A one-line notice with that link **on the signup screen**, before an account
+  exists rather than after.
+- `docs/PARENT_NOTE.md` — a short message for the teacher to send parents in
+  either language. For a classroom deployment that note **is** the consent
+  channel, and it only works if it goes out before the link does.
+
+**What does NOT ship now, and why.** A blocking consent flow before Wednesday
+would mean a child on a shared phone cannot open a lesson until an adult finds
+the mail and clicks — and for this cohort that means most of them never start,
+which loses both the learning and the feedback the week exists for. There is
+also a reasonable basis for the classroom case specifically: the DPDP Rules'
+Fourth Schedule exempts **educational institutions processing children's data
+for academic activities** from §9(1). The school is the consent channel, as it
+has always been for material sent home.
+
+**That exemption covers consent. It does not cover analytics or profiling** —
+which is why it changes nothing about the decision to keep behavioural data in
+our own database and out of a third-party analytics platform.
+
+**Before Dagar goes to anyone beyond a teacher handing it to her own class, the
+Brilliant-style flow is required, not optional.** Parent's email at signup,
+itemised permission mail, account inactive until approved, delete-if-unapproved.
+It belongs on the roadmap as a release gate.
+
+None of this is legal advice and none of it was written by a lawyer. It is the
+honest version of what the product does, which is the part that was missing.
+
 ## D15 — Distribution: PWA now, Play Store later
 
 **Dagar is a mobile-first Progressive Web App, not a native APK.**
