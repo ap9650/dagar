@@ -223,6 +223,27 @@ and the rate reads low. Reading low is the safe direction for a number that ends
 up in a deck, which is why it was left uncorrected — but the fix belongs in the
 aggregation layer and this is where it is written down.
 
+### Each funnel stage includes everyone below it
+
+A learner who picked a class necessarily reached the grade picker; one who
+finished a lesson necessarily opened it. So each people stage counts its own
+learners **union everyone at a later stage**.
+
+This is inference, not invention, and it closes a real hole. The first run of
+the funnel against live data showed *"Got an account: 0 → Picked a class: 3"*,
+because `onboarding_started` only began existing on 4 August 2026 and everyone
+who registered before that has no row for it. Read literally, the funnel grows
+downward — which reads as a broken product rather than a gap in the history.
+
+It also makes the funnel monotonic by construction, so any future event that
+ships late, fails, or gets dropped degrades into "same as the stage below"
+rather than into a number that cannot be true.
+
+**The cost:** a stage can be inferred rather than observed, so it is a *ceiling*
+on the drop-off above it, never a floor. Where the two differ the funnel is
+generous to the earlier stage — which is the safe direction, because the
+drop-off we report comes out smaller than the real one rather than larger.
+
 ### The failure mode this section exists for
 
 `track()` fails open. On 4 August 2026 `events.student_id` referenced

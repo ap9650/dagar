@@ -7,10 +7,14 @@ import type { Database } from "./database.types";
  * Every policy written in supabase/migrations is inert here. This client can
  * read any learner's data and can read `questions.answer_value`.
  *
- * Use it for exactly three things:
+ * Use it for exactly four things:
  *   1. Grading an attempt (reading answer_value — app/api/attempts)
  *   2. Calling the derived-state functions (mastery, streaks, milestones)
  *   3. Server-owned writes with no user session (the weekly summary cron)
+ *   4. Aggregating `events` for /admin/metrics (lib/analytics/dashboard.ts).
+ *      `events` has no read policy at all, for anybody — cross-learner counts
+ *      are the one thing that legitimately needs to see past RLS, and that
+ *      module returns counts only, never an id.
  *
  * Never import this file into a Client Component, and never reach for it to
  * make an RLS problem go away — that deletes the boundary instead of fixing it.
