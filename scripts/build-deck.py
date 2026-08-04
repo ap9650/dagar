@@ -650,32 +650,33 @@ def s8_next(prs):
                        "what is fun to build. Depth before breadth: finish the "
                        "curriculum a learner is already in before adding another.")
     items = [
-        ("01", "The whole of Classes 6–8, not one chapter each",
+        ("01", "Parental consent, properly",
+         "A guardian approves the account before a child starts — the flow "
+         "Brilliant runs, and what India's DPDP Act asks for under-18s. Until "
+         "it exists Dagar can only go where a teacher hands it over in person.",
+         AMBER),
+        ("02", "The whole of Classes 6–8, not one chapter each",
          "Three chapters prove the model works. A learner runs out of Dagar in a "
          "week. Full-year mathematics for all three grades is the difference "
          "between a demo and something a child can actually use in October.",
          AMBER),
-        ("02", "More ways to interact with a lesson",
+        ("03", "More ways to interact with a lesson",
          "Today a learner can shade a fraction, drag a number onto a line and "
          "balance an equation. Junior classes want more of exactly this — and it "
          "is the part of the market that is thinnest.", AMBER),
-        ("03", "Hindi written as Hindi, not translated into it",
+        ("04", "Hindi written as Hindi, not translated into it",
          "Today the Hindi comes from the English. A Hindi-medium learner deserves "
          "lessons authored in Hindi, in the register a 12-year-old actually speaks "
          "— matching the textbook already open beside them.", PRIMARY),
-        ("04", "A parent who can see more than a summary",
+        ("05", "A parent who can see more than a summary",
          "Suresh gets a weekly note. Next he sees which topics she practised and "
          "where she is improving — enough to ask a real question on Sunday instead "
          "of \"are you studying?\"", PRIMARY),
-        ("05", "The weekly note, reliably delivered",
+        ("06", "The weekly note, reliably delivered",
          "The parent summary runs on a WhatsApp sandbox today, which drops a "
          "parent after three days. Getting onto WhatsApp Business is verification "
          "paperwork, and it makes the parent loop dependable rather than a demo.",
          HINT),
-        ("06", "Tell the learner when they level up",
-         "Practice already gets harder as they improve, and they cannot see it. "
-         "\"Nice — let's try a harder one\" on the way up, and silence on the way "
-         "down, so nobody is told they are failing.", HINT),
         ("07", "Deeper practice, so nothing repeats",
          "A tester retook a quiz and met the same eight questions. Enough questions "
          "per chapter that practice stays practice, and a learner can come back to "
@@ -705,10 +706,13 @@ def s9_roadmap(prs):
     # numbers nobody can reproduce is decoration.
     # (phase, phase colour, initiative, why it matters, I, C, E)
     rows = [
-        ("Phase 1", PRIMARY, "Full-year mathematics, Classes 6–8",
+        ("Phase 1", PRIMARY, "Parental consent before a child starts",
+         "A release gate, not a feature: without it Dagar cannot leave the classroom.",
+         9, 9, 5),
+        ("next 1–2 months", PRIMARY, "Full-year mathematics, Classes 6–8",
          "One chapter per grade proves the model. A learner exhausts it in a week.",
          9, 9, 6),
-        ("next 1–2 months", PRIMARY, "More ways to interact with a lesson",
+        ("", PRIMARY, "More ways to interact with a lesson",
          "The thinnest part of the market, and the reason juniors stay on a screen.",
          8, 8, 5),
         ("", PRIMARY, "Hindi authored natively, parent loop made reliable",
@@ -741,7 +745,7 @@ def s9_roadmap(prs):
         xs.append(acc)
         acc += cw
 
-    hh = 0.40
+    hh = 0.38
     box(s, M, y, CONTENT_W, 0.36, fill=SURFACE, line=BORDER)
     for (label, cw), cx in zip(cols, xs):
         text(s, cx, y, cw, 0.36,

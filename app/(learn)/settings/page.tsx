@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronRight, MessageSquare } from "lucide-react";
+import { ChevronRight, MessageSquare, ShieldCheck } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getCurrentProfile } from "@/lib/supabase/server";
 import { Card } from "@/components/ui/Card";
@@ -9,6 +9,7 @@ import { InviteParentCard } from "@/components/learn/InviteParentCard";
 import { InstallSettings } from "@/components/install/InstallSettings";
 import { HapticsToggle } from "@/components/settings/HapticsToggle";
 import { GradeSetting } from "@/components/settings/GradeSetting";
+import { DeleteAccountCard } from "@/components/settings/DeleteAccountCard";
 import type { Locale } from "@/i18n/config";
 import { BackLink } from "@/components/ui/BackLink";
 
@@ -110,9 +111,33 @@ export default async function SettingsPage() {
         </Link>
       </section>
 
+      {/* What we keep, reachable from inside the app and not only from the
+          sign-in screen. A learner who is already signed in — or the parent
+          holding the phone — has no other route to it, and "you can find out
+          what we store, but only before you have an account" is not a policy. */}
+      <section className="flex flex-col gap-md">
+        <h2 className="text-label text-muted">{t("privacy.sectionTitle")}</h2>
+        <Link
+          href="/privacy"
+          className="flex items-center gap-md min-h-14 px-lg rounded-(--radius-card)
+                     border border-border bg-background text-ink
+                     transition-colors duration-150 ease-out hover:bg-surface
+                     focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+        >
+          <ShieldCheck size={20} strokeWidth={1.75} aria-hidden className="text-primary shrink-0" />
+          <span className="text-body">{t("privacy.title")}</span>
+          <ChevronRight size={20} strokeWidth={1.75} aria-hidden className="ms-auto text-muted shrink-0" />
+        </Link>
+      </section>
+
       {/* Sign out is reachable in two taps from anywhere: /learn → here → out.
           On a shared phone that is the common path, not an edge case. */}
       <SignOutButton className="mt-auto" />
+
+      {/* Last on the page, below Sign out, and closed by default. This is the
+          only irreversible control in the product; it should be findable and
+          never in the way. */}
+      <DeleteAccountCard />
     </main>
   );
 }

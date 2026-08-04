@@ -440,6 +440,16 @@
       "title": "For parents",
       "body": "If you are a parent or guardian, you can see how your child is getting on through a weekly summary, without creating an account yourself. You can also ask us to delete your child's information at any time.",
       "link": "How the parent summary works"
-    }
+    },
+    "sectionTitle": "Your information"
+  },
+  "deleteAccount": {
+    "open": "Delete my account",
+    "title": "Delete your account?",
+    "body": "This removes your account and everything in it — the lessons you have finished, your practice, your streak and your badges. It cannot be undone, and we cannot get it back for you afterwards.",
+    "cancel": "Not now",
+    "confirm": "Yes, delete everything",
+    "deleting": "Deleting…",
+    "failed": "Something went wrong on our side and nothing was deleted. Try again?"
   }
 }
