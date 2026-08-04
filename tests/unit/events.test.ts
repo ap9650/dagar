@@ -67,6 +67,32 @@ describe("the canonical event list", () => {
   });
 });
 
+describe("docs/ANALYTICS.md stays in step with the code", () => {
+  const doc = readFileSync(join(ROOT, "docs/ANALYTICS.md"), "utf8");
+
+  it.each(EVENT_NAMES)("%s appears in the catalogue", (name) => {
+    // ANALYTICS.md is the stated single reference for both the event layer and
+    // the dashboard. A reference that silently omits an event is how a number
+    // gets built on a definition nobody wrote down — so the omission is a test
+    // failure, not a documentation debt.
+    expect(doc).toContain(`\`${name}\``);
+  });
+
+  it("names every table the dashboard reads", () => {
+    for (const table of [
+      "attempts",
+      "concept_mastery",
+      "streaks",
+      "exit_reasons",
+      "product_feedback",
+      "ai_calls",
+      "summary_links",
+    ]) {
+      expect(doc).toContain(table);
+    }
+  });
+});
+
 describe("anonymous events", () => {
   it("are all on the canonical list", () => {
     for (const name of ANONYMOUS_EVENTS) {

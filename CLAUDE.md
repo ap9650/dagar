@@ -13,6 +13,8 @@ of the ESLint CLI. Read `node_modules/next/dist/docs/` before writing app code.
 - `docs/DECISIONS.md` — implementation decisions the PRD left open. Source of truth.
 - `docs/DATA_MODEL.md` — schema, RLS shape, canonical event names.
 - `docs/SCREENS.md` — every screen and flow. **Load before building any screen.**
+- `docs/ANALYTICS.md` — the event catalogue and the metrics dashboard spec, in one
+  place because they fail as two. **Load before touching an event or `/admin/metrics`.**
 - `docs/specs/<slice>.md` — per-slice API contract, acceptance criteria, edge cases.
   **If a spec exists for the slice you're building, it is the brief.** Specs reference
   the docs above and never restate them; see `docs/specs/README.md`.
