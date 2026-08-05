@@ -498,7 +498,8 @@
     "fri": "F",
     "sat": "S",
     "sun": "S",
-    "summary": "{days, plural, =0 {No days yet this week} one {# day this week} other {# days this week}}"
+    "summary": "{days, plural, =0 {No days yet this week} one {# day this week} other {# days this week}}",
+    "restDay": "Rest day"
   },
   "moved": {
     "title": "What moved",

@@ -179,6 +179,12 @@ export default async function ProgressPage() {
   const week = weekOfActivity(
     (weekLessons ?? []).map((row) => row.completed_at).filter((at): at is string => Boolean(at)),
     (weekPractice ?? []).map((row) => row.created_at),
+    new Date(),
+    // Only while the streak is alive — the same condition as the rung bar above,
+    // and for the same reason. `grace_used_on` keeps its value after a streak
+    // breaks, and marking a rest day on a screen that is saying "start again
+    // today" would describe a streak that is no longer there.
+    streak.alive ? (streakRow?.grace_used_on ?? null) : null,
   );
 
   const completedLessonIds = new Set((weekLessons ?? []).map((row) => row.lesson_id));

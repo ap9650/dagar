@@ -16,11 +16,20 @@ import { PRACTICE_QUESTIONS_FOR_GOAL } from "./dailyGoal";
  * not moved, and two elements on one screen contradicting each other is worse
  * than either being absent.
  *
- * ── AND IT DOES NOT SHOW THE GRACE DAY ──────────────────────────────────────
+ * ── THE GRACE DAY IS NAMED, NOT FILLED ──────────────────────────────────────
  * D7 forgives one missed day per rolling week, so a learner can have an unfilled
- * square and an unbroken streak. That is not a contradiction, it is the grace
- * day working — and the streak card says so in words. Drawing a missed day as
- * filled would be the app lying about a day the learner knows they missed.
+ * square and an unbroken streak. Drawing that day as filled would be the app
+ * lying about a day the learner knows they missed — that part was always right.
+ *
+ * But leaving it identical to an ordinary gap was the other half of the problem,
+ * and it was reported: the streak card said "3 day streak · rest day used" while
+ * the strip showed two squares and a hole indistinguishable from any other. Two
+ * elements on one screen appearing to contradict each other, which is exactly
+ * what this file's other rule exists to prevent.
+ *
+ * So a forgiven day is marked AS a rest day — its own state, third of three.
+ * That is not a lie: `streaks.grace_used_on` records precisely which date was
+ * forgiven, so the square can say the true thing rather than nothing.
  */
 
 /** A day counts on one completed lesson OR five practice questions (D7). */
@@ -35,6 +44,11 @@ export type WeekDay = {
   met: boolean;
   /** Today's square is outlined rather than empty — the day is not over yet. */
   isToday: boolean;
+  /**
+   * A day the streak forgave (D7). Never true at the same time as `met` — a day
+   * that met the goal needed no forgiving.
+   */
+  rested: boolean;
 };
 
 /**
@@ -53,6 +67,15 @@ export function weekOfActivity(
   lessonCompletedAt: readonly string[],
   practiceAt: readonly string[],
   now: Date = new Date(),
+  /**
+   * `streaks.grace_used_on` — the one date the streak forgave, or null.
+   *
+   * Callers pass it only while the streak is ALIVE. The column keeps its value
+   * after a streak breaks, and calling a day "rest" on a screen that is telling
+   * the learner to start again would be describing a streak that no longer
+   * exists.
+   */
+  graceUsedOn: string | null = null,
 ): WeekDay[] {
   const lessonsByDay = countByDay(lessonCompletedAt);
   const practiceByDay = countByDay(practiceAt);
@@ -63,10 +86,14 @@ export function weekOfActivity(
     const at = new Date(now);
     at.setUTCDate(at.getUTCDate() - back);
     const date = istDate(at);
+    const met = dayQualified(lessonsByDay.get(date) ?? 0, practiceByDay.get(date) ?? 0);
     days.push({
       date,
-      met: dayQualified(lessonsByDay.get(date) ?? 0, practiceByDay.get(date) ?? 0),
+      met,
       isToday: date === today,
+      // `!met` guards the impossible-but-cheap case: a day that qualified was
+      // never forgiven, and two states on one square would have to pick one.
+      rested: !met && date === graceUsedOn,
     });
   }
   return days;
