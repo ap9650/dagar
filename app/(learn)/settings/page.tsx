@@ -8,6 +8,7 @@ import { SignOutButton } from "@/components/auth/SignOutButton";
 import { InviteParentCard } from "@/components/learn/InviteParentCard";
 import { InstallSettings } from "@/components/install/InstallSettings";
 import { HapticsToggle } from "@/components/settings/HapticsToggle";
+import { ReminderSetting } from "@/components/settings/ReminderSetting";
 import { GradeSetting } from "@/components/settings/GradeSetting";
 import { DeleteAccountCard } from "@/components/settings/DeleteAccountCard";
 import type { Locale } from "@/i18n/config";
@@ -73,6 +74,12 @@ export default async function SettingsPage() {
           heading has to live inside it, or an iPhone gets a section title with
           nothing under it. */}
       <HapticsToggle />
+
+      {/* Next to haptics because they are the same kind of thing: how much
+          the app is allowed to interrupt you. An invitation you cannot
+          decline afterwards is not one — and without an easy off switch a
+          learner blocks the site instead, which cannot be undone from here. */}
+      <ReminderSetting />
 
       {/* The install route that does not depend on having caught a prompt.
           The dashboard card offers once and can be dismissed — for a while it

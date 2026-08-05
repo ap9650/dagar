@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Celebration } from "./Celebration";
 import { FeedbackPrompt } from "./FeedbackPrompt";
+import { ReminderPrompt } from "./ReminderPrompt";
 import type { useLessonCompletion } from "./useLessonCompletion";
 
 /**
@@ -90,8 +91,14 @@ export function LessonActions({
 
       <Celebration moment={moment} onDismiss={dismissMoment} />
 
-      {/* Only after finishing, and BELOW the next action — so anyone carrying
-          straight on to practice never has to read it. See FeedbackPrompt. */}
+      {/* Both only after finishing, and BELOW the next action — so anyone
+          carrying straight on to practice never has to read either.
+
+          The reminder offer comes FIRST because it is the one with a cost to
+          getting wrong: a browser remembers a refused notification permission
+          for good, and Dagar cannot ask again from inside the app. Feedback can
+          be asked for again any time. */}
+      {complete && <ReminderPrompt />}
       {complete && <FeedbackPrompt />}
     </div>
   );

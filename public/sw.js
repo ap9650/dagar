@@ -124,3 +124,71 @@ self.addEventListener("fetch", (event) => {
     })(),
   );
 });
+
+/* ───────────────────────────────────────────────────────────────────────────
+   PUSH — the daily reminder (D17b).
+
+   Nothing here caches, reads or stores anything about a learner. The payload
+   carries only what the notification says and where tapping it goes, which is
+   what keeps this file's promise above intact on a shared phone: a push that
+   arrives while a sibling is holding the handset reveals no progress, no name
+   and no data.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+self.addEventListener("push", (event) => {
+  // A push with no payload, or an unparseable one, is dropped rather than shown
+  // as an empty notification. "Dagar" with a blank body on someone's lock
+  // screen is worse than silence.
+  if (!event.data) return;
+
+  let payload;
+  try {
+    payload = event.data.json();
+  } catch {
+    return;
+  }
+  if (!payload?.title || !payload?.body) return;
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title, {
+      body: payload.body,
+      icon: "/icons/icon-192.png",
+      badge: "/icons/icon-192.png",
+      // One reminder replaces the last. Without a tag, an evening nudge stacks
+      // under an afternoon one and a learner wakes to a pile — which is the
+      // escalating-nag pattern D17 refuses, assembled by accident.
+      tag: "dagar-reminder",
+      renotify: false,
+      // Never `requireInteraction`. A notification a child cannot dismiss by
+      // swiping is a notification that punishes them for not doing homework.
+      data: { url: payload.url || "/learn" },
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const target = event.notification.data?.url || "/learn";
+
+  event.waitUntil(
+    (async () => {
+      // Focus an open Dagar rather than opening a second one. A learner who
+      // already has the app open and taps the reminder should land in the tab
+      // they were using, not in a duplicate that has lost their place.
+      const clients = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      });
+
+      for (const client of clients) {
+        if (new URL(client.url).origin === self.location.origin) {
+          await client.focus();
+          if ("navigate" in client) await client.navigate(target);
+          return;
+        }
+      }
+
+      await self.clients.openWindow(target);
+    })(),
+  );
+});

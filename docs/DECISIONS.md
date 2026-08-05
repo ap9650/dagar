@@ -740,6 +740,47 @@ learner is delivered to the person whose opinion they care about most.
   easily as a learner in week 1, and an app that quietly stops reminding you is an
   app that decides on your behalf that you no longer need help.
 
+### D17b-i — Two a day, and the second is conditional (5 Aug 2026)
+
+**Revises the one-a-day cap**, on the product owner's call. That cap was set in
+July before there was a cohort, and the argument against it is stronger: a
+learner who forgets loses a streak they earned, and one reminder is a thin
+defence against a habit that does not yet exist.
+
+| Slot | Fires only if | Says |
+|---|---|---|
+| **~4pm** after school | today's goal not done | "Ready for today's lesson?" |
+| **~8pm** after dinner | goal **still** not done | "Still time — one more day makes it 4." |
+
+**What makes two safe is not the number — it is that the second is
+conditional.** A learner who studies after school gets **zero** notifications;
+one who studies in the evening gets **one**; only a learner who has not shown up
+at all gets **two**. The volume lands exactly on the people it is for and never
+on the ones already doing the work, which is also what defuses the shared-phone
+worry: a parent watching an engaged child sees almost nothing.
+
+**Two, never three.** The cost of a third is not annoyance, it is the permission
+being revoked — and once notifications are blocked they cannot be re-requested
+from inside the app. Better to spend that effort on the 8pm wording.
+
+**The evening line carries the stake as an opportunity.** When a learner is one
+day from a streak rung, the copy names it: *"One more day and you reach a 7-day
+streak."* That is the only moment a reminder carries information the learner
+does not already have. What it never becomes is *"your streak is at risk"* — the
+same fact as a threat, delivered to a parent's phone.
+
+Anchored to a **routine, never a deadline**. The IST day runs to midnight, so
+8pm is a window, not a countdown — and Vercel's Hobby cron fires within the hour
+of its schedule, which is fine for a routine and would be useless for a
+deadline. One more reason not to build one.
+
+`tests/unit/reminders.test.ts` bans the countdown vocabulary in both languages,
+because copy is the risk here and a banned substring cannot be argued with.
+
+**Built 5 Aug 2026** — migration 0028, `lib/notify/push.ts`, the service worker's
+push handler, and two Vercel crons. Note that D17b had been *decided* since July
+and never built; nothing existed until now.
+
   Fatigue is controlled by the **skip rule, not by frequency**: on any day the goal
   is already met, nothing is sent. So an engaged learner naturally receives fewer
   notifications, without the schedule ever having to guess whether they still need

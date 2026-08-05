@@ -522,5 +522,24 @@
     "rungDays": "{days} days",
     "rungIdeas": "{count} ideas",
     "rungChapters": "{count} chapters"
+  },
+  "reminders": {
+    "title": "Want a nudge?",
+    "body": "We can remind you once or twice a day, so a good streak does not slip.",
+    "enable": "Yes, remind me",
+    "notNow": "Not now",
+    "enabled": "We will nudge you. You can turn this off in Settings.",
+    "blocked": "Your browser has blocked notifications for Dagar. You can turn them back on in your browser settings.",
+    "settingsTitle": "Daily reminder",
+    "settingsOn": "On",
+    "settingsOff": "Off",
+    "iosHint": "On an iPhone, add Dagar to your home screen first."
+  },
+  "push": {
+    "afternoonTitle": "Dagar",
+    "afternoonBody": "Ready for today's lesson?",
+    "eveningTitle": "Dagar",
+    "eveningBody": "Still time for today's lesson.",
+    "rungBody": "One more day and you reach a {days}-day streak."
   }
 }
