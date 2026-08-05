@@ -476,5 +476,34 @@
       "duplicate": "I made another account by mistake",
       "other": "Something else"
     }
+  },
+  "level": {
+    "not_started": "Not started",
+    "practising": "Keep practising",
+    "getting_there": "Getting there",
+    "mastered": "Mastered"
+  },
+  "week": {
+    "title": "This week",
+    "mon": "M",
+    "tue": "T",
+    "wed": "W",
+    "thu": "T",
+    "fri": "F",
+    "sat": "S",
+    "sun": "S",
+    "summary": "{days, plural, =0 {No days yet this week} one {# day this week} other {# days this week}}"
+  },
+  "moved": {
+    "title": "What moved",
+    "empty": "A fresh week — the first thing you finish shows up here.",
+    "level": "{concept} → {level}",
+    "lesson": "Finished {lesson}",
+    "chapter": "Finished the chapter {chapter}",
+    "badge": "New badge: {badge}"
+  },
+  "chapterLevel": {
+    "conceptsMastered": "{mastered} of {total} ideas mastered",
+    "quizLeft": "Master every idea, then pass the chapter quiz."
   }
 }

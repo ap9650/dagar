@@ -122,6 +122,7 @@ reason, and because the grade picker has a session to attribute it to.
 | `dashboard_viewed` | every `/learn` render | `recommendation`, `reason` | Return days, Recommendation Acceptance denominator |
 | `recommendation_clicked` | at the **destination** of the next-action card | `target` | Recommendation Acceptance numerator |
 | `chapter_opened` | `/learn/[chapter]` render | `chapter_id`, `lessons` | Chapter-picker drop-off |
+| `concept_level_changed` | `POST /api/attempts` and `POST /api/quiz/[id]/submit`, when a level moves | `concept_id`, `from`, `to` | The “what moved this week” diary; learning-outcome tracking |
 | `lesson_started` | `POST /api/lessons/[id]/start` | `lesson_id` | Funnel stage 5 |
 | `lesson_completed` | `POST /api/lessons/[id]/complete`, first time only | `lesson_id` | Funnel stage 6, activation |
 | `chapter_completed` | same route, when the last lesson of a chapter completes | `chapter_id`, `lessons` | Funnel stage 7 — the outcome |
@@ -168,6 +169,7 @@ makes the rates read worse.
 | Individual practice attempts | Every attempt is already a row in `attempts` with correctness, hints used and timing. An event would duplicate it less well. |
 | Signing in | `dashboard_viewed` already stamps a day per learner, so return rate needs no second session marker. |
 | Per-step lesson progress | The most invasive grain available, and unreadable at cohort sizes under a hundred. Revisit only with a specific question it answers. |
+| A level going *down*, hidden | `concept_level_changed` fires in **both** directions, because mastery genuinely falls — the score is a five-attempt window — and the metrics should see the real picture. The progress screen shows only the rises. That filtering is a presentation choice made on the screen, never in the record: *"Fractions went backwards on Thursday"* is not a sentence this product says to a child, but it is a fact worth having. |
 
 ---
 

@@ -69,6 +69,19 @@ export const EVENT_NAMES = [
   // when the screen's does.
   "chapter_opened",
 
+  // ── The diary's only source, added 5 Aug 2026 ────────────────────────────
+  // `concept_mastery` stores the CURRENT state and nothing else, so there was
+  // no way to know a learner moved from "Getting there" to "Mastered" on
+  // Tuesday — the fact existed for one instant inside a database function and
+  // was overwritten. This records it.
+  //
+  // Carries `from` and `to`, and fires in BOTH directions. Mastery genuinely
+  // falls, and analytics should see the real picture; the progress screen shows
+  // only upward moves, which is a presentation choice made where it belongs.
+  //
+  // It cannot be backdated: nothing before this event existed is recoverable.
+  "concept_level_changed",
+
   // `quiz_submitted` had no denominator, so quiz abandonment read as zero.
   "quiz_started",
 

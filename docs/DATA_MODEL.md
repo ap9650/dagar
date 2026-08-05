@@ -103,7 +103,7 @@ Canonical event names — **use these exact strings**, they map to PRD §12:
 ```
 welcome_viewed       login_viewed        onboarding_started
 learner_registered   lesson_started      lesson_completed
-chapter_opened       chapter_completed
+chapter_opened       chapter_completed   concept_level_changed
 ai_question_asked    hint_requested
 practice_started     practice_completed
 quiz_started         quiz_submitted

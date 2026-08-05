@@ -11,6 +11,7 @@ import { ladderFrom } from "@/lib/learning/adaptivity";
 import { detectStruggle } from "@/lib/learning/struggle";
 import { HINT_TIERS } from "@/lib/learning/hints";
 import { PRACTICE_QUESTIONS_FOR_GOAL } from "@/lib/learning/dailyGoal";
+import { conceptLevel } from "@/lib/learning/levels";
 import { istDate, istDayStart } from "@/lib/learning/dates";
 import { t as tContent } from "@/lib/i18n/content";
 import type { Locale } from "@/i18n/config";
@@ -168,6 +169,24 @@ export async function POST(request: Request) {
   let mentorTrigger: string | null = null;
 
   try {
+    /**
+     * ── READ THE LEVEL BEFORE THE RECOMPUTE OVERWRITES IT ──────────────────
+     * `concept_mastery` holds the current state and no history, so the fact
+     * that a learner moved from "Getting there" to "Mastered" exists for one
+     * instant — inside the RPC, between the select and the upsert — and is then
+     * gone. Reading first is the only way to know a level changed at all, and
+     * the diary on `/progress` has nothing to show without it.
+     *
+     * One extra select on the practice hot path, which is the price of the
+     * screen being able to prove yesterday happened.
+     */
+    const { data: before } = await admin
+      .from("concept_mastery")
+      .select("score, attempts_count, is_mastered")
+      .eq("student_id", auth.userId)
+      .eq("concept_id", question.concept_id)
+      .maybeSingle();
+
     const { data: mastery } = await admin.rpc("recompute_concept_mastery", {
       p_student_id: auth.userId,
       p_concept_id: question.concept_id,
@@ -177,6 +196,24 @@ export async function POST(request: Request) {
       masteryScore = Number(mastery.score);
       masteryAttempts = mastery.attempts_count;
       masteryIsMastered = mastery.is_mastered;
+
+      // Both directions. Mastery falls as well as rises and analytics should
+      // see the truth; `/progress` shows only the rises, which is a decision
+      // made where it belongs — in the screen, not in the record.
+      const fromLevel = conceptLevel(before);
+      const toLevel = conceptLevel({
+        score: masteryScore,
+        attempts_count: masteryAttempts,
+        is_mastered: masteryIsMastered,
+      });
+
+      if (fromLevel !== toLevel) {
+        await track("concept_level_changed", {
+          concept_id: question.concept_id,
+          from: fromLevel,
+          to: toLevel,
+        });
+      }
     }
 
     // ── D7: five practice questions closes the day ─────────────────────────

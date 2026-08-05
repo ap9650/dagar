@@ -9,6 +9,7 @@ import { track } from "@/lib/analytics/track";
 import { gradeQuizSubmission } from "@/lib/learning/quiz";
 import { detectStruggle } from "@/lib/learning/struggle";
 import { HINT_TIERS } from "@/lib/learning/hints";
+import { conceptLevel } from "@/lib/learning/levels";
 import { t as tContent } from "@/lib/i18n/content";
 import type { Locale } from "@/i18n/config";
 
@@ -92,11 +93,47 @@ export async function POST(
   let mentorConceptId: string | null = null;
 
   try {
+    /**
+     * The same before/after read as the practice route, and for the same
+     * reason: `concept_mastery` keeps no history, so a level change exists only
+     * in the gap between these two calls. A quiz can move several concepts at
+     * once — it is the one moment in the product where a learner's whole
+     * chapter standing can shift — so leaving it out would mean the diary
+     * silently skipped the biggest day a learner has.
+     *
+     * Read in one query rather than per concept: a chapter quiz touches every
+     * concept in the chapter, and a select each would be four round trips
+     * inside a request the learner is waiting on.
+     */
+    const { data: beforeRows } = await admin
+      .from("concept_mastery")
+      .select("concept_id, score, attempts_count, is_mastered")
+      .eq("student_id", auth.userId)
+      .in("concept_id", graded.conceptIds);
+
+    const before = new Map((beforeRows ?? []).map((row) => [row.concept_id, row]));
+
     for (const conceptId of graded.conceptIds) {
-      await admin.rpc("recompute_concept_mastery", {
+      const { data: after } = await admin.rpc("recompute_concept_mastery", {
         p_student_id: auth.userId,
         p_concept_id: conceptId,
       });
+      if (!after) continue;
+
+      const fromLevel = conceptLevel(before.get(conceptId));
+      const toLevel = conceptLevel({
+        score: Number(after.score),
+        attempts_count: after.attempts_count,
+        is_mastered: after.is_mastered,
+      });
+
+      if (fromLevel !== toLevel) {
+        await track("concept_level_changed", {
+          concept_id: conceptId,
+          from: fromLevel,
+          to: toLevel,
+        });
+      }
     }
 
     // Runs AFTER every concept is recomputed, not inside the loop: `chapter_mastered`

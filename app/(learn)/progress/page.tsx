@@ -9,10 +9,15 @@ import { fromRow, streakStatus } from "@/lib/learning/streaks";
 import { rungProgress } from "@/lib/learning/streakLadder";
 import { earnedCount, milestoneGrid } from "@/lib/learning/milestones";
 import { chapterMastery, type MasteryBand } from "@/lib/learning/mastery";
+import { chapterLevel, conceptLevel, type Level } from "@/lib/learning/levels";
+import { weekOfActivity } from "@/lib/learning/week";
+import { buildDiary, DIARY_EVENTS } from "@/lib/learning/diary";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { MilestoneGrid } from "@/components/learn/MilestoneGrid";
+import { WeekStrip } from "@/components/learn/WeekStrip";
+import { WhatMoved } from "@/components/learn/WhatMoved";
 import { cn } from "@/lib/cn";
 import type { Locale } from "@/i18n/config";
 import { BackLink } from "@/components/ui/BackLink";
@@ -51,6 +56,14 @@ export default async function ProgressPage() {
   const today = istDate();
   const todayStart = istDayStart(today).toISOString();
 
+  // Seven days back from IST MIDNIGHT, not from "now minus 8 days".
+  //
+  // Anchoring to the day boundary is what makes the oldest square whole: from
+  // `now` it would start mid-morning and silently clip work the learner did
+  // early on that day. It also keeps `Date.now()` out of the render, which the
+  // React compiler flags as impure — the two reasons happen to agree.
+  const weekAgo = new Date(istDayStart(today).getTime() - 7 * 86_400_000).toISOString();
+
   const [
     { data: chapters },
     { data: mastery },
@@ -58,6 +71,11 @@ export default async function ProgressPage() {
     { data: earned },
     { count: lessonsToday },
     { count: practiceToday },
+    { data: weekLessons },
+    { data: weekPractice },
+    { data: diaryEvents },
+    { data: allLessons },
+    { data: passedQuizzes },
   ] = await Promise.all([
     supabase
       .from("chapters")
@@ -90,6 +108,52 @@ export default async function ProgressPage() {
       .eq("student_id", studentId)
       .eq("session_kind", "practice")
       .gte("created_at", todayStart),
+
+    // ── the last seven days ─────────────────────────────────────────────────
+    // Timestamps, not counts: the squares are per-day and the IST grouping
+    // happens in `weekOfActivity`, so that a lesson finished at 11:50pm lands
+    // on the day the learner thinks it did.
+    supabase
+      .from("lesson_progress")
+      .select("completed_at, lesson_id")
+      .eq("student_id", studentId)
+      .eq("status", "completed")
+      .gte("completed_at", weekAgo),
+    supabase
+      .from("attempts")
+      .select("created_at")
+      .eq("student_id", studentId)
+      .eq("session_kind", "practice")
+      .gte("created_at", weekAgo),
+
+    // ── the diary ───────────────────────────────────────────────────────────
+    // Under the learner's own session, never the service role: RLS is what
+    // keeps one child's history out of another's screen, and on a learner-facing
+    // page that boundary should not be a `.eq()` somebody has to remember.
+    // `events` was insert-only until 0026 added the own-rows read policy — the
+    // filter below is belt to that policy's braces.
+    supabase
+      .from("events")
+      .select("name, props, created_at")
+      .eq("student_id", studentId)
+      .in("name", DIARY_EVENTS)
+      .gte("created_at", weekAgo)
+      .order("created_at", { ascending: false })
+      .limit(200),
+
+    // Titles for the diary. Whole-curriculum rather than per-entry: four
+    // lookups against small seeded tables beat one query per line.
+    supabase.from("lessons").select("id, title, i18n"),
+
+    // Which chapter quizzes have been passed at the Mastered band — the last
+    // condition on a chapter reaching Mastered (Khan Academy's rule: the top
+    // level cannot be earned by drilling one concept's practice).
+    supabase
+      .from("quiz_sessions")
+      .select("chapter_id, mastery_band")
+      .eq("student_id", studentId)
+      .eq("mastery_band", "mastered")
+      .not("submitted_at", "is", null),
   ]);
 
   const streak = streakStatus(fromRow(streakRow), today);
@@ -106,6 +170,31 @@ export default async function ProgressPage() {
   const masteredIds = new Set(
     (mastery ?? []).filter((m) => m.is_mastered).map((m) => m.concept_id),
   );
+
+  const week = weekOfActivity(
+    (weekLessons ?? []).map((row) => row.completed_at).filter((at): at is string => Boolean(at)),
+    (weekPractice ?? []).map((row) => row.created_at),
+  );
+
+  const diary = buildDiary(diaryEvents ?? []);
+
+  const quizPassedChapters = new Set((passedQuizzes ?? []).map((row) => row.chapter_id));
+
+  // Names in the learner's language, for the diary's lines. Built from the
+  // curriculum we already fetched plus the lesson list.
+  const diaryNames = {
+    concepts: new Map(
+      (chapters ?? []).flatMap((chapter) =>
+        chapter.concepts.map((c) => [c.id, tContent(c, "name", locale)] as const),
+      ),
+    ),
+    lessons: new Map(
+      (allLessons ?? []).map((lesson) => [lesson.id, tContent(lesson, "title", locale)] as const),
+    ),
+    chapters: new Map(
+      (chapters ?? []).map((chapter) => [chapter.id, tContent(chapter, "title", locale)] as const),
+    ),
+  };
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
@@ -184,10 +273,22 @@ export default async function ProgressPage() {
         </div>
       </section>
 
+      {/* ── the last seven days ──────────────────────────────────────────── */}
+      {/* Directly under the streak, because it is the same fact drawn a second
+          way: the flame says how long, the squares say which days. Reading them
+          together is how a learner sees a grace day rather than a mistake. */}
+      <WeekStrip week={week} />
+
       {/* ── today's goal (D17) — the same rule as the streak ─────────────── */}
       <section aria-label={t("dashboard.dailyGoalTitle")}>
         <DailyGoalRing goal={goal} />
       </section>
+
+      {/* ── what moved this week ─────────────────────────────────────────── */}
+      {/* ABOVE the concept list and the badges, both of which report state.
+          A learner opening this screen should meet the evidence that yesterday
+          happened before they meet another table of where they currently are. */}
+      <WhatMoved entries={diary} names={diaryNames} />
 
       {/* ── mastery per concept (D5) ─────────────────────────────────────── */}
       <section aria-labelledby="concepts-heading" className="flex flex-col gap-lg">
@@ -207,36 +308,70 @@ export default async function ProgressPage() {
               masteredIds,
             );
 
+            /**
+             * ── THE ROLL-UP ────────────────────────────────────────────────
+             * The chapter's own level, in the same four words a concept uses.
+             * This is the answer to a parent's "what level is my child at" —
+             * previously unanswerable without reading four rows and doing the
+             * arithmetic yourself.
+             *
+             * Deliberately the SAME vocabulary at both scales: a learner should
+             * not have to hold two ladders in their head for one idea.
+             */
+            const level = chapterLevel({
+              total: chapterProgress.total,
+              mastered: chapterProgress.mastered,
+              started: concepts.some(
+                (c) => (masteryByConcept.get(c.id)?.attempts_count ?? 0) > 0,
+              ),
+              quizPassed: quizPassedChapters.has(chapter.id),
+            });
+
             return (
               <div key={chapter.id} className="flex flex-col gap-md">
+                <div className="flex items-center justify-between gap-md">
+                  <h3 className="text-h3 text-ink min-w-0">
+                    {tContent(chapter, "title", locale)}
+                  </h3>
+                  <Badge tone={badgeToneFor(level)} className="shrink-0">
+                    {t(`level.${level}` as never)}
+                  </Badge>
+                </div>
+
                 <ProgressBar
                   value={chapterProgress.mastered}
                   max={chapterProgress.total}
                   // A bar is always paired with a number (design rule: "a ring
                   // alone is not readable to everyone").
-                  label={t("progress.chapterMastery", {
-                    chapter: tContent(chapter, "title", locale),
+                  label={t("chapterLevel.conceptsMastered", {
                     mastered: chapterProgress.mastered,
                     total: chapterProgress.total,
                   })}
                 />
 
+                {/* Says what the last step is rather than leaving a learner to
+                    guess why four mastered ideas did not make a mastered
+                    chapter. Only when that IS the remaining step. */}
+                {chapterProgress.mastered === chapterProgress.total &&
+                  chapterProgress.total > 0 &&
+                  !quizPassedChapters.has(chapter.id) && (
+                    <p className="text-body-sm text-muted">{t("chapterLevel.quizLeft")}</p>
+                  )}
+
                 <ul className="flex flex-col gap-sm">
                   {concepts.map((concept) => {
-                    const row = masteryByConcept.get(concept.id);
-                    const attempts = row?.attempts_count ?? 0;
-
                     // A concept nobody has attempted shows "Not started", never
                     // 0% (spec §7). A learner who has not begun something is not
                     // failing at it, and 0% reads as failure.
+                    //
+                    // The thresholds used to be written out here, and again on
+                    // the dashboard, and again on the chapter page. They live in
+                    // `conceptLevel` now — a fourth copy would have decided when
+                    // the diary announces a move, and a copy disagreeing by 0.01
+                    // would announce moves no screen ever showed.
+                    const conceptState = conceptLevel(masteryByConcept.get(concept.id));
                     const band: MasteryBand | null =
-                      attempts === 0
-                        ? null
-                        : row!.is_mastered
-                          ? "mastered"
-                          : row!.score >= 0.5
-                            ? "developing"
-                            : "needs_revision";
+                      conceptState === "not_started" ? null : badgeToneFor(conceptState);
 
                     return (
                       <li
@@ -290,4 +425,26 @@ export default async function ProgressPage() {
       </section>
     </main>
   );
+}
+
+/**
+ * A level's badge tone.
+ *
+ * The `Badge` component's tones predate levels and are named for the mastery
+ * bands (D5). Mapping here rather than renaming the tones keeps one vocabulary
+ * for learners — four level words — without churning a primitive that quiz
+ * results and practice feedback also use.
+ *
+ * `not_started` has no tone: it renders as `neutral`, and callers that want no
+ * badge at all check the level itself first.
+ */
+function badgeToneFor(level: Level): MasteryBand {
+  switch (level) {
+    case "mastered":
+      return "mastered";
+    case "getting_there":
+      return "developing";
+    default:
+      return "needs_revision";
+  }
 }

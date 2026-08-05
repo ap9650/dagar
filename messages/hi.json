@@ -476,5 +476,34 @@
       "duplicate": "मैंने गलती से दूसरा खाता बना लिया था",
       "other": "कुछ और"
     }
+  },
+  "level": {
+    "not_started": "शुरू नहीं किया",
+    "practising": "और प्रैक्टिस करो",
+    "getting_there": "अच्छा चल रहा है",
+    "mastered": "पक्का हो गया"
+  },
+  "week": {
+    "title": "इस हफ़्ते",
+    "mon": "सो",
+    "tue": "मं",
+    "wed": "बु",
+    "thu": "गु",
+    "fri": "शु",
+    "sat": "श",
+    "sun": "र",
+    "summary": "{days, plural, =0 {इस हफ़्ते अभी कुछ नहीं} one {इस हफ़्ते # दिन} other {इस हफ़्ते # दिन}}"
+  },
+  "moved": {
+    "title": "क्या बदला",
+    "empty": "नया हफ़्ता — जो पहला काम पूरा करोगे वो यहाँ दिखेगा।",
+    "level": "{concept} → {level}",
+    "lesson": "{lesson} पूरा किया",
+    "chapter": "{chapter} चैप्टर पूरा किया",
+    "badge": "नया बैज: {badge}"
+  },
+  "chapterLevel": {
+    "conceptsMastered": "{total} में से {mastered} बातें पक्की",
+    "quizLeft": "हर बात पक्की करो, फिर चैप्टर क्विज़ दो।"
   }
 }
