@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { requireAdmin } from "@/lib/security/adminGuard";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { getCurrentUser } from "@/lib/supabase/server";
+import { planReminders } from "@/lib/notify/reminderPlan";
 import { pushConfigured } from "@/lib/notify/push";
 import { DryRun, NotificationTester, SummaryPreview } from "@/components/admin/NotificationTester";
 import type { Locale } from "@/i18n/config";
@@ -28,6 +31,18 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminNotificationsPage() {
   await requireAdmin();
+
+  /*
+    The real decision for THIS operator's own devices, read through the same
+    planner the cron sends from. Shown beside the delivery buttons, which do not
+    consult it — see the note further down for why that confusion was worth
+    designing out rather than explaining once.
+  */
+  const me = await getCurrentUser();
+  const mine =
+    (await planReminders(createAdminClient(), "evening")).find(
+      (item) => item.subscription.student_id === me?.id,
+    ) ?? null;
 
   // The real strings, read the way the cron reads them — not retyped here. If
   // someone edits the copy, this screen changes with it, which is the only way
@@ -125,11 +140,44 @@ export default async function AdminNotificationsPage() {
 
       {/* ── the messages ────────────────────────────────────────────────── */}
       <section className="flex flex-col gap-md">
-        <h2 className="text-h3 text-ink">The daily reminders</h2>
+        <h2 className="text-h3 text-ink">Does a notification reach my phone?</h2>
         <p className="text-body-sm text-muted">
           Sending goes only to devices signed in on <em>this</em> account — never to a
           learner. Turn reminders on in Settings on the phone you want to test, then send.
         </p>
+
+        {/*
+          ── SAYING THE QUIET PART, BECAUSE IT WAS MISREAD ───────────────────
+          Reported after a careful test: finish a lesson, press send, and the
+          notification still arrives — which looks like the skip rule failing.
+
+          It is not. These buttons are a DELIVERY test and deliberately bypass
+          the goal check, because a button that respected it would refuse to
+          send the moment the tester had studied — exactly when they are most
+          likely to be testing. But nothing on screen said so, and two controls
+          on one page that appear to simulate the same job while obeying
+          different rules is a trap the page laid itself.
+
+          The live line below is the fix: the real decision, for this account,
+          right now, next to the button that ignores it.
+        */}
+        <p className="text-body-sm text-body rounded-(--radius-card) border border-hint/30 bg-primary-wash px-lg py-md">
+          <strong className="text-ink">These always send.</strong> They prove a push reaches
+          the handset, so they skip the goal check on purpose — otherwise they would stop
+          working the moment you finished a lesson. Whether the real cron would send is the
+          section above.
+          {mine && (
+            <>
+              {" "}
+              Right now the 8pm run{" "}
+              <strong className="text-ink">
+                {mine.send ? "would send to you" : "would SKIP you — today's goal is met"}
+              </strong>
+              .
+            </>
+          )}
+        </p>
+
         <NotificationTester variants={variants} />
       </section>
 
