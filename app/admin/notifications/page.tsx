@@ -2,7 +2,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { requireAdmin } from "@/lib/security/adminGuard";
 import { pushConfigured } from "@/lib/notify/push";
-import { NotificationTester, SummaryPreview } from "@/components/admin/NotificationTester";
+import { DryRun, NotificationTester, SummaryPreview } from "@/components/admin/NotificationTester";
 import type { Locale } from "@/i18n/config";
 
 /**
@@ -108,6 +108,21 @@ export default async function AdminNotificationsPage() {
         </p>
       </section>
 
+      {/* ── the dry run ─────────────────────────────────────────────────── */}
+      <section className="flex flex-col gap-md">
+        <h2 className="text-h3 text-ink">Who would get one right now</h2>
+        <p className="text-body-sm text-muted">
+          The part you cannot see from anywhere else: neither slot fires once a learner has met
+          today&rsquo;s goal, which is what makes two a day safe. This runs the same code the
+          cron sends from, and sends nothing.
+        </p>
+        <p className="text-body-sm text-muted">
+          To watch the rule work: run it, finish a lesson on a test account, run it again — that
+          row flips from &ldquo;would be sent&rdquo; to &ldquo;skipped&rdquo;.
+        </p>
+        <DryRun />
+      </section>
+
       {/* ── the messages ────────────────────────────────────────────────── */}
       <section className="flex flex-col gap-md">
         <h2 className="text-h3 text-ink">The daily reminders</h2>
@@ -123,10 +138,8 @@ export default async function AdminNotificationsPage() {
         <h2 className="text-h3 text-ink">The weekly parent message</h2>
         <p className="text-body-sm text-muted">
           Written by the model from the week&rsquo;s facts, so it is different every time and
-          cannot be read off a screen in advance. This runs the real generator and the real
-          prompt against invented facts — a made-up Class 6 learner, four lessons, one weak
-          topic — so it shows the tone and shape without putting a real child&rsquo;s week on
-          this screen.
+          cannot be read off a screen in advance. The first button runs the Sunday job against
+          your real share links and shows what would go out, without sending it.
         </p>
         <SummaryPreview />
         <p className="text-body-sm text-muted">

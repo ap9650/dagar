@@ -93,9 +93,118 @@ export function NotificationTester({
   );
 }
 
+type ReminderRow = {
+  who: string;
+  isYou: boolean;
+  send: boolean;
+  reason: string;
+  locale: string;
+  streakDays: number;
+  rung: number | null;
+  body: string;
+};
+
+/**
+ * What the crons would do right now, without doing it.
+ *
+ * The reminders' design is who does NOT get one, and that is invisible from
+ * every screen in the product. Run this, finish a lesson on a test account, run
+ * it again: the row flips from "would send" to "goal met".
+ */
+export function DryRun() {
+  const [busy, setBusy] = useState<string | null>(null);
+  const [out, setOut] = useState<{ slot: string; rows: ReminderRow[] } | null>(null);
+
+  async function run(slot: "afternoon" | "evening") {
+    setBusy(slot);
+    try {
+      const response = await fetch("/api/admin/dry-run", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ job: "reminders", slot }),
+      });
+      const json = await response.json();
+      setOut({ slot, rows: json.rows ?? [] });
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-lg">
+      <div className="flex gap-md flex-wrap">
+        {(["afternoon", "evening"] as const).map((slot) => (
+          <Button
+            key={slot}
+            variant="secondary"
+            className="grow-0 w-auto px-lg"
+            loading={busy === slot}
+            onClick={() => run(slot)}
+          >
+            {slot === "afternoon" ? "Check the 4pm run" : "Check the 8pm run"}
+          </Button>
+        ))}
+      </div>
+
+      {out &&
+        (out.rows.length === 0 ? (
+          <p className="text-body-sm text-body">
+            Nobody has reminders switched on yet, so this run would send nothing.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-sm">
+            <p className="text-body-sm text-muted">
+              {out.rows.filter((r) => r.send).length} would be sent ·{" "}
+              {out.rows.filter((r) => !r.send).length} skipped
+            </p>
+            <ul className="flex flex-col gap-sm list-none m-0 p-0">
+              {out.rows.map((row, i) => (
+                <li
+                  key={i}
+                  className="flex flex-col gap-xs rounded-(--radius-card) border border-border px-lg py-md"
+                >
+                  <div className="flex items-center justify-between gap-md flex-wrap">
+                    <span className="text-label font-medium text-ink">
+                      {row.who}
+                      {row.isYou && " · this is you"}
+                    </span>
+                    <span
+                      className={
+                        row.send ? "text-body-sm text-notquite" : "text-body-sm text-correct"
+                      }
+                    >
+                      {row.send ? "would be sent" : "skipped — goal already met"}
+                    </span>
+                  </div>
+                  <span className="text-caption text-muted">
+                    {row.locale === "hi" ? "Hindi" : "English"} · streak {row.streakDays}
+                    {row.rung !== null && ` · one day from the ${row.rung}-day badge`}
+                  </span>
+                  {row.send && <span className="text-body-sm text-body">“{row.body}”</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+    </div>
+  );
+}
+
+type SummaryRow = {
+  who: string;
+  locale: string;
+  channel: string;
+  quiet: boolean;
+  lessons: number;
+  practice: number;
+  body: string;
+  source: string;
+};
+
 export function SummaryPreview() {
   const [busy, setBusy] = useState<string | null>(null);
   const [out, setOut] = useState<Record<string, { body: string; source: string }>>({});
+  const [real, setReal] = useState<SummaryRow[] | null>(null);
 
   async function generate(locale: "en" | "hi") {
     setBusy(locale);
@@ -114,8 +223,65 @@ export function SummaryPreview() {
     }
   }
 
+  /** The Sunday job, against the real share links, without sending. */
+  async function dryRun() {
+    setBusy("real");
+    try {
+      const response = await fetch("/api/admin/dry-run", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ job: "summary" }),
+      });
+      const json = await response.json();
+      setReal(json.rows ?? []);
+    } finally {
+      setBusy(null);
+    }
+  }
+
   return (
     <div className="flex flex-col gap-lg">
+      <div className="flex gap-md flex-wrap">
+        <Button
+          variant="secondary"
+          className="grow-0 w-auto px-lg"
+          loading={busy === "real"}
+          onClick={dryRun}
+        >
+          What Sunday would send
+        </Button>
+      </div>
+
+      {real &&
+        (real.length === 0 ? (
+          <p className="text-body-sm text-body">
+            No live share links, so Sunday would send nothing. Create one from a learner&rsquo;s
+            Settings → &ldquo;Share your progress&rdquo;.
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-md list-none m-0 p-0">
+            {real.map((row, i) => (
+              <li
+                key={i}
+                className="flex flex-col gap-xs rounded-(--radius-card) border border-border px-lg py-md"
+              >
+                <span className="text-caption text-muted">
+                  {row.who} · {row.locale === "hi" ? "Hindi" : "English"} · {row.channel} ·{" "}
+                  {row.lessons} lessons, {row.practice} questions this week
+                  {row.quiet && " · quiet week"}
+                  {row.source === "fallback" && " · fallback, the model call failed"}
+                </span>
+                <p className="text-body text-ink">{row.body}</p>
+              </li>
+            ))}
+          </ul>
+        ))}
+
+      <p className="text-body-sm text-muted">
+        Or write one from invented facts, to see the tone without a real learner&rsquo;s week on
+        this screen:
+      </p>
+
       <div className="flex gap-md flex-wrap">
         {(["en", "hi"] as const).map((locale) => (
           <Button

@@ -1,12 +1,7 @@
 import { NextResponse } from "next/server";
-import { getTranslations } from "next-intl/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { istDate, istDayStart } from "@/lib/learning/dates";
-import { dayQualified } from "@/lib/learning/week";
-import { fromRow, streakStatus } from "@/lib/learning/streaks";
-import { oneDayFromRung } from "@/lib/learning/streakLadder";
 import { pushConfigured, sendPush } from "@/lib/notify/push";
-import type { Locale } from "@/i18n/config";
+import { planReminders } from "@/lib/notify/reminderPlan";
 
 /**
  * GET /api/cron/reminders/[slot] — the daily nudge (D17b).
@@ -70,111 +65,29 @@ export async function GET(
   }
 
   const admin = createAdminClient();
-  const today = istDate();
-  const dayStart = istDayStart(today).toISOString();
 
-  const { data: subscriptions, error } = await admin
-    .from("push_subscriptions")
-    .select("id, student_id, endpoint, p256dh, auth");
-
-  if (error) {
-    console.error("[reminders] could not read subscriptions:", error.message);
-    return NextResponse.json({ error: "read_failed" }, { status: 500 });
-  }
-  if (!subscriptions?.length) return NextResponse.json({ ok: true, sent: 0, reason: "none" });
-
-  const studentIds = [...new Set(subscriptions.map((row) => row.student_id))];
-
-  // ── who has already met today's goal ──────────────────────────────────────
-  // Batched, not per learner: three queries for the whole cohort rather than
-  // three per subscription. The rule is D7's, shared with the streak and the
-  // week strip via `dayQualified` — an app that reminds you to do something you
-  // have done is an app you stop trusting.
-  const [{ data: lessonsToday }, { data: practiceToday }, { data: streaks }, { data: profiles }] =
-    await Promise.all([
-      admin
-        .from("lesson_progress")
-        .select("student_id")
-        .in("student_id", studentIds)
-        .eq("status", "completed")
-        .gte("completed_at", dayStart),
-      admin
-        .from("attempts")
-        .select("student_id, question_id")
-        .in("student_id", studentIds)
-        .eq("session_kind", "practice")
-        .gte("created_at", dayStart),
-      admin
-        .from("streaks")
-        .select("student_id, current, longest, last_active_date, grace_used_on")
-        .in("student_id", studentIds),
-      admin.from("profiles").select("id, locale").in("id", studentIds),
-    ]);
-
-  const lessonCount = tally((lessonsToday ?? []).map((row) => row.student_id));
-
-  // DISTINCT questions, matching the goal ring: answering one question five
-  // times is not five questions of practice.
-  const practiceCount = new Map<string, Set<string>>();
-  for (const row of practiceToday ?? []) {
-    const set = practiceCount.get(row.student_id) ?? new Set<string>();
-    set.add(row.question_id);
-    practiceCount.set(row.student_id, set);
-  }
-
-  const streakByStudent = new Map((streaks ?? []).map((row) => [row.student_id, row]));
-  const localeByStudent = new Map((profiles ?? []).map((row) => [row.id, row.locale as Locale]));
-
-  const done = new Set(
-    studentIds.filter((id) =>
-      dayQualified(lessonCount.get(id) ?? 0, practiceCount.get(id)?.size ?? 0),
-    ),
-  );
+  // Who gets what is decided in `planReminders`, which the dry run at
+  // `/admin/notifications` also calls. One copy of the rule — a dry run that
+  // reimplemented it would prove the reimplementation, not this job.
+  const plan = await planReminders(admin, slot);
+  if (plan.length === 0) return NextResponse.json({ ok: true, sent: 0, reason: "none" });
 
   let sent = 0;
   let skipped = 0;
   const expired: string[] = [];
 
-  for (const subscription of subscriptions) {
-    if (done.has(subscription.student_id)) {
+  for (const item of plan) {
+    if (!item.send) {
       skipped++;
       continue;
     }
 
-    const locale = localeByStudent.get(subscription.student_id) ?? "en";
-    const t = await getTranslations({ locale, namespace: "push" });
-
-    /**
-     * The evening line changes when the learner is one day from a rung.
-     *
-     * That is the only moment a reminder carries information they do not
-     * already have — and it is stated as an OPPORTUNITY, never a threat.
-     * "One more day and you reach a 7-day streak", not "your streak is at
-     * risk". The first is a fact; the second is a countdown wearing a helpful
-     * voice, and it lands on a parent's phone.
-     */
-    const streak = streakStatus(
-      fromRow(streakByStudent.get(subscription.student_id) ?? null),
-      today,
-    );
-    const rung = slot === "evening" && streak.alive ? oneDayFromRung(streak.days) : null;
-
-    const body = rung
-      ? t("rungBody", { days: rung })
-      : slot === "evening"
-        ? t("eveningBody")
-        : t("afternoonBody");
-
-    const result = await sendPush(subscription, {
-      title: slot === "evening" ? t("eveningTitle") : t("afternoonTitle"),
-      body,
-      url: "/learn",
-    });
+    const result = await sendPush(item.subscription, item.message);
 
     if (result.ok) sent++;
     // 404/410: the browser is gone for good. Retrying it every day forever is
     // wasted work against an endpoint that will never accept anything again.
-    else if (result.gone) expired.push(subscription.id);
+    else if (result.gone) expired.push(item.subscription.id);
   }
 
   if (expired.length > 0) {
@@ -187,15 +100,9 @@ export async function GET(
       .update({ last_sent_at: new Date().toISOString() })
       .in(
         "id",
-        subscriptions.filter((s) => !done.has(s.student_id)).map((s) => s.id),
+        plan.filter((item) => item.send).map((item) => item.subscription.id),
       );
   }
 
   return NextResponse.json({ ok: true, slot, sent, skipped, expired: expired.length });
-}
-
-function tally(ids: readonly string[]): Map<string, number> {
-  const out = new Map<string, number>();
-  for (const id of ids) out.set(id, (out.get(id) ?? 0) + 1);
-  return out;
 }

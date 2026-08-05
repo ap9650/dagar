@@ -106,7 +106,7 @@ test("the notifications console does not exist for a signed-out visitor", async 
 
 test("the admin notification routes reject a signed-out caller", async ({ request }) => {
   // 404 rather than 403 — an admin surface does not confirm it exists.
-  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary"]) {
+  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary", "/api/admin/dry-run"]) {
     const response = await request.post(path, { data: { slot: "afternoon", locale: "en" } });
     expect(response.status(), path).toBe(404);
   }
@@ -133,7 +133,7 @@ test("a signed-in learner cannot reach the console or fire a push", async ({ pag
   const consoleResponse = await page.goto("/admin/notifications");
   expect(consoleResponse?.status()).toBe(404);
 
-  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary"]) {
+  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary", "/api/admin/dry-run"]) {
     const response = await page.request.post(path, { data: { slot: "afternoon", locale: "en" } });
     expect(response.status(), path).toBe(404);
   }

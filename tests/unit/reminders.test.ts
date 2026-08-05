@@ -148,8 +148,19 @@ describe("the send route", () => {
     // What makes two reminders a day safe is not the number — it is that
     // neither fires once the day's work is done. An app that reminds you to do
     // something you have done is an app you stop trusting.
-    expect(source).toContain("dayQualified");
-    expect(source).toContain("done.has(subscription.student_id)");
+    //
+    // The rule moved into `reminderPlan.ts` when the dry run at
+    // `/admin/notifications` needed it: a dry run that reimplemented this would
+    // prove the reimplementation, not the job. So the assertion follows it —
+    // and the route must now send from the plan rather than deciding again.
+    const plan = readFileSync(join(ROOT, "lib/notify/reminderPlan.ts"), "utf8");
+    expect(plan).toContain("dayQualified");
+    expect(plan).toContain("send: !met");
+
+    // The route decides nothing on its own: no second copy of the rule.
+    expect(source).toContain("planReminders(admin, slot)");
+    expect(source).toContain("if (!item.send)");
+    expect(source).not.toContain("dayQualified");
   });
 
   it("deletes endpoints the push service says are gone", () => {
