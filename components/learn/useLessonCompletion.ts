@@ -46,6 +46,21 @@ export function useLessonCompletion({
    * the content away.
    */
   const [justCompleted, setJustCompleted] = useState(false);
+  /**
+   * Did this action just CLOSE TODAY'S GOAL? The server's `dayCounted` — "today
+   * became a counted day", not "today is counted" — so it is true on exactly one
+   * action per day and false on every one after it.
+   *
+   * This is the moment the reminder offer is worth making, and the reason it is
+   * a separate flag from `justCompleted`: finishing a fourth lesson on a day
+   * already counted is good work, but "want a nudge tomorrow?" has nothing to
+   * point at. Asked as the goal closes, the offer argues for itself — you did
+   * today's work, shall we help you do it again.
+   *
+   * Never optimistic, unlike `complete`. A permission ask has one chance per
+   * browser, so it waits for the server to confirm rather than guessing.
+   */
+  const [goalClosed, setGoalClosed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [moment, setMoment] = useState<Moment | null>(null);
@@ -93,6 +108,7 @@ export function useLessonCompletion({
       // One moment, ranked server-fact-first — see lib/learning/celebration.ts.
       // Notably it can be null, and on a second lesson the same day it should be.
       setMoment(celebrationFor(body));
+      setGoalClosed(body.dayCounted === true);
 
       // Refresh so the dashboard's journey path, streak and goal ring reflect
       // this on the way back. The server recomputed them; the client just
@@ -108,6 +124,7 @@ export function useLessonCompletion({
   return {
     complete,
     justCompleted,
+    goalClosed,
     busy,
     failed,
     moment,

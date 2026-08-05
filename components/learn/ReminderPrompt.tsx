@@ -15,13 +15,23 @@ import {
  * "Want a nudge?" — the opt-in for daily reminders (D17b).
  *
  * ── WHEN IT APPEARS, AND WHY THAT IS THE WHOLE DESIGN ───────────────────────
- * After a first completed lesson. Never on arrival, never on first load.
+ * **The moment today's goal closes** — the lesson or the fifth practice question
+ * that turns today into a counted day (the server's `dayCounted`). Never on
+ * arrival, never on first load, and never again later the same day.
  *
  * A permission prompt shown before any value is delivered is how an app gets
  * permission denied *permanently* — a browser remembers a refusal and Dagar
- * cannot ask again from inside the app. So the ask comes at the one moment a
- * learner has evidence this thing is worth hearing from: they have just
- * finished something.
+ * cannot ask again from inside the app. There is one chance, so it is spent at
+ * the strongest moment there is: the learner has just done today's work, and
+ * "shall we help you do it again tomorrow?" is an offer that argues for itself.
+ *
+ * It used to appear on any completed lesson, which sounds close and is not. A
+ * fourth lesson on a day already counted earns the same words pointing at
+ * nothing — and spends the one refusal to say it. Reported from a phone, where
+ * it arrived before the learner had finished anything at all.
+ *
+ * Callers pass the moment in, so the two places a goal can close — the lesson
+ * footer and the end of a practice set — both offer it, and nothing else can.
  *
  * ── AND WHY THE CARD IS NOT THE PROMPT ──────────────────────────────────────
  * The browser's permission dialog only opens on a real tap. This card is a

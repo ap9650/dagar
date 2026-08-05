@@ -730,9 +730,8 @@ learner is delivered to the person whose opinion they care about most.
 
 ### Design specifics
 
-- **Opt-in, asked at the right moment** — after a first completed lesson, never on
-  first load. A permission prompt before any value is delivered is how an app gets
-  permission denied permanently.
+- **Opt-in, asked at the right moment** — see D17b-ii. A permission prompt before
+  any value is delivered is how an app gets permission denied permanently.
 - **Skipped when the daily goal is already met** (D17). An app that reminds you to
   do something you have done is an app you stop trusting.
 - **Every day, indefinitely — no tapering.** Revised 2026-07-30 on the product
@@ -780,6 +779,39 @@ because copy is the risk here and a banned substring cannot be argued with.
 **Built 5 Aug 2026** — migration 0028, `lib/notify/push.ts`, the service worker's
 push handler, and two Vercel crons. Note that D17b had been *decided* since July
 and never built; nothing existed until now.
+
+### D17b-ii — The ask happens when the day's goal closes (5 Aug 2026)
+
+**Revises "after a first completed lesson"**, which sounded close and was not.
+
+The permission ask has **exactly one chance per browser**: a refusal is
+remembered for good and Dagar cannot re-request it from inside the app. So the
+question is not "has this learner seen some value" but "what is the strongest
+sentence we will ever be able to say", and there is a clear answer — the moment
+today's goal closes. *You did today's work; shall we help you do it again
+tomorrow?* The offer argues for itself, and it is the only moment where the
+thing being offered is visibly the thing that just happened.
+
+The trigger is the server's `dayCounted` — "today **became** a counted day",
+decided against the IST calendar in the completion route (D7). Never the
+client's own guess, and never "is today counted", which is true all day.
+
+Consequences worth stating:
+
+- **Both routes to the goal offer it** — one lesson, or the fifth practice
+  question. A learner who only ever practises would otherwise never be asked.
+- **In practice it waits for the summary screen.** The goal can close mid-set,
+  and a permission card beside a live question is the opposite of one thing at
+  a time (design rule 11).
+- **At most once a day**, and silent for the rest of it. A fourth lesson on a
+  day already counted gets the same words pointing at nothing.
+- **Never optimistic.** It waits for the server's answer rather than assuming
+  one, because there is no second attempt to correct a wrong guess.
+
+**Found on a phone**, where the card greeted a learner who had finished nothing
+— reopening an already-complete lesson made the old `complete` gate true on
+arrival. Guarded in `tests/unit/reminders.test.ts`, which asserts the JSX gate
+by name so a weaker trigger cannot quietly return.
 
   Fatigue is controlled by the **skip rule, not by frequency**: on any day the goal
   is already met, nothing is sent. So an engaged learner naturally receives fewer

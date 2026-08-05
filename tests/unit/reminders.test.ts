@@ -161,6 +161,8 @@ describe("the send route", () => {
 describe("when the nudge is allowed to appear", () => {
   const actions = readFileSync(join(ROOT, "components/learn/LessonActions.tsx"), "utf8");
   const prompt = readFileSync(join(ROOT, "components/learn/ReminderPrompt.tsx"), "utf8");
+  const practice = readFileSync(join(ROOT, "components/learn/PracticeSession.tsx"), "utf8");
+  const hook = readFileSync(join(ROOT, "components/learn/useLessonCompletion.ts"), "utf8");
 
   /*
     A permission ask before any value has been delivered is how an app spends
@@ -175,11 +177,28 @@ describe("when the nudge is allowed to appear", () => {
     reopened a lesson to reread it is asking a favour in return for nothing, and
     it spends the refusal at the worst possible moment.
   */
-  it("is offered only at the moment a lesson is finished, never on arrival", () => {
-    expect(actions).toMatch(/\{\s*justCompleted\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
-    // The fact must not be what gates it. Matches the JSX guard specifically,
-    // so the prose above — which uses the word deliberately — cannot satisfy it.
+  it("is offered only as today's goal closes, never on arrival", () => {
+    expect(actions).toMatch(/\{\s*goalClosed\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
+    // Neither weaker trigger may gate it. Matches the JSX specifically, so the
+    // prose above — which names both deliberately — cannot satisfy these.
     expect(actions).not.toMatch(/\{\s*complete\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
+    expect(actions).not.toMatch(/\{\s*justCompleted\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
+  });
+
+  it("takes the goal from the server, never from the client's own guess", () => {
+    // `dayCounted` is "today BECAME a counted day", decided in the completion
+    // route against the IST calendar (D7). A client that inferred it from its
+    // own clock would ask twice on a day that crossed midnight in the wrong
+    // timezone, and a permission ask has one chance.
+    expect(hook).toMatch(/setGoalClosed\(body\.dayCounted === true\)/);
+    expect(practice).toMatch(/if \(body\.dayCounted\) setGoalClosed\(true\)/);
+  });
+
+  it("is offered at the end of a practice set too, not only after a lesson", () => {
+    // One lesson OR five practice questions closes the same goal (D7/D17). A
+    // learner who only ever practises must still be asked — and must not be
+    // asked beside a live question.
+    expect(practice).toMatch(/\{\s*goalClosed\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
   });
 
   it("asks at most once per browser, and remembers a decline", () => {

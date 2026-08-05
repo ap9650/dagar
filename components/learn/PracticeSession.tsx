@@ -17,6 +17,7 @@ import { FeedbackPanel } from "./FeedbackPanel";
 import { MentorCta } from "./MentorCta";
 import { celebrationFor, type Celebration as Moment } from "@/lib/learning/celebration";
 import { Celebration } from "./Celebration";
+import { ReminderPrompt } from "./ReminderPrompt";
 
 /**
  * The practice screen (slice 2.2).
@@ -85,6 +86,15 @@ export function PracticeSession({
 
   const [correctCount, setCorrectCount] = useState(0);
   const [moment, setMoment] = useState<Moment | null>(null);
+  /**
+   * The day's goal closed during this set — five distinct questions is the same
+   * goal one lesson is (D7/D17), so it closes here as readily as on a lesson.
+   *
+   * Remembered rather than acted on immediately: it can happen MID-SET, and a
+   * notification-permission card next to a live question is the opposite of one
+   * thing at a time. It surfaces on the summary screen at the end of the set.
+   */
+  const [goalClosed, setGoalClosed] = useState(false);
   const [mentorTrigger, setMentorTrigger] = useState<string | null>(null);
   /**
    * A request has been filed for THIS concept, in THIS session.
@@ -166,6 +176,7 @@ export function PracticeSession({
       // The fifth distinct question of the day closes the goal, so this is the
       // one place a celebration can arrive MID-SET rather than at the end.
       setMoment(celebrationFor(body));
+      if (body.dayCounted) setGoalClosed(true);
       // `!mentorRequested` — not "never offer again", just not twice in a row
       // about the same concept. See the state declaration.
       if (body.showMentorCta && body.mentorTrigger && !mentorRequested) {
@@ -293,6 +304,12 @@ export function PracticeSession({
         </div>
 
         <Button onClick={() => router.push("/learn")}>{t("errors.backHome")}</Button>
+
+        {/* Practice is the OTHER way today's goal closes, so the reminder offer
+            has to live here too — a learner who only ever practises would
+            otherwise never be asked. Below the action and at the end of the
+            set, never beside a question. */}
+        {goalClosed && <ReminderPrompt />}
 
         <Celebration moment={moment} onDismiss={() => setMoment(null)} />
       </div>

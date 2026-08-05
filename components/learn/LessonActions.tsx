@@ -39,7 +39,7 @@ export function LessonActions({
 }) {
   const t = useTranslations();
   const router = useRouter();
-  const { complete, justCompleted, busy, failed, moment, markComplete, dismissMoment } =
+  const { complete, justCompleted, goalClosed, busy, failed, moment, markComplete, dismissMoment } =
     state;
 
   // Nothing to show yet: a stepped lesson mid-way has its own Continue, and this
@@ -98,16 +98,25 @@ export function LessonActions({
 
       <Celebration moment={moment} onDismiss={dismissMoment} />
 
-      {/* Both only after finishing SOMETHING JUST NOW, and BELOW the next action
-          — so anyone carrying straight on to practice never has to read either.
-          On `complete` they would also greet a learner who only reopened an old
-          lesson to reread it, which is asking for a favour in return for nothing.
+      {/* Both BELOW the next action, so anyone carrying straight on to practice
+          never has to read either — and both tied to something that HAPPENED
+          here, never to the recorded fact that a lesson is done. On `complete`
+          they also greeted a learner who only reopened an old lesson to reread
+          it, which is asking a favour in return for nothing.
 
-          The reminder offer comes FIRST because it is the one with a cost to
-          getting wrong: a browser remembers a refused notification permission
-          for good, and Dagar cannot ask again from inside the app. Feedback can
-          be asked for again any time. */}
-      {justCompleted && <ReminderPrompt />}
+          They hang off DIFFERENT moments, and that is deliberate.
+
+          The reminder waits for the day's GOAL to close, because it is the ask
+          with a cost to getting wrong: a browser remembers a refused
+          notification permission for good, and Dagar cannot ask again from
+          inside the app. "You did today's work — shall we help you do it again
+          tomorrow?" is an offer that argues for itself. The same words after a
+          fourth lesson on a day already counted point at nothing, and spend the
+          one refusal to say it.
+
+          Feedback only needs the learner to have finished something, and can be
+          asked for again any time. */}
+      {goalClosed && <ReminderPrompt />}
       {justCompleted && <FeedbackPrompt />}
     </div>
   );

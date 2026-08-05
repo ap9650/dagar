@@ -144,7 +144,20 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   );
 
   await complete.first().click();
-  expect((await completed).ok()).toBeTruthy();
+  const completionResponse = await completed;
+  expect(completionResponse.ok()).toBeTruthy();
+
+  /*
+    THE FIRST LESSON OF THE DAY CLOSES THE DAILY GOAL.
+
+    `dayCounted` is "today BECAME a counted day" — the server's answer, decided
+    against the IST calendar (D7). It is what the daily celebration and the
+    reminder offer both hang on (D17b-ii), and neither can be seen from here:
+    headless Chrome reports notification permission as "denied", so the reminder
+    card correctly renders nothing. Asserting the FACT it keys off is the part
+    this test can honestly prove, and it is the part that silently breaks.
+  */
+  expect(await completionResponse.json()).toMatchObject({ dayCounted: true });
 
   // One tap, not two: the finishing button is replaced by what comes next.
   await expect(complete).toHaveCount(0);
