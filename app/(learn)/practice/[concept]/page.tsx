@@ -59,7 +59,10 @@ export default async function PracticePage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <BackLink href="/learn" label={t("lesson.backToChapter")} />
+          {/* The chapter this concept belongs to — the label says "back to the
+              chapter" and used to go to the home screen. `chapter_id` was
+              already being fetched; it just was not being used. */}
+          <BackLink href={`/learn/${concept.chapter_id}`} label={t("lesson.backToChapter")} />
           <span className="text-caption text-muted">{t("practice.title")}</span>
         </div>
 

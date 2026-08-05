@@ -93,7 +93,8 @@ export default async function QuizPage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <BackLink href="/learn" label={t("quiz.backToChapter")} />
+          {/* The chapter, not the home screen — same fix as the lesson. */}
+          <BackLink href={`/learn/${chapterId}`} label={t("quiz.backToChapter")} />
           <span className="text-caption text-muted">{t("quiz.title")}</span>
         </div>
 

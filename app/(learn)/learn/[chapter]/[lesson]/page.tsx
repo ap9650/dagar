@@ -104,7 +104,18 @@ export default async function LessonPage({
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-lg flex flex-col gap-xl">
       <header className="flex flex-col gap-lg">
         <div className="flex items-center gap-md">
-          <BackLink href="/learn" label={t("lesson.backToChapter")} />
+          {/* To the CHAPTER, which is what the label has always promised.
+
+              It pointed at `/learn` — correct while the dashboard WAS the chapter
+              view, and wrong the moment `/learn/[chapter]` was built. Reported
+              from a phone: finish a lesson, tap "back to the chapter", land on
+              the home screen — and because the recommendation has moved on to
+              the NEXT lesson by then, there is no obvious route back to the one
+              just finished. A learner who wants to revise could not.
+
+              Completed nodes on the chapter path were tappable all along. The
+              only thing missing was a way back to the path. */}
+          <BackLink href={`/learn/${chapterId}`} label={t("lesson.backToChapter")} />
           {/* The step count belongs to the progress dots below and is NOT
               repeated here — it was, and reading the same sentence twice in two
               places makes a screen feel unfinished. */}

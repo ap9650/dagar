@@ -155,6 +155,43 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
     timeout: 10_000,
   });
 
+  /*
+    ── A FINISHED LESSON CAN BE GONE BACK TO ────────────────────────────────
+    Reported from a phone: finish a lesson and there is no way back to revise
+    it. The cause was a link that said "back to the chapter" and went to the
+    HOME screen — correct while the dashboard WAS the chapter view, wrong from
+    the moment `/learn/[chapter]` existed. And because the recommendation moves
+    on to the next lesson as soon as one is finished, the home screen offered no
+    route back to the lesson just completed.
+
+    Asserted as the learner's actual goal — reopen the thing I just did — rather
+    than as "the href is correct", so it stays true however the navigation is
+    later rearranged.
+  */
+  const finishedLesson = new URL(page.url()).pathname;
+
+  await page.getByRole("link", { name: /back to the chapter/i }).click();
+  await page.waitForURL(/\/learn\/[^/]+$/, { timeout: 15_000 });
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+
+  // The completed lesson is still on the path and still opens.
+  await page.getByRole("link", { name: /lesson 1/i }).first().click();
+  await page.waitForURL(/\/learn\/[^/]+\/[^/]+/, { timeout: 15_000 });
+
+  const revisited = new URL(page.url());
+  expect(revisited.pathname).toBe(finishedLesson);
+
+  /*
+    PATHNAME, not the whole URL — and the difference matters.
+
+    The first visit carried `?from=rec`, because the learner arrived from the
+    next-action card. Coming back through the chapter path must NOT carry it: the
+    marker is what makes the destination emit `recommendation_clicked`, so a
+    revisit inheriting it would count every revision as accepting a
+    recommendation and inflate the metric with rereading.
+  */
+  expect(revisited.searchParams.get("from")).toBeNull();
+
   // ── practice, via the wrong answer ────────────────────────────────────────
   await page.goto("/progress");
   await page.getByRole("link", { name: /fraction/i }).first().click();
