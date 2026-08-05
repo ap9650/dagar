@@ -219,7 +219,12 @@
     "streak_30": "30 days in a row",
     "streak_100": "100 days in a row",
     "streak_180": "180 days in a row",
-    "streak_365": "A whole year in a row"
+    "streak_365": "A whole year in a row",
+    "concepts_5": "5 ideas mastered",
+    "concepts_15": "15 ideas mastered",
+    "concepts_40": "40 ideas mastered",
+    "chapters_3": "3 chapters finished",
+    "chapters_10": "10 chapters finished"
   },
   "celebration": {
     "goalDone": "Today's goal is done.",
@@ -505,5 +510,17 @@
   "chapterLevel": {
     "conceptsMastered": "{mastered} of {total} ideas mastered",
     "quizLeft": "Master every idea, then pass the chapter quiz."
+  },
+  "ladder": {
+    "coming_back": "Coming back",
+    "ideas": "Ideas mastered",
+    "chapters": "Chapters finished",
+    "firsts": "Firsts",
+    "next": "Next: {label}",
+    "away": "{count, plural, one {# to go} other {# to go}}",
+    "done": "Every one of these is yours.",
+    "rungDays": "{days} days",
+    "rungIdeas": "{count} ideas",
+    "rungChapters": "{count} chapters"
   }
 }

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import enMessages from "@/messages/en.json";
@@ -32,12 +32,23 @@ import {
  * knows about that the database would reject, or the reverse.
  */
 function codesAllowedByTheDatabase(): string[] {
-  const sql = readFileSync(
-    join(__dirname, "..", "..", "supabase/migrations/0025_streak_ladder.sql"),
-    "utf8",
-  );
+  // The LAST migration that defines the constraint wins, found by scanning
+  // rather than named. Pinning a filename means this test starts checking a
+  // superseded constraint the moment another migration widens it — which is
+  // exactly what happened when 0027 added the counting ladders on top of
+  // 0025's streak rungs.
+  const dir = join(__dirname, "..", "..", "supabase/migrations");
+  const defining = readdirSync(dir)
+    .filter((name) => name.endsWith(".sql"))
+    .sort()
+    .filter((name) => readFileSync(join(dir, name), "utf8").includes("milestones_code_check"));
+
+  const latest = defining.at(-1);
+  if (!latest) throw new Error("no migration defines milestones_code_check");
+
+  const sql = readFileSync(join(dir, latest), "utf8");
   const constraint = /add constraint milestones_code_check check \(code in \(([\s\S]*?)\)\)/.exec(sql);
-  if (!constraint) throw new Error("milestones_code_check not found in 0025");
+  if (!constraint) throw new Error(`milestones_code_check not parseable in ${latest}`);
   return [...constraint[1].matchAll(/'([a-z0-9_]+)'/g)].map((m) => m[1]);
 }
 

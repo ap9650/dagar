@@ -603,6 +603,48 @@ ranking them against peers works against the product's stated purpose.
 
 Emits `milestone_earned` with the code.
 
+### D7b-i — Ladders, not one-shots (5 Aug 2026)
+
+**The seven badges dead-ended.** Once earned, the grid was a wall of gold telling
+a learner two weeks in that they were finished. `concept_mastered` fired on the
+first concept ever and never again, however many followed; `streak_7` was the
+last habit milestone that existed.
+
+Three counting ladders now, plus the genuine one-shots:
+
+| Ladder | Rungs | Top rung is |
+|---|---|---|
+| **Coming back** | 3 · 7 · 14 · 30 · 100 · 180 · 365 days | a school year |
+| **Ideas mastered** | 1 · 5 · 15 · 40 concepts | a whole class |
+| **Chapters finished** | 1 · 3 · 10 chapters | a whole class |
+| **Firsts** | first lesson · first practice · first chapter mastered | — |
+
+**The rule, and it covers every ladder in the product:** *the top rung sits at
+the edge of the learner's horizon, never inside it.* Four concepts a chapter and
+roughly ten chapters a class means ~40 ideas IS a class; a learner in Class 6 is
+in Class 6 for 365 days and is then promoted. Reaching a top rung should mean
+"you finished the year", never "you are 40% of the way through it". A first
+draft topped out at 20 ideas — reachable halfway through one class, which is the
+dead end ladders exist to prevent, rebuilt smaller.
+
+**Past the top rung, nothing.** Badges are scaffolding: they matter most in the
+first weeks when a learner has nothing else to show. Someone with forty ideas
+mastered has a progress screen full of chapters reading Mastered. The badge
+becomes a *record* rather than a goal, and the scaffolding comes down because
+the building is standing.
+
+**What this is not:** repetition. "Another badge every ten ideas" is points with
+extra steps, and D17's refusal of points stands — a ladder that ends honestly
+beats a counter that never does.
+
+Purely additive: every existing code keeps its meaning and becomes rung 1 of its
+ladder, so no earned badge is orphaned. `chapter_mastered` stays a one-shot
+because it measures **depth, not count** — on the chapters ladder it would say
+that mastering one chapter equals finishing ten.
+
+Migrations 0025 and 0027. `lib/learning/badgeLadders.ts` mirrors the SQL arrays;
+a test parses them out of the migration and asserts the two agree.
+
 ## D17 — Habit mechanics: what we take from Duolingo, and what we don't
 
 Duolingo is the reference for habit design. But its audience is a **voluntary adult

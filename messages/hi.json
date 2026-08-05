@@ -219,7 +219,12 @@
     "streak_30": "लगातार 30 दिन",
     "streak_100": "लगातार 100 दिन",
     "streak_180": "लगातार 180 दिन",
-    "streak_365": "पूरा एक साल लगातार"
+    "streak_365": "पूरा एक साल लगातार",
+    "concepts_5": "5 बातें पक्की",
+    "concepts_15": "15 बातें पक्की",
+    "concepts_40": "40 बातें पक्की",
+    "chapters_3": "3 चैप्टर पूरे",
+    "chapters_10": "10 चैप्टर पूरे"
   },
   "celebration": {
     "goalDone": "आज का काम पूरा।",
@@ -505,5 +510,17 @@
   "chapterLevel": {
     "conceptsMastered": "{total} में से {mastered} बातें पक्की",
     "quizLeft": "हर बात पक्की करो, फिर चैप्टर क्विज़ दो।"
+  },
+  "ladder": {
+    "coming_back": "वापस आना",
+    "ideas": "पक्की बातें",
+    "chapters": "पूरे चैप्टर",
+    "firsts": "पहली बार",
+    "next": "आगे: {label}",
+    "away": "{count, plural, one {# बाकी} other {# बाकी}}",
+    "done": "इनमें से हर एक तुम्हारा है।",
+    "rungDays": "{days} दिन",
+    "rungIdeas": "{count} बातें",
+    "rungChapters": "{count} चैप्टर"
   }
 }

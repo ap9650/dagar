@@ -8,6 +8,7 @@ import { istDate, istDayStart } from "@/lib/learning/dates";
 import { fromRow, streakStatus } from "@/lib/learning/streaks";
 import { rungProgress } from "@/lib/learning/streakLadder";
 import { earnedCount, milestoneGrid } from "@/lib/learning/milestones";
+import { BADGE_LADDERS, FIRST_CODES, ladderState } from "@/lib/learning/badgeLadders";
 import { chapterMastery, type MasteryBand } from "@/lib/learning/mastery";
 import { chapterLevel, conceptLevel, type Level } from "@/lib/learning/levels";
 import { weekOfActivity } from "@/lib/learning/week";
@@ -15,7 +16,7 @@ import { buildDiary, DIARY_EVENTS } from "@/lib/learning/diary";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
-import { MilestoneGrid } from "@/components/learn/MilestoneGrid";
+import { BadgeLadders } from "@/components/learn/BadgeLadders";
 import { WeekStrip } from "@/components/learn/WeekStrip";
 import { WhatMoved } from "@/components/learn/WhatMoved";
 import { cn } from "@/lib/cn";
@@ -109,16 +110,19 @@ export default async function ProgressPage() {
       .eq("session_kind", "practice")
       .gte("created_at", todayStart),
 
-    // ── the last seven days ─────────────────────────────────────────────────
-    // Timestamps, not counts: the squares are per-day and the IST grouping
+    // ── every completed lesson ──────────────────────────────────────────────
+    // Timestamps, not counts: the week squares are per-day and the IST grouping
     // happens in `weekOfActivity`, so that a lesson finished at 11:50pm lands
     // on the day the learner thinks it did.
+    //
+    // ALL of them, not just this week's: the chapters-finished ladder counts
+    // whole chapters over a learner's whole history, and a window would make a
+    // badge un-earn itself every Monday. `weekOfActivity` does its own filtering.
     supabase
       .from("lesson_progress")
       .select("completed_at, lesson_id")
       .eq("student_id", studentId)
-      .eq("status", "completed")
-      .gte("completed_at", weekAgo),
+      .eq("status", "completed"),
     supabase
       .from("attempts")
       .select("created_at")
@@ -141,9 +145,10 @@ export default async function ProgressPage() {
       .order("created_at", { ascending: false })
       .limit(200),
 
-    // Titles for the diary. Whole-curriculum rather than per-entry: four
-    // lookups against small seeded tables beat one query per line.
-    supabase.from("lessons").select("id, title, i18n"),
+    // Titles for the diary, and the chapter each lesson belongs to for the
+    // chapters-finished count. Whole-curriculum rather than per-entry: one read
+    // of a small seeded table beats a query per diary line.
+    supabase.from("lessons").select("id, chapter_id, title, i18n"),
 
     // Which chapter quizzes have been passed at the Mastered band — the last
     // condition on a chapter reaching Mastered (Khan Academy's rule: the top
@@ -176,9 +181,38 @@ export default async function ProgressPage() {
     (weekPractice ?? []).map((row) => row.created_at),
   );
 
+  const completedLessonIds = new Set((weekLessons ?? []).map((row) => row.lesson_id));
+
   const diary = buildDiary(diaryEvents ?? []);
 
   const quizPassedChapters = new Set((passedQuizzes ?? []).map((row) => row.chapter_id));
+
+  /**
+   * ── THE LIVE COUNTS BEHIND "YOU ARE 4 AWAY" ─────────────────────────────
+   * Read from the same tables `award_milestones` counts, so the screen and the
+   * awarding cannot disagree about whether a rung has been reached.
+   *
+   * Chapters finished is counted across the WHOLE curriculum, not just this
+   * learner's class: a learner who changes class keeps their progress (spec
+   * §7), and a badge already earned must not un-earn itself because the
+   * dashboard now shows different chapters.
+   */
+  const conceptsMastered = masteredIds.size;
+  const chaptersFinished = countFinishedChapters(allLessons ?? [], completedLessonIds);
+
+  const earnedCodes = new Set((earned ?? []).map((row) => row.code));
+  const ladders = BADGE_LADDERS.map((ladder) =>
+    ladderState(
+      ladder,
+      earnedCodes,
+      ladder.key === "coming_back"
+        ? streak.days
+        : ladder.key === "ideas"
+          ? conceptsMastered
+          : chaptersFinished,
+    ),
+  );
+  const firsts = grid.filter((milestone) => FIRST_CODES.includes(milestone.code));
 
   // Names in the learner's language, for the diary's lines. Built from the
   // curriculum we already fetched plus the lesson list.
@@ -421,7 +455,7 @@ export default async function ProgressPage() {
 
         {badges === 0 && <p className="text-body-sm text-body">{t("progress.empty")}</p>}
 
-        <MilestoneGrid milestones={grid} />
+        <BadgeLadders ladders={ladders} firsts={firsts} />
       </section>
     </main>
   );
@@ -438,6 +472,34 @@ export default async function ProgressPage() {
  * `not_started` has no tone: it renders as `neutral`, and callers that want no
  * badge at all check the level itself first.
  */
+/**
+ * How many chapters the learner has finished every lesson of.
+ *
+ * The TypeScript mirror of the count in `award_milestones` (0027), and it must
+ * agree with it — the badge is awarded there and the distance to the next rung
+ * is computed here, so a disagreement would show "1 to go" beside a badge the
+ * learner already has.
+ *
+ * A chapter with no lessons seeded is excluded. Without that guard an empty
+ * chapter counts as finished by vacuous truth, and Class 8's placeholder
+ * chapters would each have awarded a badge for nothing.
+ */
+function countFinishedChapters(
+  lessons: readonly { id: string; chapter_id: string }[],
+  completed: ReadonlySet<string>,
+): number {
+  const byChapter = new Map<string, string[]>();
+  for (const lesson of lessons) {
+    byChapter.set(lesson.chapter_id, [...(byChapter.get(lesson.chapter_id) ?? []), lesson.id]);
+  }
+
+  let finished = 0;
+  for (const ids of byChapter.values()) {
+    if (ids.length > 0 && ids.every((id) => completed.has(id))) finished++;
+  }
+  return finished;
+}
+
 function badgeToneFor(level: Level): MasteryBand {
   switch (level) {
     case "mastered":

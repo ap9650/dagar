@@ -49,6 +49,17 @@ export const MILESTONE_CODES = [
   "streak_100",
   "streak_180",
   "streak_365",
+
+  // ── The counting ladders, added 5 Aug 2026 ───────────────────────────────
+  // `concept_mastered` fired on the first concept ever and never again, however
+  // many followed; `chapter_complete` the same. These give both somewhere to
+  // go. Rung 1 of each keeps its original name so no earned badge is orphaned
+  // — see `badgeLadders.ts` for the shape and the reasoning on the top rungs.
+  "concepts_5",
+  "concepts_15",
+  "concepts_40",
+  "chapters_3",
+  "chapters_10",
 ] as const;
 
 export type MilestoneCode = (typeof MILESTONE_CODES)[number];
