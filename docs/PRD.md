@@ -605,7 +605,70 @@ These targets are initial benchmarks for evaluating product direction during the
 | Phase 2 – Intelligence | Improve personalisation | Adaptive learning paths, additional regional languages, voice interactions, AI revision plans |
 | Phase 3 – Scale | Expand reach and accessibility | Additional subjects, teacher dashboard, NGO dashboard, accessibility features, offline learning, CSR partnerships |
 
-# 16. Appendix
+# 16. Decision Register
+
+**Every implementation decision, indexed here, with the reasoning in
+`docs/DECISIONS.md`.**
+
+### Why this is an index and not the decisions themselves
+
+This document has two readers who want opposite things. A judge, a partner or an
+investor reads it end to end and needs the argument; whoever is building reads it
+to answer "what did we decide about X, and why". Putting *"practice is offered at
+a concept boundary, not after every lesson"* into §7 would bury a strategy
+document under implementation detail and still leave the reasoning nowhere.
+
+So the split is deliberate: **the PRD says what we are building and why it
+matters; `DECISIONS.md` says what we chose when the PRD left a choice open, and
+why.** The register below is what makes that split safe — nothing is reachable
+only by reading code.
+
+**The rule stands: where the two disagree, `DECISIONS.md` wins and the PRD gets a
+follow-up edit.** It is written later, against a real product, by someone who has
+already hit the problem.
+
+### The register
+
+| # | Decision | In short |
+|---|---|---|
+| D1 | Curriculum scope & content source | New NCERT (Ganita Prakash) only; one chapter per grade in the MVP |
+| D2 | Accounts & parent linking | Learner owns the account; a parent reads via link or code, and never writes |
+| D3 | Question bank & grading | Grading is deterministic code, never AI; `1/2`, `2/4` and `0.5` all mark correct |
+| D4 | Parent summaries | WhatsApp where opted in, in-app otherwise |
+| D5 | Mastery | Per concept, over the last five attempts; ≥0.8 with ≥3 attempts is mastered |
+| D6 | Struggle detection | What triggers a mentor escalation |
+| D7 | Streaks | One lesson **or** five practice questions a day; one forgiven day per rolling week; IST |
+| D7b | Milestones | The badge catalogue and how it is awarded |
+| D8 | Mentor requests | An inline offer, never a modal, never a diagnosis |
+| D9 | Stack | Next.js · Supabase · Vercel · Claude |
+| D10 | Accessibility | WCAG AA is in the MVP, not a later phase |
+| D11 | Non-functional targets | Latency, cost and retention budgets |
+| D12 | Canonical hypotheses | Resolves the §3 / §12 conflict in this document |
+| D14 | Commercial model | Free tier and Dagar Plus |
+| D15 | Distribution | PWA now, Play Store later |
+| D16 | Hindi | In the MVP, not Phase 2 — the learners are Hindi-medium |
+| D17 | Habit mechanics | What transfers from Duolingo, and what inverts for a learner already behind |
+| D17b | Reminder notifications | Two a day, the second conditional; silent once the goal is met |
+| D18 | Lessons are steps, not prose | One idea per screen, with a visible finish line |
+| D19 | Navigation feels instant | Or the work behind it does not count |
+| D20 | Practice at a concept boundary | Not after every lesson — practice for a two-lesson concept contains both lessons' questions |
+
+### What this register is for
+
+D20 is the reason it exists. That rule was live from the first week and written
+down **only in a code comment**, so the product behaved consistently while
+appearing, to anyone reading the screen, to contradict itself: one lesson ends
+with "Next lesson", the next with "Practise this". It was reported as a bug. It
+was not a bug — but with no entry anywhere, there was no way to tell those two
+cases apart without reading `lib/learning/nextStep.ts`.
+
+**A decision that exists only in code is indistinguishable from an accident.**
+
+`tests/unit/decision-register.test.ts` fails the build when a decision is added to
+`DECISIONS.md` and not to this table, naming the missing number. An index nobody
+maintains is worse than no index, because it looks complete.
+
+# 17. Appendix
 
 ## Key Assumptions
 

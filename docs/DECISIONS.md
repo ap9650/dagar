@@ -1290,6 +1290,43 @@ demo account does not survive the move there is no demo. Revisit after judging.
 **Every interactive element needs an `active:` state, not just `hover:`.** Hover
 is the desktop affordance; this product is used with a thumb.
 
+## D20 — Practice is offered at a CONCEPT boundary, not after every lesson (5 Aug 2026)
+
+**Decision:** finishing a lesson leads to the next lesson when the next lesson
+teaches the **same concept**, and to practice only when the concept ends.
+
+This was live from the start and written down nowhere — it lived in a comment in
+`lib/learning/nextStep.ts`. It surfaced as a bug report, and reasonably so: Class
+6 Fractions lesson 1 ends with **"Next lesson"** and lesson 2 ends with
+**"Practise this"**, which reads as two products disagreeing with each other.
+
+**It is not a bug, and the reason is the same rule as the content one.**
+
+A concept is the unit of mastery (D5) and practice is drawn per concept — so
+practice for a two-lesson concept contains questions from **both** lessons.
+Offering it after lesson 1 serves a learner questions on material they have not
+been taught. Checked, not assumed:
+
+| Concept | Lesson 1 | Lesson 2 | A question in its bank |
+|---|---|---|---|
+| `adding-subtracting-integers` | Adding Integers | Subtracting Integers | `-2 - 3` |
+| `bar-graphs` | Reading a Height | Choosing the Scale | "Which class has the most students walking to school?" |
+| `solving-one-side` | Solving Step by Step | Brackets and Fractions | bracket equations |
+
+Practising after "Adding Integers" would hand a learner subtraction. That is the
+teach-before-ask violation the whole content pass exists to remove, arriving
+through practice instead of lessons — so "practise after every lesson" is not a
+smaller inconsistency, it is the larger bug.
+
+**What is genuinely wrong is that a learner cannot see why.** Two lessons that
+share a concept look identical on the chapter path. The honest fix is to make the
+grouping visible there, not to change when practice fires. Not built — noted so
+the next person meets the choice rather than the symptom.
+
+Mastery also depends on it: the score is the last five attempts (D5), so attempts
+collected before a concept is fully taught are noise in the number that drives
+adaptivity.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3
