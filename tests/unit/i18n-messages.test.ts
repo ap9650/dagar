@@ -138,3 +138,42 @@ describe("message dictionaries", () => {
     expect(offenders).toEqual([]);
   });
 });
+
+/**
+ * Copy that names a button must name a button that exists.
+ *
+ * `/for-parents` walks an adult through taps they will make in Settings, in
+ * quotes: *tap "Invite a parent"*. If the quoted label and the real one drift,
+ * nothing breaks and no other test notices — a parent simply hunts a screen for
+ * a control that is not there, on a phone, in the one flow where they have the
+ * least patience.
+ *
+ * That is exactly what happened in Hindi: the instructions said
+ * "पैरेंट को बुलाओ" while the button says "पैरेंट को जोड़ो". English was
+ * consistent, so reading the English copy would never have found it.
+ */
+describe("copy that quotes a button label", () => {
+  const dicts = { en, hi } as const;
+
+  const QUOTED = [
+    { where: "forParents.step1", label: "settings.inviteParent" },
+    { where: "forParents.noCodeBody", label: "settings.inviteParent" },
+    { where: "forParents.linkWay1", label: "settings.shareTitle" },
+  ];
+
+  function read(dict: Record<string, unknown>, path: string): string {
+    return path
+      .split(".")
+      .reduce<unknown>((acc, part) => (acc as Record<string, unknown>)[part], dict) as string;
+  }
+
+  for (const { where, label } of QUOTED) {
+    for (const [locale, dict] of Object.entries(dicts)) {
+      it(`${where} names the real ${label} in ${locale}`, () => {
+        const copy = read(dict as Record<string, unknown>, where);
+        const button = read(dict as Record<string, unknown>, label);
+        expect(copy).toContain(button);
+      });
+    }
+  }
+});

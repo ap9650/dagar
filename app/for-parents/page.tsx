@@ -29,7 +29,20 @@ import { BackLink } from "@/components/ui/BackLink";
 export default async function ForParentsPage() {
   const t = await getTranslations("forParents");
 
-  const sees = [t("sees1"), t("sees2"), t("sees3"), t("sees4")];
+  /*
+    FIVE, and the fifth is the one that was missing.
+
+    The parent screen's most useful section is "What would help most" — one
+    named concept and one thing to do about it tonight. It is the whole reason
+    an adult without the maths would open this at all, and the list promising
+    what they would see never mentioned it: four lines of reporting and nothing
+    about being helped.
+
+    `sees2` also now uses the exact words the badges use — "Mastered", "Getting
+    there" — rather than paraphrasing them. A promise a reader has to translate
+    into what they later see on screen is a weaker promise.
+  */
+  const sees = [t("sees1"), t("sees2"), t("sees3"), t("sees4"), t("sees5")];
   // ONE line, because one thing is actually enforced.
   //
   // This list used to promise that the answers a learner gave and "anything they
