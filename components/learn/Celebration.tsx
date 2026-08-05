@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Award, Flame, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { haptic } from "@/lib/haptics";
+import { nextRung, rungFromCode } from "@/lib/learning/streakLadder";
 import type { Celebration as Moment } from "@/lib/learning/celebration";
 
 /**
@@ -137,6 +138,31 @@ export function Celebration({
  */
 function copyFor(moment: Moment, t: RootTranslator) {
   if (moment.kind === "milestone") {
+    /**
+     * ── A STREAK RUNG IS CELEBRATED AND THEN IMMEDIATELY RE-AIMED ───────────
+     * "3 days in a row." is a full stop. "3 days in a row. Ready for 7?" is a
+     * handoff — the celebration and the invitation in one breath, which is the
+     * entire point of the ladder. A milestone that only says well done is the
+     * dead end this replaced.
+     *
+     * The rung takes the headline instead of the generic "New badge!", because
+     * the number IS the news. Ordinary badges keep the generic title, where the
+     * badge name is the news instead.
+     *
+     * At the top of the ladder there is no next rung, and the copy says so
+     * plainly rather than inventing a target — a learner who has kept this going
+     * for a year is owed a true sentence, not another ask.
+     */
+    const rung = moment.codes.map(rungFromCode).find((r) => r !== null) ?? null;
+
+    if (rung !== null) {
+      const next = nextRung(rung);
+      return {
+        title: t(`milestone.streak_${rung}` as never),
+        body: next !== null ? t("streak.nextRung", { days: next }) : t("streak.ladderDone"),
+      };
+    }
+
     return {
       title: t("milestone.earned"),
       body: moment.codes.map((code) => t(`milestone.${code}` as never)).join(" · "),

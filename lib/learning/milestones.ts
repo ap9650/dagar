@@ -38,6 +38,17 @@ export const MILESTONE_CODES = [
   "chapter_complete",
   "streak_7",
   "chapter_mastered",
+
+  // ── The streak ladder, added 5 Aug 2026 ───────────────────────────────────
+  // `streak_7` used to be the last habit milestone a learner could ever earn:
+  // from day 8 onward the streak counted up toward nothing. These are the rest
+  // of the rungs — see `streakLadder.ts` for why these numbers and why the
+  // ladder stops at a year rather than running forever.
+  "streak_14",
+  "streak_30",
+  "streak_100",
+  "streak_180",
+  "streak_365",
 ] as const;
 
 export type MilestoneCode = (typeof MILESTONE_CODES)[number];

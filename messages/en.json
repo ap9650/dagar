@@ -82,7 +82,11 @@
     "days": "{days, plural, =0 {No streak yet} one {# day streak} other {# day streak}}",
     "broken": "Start again today",
     "grace": "Rest day used — your streak is safe",
-    "extended": "{days, plural, one {# day in a row} other {# days in a row}}"
+    "extended": "{days, plural, one {# day in a row} other {# days in a row}}",
+    "nextRung": "Ready for {days}?",
+    "toNextRung": "{days, plural, one {# more day} other {# more days}} to your {target}-day badge.",
+    "ladderDone": "You have kept this going for a whole year.",
+    "graceHint": "Miss a day and your streak still survives — once a week."
   },
   "chapter": {
     "lessonsTitle": "Lessons",
@@ -210,7 +214,12 @@
     "streak_7": "7 days in a row",
     "concept_mastered": "First concept mastered",
     "chapter_complete": "Chapter finished",
-    "chapter_mastered": "Chapter mastered"
+    "chapter_mastered": "Chapter mastered",
+    "streak_14": "14 days in a row",
+    "streak_30": "30 days in a row",
+    "streak_100": "100 days in a row",
+    "streak_180": "180 days in a row",
+    "streak_365": "A whole year in a row"
   },
   "celebration": {
     "goalDone": "Today's goal is done.",

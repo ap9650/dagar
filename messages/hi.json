@@ -82,7 +82,11 @@
     "days": "{days, plural, =0 {अभी कोई स्ट्रीक नहीं} one {# दिन की स्ट्रीक} other {# दिन की स्ट्रीक}}",
     "broken": "आज से नया शुरू करते हैं",
     "grace": "एक दिन का आराम — स्ट्रीक बची हुई है",
-    "extended": "{days, plural, one {लगातार # दिन} other {लगातार # दिन}}"
+    "extended": "{days, plural, one {लगातार # दिन} other {लगातार # दिन}}",
+    "nextRung": "अब {days} तक चलें?",
+    "toNextRung": "{days, plural, one {# दिन और} other {# दिन और}} — फिर {target} दिन का बैज मिलेगा।",
+    "ladderDone": "तुमने पूरे एक साल यह जारी रखा है।",
+    "graceHint": "एक दिन छूट जाए तो भी स्ट्रीक बची रहती है — हफ़्ते में एक बार।"
   },
   "chapter": {
     "lessonsTitle": "लेसन",
@@ -210,7 +214,12 @@
     "streak_7": "लगातार 7 दिन",
     "concept_mastered": "पहला टॉपिक पक्का",
     "chapter_complete": "चैप्टर पूरा",
-    "chapter_mastered": "चैप्टर पक्का"
+    "chapter_mastered": "चैप्टर पक्का",
+    "streak_14": "लगातार 14 दिन",
+    "streak_30": "लगातार 30 दिन",
+    "streak_100": "लगातार 100 दिन",
+    "streak_180": "लगातार 180 दिन",
+    "streak_365": "पूरा एक साल लगातार"
   },
   "celebration": {
     "goalDone": "आज का काम पूरा।",

@@ -306,15 +306,7 @@ export type Database = {
           props?: Json
           student_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "events_student_id_fkey"
-            columns: ["student_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       exit_reasons: {
         Row: {

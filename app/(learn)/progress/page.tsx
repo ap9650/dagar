@@ -6,6 +6,7 @@ import { t as tContent } from "@/lib/i18n/content";
 import { dailyGoal } from "@/lib/learning/dailyGoal";
 import { istDate, istDayStart } from "@/lib/learning/dates";
 import { fromRow, streakStatus } from "@/lib/learning/streaks";
+import { rungProgress } from "@/lib/learning/streakLadder";
 import { earnedCount, milestoneGrid } from "@/lib/learning/milestones";
 import { chapterMastery, type MasteryBand } from "@/lib/learning/mastery";
 import { Badge } from "@/components/ui/Badge";
@@ -92,6 +93,11 @@ export default async function ProgressPage() {
   ]);
 
   const streak = streakStatus(fromRow(streakRow), today);
+
+  // Null once the ladder is finished, and null while the streak is broken — a
+  // learner being told "start again today" should not be handed a distance to a
+  // badge in the same breath. The invitation belongs to a streak that is alive.
+  const ladder = streak.alive ? rungProgress(streak.days) : null;
   const goal = dailyGoal(lessonsToday ?? 0, practiceToday ?? 0);
   const grid = milestoneGrid(earned ?? []);
   const badges = earnedCount(grid);
@@ -140,6 +146,40 @@ export default async function ProgressPage() {
             <p className="text-body-sm text-muted">
               {t("progress.longestStreak", { days: streak.longest })}
             </p>
+          )}
+
+          {/*
+            ── WHERE THE STREAK IS GOING ─────────────────────────────────────
+            A streak that counts up forever is a number; one with a named next
+            rung is a goal. D17 already endorses a visible finish line inside a
+            lesson — this is the same principle at the scale of a week.
+
+            The bar measures from the PREVIOUS rung, not from zero (see
+            `rungProgress`): a learner on day 31 heading for 100 is one day into
+            a seventy-day span, and a bar starting at zero would appear to
+            collapse the moment they earned 30.
+
+            Nothing renders past the top rung. A learner who has kept this going
+            for a year gets their streak and no further ask — inventing a target
+            beyond the ladder would be the dead end this replaced, moved upward.
+          */}
+          {ladder && (
+            <div className="flex flex-col gap-xs pt-xs">
+              {/* The TRACK is `border`, not `background`. This card sits on
+                  `surface`, so a white track vanished into it — and on the day a
+                  rung is reached the fill is legitimately zero, which made the
+                  whole thing read as a broken white rule rather than as a fresh
+                  span with everything still to go. */}
+              <div className="h-1.5 rounded-full bg-border overflow-hidden" aria-hidden>
+                <div
+                  className="h-full rounded-full bg-streak-active"
+                  style={{ width: `${ladder.fraction * 100}%` }}
+                />
+              </div>
+              <p className="text-body-sm text-body">
+                {t("streak.toNextRung", { days: ladder.remaining, target: ladder.next })}
+              </p>
+            </div>
           )}
         </div>
       </section>
