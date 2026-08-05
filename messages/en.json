@@ -24,7 +24,8 @@
   },
   "login": {
     "title": "Welcome to Dagar",
-    "subtitle": "NCERT mathematics for Classes 6 to 8",
+    "subtitle": "A personal guide for your learning journey",
+    "scope": "Starting with NCERT maths, Classes 6–8",
     "google": "Continue with Google",
     "divider": "or",
     "emailOption": "Use email instead",

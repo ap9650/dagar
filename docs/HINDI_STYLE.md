@@ -54,8 +54,13 @@ correct in their place. Mixing them up in either direction is the error.
 
 ### For the conversational surfaces only
 
-- **तुम**, not आप — Dagar means *companion*, and आप is polite distance.
+- **तुम**, not आप — आप is polite distance, and Dagar walks the path *beside* a
+  12-year-old rather than addressing them across a counter.
   (Parent-facing copy uses आप; that reader is an adult.)
+  <!-- This read "Dagar means companion", which was true of Saathi — डगर means
+       the path, not the one walking it. The rule was always right; only the
+       reason for it needed the rename. -->
+
 - Everyday words: **सवाल** over प्रश्न, **जवाब** over उत्तर, **गलती** over त्रुटि,
   **फिर से** over पुनः. Drop **कृपया** entirely — it makes an app sound like a form.
 - Keep the English words children genuinely say, written in Devanagari:

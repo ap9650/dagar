@@ -56,9 +56,28 @@ export default async function LoginPage({
 
   return (
     <main className="flex-1 w-full max-w-(--container-content) mx-auto px-lg py-3xl flex flex-col gap-xl">
+      {/*
+        ── WHAT THIS SCREEN SAYS DAGAR IS ──────────────────────────────────────
+        The subtitle read "NCERT mathematics for Classes 6 to 8", which promoted
+        a temporary scope decision into the product's identity. The PRD is
+        explicit that it IS temporary — "Dagar's long-term vision spans multiple
+        subjects and learner groups; the MVP focuses on Mathematics for Classes
+        6–8" — so the first screen a learner ever sees was introducing the
+        smallest true thing about the product.
+
+        Purpose in the subtitle, scope in the line under it. The subtitle
+        survives a new subject or a new class; only the small line moves. And
+        "Starting with" rather than "Currently" or "Only": a journey has a
+        starting point, which is the same idea the name carries.
+
+        The scope line stays because it is load-bearing for the ADULT — a parent
+        or teacher opening the link needs to know whether this covers their
+        child's class before they sign anyone up.
+      */}
       <header className="flex flex-col gap-sm">
         <h1 className="text-h1 text-ink">{t("login.title")}</h1>
         <p className="text-body-sm text-body">{t("login.subtitle")}</p>
+        <p className="text-caption text-muted">{t("login.scope")}</p>
       </header>
 
       {error === "oauth" && (
