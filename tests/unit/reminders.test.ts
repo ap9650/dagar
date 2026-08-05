@@ -158,6 +158,43 @@ describe("the send route", () => {
   });
 });
 
+describe("when the nudge is allowed to appear", () => {
+  const actions = readFileSync(join(ROOT, "components/learn/LessonActions.tsx"), "utf8");
+  const prompt = readFileSync(join(ROOT, "components/learn/ReminderPrompt.tsx"), "utf8");
+
+  /*
+    A permission ask before any value has been delivered is how an app spends
+    its ONE refusal — a browser remembers "denied" for good and Dagar cannot ask
+    again from inside itself. So the whole design of this card is *when* it
+    shows, and that is worth a guard.
+
+    Reported from a phone: the nudge greeted a learner on a lesson screen before
+    they had finished anything. The cause was `complete` — a recorded FACT that
+    is already true the instant a finished lesson is reopened — standing in for
+    the MOMENT of finishing. Asking someone to enable notifications because they
+    reopened a lesson to reread it is asking a favour in return for nothing, and
+    it spends the refusal at the worst possible moment.
+  */
+  it("is offered only at the moment a lesson is finished, never on arrival", () => {
+    expect(actions).toMatch(/\{\s*justCompleted\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
+    // The fact must not be what gates it. Matches the JSX guard specifically,
+    // so the prose above — which uses the word deliberately — cannot satisfy it.
+    expect(actions).not.toMatch(/\{\s*complete\s*&&\s*<ReminderPrompt\s*\/>\s*\}/);
+  });
+
+  it("asks at most once per browser, and remembers a decline", () => {
+    expect(prompt).toContain("PUSH_ASKED_KEY");
+    expect(prompt).toMatch(/if \(asked/);
+  });
+
+  it("says nothing to a browser that has already granted or denied", () => {
+    // Nothing useful to offer either way, and a card about a setting the
+    // learner cannot change from here is nagging.
+    expect(prompt).toMatch(/permissionState\(\) === "granted"/);
+    expect(prompt).toMatch(/permissionState\(\) === "denied"/);
+  });
+});
+
 describe("the service worker", () => {
   const sw = readFileSync(join(ROOT, "public/sw.js"), "utf8");
 
