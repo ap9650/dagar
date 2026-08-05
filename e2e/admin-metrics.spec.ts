@@ -85,3 +85,56 @@ test.describe(canSignIn ? "signed in as an admin" : "signed in as an admin (skip
     await expect(page.getByText(/follows the learners who joined/i)).toBeVisible();
   });
 });
+
+/**
+ * The notifications console, and the two routes behind it.
+ *
+ * These matter more than the metrics guard does. `/api/admin/test-push` puts a
+ * notification on a phone — so the question is not only "can a stranger read
+ * numbers" but "can anyone who is not the operator make a device buzz". The
+ * route answers that twice over: the admin allowlist, and then a query scoped
+ * to the caller's OWN user id, so even a valid admin can only reach their own
+ * handset.
+ */
+test("the notifications console does not exist for a signed-out visitor", async ({ page }) => {
+  // Same shape as the metrics assertion above: proxy.ts redirects before the
+  // guard is reached, and the outer layer is enough on its own.
+  const response = await page.goto("/admin/notifications");
+  expect(response?.status()).toBeLessThan(400);
+  await expect(page).toHaveURL(/\/(welcome|login)/);
+});
+
+test("the admin notification routes reject a signed-out caller", async ({ request }) => {
+  // 404 rather than 403 — an admin surface does not confirm it exists.
+  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary"]) {
+    const response = await request.post(path, { data: { slot: "afternoon", locale: "en" } });
+    expect(response.status(), path).toBe(404);
+  }
+});
+
+test("a signed-in learner cannot reach the console or fire a push", async ({ page }) => {
+  const stamp = `${Date.now()}${Math.random().toString(36).slice(2, 7)}`;
+  await page.goto("/login");
+  await page.getByRole("button", { name: "Create an account" }).click();
+  await page.getByLabel("Email").fill(`e2e_${stamp}@example.com`);
+  await page.getByLabel("Password").fill("demo-password-12345");
+  await page.getByRole("button", { name: "Create an account" }).click();
+
+  // Finish onboarding, or proxy sends them there rather than to the guard —
+  // which would pass this test for the wrong reason.
+  await expect(page.getByRole("heading", { name: /which class are you in/i })).toBeVisible({
+    timeout: 20_000,
+  });
+  await page.getByText("Class 6", { exact: true }).click();
+  await page.getByRole("button", { name: "Continue" }).click();
+  await page.waitForURL(/\/learn$/, { timeout: 20_000 });
+
+  // A real session, held by someone who is not on the allowlist.
+  const consoleResponse = await page.goto("/admin/notifications");
+  expect(consoleResponse?.status()).toBe(404);
+
+  for (const path of ["/api/admin/test-push", "/api/admin/preview-summary"]) {
+    const response = await page.request.post(path, { data: { slot: "afternoon", locale: "en" } });
+    expect(response.status(), path).toBe(404);
+  }
+});
