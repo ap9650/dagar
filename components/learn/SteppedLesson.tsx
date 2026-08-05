@@ -14,9 +14,15 @@ import type { LessonStep } from "@/lib/learning/lessonSteps";
  * a `children` slot was the previous shape, and it forced the player to render a
  * second, identical button on a screen of its own.
  *
- * Once the lesson is complete the player steps aside: what a learner wants at
- * that moment is the celebration and the next thing, not step 8 again. Reopening
- * the lesson starts it from the top, as it always has.
+ * Once a learner FINISHES the lesson the player steps aside: what they want at
+ * that moment is the celebration and the next thing, not step 8 again.
+ *
+ * "Finishes", not "is complete" — the difference is the whole of a bug reported
+ * from a phone. This read `!state.complete`, and `complete` is true the instant a
+ * finished lesson is REOPENED, so revising one showed its title, "Lesson
+ * complete", and none of the lesson. The comment here used to claim reopening
+ * "starts it from the top, as it always has". It did not. Nothing is gated in
+ * Dagar and revision is the point, so a finished lesson must open like any other.
  */
 export function SteppedLesson({
   lessonId,
@@ -37,7 +43,7 @@ export function SteppedLesson({
 
   return (
     <>
-      {!state.complete && (
+      {!state.justCompleted && (
         <LessonSteps
           steps={steps}
           speech={speech}

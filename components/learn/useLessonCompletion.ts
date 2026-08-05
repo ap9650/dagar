@@ -32,6 +32,20 @@ export function useLessonCompletion({
   const router = useRouter();
 
   const [complete, setComplete] = useState(alreadyComplete);
+  /**
+   * Finished JUST NOW, in this visit — as opposed to `complete`, which is only a
+   * recorded fact and is true the instant a finished lesson is reopened.
+   *
+   * The two were one flag, and everything that belongs to the MOMENT of finishing
+   * hung off the fact: the step player stepped aside, the reminder and feedback
+   * prompts appeared. So reopening a finished lesson to revise it showed a title,
+   * "Lesson complete", and no lesson — reported from a phone, with a screenshot
+   * of an all-but-empty screen.
+   *
+   * A recorded fact says what the footer should read. Only the moment may take
+   * the content away.
+   */
+  const [justCompleted, setJustCompleted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [failed, setFailed] = useState(false);
   const [moment, setMoment] = useState<Moment | null>(null);
@@ -63,6 +77,7 @@ export function useLessonCompletion({
     // optimistic state, not the response: the learner finished the lesson, and
     // whether our server heard about it is not their news.
     setComplete(true);
+    setJustCompleted(true);
     haptic("complete");
 
     try {
@@ -92,6 +107,7 @@ export function useLessonCompletion({
 
   return {
     complete,
+    justCompleted,
     busy,
     failed,
     moment,

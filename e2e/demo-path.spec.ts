@@ -182,6 +182,27 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   expect(revisited.pathname).toBe(finishedLesson);
 
   /*
+    AND THE LESSON IS ACTUALLY THERE.
+
+    This assertion is the one the first version of this block was missing, and
+    the miss is instructive: arriving at the right URL was checked, having
+    something to read when you got there was not. So the navigation fix went out
+    green while the screen a learner reached still held a title, "Lesson
+    complete" and nothing else — reported from a phone, with the screenshot.
+
+    The player was hidden by `complete`, which is true the moment a finished
+    lesson is REOPENED, rather than by finishing it here and now. Reopening a
+    finished lesson must start it from the top like any other: nothing in Dagar
+    is gated, and revision is the entire point of coming back.
+  */
+  await expect(page.getByText(/step 1 of/i)).toBeVisible();
+  await expect(page.getByRole("button", { name: /continue|got it/i })).toBeVisible();
+
+  // And the moment-of-finishing surfaces do NOT reappear for a reread: the
+  // sticky footer belongs to the end of the lesson, not to arriving at it.
+  await expect(page.getByText(/^lesson complete$/i)).toBeHidden();
+
+  /*
     PATHNAME, not the whole URL — and the difference matters.
 
     The first visit carried `?from=rec`, because the learner arrived from the

@@ -39,11 +39,18 @@ export function LessonActions({
 }) {
   const t = useTranslations();
   const router = useRouter();
-  const { complete, busy, failed, moment, markComplete, dismissMoment } = state;
+  const { complete, justCompleted, busy, failed, moment, markComplete, dismissMoment } =
+    state;
 
   // Nothing to show yet: a stepped lesson mid-way has its own Continue, and this
   // would otherwise draw an empty sticky bar across the bottom of every step.
-  if (!primary && !complete && !failed) return null;
+  //
+  // `justCompleted`, not `complete`, so that REOPENING a finished stepped lesson
+  // reads exactly like opening it the first time — steps, then this. Keyed off
+  // the recorded fact instead, a learner revising step 1 would have "Practise
+  // this" pinned across the bottom competing with the step's own Continue: two
+  // primary buttons on a 360px screen, against design rule 11.
+  if (!primary && !justCompleted && !failed) return null;
 
   return (
     /*
@@ -91,15 +98,17 @@ export function LessonActions({
 
       <Celebration moment={moment} onDismiss={dismissMoment} />
 
-      {/* Both only after finishing, and BELOW the next action — so anyone
-          carrying straight on to practice never has to read either.
+      {/* Both only after finishing SOMETHING JUST NOW, and BELOW the next action
+          — so anyone carrying straight on to practice never has to read either.
+          On `complete` they would also greet a learner who only reopened an old
+          lesson to reread it, which is asking for a favour in return for nothing.
 
           The reminder offer comes FIRST because it is the one with a cost to
           getting wrong: a browser remembers a refused notification permission
           for good, and Dagar cannot ask again from inside the app. Feedback can
           be asked for again any time. */}
-      {complete && <ReminderPrompt />}
-      {complete && <FeedbackPrompt />}
+      {justCompleted && <ReminderPrompt />}
+      {justCompleted && <FeedbackPrompt />}
     </div>
   );
 }
