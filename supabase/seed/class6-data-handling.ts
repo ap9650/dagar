@@ -91,9 +91,14 @@ export const class6DataHandling: SeedChapter = {
           md: "Your class is choosing a game for Saturday. You ask all 40 students. The answers arrive in a jumble.",
         },
         {
-          // The chart carries no bundling yet — this is the mess, on purpose.
-          kind: "see",
-          md: "This is **data**: information you collected. Correct, and useless — you still cannot say which game won.",
+          // A question, not a third thing to read. Three passive steps in a row
+          // is the contract this chapter kept breaking (C4) — and asking here
+          // costs nothing, because the answer is "no, you cannot", which is the
+          // entire reason the rest of the lesson exists.
+          kind: "reveal",
+          md: "You have all 40 answers written down. Can you say which game won?",
+          answer:
+            "Not from that jumble. It is correct **data** — information you collected — and useless until somebody organises it.",
           viz: {
             kind: "chart",
             variant: "tally",
@@ -106,14 +111,11 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
-          kind: "reveal",
-          md: "Look at the kabaddi row. The marks are in groups. How many marks are in each full group?",
-          answer:
-            "Five. Four upright, and the fifth drawn across them — a bundle you can see at a glance without counting.",
-        },
-        {
+          // NAMED BEFORE IT IS USED. The word "tally" used to arrive inside a
+          // reveal's ANSWER, which meant a learner met the term for the first
+          // time as a correction to a guess. A term is taught, then asked.
           kind: "see",
-          md: "That is why five: you recognise a bundle without counting it. A bundle of seven would need counting, which is the problem we are solving.",
+          md: "So you draw one mark per answer. These are **tally marks**: four standing up, the fifth across them makes a bundle of 5.",
           viz: {
             kind: "chart",
             variant: "tally",
@@ -124,8 +126,14 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
+          kind: "reveal",
+          md: "Why bundle them in fives, and not sevens?",
+          answer:
+            "Because you see five at a glance, without counting. Seven you would have to count — and counting is what we are trying to stop doing.",
+        },
+        {
           kind: "worked",
-          md: "So reading a tally back is arithmetic, not counting.",
+          md: "Now you can read a row without counting every mark.",
           lines: [
             "Kabaddi has 2 full bundles and 2 single marks.",
             "Bundles first: $2 \\times 5 = 10$.",
@@ -193,8 +201,12 @@ export const class6DataHandling: SeedChapter = {
 
       steps: [
         {
+          // A THING, not an argument. This lesson used to open with "Tally marks
+          // are quick to write and hard to compare" — a judgement about a method,
+          // which is how an adult introduces a topic and not how a 11-year-old
+          // meets one. Show the two rows and let the eye do the work.
           kind: "see",
-          md: "Tally marks are quick to write and hard to compare. Which is more, 17 marks or 12? You have to count both.",
+          md: "Here are the kabaddi and cricket votes again. Which row is bigger? You still have to count.",
           viz: {
             kind: "chart",
             variant: "tally",
@@ -206,7 +218,7 @@ export const class6DataHandling: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Same votes, drawn as pictures. Now the longer row IS the bigger number — no counting needed.",
+          md: "Same votes, drawn with circles instead. This picture is called a **pictograph**.",
           viz: {
             kind: "chart",
             variant: "pictograph",
@@ -220,10 +232,36 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
+          // The KEY arrives as the ANSWER to a genuine puzzle — "12 votes, but
+          // only two and a half circles?" — which is discovery, not correction.
+          // A `reveal` has no wrong-answer path: everybody sees this. That is
+          // the difference from the `tap` this chapter used to open with.
           kind: "reveal",
-          md: "Kabaddi got 12 votes but shows only about 2 and a half circles. Why not 12 circles?",
+          md: "Kabaddi got 12 votes but shows only about 2 and a half circles. How can that be?",
           answer:
-            "Because one circle stands for 5 students. That line is called the **key**, and it is written above every pictograph.",
+            "Because one circle stands for 5 students. The line saying so is called the **key**, and every pictograph has one at the top.",
+          viz: {
+            kind: "chart",
+            variant: "pictograph",
+            each: 5,
+            categories: [
+              { label: "Kabaddi", value: 12, tone: "correct" },
+              { label: "Chess", value: 3 },
+            ],
+          },
+        },
+        {
+          kind: "see",
+          md: "So the key decides every number on the chart. Read it before you count a single picture.",
+          viz: {
+            kind: "chart",
+            variant: "pictograph",
+            each: 5,
+            categories: [
+              { label: "Kabaddi", value: 12 },
+              { label: "Cricket", value: 17, tone: "correct" },
+            ],
+          },
         },
         {
           kind: "worked",
@@ -301,8 +339,12 @@ export const class6DataHandling: SeedChapter = {
 
       steps: [
         {
+          // Opened on "For 1,700 you would draw 340 circles" — a hypothetical
+          // about a number no 11-year-old has met, used to justify a tool they
+          // have not been shown yet. Now: the whole school, which is a real
+          // place, and then the new picture immediately.
           kind: "see",
-          md: "A key of 5 works for 17 votes. For 1,700 you would draw 340 circles. Pictures stop being practical.",
+          md: "Now imagine asking the whole school, not just your class. Hundreds of votes — and hundreds of circles to draw.",
           viz: {
             kind: "chart",
             variant: "pictograph",
@@ -314,8 +356,12 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
+          // NAMES THE THING. The lesson is titled "Bar Graphs" and its steps
+          // never once said "bar graph" — it lived only in the prose, which the
+          // step player hides. Four practice questions and a quiz question then
+          // asked about bar graphs.
           kind: "see",
-          md: "Same four numbers, drawn as bars. Each bar's **height** is the number now — no counting at all.",
+          md: "So instead of circles we draw one **bar** for each game. A picture like this is called a **bar graph**.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -328,10 +374,35 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
+          // The numbers up the side are visible on the chart above, so this is
+          // answerable by looking — and answering it is what makes the word
+          // stick better than being told.
           kind: "reveal",
-          md: "Look up the left side. The numbers go 0, 5, 10, 15, 20. What is that called, and what is it for?",
+          md: "Look up the left-hand side. The numbers go 0, 5, 10, 15, 20. What are they there for?",
           answer:
-            "The **scale**. You read a bar by finding its top and moving straight across to these numbers.",
+            "They are the **scale**. To read a bar you find its top, move straight across to the scale, and read the number.",
+          viz: {
+            kind: "chart",
+            variant: "bar",
+            categories: [
+              { label: "Cricket", value: 17, tone: "correct" },
+              { label: "Chess", value: 3 },
+            ],
+          },
+        },
+        {
+          kind: "see",
+          md: "Along the bottom are the four games. Each one is a **category** — a thing you are comparing.",
+          viz: {
+            kind: "chart",
+            variant: "bar",
+            categories: [
+              { label: "Kabaddi", value: 12, tone: "correct" },
+              { label: "Cricket", value: 17, tone: "correct" },
+              { label: "Kho-kho", value: 8, tone: "correct" },
+              { label: "Chess", value: 3, tone: "correct" },
+            ],
+          },
         },
         {
           kind: "worked",
@@ -400,7 +471,7 @@ export const class6DataHandling: SeedChapter = {
       steps: [
         {
           kind: "see",
-          md: "Five classes, and how many walk to school: 30, 45, 25, 50, 35. These need a scale before they can be drawn.",
+          md: "New question: how many students in each class walk to school? You count 30, 45, 25, 50 and 35.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -414,9 +485,13 @@ export const class6DataHandling: SeedChapter = {
           },
         },
         {
+          kind: "see",
+          md: "Before you can draw the bars, you have to choose what the numbers up the side will be. That choice is the **scale**.",
+        },
+        {
           kind: "reveal",
-          md: "Why would a scale going up in 1s be a bad choice here?",
-          answer: "It needs 50 lines. The graph would not fit on the page, and nobody could read it.",
+          md: "Suppose you make the scale go up in 1s — 0, 1, 2, 3, all the way to 50. What goes wrong?",
+          answer: "You would need 50 lines up the side. They would be squashed together and nobody could read them.",
         },
         {
           kind: "tap",
@@ -483,8 +558,11 @@ export const class6DataHandling: SeedChapter = {
 
       steps: [
         {
+          // Was "A graph is not the end of the work" — a claim about graphs in
+          // general. A learner needs the situation first: someone is standing
+          // there asking something.
           kind: "see",
-          md: "A graph is not the end of the work. Somebody asked a question first, and the graph is how you answer it.",
+          md: "Your chart is finished and on the wall. Now your teacher starts asking questions about it.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -648,11 +726,21 @@ export const class6DataHandling: SeedChapter = {
       stem_md: "What is the line above a pictograph that tells you what one picture is worth?",
       answer_type: "mcq",
       answer_value: "key",
+      /*
+        Distractors a learner could actually believe HERE, which the previous
+        set were not. "The axis" is a word they do not meet until the next
+        lesson — an option nobody has heard of is noise, not a misconception,
+        and the seed's own rule is that wrong options encode real mistakes.
+
+        "The scale" was worse than useless: NCERT calls the value of one picture
+        the scale of a pictograph, so marking it wrong would contradict the
+        textbook open on the learner's desk.
+      */
       choices: [
         { id: "key", label: "The key" },
-        { id: "scale", label: "The scale" },
         { id: "title", label: "The title" },
-        { id: "axis", label: "The axis" },
+        { id: "tally", label: "The tally marks" },
+        { id: "total", label: "The total" },
       ],
       solution_md:
         "It is the **key**. A scale runs up the side of a bar graph; a key tells you what one picture stands for.",

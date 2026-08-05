@@ -104,7 +104,7 @@ export const class7Integers: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Counting numbers cannot say that. **Integers** can — the whole numbers and their negatives.",
+          md: "Counting numbers cannot say that. **Integers** can — the whole numbers, their **negatives** below zero, and their **positives** above it.",
           viz: { kind: "numberLine", from: -5, to: 5, step: 1 },
         },
         {

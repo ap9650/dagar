@@ -73,6 +73,46 @@ untagged question is invisible to the whole learning engine.
   recognises. Not pizzas and dollars.
 - Warm, never condescending. The learner is behind, not slow.
 
+## Teach it before you ask it — the rule above all the others
+
+**No question may use a term the learner has not already been shown**, in the
+steps they actually see, before they reach it.
+
+An audit on 5 Aug found **18 violations across four of the five chapters**. Class
+8's first algebra lesson asked *"which of these is linear, in one variable?"* at
+step 4, having never said what linear meant — nor, in the steps, the word
+*equation*. Class 6's lesson titled "Bar Graphs" never once said "bar graph", and
+five questions then asked about them.
+
+**The mechanism, so it is not repeated:** chapters were written as prose, steps
+were derived from the prose, and the QUESTIONS carried over while the DEFINITIONS
+stayed behind. `body_md` is **not** read when a lesson has `steps` — the player
+replaces it. Class 6 Fractions had zero violations because it was authored
+steps-first.
+
+A learner who meets an untaught term does not conclude the app is incomplete.
+They conclude they are stupid, and Dagar's whole audience is learners who already
+half-believe that.
+
+So:
+
+- **Define in a `see` or a `reveal`, never in a `tap`'s feedback.** A `tap`
+  punishes a guess; the learner meets the word as a correction. A `reveal` is
+  safe — everybody sees the answer — so a term may be the *answer to a genuine
+  puzzle* ("12 votes but only two and a half circles — how?").
+- **Teach the exact phrase the question uses.** If practice asks about a "linear
+  equation in one variable", a step must say those words, not a paraphrase.
+- **A discrimination question needs its non-examples taught.** "Which is linear?"
+  requires $x^2$ *and* two-variable cases to have been shown, with the reason
+  each fails.
+- **Distractors must be believable at that moment.** An option naming a word from
+  a later lesson is noise, not a misconception — and check the textbook: "the
+  scale" was a wrong answer on a pictograph question, while NCERT calls the value
+  of one picture exactly that.
+
+`tests/unit/teach-before-ask.test.ts` fails the build on a violation, per chapter,
+naming the lesson, the step and the word.
+
 ## Writing questions
 
 Each question needs: `concept_id`, `kind` (`practice`|`quiz`), `difficulty` (1–3),

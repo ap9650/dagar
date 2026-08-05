@@ -104,20 +104,50 @@ export const class8LinearEquations: SeedChapter = {
         },
         {
           kind: "see",
-          md: "The **variable** $x$ is the thing you do not know yet.",
+          md: "Algebra writes that down as $3x + 5 = 35$. The letter $x$ stands for the pen's price — it is called the **variable**.",
+          viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 }, label: "3x + 5 = 35" },
+        },
+        {
+          // The word "equation" was never once said in these steps. It lived in
+          // the prose, which the step player hides — and then practice and quiz
+          // both asked about "a linear equation in one variable".
+          kind: "see",
+          md: "A sentence with an $=$ sign is an **equation**. It says both sides weigh the same, like a level balance.",
           viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 } },
         },
         {
           kind: "reveal",
-          md: "So what is the $=$ sign actually claiming?",
-          answer: "That both sides weigh exactly the same. It is a **claim**, not an instruction to do something.",
+          md: "So is $=$ telling you to do something?",
+          answer: "No. It is a **claim** — that both sides are equal. Your job is to find the value of $x$ that makes the claim true.",
+        },
+        {
+          // ── TAUGHT, THEN ASKED ────────────────────────────────────────────
+          // Reported from a real reading of the app: the tap below asked "which
+          // of these is linear?" and nothing before it had ever said what linear
+          // meant. Discriminating between an example and a non-example is only
+          // possible once BOTH have been shown — so both are shown, here, with
+          // the reason each one counts or does not.
+          kind: "see",
+          md: "This chapter is about a particular kind of equation. Two rules: only **one** letter, and that letter is **never** squared.",
+        },
+        {
+          kind: "see",
+          md: "An equation obeying both is a **linear equation in one variable**. $2x + 5 = 11$ is one; $x^2 + 3 = 7$ is not.",
         },
         {
           kind: "tap",
-          md: "Which of these is linear, in one variable?",
-          options: [{ label: "$2x + 5 = 11$" }, { label: "$x^2 + 3 = 7$" }],
+          md: "Which of these is linear?",
+          options: [{ label: "$4x - 1 = 7$" }, { label: "$x^2 + 2 = 6$" }],
           answer: 0,
-          why: "No squares, no roots, and only one letter.",
+          why: "$4x - 1 = 7$ has one letter and no square. The other has $x^2$, so it breaks the second rule.",
+        },
+        {
+          // The third non-example, taught AFTER the first tap rather than piled
+          // on before it — the practice question offers two different letters as
+          // an option, and a learner shown only the squared counter-example can
+          // still be caught out by $3x + 2y = 6$.
+          kind: "see",
+          md: "One more that is not linear: $3x + 2y = 6$. It has two different letters, $x$ and $y$. One letter only.",
         },
         {
           kind: "see",
@@ -1413,8 +1443,12 @@ export const class8LinearEquations: SeedChapter = {
       kind: "quiz",
       difficulty: 3,
       answer_type: "integer",
+      // "Integers" is Class 7 vocabulary this chapter never revisits, and a
+      // learner may not have done that chapter. The three numbers here are 15,
+      // 16 and 17, so "whole numbers" is exactly as true and asks nothing extra
+      // of a reader who is already doing the hard part.
       stem_md:
-        "The sum of three consecutive integers is 48.\n\nWhat is the **smallest** of them?",
+        "The sum of three consecutive whole numbers is 48.\n\nWhat is the **smallest** of them?",
       answer_value: "15",
       solution_md: [
         "Let the smallest be $x$. The next two are $x + 1$ and $x + 2$:",

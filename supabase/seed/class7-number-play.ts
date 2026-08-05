@@ -115,11 +115,18 @@ export const class7NumberPlay: SeedChapter = {
           viz: { kind: "tokenRow", positive: 0, negative: 0, groupsOf: 2, plain: true },
         },
         {
+          // The distractor offers "it is negative" as a category, so the steps
+          // have to have said what a negative number is. It was said only in
+          // the prose, which the step player hides.
+          kind: "see",
+          md: "Numbers below zero are **negative** — you write them with a minus sign, like $-7$. Seven owed instead of seven owned.",
+        },
+        {
           kind: "tap",
-          md: "And $-7$?",
+          md: "So is $-7$ odd or even?",
           options: [{ label: "Odd" }, { label: "Even" }, { label: "Neither — it is negative" }],
           answer: 0,
-          why: "Odd, the same as 7. Parity has no sign: seven debts pair up no better than seven students.",
+          why: "Odd, the same as 7. Odd and even take no notice of the minus sign: seven debts pair up no better than seven students.",
         },
       ],
     },
