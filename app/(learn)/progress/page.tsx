@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Flame } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient, getCurrentProfile, getCurrentUser } from "@/lib/supabase/server";
@@ -15,6 +14,7 @@ import { weekOfActivity } from "@/lib/learning/week";
 import { buildDiary, DIARY_EVENTS } from "@/lib/learning/diary";
 import { Badge } from "@/components/ui/Badge";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ConceptRow } from "@/components/learn/ConceptRow";
 import { DailyGoalRing } from "@/components/learn/DailyGoalRing";
 import { BadgeLadders } from "@/components/learn/BadgeLadders";
 import { WeekStrip } from "@/components/learn/WeekStrip";
@@ -403,36 +403,18 @@ export default async function ProgressPage() {
                     // `conceptLevel` now — a fourth copy would have decided when
                     // the diary announces a move, and a copy disagreeing by 0.01
                     // would announce moves no screen ever showed.
-                    const conceptState = conceptLevel(masteryByConcept.get(concept.id));
-                    const band: MasteryBand | null =
-                      conceptState === "not_started" ? null : badgeToneFor(conceptState);
-
+                    // The same row as the chapter screen, and now literally the
+                    // same component. It was a hover-underlined name here and
+                    // plain text there — one screen let you practise a weak
+                    // concept and the other only told you it was weak.
                     return (
-                      <li
+                      <ConceptRow
                         key={concept.id}
-                        className="flex items-center justify-between gap-md min-h-11"
-                      >
-                        {/* `min-h-11` on the LINK, not just on the row. The row
-                            was already 44px tall and the anchor inside it was
-                            32px, so the tappable area was smaller than the thing
-                            that looked tappable — measured, not guessed (design
-                            rule 6). */}
-                        <Link
-                          href={`/practice/${concept.id}`}
-                          className="flex items-center min-h-11 text-body text-body min-w-0 hover:text-primary-strong underline-offset-4 hover:underline"
-                        >
-                          {tContent(concept, "name", locale)}
-                        </Link>
-                        {band ? (
-                          <Badge tone={band} className="shrink-0">
-                            {t(`mastery.${band}`)}
-                          </Badge>
-                        ) : (
-                          <Badge tone="neutral" className="shrink-0">
-                            {t("progress.notStarted")}
-                          </Badge>
-                        )}
-                      </li>
+                        conceptId={concept.id}
+                        name={tContent(concept, "name", locale)}
+                        level={conceptLevel(masteryByConcept.get(concept.id))}
+                        showNotStarted
+                      />
                     );
                   })}
                 </ul>

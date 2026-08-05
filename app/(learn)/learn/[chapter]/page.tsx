@@ -5,9 +5,10 @@ import { createClient, getCurrentUser } from "@/lib/supabase/server";
 import { t as tContent } from "@/lib/i18n/content";
 import { selectNextAction } from "@/lib/learning/adaptivity";
 import { track } from "@/lib/analytics/track";
-import { Badge } from "@/components/ui/Badge";
+import { conceptLevel } from "@/lib/learning/levels";
 import { BackLink } from "@/components/ui/BackLink";
 import { buttonClasses } from "@/components/ui/Button";
+import { ConceptRow } from "@/components/learn/ConceptRow";
 import { JourneyPath, type JourneyNode } from "@/components/learn/JourneyPath";
 import type { Locale } from "@/i18n/config";
 
@@ -132,33 +133,22 @@ export default async function ChapterPage({
         <section className="flex flex-col gap-md">
           <h2 className="text-label text-muted">{t("dashboard.conceptsTitle")}</h2>
           <ul className="flex flex-col gap-sm">
-            {concepts.map((concept) => {
-              const m = masteryByConcept.get(concept.id);
-              // A never-attempted concept shows NO badge. Rendering it as 0%
-              // reads as failure rather than "not started", and this learner
-              // does not need that on day one.
-              const band =
-                !m || m.attempts_count === 0
-                  ? null
-                  : m.is_mastered
-                    ? "mastered"
-                    : m.score >= 0.5
-                      ? "developing"
-                      : "needs_revision";
+            {/* Every row goes to that concept's practice. It did not, and a
+                learner standing here reading "Keep practising" had no way to.
+                See `ConceptRow` for the whole story.
 
-              return (
-                <li key={concept.id} className="flex items-center justify-between gap-md min-h-11">
-                  <span className="text-body text-body min-w-0">
-                    {tContent(concept, "name", locale)}
-                  </span>
-                  {band && (
-                    <Badge tone={band} className="shrink-0">
-                      {t(`mastery.${band}`)}
-                    </Badge>
-                  )}
-                </li>
-              );
-            })}
+                The thresholds now come from `conceptLevel` rather than a
+                ternary written out here. `lib/learning/levels.ts` already
+                claimed to have absorbed this screen's copy and had not — the
+                two agreed by luck, and the next edit to either was the bug. */}
+            {concepts.map((concept) => (
+              <ConceptRow
+                key={concept.id}
+                conceptId={concept.id}
+                name={tContent(concept, "name", locale)}
+                level={conceptLevel(masteryByConcept.get(concept.id))}
+              />
+            ))}
           </ul>
         </section>
       )}

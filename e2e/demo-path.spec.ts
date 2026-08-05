@@ -226,6 +226,25 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   */
   expect(revisited.searchParams.get("from")).toBeNull();
 
+  /*
+    ── EVERY CONCEPT ON THE CHAPTER SCREEN CAN BE PRACTISED ─────────────────
+    Reported from a phone, and it is the sharpest of the three navigation
+    reports: a learner who had finished all five Fractions lessons saw
+    "Fraction Basics · Keep practising" on the chapter screen with nothing to
+    tap. That concept spans lessons 1–2, and practice is offered at a concept
+    BOUNDARY, so its only routes were the foot of lesson 2 or `/progress`.
+
+    The app named a weakness and withheld the fix. Asserted as reachability
+    rather than as markup, because the rule is "wherever Dagar shows a
+    diagnosis it offers the treatment", not "there is an anchor here".
+  */
+  await page.goBack();
+  await page.waitForURL(/\/learn\/[^/]+$/, { timeout: 15_000 });
+  const conceptRows = page.locator('a[href^="/practice/"]');
+  await expect(conceptRows.first()).toBeVisible({ timeout: 15_000 });
+  await conceptRows.first().click();
+  await page.waitForURL(/\/practice\//, { timeout: 15_000 });
+
   // ── practice, via the wrong answer ────────────────────────────────────────
   await page.goto("/progress");
   await page.getByRole("link", { name: /fraction/i }).first().click();

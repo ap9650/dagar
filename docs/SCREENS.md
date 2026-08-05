@@ -122,6 +122,19 @@ This is the demo, and the four screens that must never be cut.
 | `/quiz/[chapter]` | fixed question set, no hints | `quiz_submitted` |
 | `/progress` | mastery per concept, streak, earned + unearned milestones | `streak_extended` `milestone_earned` |
 
+**Wherever a screen shows a diagnosis, it offers the treatment in the same
+place.** A mastery badge reading "Keep practising" must be tappable, and it must
+go to that concept's practice. This is a rule and not a detail: the chapter
+screen listed every concept with its band and made none of them tappable, so a
+learner who had finished all five Fractions lessons could see that Fraction
+Basics was weak and had no way to act on it — the concept spans lessons 1–2 and
+practice is offered at a concept *boundary*, so the only routes were the foot of
+lesson 2 or `/progress`. Naming a weakness and withholding the fix is worse than
+saying nothing, for a learner who is already behind.
+
+One `ConceptRow` component serves `/learn/[chapter]` and `/progress` for exactly
+this reason: the same row existed twice with the affordance in only one copy.
+
 **The tutor is a sheet over the lesson, not a separate page.** A learner who
 navigates away from the lesson to ask about it has lost the thing they were confused
 about.

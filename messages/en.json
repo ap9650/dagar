@@ -148,7 +148,8 @@
     "placeHint": "Tap the line where the number belongs",
     "placePicked": "You chose {value}",
     "barUp": "Raise the {label} bar",
-    "barDown": "Lower the {label} bar"
+    "barDown": "Lower the {label} bar",
+    "practiseConcept": "Practise {concept}"
   },
   "feedback": {
     "correct": "Correct!",

@@ -148,7 +148,8 @@
     "placeHint": "लाइन पर वहाँ दबाओ जहाँ संख्या आती है",
     "placePicked": "तुमने {value} चुना",
     "barUp": "{label} का दंड बढ़ाओ",
-    "barDown": "{label} का दंड घटाओ"
+    "barDown": "{label} का दंड घटाओ",
+    "practiseConcept": "{concept} की प्रैक्टिस करो"
   },
   "feedback": {
     "correct": "सही! 🎉",
