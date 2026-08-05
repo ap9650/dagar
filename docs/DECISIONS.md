@@ -1327,6 +1327,32 @@ Mastery also depends on it: the score is the last five attempts (D5), so attempt
 collected before a concept is fully taught are noise in the number that drives
 adaptivity.
 
+## D21 — A practice set is five questions, and that is the same five as the goal (5 Aug 2026)
+
+**Decision:** `PRACTICE_SET_SIZE = 5`, deliberately equal to
+`PRACTICE_QUESTIONS_FOR_GOAL` (D7/D17).
+
+Found by the same audit that produced D20 — a live product rule, reasoned, and
+written down only in `lib/learning/practiceSet.ts`.
+
+**The two numbers are one number.** Finishing one practice set closes the daily
+goal ring and extends the streak. If they ever drifted apart, a learner would
+finish a full set and watch the ring stay open — the app disagreeing with itself
+about whether they turned up today, which is precisely the class of contradiction
+D7's shared `dayQualified` rule exists to prevent.
+
+**Why five and not ten.** A set has to be finishable in one sitting by a learner
+on a borrowed phone with fifteen minutes. D17's daily goal is built on the same
+constraint: *"closable in one session — a goal a struggling learner cannot finish
+on a bad day is a daily reminder that they failed."* A ten-question set would
+break that for the learner it matters most to.
+
+### The numbering
+
+There is **no D13**, and never was. Left as a gap rather than renumbered, because
+D-numbers are cited from code comments, specs and skills — renumbering to close a
+cosmetic hole would invalidate live references.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3

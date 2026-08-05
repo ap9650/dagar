@@ -652,6 +652,7 @@ already hit the problem.
 | D18 | Lessons are steps, not prose | One idea per screen, with a visible finish line |
 | D19 | Navigation feels instant | Or the work behind it does not count |
 | D20 | Practice at a concept boundary | Not after every lesson — practice for a two-lesson concept contains both lessons' questions |
+| D21 | A practice set is five questions | The same five that close the daily goal, so finishing a set can never leave the ring open |
 
 ### What this register is for
 
