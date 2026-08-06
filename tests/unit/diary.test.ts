@@ -94,8 +94,19 @@ describe("buildDiary", () => {
   });
 
   it("caps the week so it stays readable", () => {
+    /*
+      SPREAD ACROSS DAYS, because the cap is now two rules and this one tests
+      the outer one. Thirty lessons on a SINGLE day is capped at three by
+      `DIARY_PER_DAY` — see "one busy day must not hide the rest of the week"
+      below — so piling them onto one date would silently stop testing
+      `DIARY_LIMIT` at all.
+    */
     const many = Array.from({ length: 30 }, (_, i) =>
-      ev("lesson_completed", { lesson_id: `l${i}` }, "2026-08-04T09:00:00Z"),
+      ev(
+        "lesson_completed",
+        { lesson_id: `l${i}` },
+        `2026-08-0${(i % 5) + 1}T09:${String(i).padStart(2, "0")}:00Z`,
+      ),
     );
     expect(buildDiary(many, NOW)).toHaveLength(DIARY_LIMIT);
   });
@@ -142,5 +153,62 @@ describe("entryDate", () => {
     expect(
       entryDate({ kind: "lesson", at: "2026-08-04T18:40:00Z", lessonId: "l1" }),
     ).toBe("2026-08-05");
+  });
+});
+
+/**
+ * One busy day must not hide the rest of the week.
+ *
+ * Reported from a phone: the week strip said two days worked, and "What moved"
+ * listed only one. Nothing was broken — a single evening produced eight entries
+ * and filled the global cap, pushing the other day out. Both sections cover the
+ * same seven days, so from the outside it reads as a day going missing.
+ */
+describe("what moved, across a lopsided week", () => {
+  const at = (day: string, hour: number) => `2026-08-${day}T${String(hour).padStart(2, "0")}:00:00Z`;
+
+  it("keeps a quiet day visible beside a busy one", () => {
+    const events = [
+      // Tuesday: one lesson, and nothing else.
+      { name: "lesson_completed", props: { lesson_id: "tue-1" }, created_at: at("04", 10) },
+      // Wednesday: an entire chapter, which used to fill the list on its own.
+      ...Array.from({ length: 6 }, (_, i) => ({
+        name: "lesson_completed",
+        props: { lesson_id: `wed-${i}` },
+        created_at: at("05", 12 + i),
+      })),
+      { name: "chapter_completed", props: { chapter_id: "ch-1" }, created_at: at("05", 19) },
+      { name: "milestone_earned", props: { code: "first_lesson" }, created_at: at("05", 19) },
+    ];
+
+    const diary = buildDiary(events);
+    const days = new Set(diary.map((e) => e.at.slice(0, 10)));
+
+    expect(days.has("2026-08-04"), "Tuesday was pushed out by Wednesday").toBe(true);
+    expect(days.has("2026-08-05")).toBe(true);
+  });
+
+  it("shows a day's headline, not whichever lesson finished last", () => {
+    const events = [
+      ...Array.from({ length: 5 }, (_, i) => ({
+        name: "lesson_completed",
+        props: { lesson_id: `l-${i}` },
+        created_at: at("05", 12 + i),
+      })),
+      { name: "milestone_earned", props: { code: "first_lesson" }, created_at: at("05", 12) },
+    ];
+
+    const kinds = buildDiary(events).map((e) => e.kind);
+    // The badge was earned FIRST, so recency alone would have dropped it.
+    expect(kinds).toContain("badge");
+  });
+
+  it("never shows more than three from one day", () => {
+    const events = Array.from({ length: 9 }, (_, i) => ({
+      name: "lesson_completed",
+      props: { lesson_id: `l-${i}` },
+      created_at: at("05", 10 + i),
+    }));
+    expect(buildDiary(events)).toHaveLength(3);
   });
 });

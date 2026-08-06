@@ -121,7 +121,56 @@ export function buildDiary(events: readonly DiaryEvent[], now: Date = new Date()
 
   entries.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
 
-  return dedupe(entries).slice(0, DIARY_LIMIT);
+  return capPerDay(dedupe(entries)).slice(0, DIARY_LIMIT);
+}
+
+/**
+ * At most three lines from any one day.
+ *
+ * ── WHY A GLOBAL CAP WAS THE WRONG SHAPE ────────────────────────────────────
+ * Reported from a phone: the week strip said two days worked, and "What moved"
+ * listed only one of them. Nothing was broken — a single evening had produced
+ * eight entries (five lessons, a chapter, a badge) and filled the whole list,
+ * pushing the other day out entirely.
+ *
+ * Both sections cover the same seven days, so a learner comparing them
+ * reasonably concludes a day went missing. And the section is called *what
+ * moved this week*: the shape of the week is the thing it is for, so one busy
+ * evening must not be able to hide the rest of it.
+ *
+ * Three from a day is enough to say what that day was. The rest of the list is
+ * then spent on days the learner would otherwise not see at all.
+ */
+export const DIARY_PER_DAY = 3;
+
+/** Milestones and chapters outrank lessons — a day's headline, not its log. */
+const NOTABILITY: Record<DiaryEntry["kind"], number> = {
+  badge: 0,
+  chapter: 1,
+  level: 2,
+  lesson: 3,
+};
+
+function capPerDay(entries: readonly DiaryEntry[]): DiaryEntry[] {
+  const byDay = new Map<string, DiaryEntry[]>();
+  for (const entry of entries) {
+    const day = istDate(new Date(entry.at));
+    byDay.set(day, [...(byDay.get(day) ?? []), entry]);
+  }
+
+  const kept: DiaryEntry[] = [];
+  for (const dayEntries of byDay.values()) {
+    // Most notable first, then most recent — so a day that earned a badge shows
+    // the badge, not whichever lesson happened to finish last.
+    const ranked = [...dayEntries].sort(
+      (a, b) =>
+        NOTABILITY[a.kind] - NOTABILITY[b.kind] ||
+        new Date(b.at).getTime() - new Date(a.at).getTime(),
+    );
+    kept.push(...ranked.slice(0, DIARY_PER_DAY));
+  }
+
+  return kept.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
 }
 
 /**

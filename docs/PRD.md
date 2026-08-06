@@ -653,6 +653,9 @@ already hit the problem.
 | D19 | Navigation feels instant | Or the work behind it does not count |
 | D20 | Practice at a concept boundary | Not after every lesson — practice for a two-lesson concept contains both lessons' questions |
 | D21 | A practice set is five questions | The same five that close the daily goal, so finishing a set can never leave the ring open |
+| D22 | `completed_at` never moves | Rereading a lesson is not a completion; it writes nothing |
+| D23 | The progress screen has tested invariants | Where two numbers derive from one fact, their agreement is asserted, not just their rendering |
+| D24 | Weekday letters are unambiguous | `M T W T F S S` had four collisions; two letters now |
 
 ### What this register is for
 

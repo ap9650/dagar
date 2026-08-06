@@ -1,4 +1,4 @@
-import { daysBetween, istDate } from "./dates";
+import { daysBetween, istDate } from "./dates.ts";
 
 /**
  * Streaks (D7).
@@ -90,6 +90,42 @@ export function nextStreak(streak: Streak | null, date: string): Streak {
     lastActiveDate: date,
     graceUsedOn,
   };
+}
+
+/**
+ * The streak a learner's qualifying days ADD UP TO, from nothing.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * THE INVARIANT THIS EXISTS TO MAKE CHECKABLE.
+ *
+ * A streak is a stored counter, written once per qualifying day by
+ * `extend_streak`. Everything else on the progress screen — the week strip, the
+ * daily goal, the parent summary — is DERIVED from raw activity on read. Two
+ * representations of one fact, updated by different paths, is a fault line: the
+ * moment a write is skipped or a timestamp moves, they disagree and nothing
+ * notices.
+ *
+ * It happened. Rereading a finished lesson restamped `completed_at` to today
+ * and returned before the streak was touched, so the week strip showed a day
+ * the streak had never counted. Reported as "2 days this week, 1 day streak",
+ * and no test could have caught it, because every test asserted a FLOW — can I
+ * finish a lesson, does the button appear — and none asserted that the numbers
+ * on one screen agree with each other.
+ *
+ * This makes the agreement expressible: fold this over a learner's qualifying
+ * days and it must equal what is stored. `npm run check:streaks` runs it
+ * against the real database; `tests/unit/streak-invariant.test.ts` runs it
+ * against constructed cases, including the exact shape of the bug.
+ *
+ * Pure, so it is also the honest way to REPAIR a divergence: recompute from the
+ * activity, which is the thing that actually happened.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+export function streakFromDays(days: readonly string[]): Streak | null {
+  // Sorted and de-duplicated: the fold is order-dependent, and two lessons on
+  // one day are one qualifying day (D7).
+  const ordered = [...new Set(days)].sort();
+  return ordered.reduce<Streak | null>((streak, date) => nextStreak(streak, date), null);
 }
 
 /** `date` shifted by n days, still as an IST date string. */

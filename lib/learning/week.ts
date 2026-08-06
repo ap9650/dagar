@@ -1,5 +1,5 @@
-import { istDate } from "./dates";
-import { PRACTICE_QUESTIONS_FOR_GOAL } from "./dailyGoal";
+import { istDate } from "./dates.ts";
+import { PRACTICE_QUESTIONS_FOR_GOAL } from "./dailyGoal.ts";
 
 /**
  * The last seven days, as seven squares.

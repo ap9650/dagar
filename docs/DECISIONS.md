@@ -1353,6 +1353,92 @@ There is **no D13**, and never was. Left as a gap rather than renumbered, becaus
 D-numbers are cited from code comments, specs and skills — renumbering to close a
 cosmetic hole would invalidate live references.
 
+## D22 — `completed_at` is the day a lesson was finished, and it never moves (6 Aug 2026)
+
+**Decision:** re-finishing a lesson writes nothing. `completed_at` is set once,
+on the transition to complete.
+
+Shipped broken for a day. Making finished lessons revisitable (5 Aug) left the
+completion route writing `completed_at = now()` *before* it checked whether the
+lesson was already done, then returning early — so rereading a lesson moved the
+date it was finished to today and recorded nothing else.
+
+**`completed_at` is load-bearing.** Four things read it to mean *work done
+today*, and each was wrong for the affected learner:
+
+| Reader | What it did |
+|---|---|
+| week strip | lit a square on a day with no new work |
+| daily goal ring | closed a goal nobody had earned |
+| reminder cron | suppressed both nudges for that day |
+| parent summary | counted a reread as a lesson |
+
+while the streak — a stored counter, correctly left alone — did not move.
+Reported as *"2 days this week, but a 1 day streak"*.
+
+**Revisiting is not a lesser completion. It is not a completion at all.** It is
+rereading something you already know, which the product should encourage and
+must not count as today's work.
+
+Five rows across two accounts were repaired from `lesson_completed` events,
+which carry the original timestamp.
+
+## D23 — The progress screen has invariants, and they are tested as invariants (6 Aug 2026)
+
+**Decision:** where two numbers on one screen derive from the same fact, their
+agreement is asserted directly — in the unit suite against constructed cases,
+in the e2e against a real journey, and against the live database on demand.
+
+### Why this is its own decision
+
+Four progress bugs were reported from a phone in two days. Every one passed the
+whole test suite, because **every test asserted a flow** — can a learner reach
+the screen, is the element present, does the route return 200 — and the bugs
+were all **relationships between numbers**:
+
+- a lesson screen with no lesson on it
+- a concept marked "keep practising" with no way to practise it
+- a week strip whose worked days could not be told apart from its gaps
+- two days on the strip above a one-day streak
+
+A flow test cannot see any of those. The learner could always reach the screen.
+
+### The architectural fault line underneath
+
+**The streak is a stored counter; everything else on that screen is derived from
+raw activity on read.** Two representations of one fact, written by different
+code paths. That is why D22 was possible at all: a timestamp moved, the derived
+side followed it, the stored side did not, and nothing noticed.
+
+Deriving the streak on read too would remove the class entirely, and is the
+right long-term shape. It is **not** being done before the pilot: `extend_streak`
+is also what awards milestones inside the same transaction, and D7's grace day
+carries state (`grace_used_on`) that a pure derivation would have to reconstruct.
+Recorded here so the next person meets a decision rather than an accident.
+
+### What exists instead
+
+| Guard | Scope |
+|---|---|
+| `lib/learning/streaks.ts` → `streakFromDays()` | folds qualifying days into the streak they add up to |
+| `tests/unit/streak-invariant.test.ts` | the fold against constructed histories, including the exact shape of D22, plus generative properties |
+| `npm run check:streaks [--fix]` | the same invariant against the live cohort; `--fix` recomputes from activity |
+| `e2e/demo-path.spec.ts` | after one lesson: square filled, "1 day this week", "1 day streak", goal closed — four code paths, one fact |
+| `tests/unit/completed-at.test.ts` | the early return precedes the write, and `completed_at` is written on one path |
+
+**The rule this leaves behind:** when a screen shows the same fact twice, the
+test asserts that the two agree — not that each renders.
+
+## D24 — Weekday letters must be unambiguous (6 Aug 2026)
+
+English weekday initials were `M T W T F S S`. **Four of seven are ambiguous** —
+Tuesday and Thursday are both `T`, Saturday and Sunday both `S` — and a learner
+misread her own week twice, reporting a bug that was not there both times.
+
+Now two letters: `Mo Tu We Th Fr Sa Su`. They fit the 43px square at 360px.
+
+Hindi never had the problem: `र सो मं बु गु शु श` are already distinct.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3

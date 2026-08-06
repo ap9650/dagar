@@ -285,6 +285,39 @@ test("demo path: sign up → dashboard → lesson → practice → progress", as
   await page.goto("/progress");
   await expect(page.getByRole("heading", { name: /your progress/i })).toBeVisible();
   await expect(page.getByText(/badges/i).first()).toBeVisible();
+
+  /*
+    ── THE NUMBERS ON THIS SCREEN MUST AGREE WITH EACH OTHER ────────────────
+    Every assertion above this line, and every one in this file before today,
+    checks a FLOW: can a learner get there, is the thing on screen. All of them
+    passed on the morning a learner was shown "2 days this week" above "1 day
+    streak" — two answers drawn from the same activity, so one had to be wrong.
+
+    No flow test can see that. It is a relationship between numbers, not a step
+    in a journey, and it is the shape of every progress bug reported so far.
+
+    This learner has finished exactly one lesson, today. So:
+      · today's square is filled
+      · the week counts one day
+      · the streak reads one day
+      · today's goal is closed
+    Four independent code paths — `weekOfActivity`, `daysMet`, the stored streak,
+    `dailyGoal` — reading one fact. If any of them disagrees, this fails, and it
+    fails on the specific number rather than on "the page looks wrong".
+  */
+  const today = new Date(Date.now() + 5.5 * 3_600_000).toISOString().slice(0, 10);
+
+  // The square carries its IST date as its accessible name, and a met day has
+  // no trailing em dash — see WeekStrip.
+  const todaySquare = page.locator(`[aria-label="${today}"]`);
+  await expect(todaySquare, "today's square should be filled after a lesson").toHaveCount(1);
+
+  await expect(page.getByText(/1 day this week/i)).toBeVisible();
+  await expect(page.getByText(/^1 day streak$/i)).toBeVisible();
+  await expect(page.getByText(/done for today/i)).toBeVisible();
+
+  // And the diary names the thing that moved, on the day it moved.
+  await expect(page.getByText(/what moved/i)).toBeVisible();
 });
 
 /**
