@@ -1,6 +1,8 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Check } from "lucide-react";
 import { daysMet, type WeekDay } from "@/lib/learning/week";
+import { weekdayFormatter } from "@/lib/i18n/weekday";
+import type { Locale } from "@/i18n/config";
 
 /**
  * Seven squares — the last seven days, oldest first.
@@ -9,16 +11,27 @@ import { daysMet, type WeekDay } from "@/lib/learning/week";
  * reason it earns space: everything else there reports a state, so a learner
  * who worked hard on Tuesday saw the same words on Wednesday.
  *
- * ── EVERY SQUARE KEEPS ITS LETTER ───────────────────────────────────────────
- * A completed day used to REPLACE its weekday letter with the tick, so the only
+ * ── EVERY SQUARE KEEPS ITS NAME ─────────────────────────────────────────────
+ * A completed day used to REPLACE its weekday label with the tick, so the only
  * days a learner could not identify were the days they had actually worked —
- * and with letters missing from the middle, the row stopped reading as a
+ * and with labels missing from the middle, the row stopped reading as a
  * sequence of days at all. Reported from a phone as simply "very confusing",
  * which was the right word: `W T F S ✓ M ✓` is not a week.
  *
- * The letter and the tick now stack, the same way a badge rung stacks its
- * number over its icon, and for the same reason: the label is the identity of
- * the thing and the icon is its state. Neither can stand in for the other.
+ * The name and the tick now stack, the same way a badge rung stacks its number
+ * over its icon, and for the same reason: the label is the identity of the
+ * thing and the icon is its state. Neither can stand in for the other.
+ *
+ * ── AND IT IS THE SAME NAME "WHAT MOVED" USES ───────────────────────────────
+ * Single letters came next, and were worse: `M T W T F S S` has four ambiguous
+ * characters, so nobody could say which square was Tuesday. Two letters fixed
+ * the ambiguity but not the actual task — the diary below spells the same day
+ * `Wed` while the square said `We`, and reading a filled square and then
+ * hunting the list for what filled it meant translating between two spellings.
+ *
+ * `weekdayFormatter` is now the only thing in the product that names a day, so
+ * the square and the line are the same string by construction rather than by
+ * two message files agreeing. `tests/unit/progress-agreement.test.ts` holds it.
  *
  * ── A MISSED DAY IS NOT DRAWN AS A FAILURE ──────────────────────────────────
  * An unfilled square is empty, not red, not crossed. The learner already knows
@@ -34,10 +47,12 @@ import { daysMet, type WeekDay } from "@/lib/learning/week";
  * Colour is never the only signal (D10): met carries a tick, rested carries a
  * dot, and the row has a text summary beneath it.
  */
-const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
-
 export async function WeekStrip({ week }: { week: WeekDay[] }) {
   const t = await getTranslations();
+  // The SAME formatter "What moved" uses on its lines. The two sections name the
+  // same days, and a learner reads them together: filled square, then down the
+  // list for what filled it. They must spell Wednesday the same way.
+  const weekday = weekdayFormatter((await getLocale()) as Locale);
 
   return (
     <section aria-labelledby="week-heading" className="flex flex-col gap-sm">
@@ -46,14 +61,8 @@ export async function WeekStrip({ week }: { week: WeekDay[] }) {
       </h2>
 
       <ol className="flex gap-xs list-none m-0 p-0">
-        {week.map((day) => {
-          // `getUTCDay` on an IST date string would drift for anyone west of
-          // UTC; parsing it AS an IST midnight keeps the letter matching the
-          // square everywhere.
-          const weekday = WEEKDAY_KEYS[new Date(`${day.date}T00:00:00+05:30`).getDay()];
-
-          return (
-            <li key={day.date} className="flex-1">
+        {week.map((day) => (
+          <li key={day.date} className="flex-1">
               <div
                 // The date is the accessible label; the letter alone would read
                 // as "T T" for Tuesday and Thursday to a screen reader. The
@@ -77,7 +86,7 @@ export async function WeekStrip({ week }: { week: WeekDay[] }) {
               >
                 {/* Always. This is which day it is, and it is never the thing
                     that gets swapped out for a status. */}
-                <span className="leading-none">{t(`week.${weekday}` as never)}</span>
+                <span className="leading-none">{weekday(day.date)}</span>
 
                 {day.met ? (
                   <Check size={11} strokeWidth={3} aria-hidden />
@@ -90,10 +99,9 @@ export async function WeekStrip({ week }: { week: WeekDay[] }) {
                   // whatever mix of states the week happens to be.
                   <span aria-hidden className="block size-1" />
                 )}
-              </div>
-            </li>
-          );
-        })}
+            </div>
+          </li>
+        ))}
       </ol>
 
       <p className="text-body-sm text-muted">{t("week.summary", { days: daysMet(week) })}</p>

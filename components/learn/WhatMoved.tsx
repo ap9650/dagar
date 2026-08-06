@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowUpRight, Award, BookCheck, Sparkles } from "lucide-react";
 import { entryDate, type DiaryEntry } from "@/lib/learning/diary";
 import type { Locale } from "@/i18n/config";
+import { weekdayFormatter } from "@/lib/i18n/weekday";
 
 /**
  * "What moved" — the week's news, newest first.
@@ -35,12 +36,10 @@ export async function WhatMoved({
   const t = await getTranslations();
   const locale = (await getLocale()) as Locale;
 
-  // "Wed". `en-IN` and `hi-IN` both give a short weekday; the IST midnight
-  // parse keeps it on the right day for a learner working late in the evening.
-  const weekday = new Intl.DateTimeFormat(locale === "hi" ? "hi-IN" : "en-IN", {
-    weekday: "short",
-    timeZone: "Asia/Kolkata",
-  });
+  // The SAME formatter the week strip's squares use. A line here reading "Wed"
+  // beside a square reading "We" is what made the two sections impossible to
+  // cross-check by eye — see `lib/i18n/weekday.ts`.
+  const weekday = weekdayFormatter(locale);
 
   return (
     <section aria-labelledby="moved-heading" className="flex flex-col gap-md">
@@ -61,7 +60,7 @@ export async function WhatMoved({
             return (
               <li key={`${entry.kind}-${index}`} className="flex items-start gap-md">
                 <span className="text-caption text-muted font-medium w-10 shrink-0 pt-0.5">
-                  {weekday.format(new Date(`${entryDate(entry)}T12:00:00+05:30`))}
+                  {weekday(entryDate(entry))}
                 </span>
                 <span className="shrink-0 pt-0.5">{icon}</span>
                 <span className="text-body-sm text-ink min-w-0">{text}</span>

@@ -1,5 +1,7 @@
-import { istDate } from "./dates";
-import { worthCelebrating, type Level, LEVELS } from "./levels";
+// Explicit `.ts` extensions so `scripts/*.ts` can import this under node's
+// type-stripping, the same reason `streaks.ts` and `week.ts` carry them.
+import { istDate } from "./dates.ts";
+import { worthCelebrating, type Level, LEVELS } from "./levels.ts";
 
 /**
  * "What moved this week" — a diary, not a photograph.
@@ -121,25 +123,14 @@ export function buildDiary(events: readonly DiaryEvent[], now: Date = new Date()
 
   entries.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());
 
-  return capPerDay(dedupe(entries)).slice(0, DIARY_LIMIT);
+  return selectForWeek(dedupe(entries));
 }
 
 /**
  * At most three lines from any one day.
  *
- * ── WHY A GLOBAL CAP WAS THE WRONG SHAPE ────────────────────────────────────
- * Reported from a phone: the week strip said two days worked, and "What moved"
- * listed only one of them. Nothing was broken — a single evening had produced
- * eight entries (five lessons, a chapter, a badge) and filled the whole list,
- * pushing the other day out entirely.
- *
- * Both sections cover the same seven days, so a learner comparing them
- * reasonably concludes a day went missing. And the section is called *what
- * moved this week*: the shape of the week is the thing it is for, so one busy
- * evening must not be able to hide the rest of it.
- *
- * Three from a day is enough to say what that day was. The rest of the list is
- * then spent on days the learner would otherwise not see at all.
+ * Three is enough to say what a day was. Past that a single evening starts
+ * describing itself in detail while other days go unmentioned.
  */
 export const DIARY_PER_DAY = 3;
 
@@ -151,23 +142,59 @@ const NOTABILITY: Record<DiaryEntry["kind"], number> = {
   lesson: 3,
 };
 
-function capPerDay(entries: readonly DiaryEntry[]): DiaryEntry[] {
+/**
+ * Every worked day gets a line before any day gets a second one.
+ *
+ * ── THE RULE THIS SECTION IS ACTUALLY FOR ───────────────────────────────────
+ * The week strip and this list describe the same seven days from two different
+ * tables. A learner reads them together — filled square, then down the list for
+ * what filled it — so a ticked day with nothing beside it does not read as "the
+ * list is abbreviated". It reads as the app contradicting itself, and it was
+ * reported that way twice.
+ *
+ * ── TWO CAPS, BOTH OF WHICH HID A DAY ───────────────────────────────────────
+ * First the cap was global: eight entries, newest first. One busy evening —
+ * five lessons, a chapter, a badge — filled all eight and pushed the other
+ * worked day out. `DIARY_PER_DAY` fixed that one.
+ *
+ * It did not fix the general case, because the global limit still applied
+ * afterwards. Four worked days at three lines each is twelve, sliced to eight,
+ * and the OLDEST day silently lost all three — four ticks above a list covering
+ * three of them. A learner studying most days hits this in their first week,
+ * which is to say the fix covered the report and not the bug.
+ *
+ * Round-robin covers the bug. Take each day's headline first, then each day's
+ * second line, and so on. Seven worked days and eight slots means every day is
+ * named and the newest gets the spare — the shape of the week survives, which
+ * is the entire job of a section called "what moved this week".
+ */
+function selectForWeek(entries: readonly DiaryEntry[]): DiaryEntry[] {
   const byDay = new Map<string, DiaryEntry[]>();
   for (const entry of entries) {
     const day = istDate(new Date(entry.at));
     byDay.set(day, [...(byDay.get(day) ?? []), entry]);
   }
 
-  const kept: DiaryEntry[] = [];
-  for (const dayEntries of byDay.values()) {
-    // Most notable first, then most recent — so a day that earned a badge shows
-    // the badge, not whichever lesson happened to finish last.
-    const ranked = [...dayEntries].sort(
-      (a, b) =>
-        NOTABILITY[a.kind] - NOTABILITY[b.kind] ||
-        new Date(b.at).getTime() - new Date(a.at).getTime(),
+  // Newest day first, so when slots run out it is the oldest day that loses its
+  // SECOND line — never its first.
+  const days = [...byDay.entries()]
+    .sort(([a], [b]) => (a < b ? 1 : a > b ? -1 : 0))
+    .map(([, dayEntries]) =>
+      // Most notable first, then most recent — so a day that earned a badge
+      // shows the badge, not whichever lesson happened to finish last.
+      [...dayEntries].sort(
+        (a, b) =>
+          NOTABILITY[a.kind] - NOTABILITY[b.kind] ||
+          new Date(b.at).getTime() - new Date(a.at).getTime(),
+      ),
     );
-    kept.push(...ranked.slice(0, DIARY_PER_DAY));
+
+  const kept: DiaryEntry[] = [];
+  for (let rank = 0; rank < DIARY_PER_DAY && kept.length < DIARY_LIMIT; rank++) {
+    for (const dayEntries of days) {
+      if (kept.length >= DIARY_LIMIT) break;
+      if (dayEntries[rank]) kept.push(dayEntries[rank]);
+    }
   }
 
   return kept.sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime());

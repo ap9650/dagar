@@ -492,13 +492,6 @@
   },
   "week": {
     "title": "This week",
-    "mon": "Mo",
-    "tue": "Tu",
-    "wed": "We",
-    "thu": "Th",
-    "fri": "Fr",
-    "sat": "Sa",
-    "sun": "Su",
     "summary": "{days, plural, =0 {No days yet this week} one {# day this week} other {# days this week}}",
     "restDay": "Rest day"
   },

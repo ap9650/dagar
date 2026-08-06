@@ -1429,15 +1429,66 @@ Recorded here so the next person meets a decision rather than an accident.
 **The rule this leaves behind:** when a screen shows the same fact twice, the
 test asserts that the two agree — not that each renders.
 
-## D24 — Weekday letters must be unambiguous (6 Aug 2026)
+## D24 — One formatter names every weekday (6 Aug 2026)
+
+**Amended the same day it was written.** The first version of this decision only
+widened the labels; the amendment is the actual rule, and the gap between them is
+the more useful record.
 
 English weekday initials were `M T W T F S S`. **Four of seven are ambiguous** —
 Tuesday and Thursday are both `T`, Saturday and Sunday both `S` — and a learner
-misread her own week twice, reporting a bug that was not there both times.
+misread her own week twice, reporting a bug that was not there both times. So the
+squares went to two letters: `Mo Tu We Th Fr Sa Su`.
 
-Now two letters: `Mo Tu We Th Fr Sa Su`. They fit the 43px square at 360px.
+That fixed the ambiguity and **not the task**. Asked again, she said "I still feel
+it's buggy" — and she was right to. The progress screen names the same day twice:
+in a week-strip square and beside a "What moved" line. The strip took its label
+from `messages/*.json` (`We`) and the diary from `Intl` (`Wed`). Both readable
+alone; together, checking one against the other was a translation exercise. **A
+screen a careful person cannot verify is buggy, whatever the database says.**
 
-Hindi never had the problem: `र सो मं बु गु शु श` are already distinct.
+The rule: **`lib/i18n/weekday.ts` is the only thing in the product that names a
+day.** Both sections call it, so the square and the line are the same string by
+construction rather than by two message files agreeing. Full short names —
+`Mon Tue Wed`, `सोम मंगल बुध` — measured at 41px in a 41px square at 360px in both
+languages. The fourteen weekday message keys are deleted, so there is nothing left
+to drift against.
+
+Held by `tests/unit/progress-agreement.test.ts`, which asserts no two weekdays
+share a label in either language.
+
+## D25 — Every worked day gets a line in "What moved" (6 Aug 2026)
+
+The week strip and the diary describe the same seven days from two different
+tables. A learner reads them together: filled square, then down the list for what
+filled it. **A ticked day with nothing beside it does not read as "the list is
+abbreviated" — it reads as the app contradicting itself.**
+
+Two caps hid a day, and only the second fix was general:
+
+1. A global cap of 8, newest first. One busy evening — five lessons, a chapter, a
+   badge — filled all eight and pushed the other worked day out. `DIARY_PER_DAY = 3`
+   fixed that.
+2. The global limit still applied afterwards. Four worked days × 3 lines = 12,
+   sliced to 8, and the **oldest day silently lost all three**: four ticks above a
+   list covering three of them. A learner studying most days hits this in their
+   first week. The first fix had covered the report, not the bug.
+
+Selection is now **round-robin across days**: every day's headline before any day's
+second line. Seven worked days and eight slots means every day is named and the
+newest gets the spare. The shape of the week survives, which is the entire job of a
+section called "what moved this week".
+
+One asymmetry is deliberate and asserted so nobody later "fixes" it: five practice
+questions fill a square (D7) without finishing anything nameable, so that day is
+ticked with no diary line. Practice is activity; the diary carries completions.
+
+**Known and accepted:** `scripts/demo-data.ts` seeds `lesson_progress` but not
+`events` — deliberately, so seeded activity never pollutes the PRD metrics (its
+header explains why). The cost is that a demo account shows ticked squares above an
+empty "What moved", which is exactly the contradiction above. Acceptable because it
+cannot happen to a real learner, whose events are real. Revisit by tagging seeded
+events rather than by fabricating untagged ones.
 
 ## Still open
 

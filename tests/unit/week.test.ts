@@ -133,23 +133,40 @@ describe("weekOfActivity — the forgiven day", () => {
 });
 
 /**
- * Every square keeps its weekday letter.
+ * Every square keeps its weekday name.
  *
  * The tick used to REPLACE it, so the only days a learner could not identify
  * were the days they had worked, and the row stopped reading as a week at all
- * (`W T F S ✓ M ✓`). Asserted against the component source because the letter
- * and the state must both be present — a component test would prove one render;
+ * (`W T F S ✓ M ✓`). Asserted against the component source because the name and
+ * the state must both be present — a component test would prove one render;
  * this proves the rule.
+ *
+ * Kept deliberately loose about HOW the name is produced. The first version of
+ * this test pinned the exact `t(\`week.${weekday}\`)` call, so replacing the
+ * message lookup with a shared formatter failed a test that had no opinion
+ * about the change — a test guarding its own implementation rather than the
+ * rule. What matters is that the name is rendered once, unconditionally.
  */
 describe("the week strip's squares", () => {
-  it("renders the weekday letter unconditionally, not as the else-branch", () => {
-    const source = readFileSync(
-      join(__dirname, "..", "..", "components/learn/WeekStrip.tsx"),
-      "utf8",
-    );
-    // The letter is its own element, outside any met/rested ternary.
-    expect(source).toMatch(/<span className="leading-none">\{t\(`week\.\$\{weekday\}`/);
-    // And the tick is decoration on top of it, never a substitute.
+  const source = readFileSync(
+    join(__dirname, "..", "..", "components/learn/WeekStrip.tsx"),
+    "utf8",
+  );
+
+  it("renders the weekday name unconditionally, not as the else-branch", () => {
+    // Its own element, outside any met/rested ternary...
+    expect(source).toMatch(/<span className="leading-none">\{weekday\(day\.date\)\}<\/span>/);
+    // ...and exactly once, so it cannot also be hiding inside a branch.
+    expect(source.match(/weekday\(day\.date\)/g)).toHaveLength(1);
+  });
+
+  it("keeps the tick as decoration on top of the name, never a substitute", () => {
     expect(source).toMatch(/aria-hidden/);
+  });
+
+  it("takes its name from the shared formatter, so it cannot drift from the diary", () => {
+    // `We` in a square over `Wed` in "What moved" is what made the two sections
+    // impossible to cross-check. One source of weekday names, product-wide.
+    expect(source).toMatch(/weekdayFormatter/);
   });
 });

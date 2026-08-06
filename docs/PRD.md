@@ -655,7 +655,8 @@ already hit the problem.
 | D21 | A practice set is five questions | The same five that close the daily goal, so finishing a set can never leave the ring open |
 | D22 | `completed_at` never moves | Rereading a lesson is not a completion; it writes nothing |
 | D23 | The progress screen has tested invariants | Where two numbers derive from one fact, their agreement is asserted, not just their rendering |
-| D24 | Weekday letters are unambiguous | `M T W T F S S` had four collisions; two letters now |
+| D24 | One formatter names every weekday | The strip said `We` where the diary said `Wed`; a screen you cannot cross-check reads as broken |
+| D25 | Every worked day gets a line in "What moved" | A ticked square with nothing beside it reads as the app contradicting itself, not as an abbreviated list |
 
 ### What this register is for
 
