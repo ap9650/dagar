@@ -16,6 +16,7 @@
     "seed": "node --no-warnings scripts/seed.ts",
     "check:keys": "node --no-warnings scripts/check-arithmetic-keys.ts",
     "check:streaks": "node --no-warnings scripts/check-streaks.ts",
+    "check:progress": "node --no-warnings scripts/check-progress.ts",
     "db:types": "npx supabase gen types typescript --linked > /tmp/dagar-db-types.ts && grep -q 'export type Database' /tmp/dagar-db-types.ts && mv /tmp/dagar-db-types.ts lib/supabase/database.types.ts || (echo 'db:types FAILED \u2014 database.types.ts left untouched' && cat /tmp/dagar-db-types.ts && exit 1)",
     "translate:hi": "node --no-warnings scripts/translate-hindi.ts",
     "check:hindi": "node --no-warnings scripts/check-hindi.ts",
