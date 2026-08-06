@@ -48,6 +48,48 @@ export async function POST(
 
   const alreadyComplete = before?.status === "completed";
 
+  if (alreadyComplete) {
+    /*
+      ── `completed_at` IS THE DAY THE LEARNER FINISHED IT, FOR EVER ─────────
+      Nothing is written here. The upsert used to run BEFORE this check and
+      stamped `completed_at` with the current time, so rereading a lesson moved
+      the date it was finished to today — and then returned early, skipping the
+      streak, the event and the milestones.
+
+      That is not a tidy no-op. `completed_at` is what four separate things read
+      to mean "work done today":
+
+        · the week strip          → lit a square on a day with no new work
+        · the daily goal ring     → closed a goal nobody had earned
+        · the reminder cron       → suppressed both nudges for that day
+        · the parent summary      → counted a reread as a lesson
+
+      while the streak, which is a stored counter and was correctly left alone,
+      did not move. Reported from a phone as "2 days this week, 1 day streak",
+      which is exactly what it looks like from the outside: the app disagreeing
+      with itself.
+
+      Revisiting is not a lesser kind of completion — it is not a completion at
+      all. It is reading something you already know, which is a good thing to do
+      and not today's work. The row already says what it needs to.
+    */
+    const { data: streak } = await supabase
+      .from("streaks")
+      .select("current")
+      .eq("student_id", auth.userId)
+      .maybeSingle();
+    return NextResponse.json({
+      ok: true,
+      alreadyComplete: true,
+      streak: streak?.current ?? 0,
+      // Nothing new happened, so there is nothing to celebrate. Re-opening a
+      // finished lesson must not replay its confetti.
+      dayCounted: false,
+      milestonesEarned: [],
+    });
+  }
+
+  // A genuine first completion, and the ONLY path that writes `completed_at`.
   const { error: writeError } = await supabase.from("lesson_progress").upsert(
     {
       student_id: auth.userId,
@@ -64,24 +106,6 @@ export async function POST(
       { error: "Could not save your progress", code: "COMPLETE_FAILED" },
       { status: 500 },
     );
-  }
-
-  if (alreadyComplete) {
-    // Second call: nothing new happened. No event, no milestone, no streak bump.
-    const { data: streak } = await supabase
-      .from("streaks")
-      .select("current")
-      .eq("student_id", auth.userId)
-      .maybeSingle();
-    return NextResponse.json({
-      ok: true,
-      alreadyComplete: true,
-      streak: streak?.current ?? 0,
-      // Nothing new happened, so there is nothing to celebrate. Re-opening a
-      // finished lesson must not replay its confetti.
-      dayCounted: false,
-      milestonesEarned: [],
-    });
   }
 
   await track("lesson_completed", { lesson_id: id });
