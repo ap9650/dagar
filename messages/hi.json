@@ -384,6 +384,7 @@
     "workedLabel": "क्या अच्छा लगा?",
     "workedPlaceholder": "रोटी वाले उदाहरण से भिन्न समझ आ गई…",
     "confusingLabel": "क्या उलझन भरा लगा, या काम नहीं किया?",
+    "charactersLeft": "{count, plural, one {# अक्षर बचा} other {# अक्षर बचे}}",
     "confusingPlaceholder": "समझ नहीं आया कि जवाब कहाँ लिखना है…",
     "returnLabel": "क्या तुम डगर दोबारा इस्तेमाल करोगे?",
     "returnYes": "हाँ",

@@ -384,6 +384,7 @@
     "workedLabel": "What worked well?",
     "workedPlaceholder": "The way it explained fractions with rotis…",
     "confusingLabel": "What was confusing, or did not work?",
+    "charactersLeft": "{count, plural, one {# character left} other {# characters left}}",
     "confusingPlaceholder": "I could not tell where to type the answer…",
     "returnLabel": "Would you use Dagar again?",
     "returnYes": "Yes",

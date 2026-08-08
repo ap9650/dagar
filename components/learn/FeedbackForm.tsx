@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Button } from "@/components/ui/Button";
+import { FEEDBACK_TEXT_MAX } from "@/lib/security/validation";
 
 /**
  * The product feedback form (0018).
@@ -268,7 +269,30 @@ function FreeText({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const t = useTranslations("productFeedback");
   const id = useId();
+  const countId = `${id}-count`;
+
+  /*
+    Silence is the failure mode this guards.
+
+    `maxLength` stops accepting keystrokes with no signal at all: the letters
+    simply stop appearing. On 8 Aug a learner wrote to the old 1,000-character
+    ceiling and was cut off mid-sentence — their answer ends "...more types of
+    questions then msq" — and neither they nor we knew until the row was read.
+    The person a cap silently truncates is, by definition, the one with the most
+    to say.
+
+    So the count appears once there is real writing to lose, and turns amber
+    close to the end. Not from the first keystroke: a character counter over an
+    empty box reads as a word limit on a homework assignment, and this is a
+    12-year-old being asked what they think.
+  */
+  const used = value.length;
+  const remaining = FEEDBACK_TEXT_MAX - used;
+  const showCount = used > FEEDBACK_TEXT_MAX / 2;
+  const nearLimit = remaining <= 200;
+
   return (
     <div className="flex flex-col gap-sm">
       <label htmlFor={id} className="text-label font-medium text-ink">
@@ -278,13 +302,25 @@ function FreeText({
         id={id}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        maxLength={1000}
+        maxLength={FEEDBACK_TEXT_MAX}
         rows={3}
         placeholder={placeholder}
+        aria-describedby={showCount ? countId : undefined}
         className="w-full rounded-(--radius-control) border border-border-strong bg-background
                    px-md py-sm text-body text-ink
                    focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary-soft"
       />
+      {showCount ? (
+        <p
+          id={countId}
+          // Polite, not assertive: a screen reader should not interrupt someone
+          // mid-sentence to read a number at them.
+          aria-live="polite"
+          className={`text-caption ${nearLimit ? "text-celebrate" : "text-muted"}`}
+        >
+          {t("charactersLeft", { count: remaining })}
+        </p>
+      ) : null}
     </div>
   );
 }

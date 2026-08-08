@@ -115,14 +115,28 @@ export const quizSubmitSchema = z.object({
  * this is free text from the public and unbounded strings are a storage bill and
  * a rendering hazard.
  */
+
+/**
+ * The ceiling on a free-text answer, shared by the textarea, this schema and
+ * the column's check constraint (0029). Exported so the form can show a counter
+ * against the same number the server enforces — a client that thinks the limit
+ * is one thing and a server that thinks it is another produces a submit button
+ * that fails with no explanation.
+ */
+export const FEEDBACK_TEXT_MAX = 4000;
+
 export const productFeedbackSchema = z.object({
   respondent_role: z.enum(["student", "parent", "teacher", "other"]),
   understood: z.enum(["yes", "a_bit", "no"]),
   would_return: z.enum(["yes", "maybe", "no"]),
   /** Optional so 0018 responses stay valid and a skipper still counts. */
   improve_most: z.enum(["chapters", "practice", "tutor", "phone", "other"]).optional(),
-  worked_well: z.string().trim().max(1000).optional(),
-  confusing: z.string().trim().max(1000).optional(),
+  // 4000, raised from 1000 after a learner hit the ceiling and was cut off
+  // mid-sentence (migration 0029). Must stay in step with the column's check
+  // constraint and the textarea's `maxLength`, or one layer truncates silently
+  // and the other rejects loudly.
+  worked_well: z.string().trim().max(FEEDBACK_TEXT_MAX).optional(),
+  confusing: z.string().trim().max(FEEDBACK_TEXT_MAX).optional(),
 });
 
 export const tutorMessageSchema = z.object({

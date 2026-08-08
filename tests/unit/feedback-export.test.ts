@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { productFeedbackSchema } from "@/lib/security/validation";
+import { productFeedbackSchema, FEEDBACK_TEXT_MAX } from "@/lib/security/validation";
 
 /**
  * The feedback export must be incapable of carrying an email address.
@@ -81,13 +81,40 @@ describe("the feedback schema", () => {
     }
   });
 
+  /*
+    Against the shared constant, never a literal.
+
+    This test used to hardcode 1001. When the ceiling was raised to 4,000 it
+    failed — not because anything was broken, but because it was guarding the
+    old number rather than the rule. A test that has to be edited every time the
+    limit legitimately moves is a test that will eventually be edited without
+    thought.
+
+    The rule is: the textarea, the schema and the column's check constraint all
+    enforce ONE number. Drift between them means a learner types happily to a
+    client limit the server then rejects.
+  */
+  const answer = (confusing: string) => ({
+    respondent_role: "teacher" as const,
+    understood: "yes" as const,
+    would_return: "yes" as const,
+    confusing,
+  });
+
+  it("accepts free text right up to the limit", () => {
+    expect(productFeedbackSchema.safeParse(answer("x".repeat(FEEDBACK_TEXT_MAX))).success).toBe(true);
+  });
+
   it("caps free text, because it is public input", () => {
-    const result = productFeedbackSchema.safeParse({
-      respondent_role: "teacher",
-      understood: "yes",
-      would_return: "yes",
-      confusing: "x".repeat(1001),
-    });
-    expect(result.success).toBe(false);
+    expect(productFeedbackSchema.safeParse(answer("x".repeat(FEEDBACK_TEXT_MAX + 1))).success).toBe(
+      false,
+    );
+  });
+
+  it("has room for the answer that was truncated on 8 Aug", () => {
+    // A Class 6 student filled the old 1,000-character box and was cut off
+    // mid-sentence. Whatever the limit becomes, it must never again be a length
+    // a motivated child can reach by writing one thoughtful paragraph.
+    expect(productFeedbackSchema.safeParse(answer("x".repeat(1500))).success).toBe(true);
   });
 });
