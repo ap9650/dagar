@@ -57,7 +57,7 @@ export const class6Fractions: SeedChapter = {
       title: "What a Fraction Really Means",
       est_minutes: 4,
       body_md: [
-        "Two rotis, four people. Nobody gets a whole roti — so how do you say how much each person gets?",
+        "Two rotis, four people. Nobody gets a whole roti, so how do you say how much each person gets?",
         "",
         "That is what fractions are for. A fraction names **a part of a whole**.",
         "",
@@ -82,7 +82,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "And what is left in the bottle? 3 parts out of 5, so $3/5$.",
         "",
-        "Notice that $2/5$ and $3/5$ together make the whole bottle — all 5 parts.",
+        "Notice that $2/5$ and $3/5$ together make the whole bottle, all 5 parts.",
         "",
         "Try a few in practice, then come back for the number line.",
       ].join("\n"),
@@ -157,7 +157,7 @@ export const class6Fractions: SeedChapter = {
         {
           kind: "reveal",
           md: "So how much is still in the bottle?",
-          answer: "3 parts out of 5. That is $3/5$ — and $2/5$ and $3/5$ together make the whole bottle.",
+          answer: "3 parts out of 5. That is $3/5$, and $2/5$ and $3/5$ together make the whole bottle.",
           viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3, label: "3/5" },
         },
       ],
@@ -192,13 +192,13 @@ export const class6Fractions: SeedChapter = {
         "",
         "The bigger the bottom number, the *smaller* each step. Cutting the same gap into 8 parts makes smaller steps than cutting it into 3.",
         "",
-        "So $1/8$ sits closer to 0 than $1/3$ does — even though 8 is a bigger number than 3.",
+        "So $1/8$ sits closer to 0 than $1/3$ does, even though 8 is a bigger number than 3.",
         "",
         "This is the single most common place learners slip, and it is worth holding on to. A bigger bottom number means more parts, and more parts means each one is smaller.",
         "",
         "$$\n\\frac{5}{5} = 1 \\qquad \\frac{0}{5} = 0\n$$",
         "",
-        "When the top and bottom are the same, you have taken every part — the whole thing.",
+        "When the top and bottom are the same, you have taken every part, the whole thing.",
       ].join("\n"),
       // Lesson 2 moves fractions off the plate and onto the line — the shift
       // from "a piece of something" to "a number". Every step is a number line
@@ -240,7 +240,7 @@ export const class6Fractions: SeedChapter = {
           // The single most common slip in the chapter, so it is asked rather
           // than told — a learner who guesses wrong here remembers being wrong.
           kind: "reveal",
-          md: "So which one sits closer to 0 — $1/8$ or $1/3$?",
+          md: "So which one sits closer to 0, $1/8$ or $1/3$?",
           answer: "$1/8$, even though 8 is the bigger number. More parts means each part is smaller.",
           viz: {
             kind: "numberLine", from: 0, to: 1, step: 1,
@@ -269,7 +269,7 @@ export const class6Fractions: SeedChapter = {
       body_md: [
         "Cut a roti in half and eat one half. Now cut the same roti into 4 pieces and eat 2. Did you eat more the second time?",
         "",
-        "No — exactly the same amount. So:",
+        "No, exactly the same amount. So:",
         "",
         "$$\n\\frac{1}{2} = \\frac{2}{4}\n$$",
         "",
@@ -293,7 +293,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{12}{18} = \\frac{6}{9} = \\frac{2}{3}\n$$",
         "",
-        "$2/3$ is as far as it goes — 2 and 3 share nothing. All three of those fractions are the same amount; $2/3$ is just the tidiest way to write it.",
+        "$2/3$ is as far as it goes: 2 and 3 share nothing. All three of those fractions are the same amount; $2/3$ is just the tidiest way to write it.",
         "",
         "### Worked example",
         "",
@@ -372,13 +372,13 @@ export const class6Fractions: SeedChapter = {
         "",
         "You cannot tell by looking, because the pieces are different sizes. Here is how to decide.",
         "",
-        "### Case 1 — same bottom number",
+        "### Case 1: same bottom number",
         "",
         "Easy. The pieces are the same size, so just count them.",
         "",
         "$$\n\\frac{5}{7} > \\frac{3}{7}\n$$",
         "",
-        "### Case 2 — same top number",
+        "### Case 2: same top number",
         "",
         "Compare the **bottom** numbers, and remember the rule from the number line: a bigger bottom means smaller pieces.",
         "",
@@ -386,7 +386,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "One piece out of 4 is bigger than one piece out of 6. This feels backwards, and it catches almost everybody the first time.",
         "",
-        "### Case 3 — nothing matches",
+        "### Case 3: nothing matches",
         "",
         "Make the bottoms the same, using equivalent fractions. Back to Anil and Bina:",
         "",
@@ -400,7 +400,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "### The trap",
         "",
-        "It is tempting to say Bina ate more because both her numbers are bigger — 5 beats 3 and 8 beats 4. But a fraction is not two separate numbers. It is one amount, and the only way to compare amounts is to make the pieces the same size first.",
+        "It is tempting to say Bina ate more because both her numbers are bigger: 5 beats 3 and 8 beats 4. But a fraction is not two separate numbers. It is one amount, and the only way to compare amounts is to make the pieces the same size first.",
       ].join("\n"),
       // Bars throughout, not circles. Comparing is the entire lesson, and two
       // bars stack with the same left edge and the same width — two circles do
@@ -419,7 +419,7 @@ export const class6Fractions: SeedChapter = {
         {
           kind: "reveal",
           md: "Can you tell who ate more just by looking?",
-          answer: "Not easily — the pieces are different sizes. Make the pieces match first.",
+          answer: "Not easily, the pieces are different sizes. Make the pieces match first.",
         },
         {
           kind: "see",
@@ -452,7 +452,7 @@ export const class6Fractions: SeedChapter = {
         },
         {
           kind: "reveal",
-          md: "Bina's numbers are both bigger — 5 beats 3, 8 beats 4. So why is she not ahead?",
+          md: "Bina's numbers are both bigger: 5 beats 3, 8 beats 4. So why is she not ahead?",
           answer: "A fraction is **one amount**, not two separate numbers. Only compare once the pieces match.",
         },
       ],
@@ -476,7 +476,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{4}{7} - \\frac{1}{7} = \\frac{3}{7}\n$$",
         "",
-        "The bottom is not telling you *how much* — it is telling you **what size piece** you are counting. Counting 3 fifths does not turn them into tenths.",
+        "The bottom is not telling you *how much*. It is telling you **what size piece** you are counting. Counting 3 fifths does not turn them into tenths.",
         "",
         "**This is the mistake to avoid:**",
         "",
@@ -521,12 +521,12 @@ export const class6Fractions: SeedChapter = {
         {
           kind: "reveal",
           md: "How much have you drunk altogether?",
-          answer: "$3/5$. One fifth plus two fifths is three fifths — you are just counting fifths.",
+          answer: "$3/5$. One fifth plus two fifths is three fifths. You are just counting fifths.",
           viz: { kind: "partWhole", shape: "bar", parts: 5, shaded: 3, label: "3/5" },
         },
         {
           kind: "see",
-          md: "The bottom does not change. It is not an amount — it says **what size piece** you are counting.",
+          md: "The bottom does not change. It is not an amount. It says **what size piece** you are counting.",
           viz: { kind: "partWhole", shape: "bar", parts: 7, shaded: 3, label: "4/7 − 1/7 = 3/7" },
         },
         {
@@ -538,7 +538,7 @@ export const class6Fractions: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Different bottoms cannot be added — like adding 3 apples to 2 mangoes and calling it 5 apples.",
+          md: "Different bottoms cannot be added, like adding 3 apples to 2 mangoes and calling it 5 apples.",
           viz: { kind: "partWhole", shape: "bar", parts: 4, shaded: 1, label: "1/4" },
         },
         {
@@ -617,7 +617,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{3}{4} - \\frac{1}{4} = \\frac{2}{4}\n$$",
         "",
-        "The bottom stays 4 throughout. Taking pieces away does not make the remaining pieces smaller — there are just fewer of them.",
+        "The bottom stays 4 throughout. Taking pieces away does not make the remaining pieces smaller. There are just fewer of them.",
       ].join("\n"),
     },
     // ── SHADE — the learner MAKES the fraction rather than recognising one ────
@@ -658,7 +658,7 @@ export const class6Fractions: SeedChapter = {
       answer_value: "3/8",
       input: { kind: "shade", shape: "grid", parts: 8 },
       solution_md: [
-        "The **bottom** number is how many equal parts there are — the grid already has 8.",
+        "The **bottom** number is how many equal parts there are, the grid already has 8.",
         "",
         "The **top** number is how many to fill. That is 3.",
         "",
@@ -734,7 +734,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{2} = \\frac{2}{4}\n$$",
         "",
-        "Multiplying the top and the bottom by the same number never changes how much there is — it just cuts the same amount into more pieces.",
+        "Multiplying the top and the bottom by the same number never changes how much there is, it just cuts the same amount into more pieces.",
       ].join("\n"),
     },
     {
@@ -781,11 +781,11 @@ export const class6Fractions: SeedChapter = {
         ],
       },
       solution_md: [
-        "Both pieces are **quarters**, so they are the same size. Take one, then take another — that is 2 quarters.",
+        "Both pieces are **quarters**, so they are the same size. Take one, then take another. That is 2 quarters.",
         "",
         "$$\n\\frac{1}{4} + \\frac{1}{4} = \\frac{2}{4}\n$$",
         "",
-        "The bottom number stays 4. It is not a count — it is the **size of the piece**, and adding two quarters does not make the pieces smaller.",
+        "The bottom number stays 4. It is not a count. It is the **size of the piece**, and adding two quarters does not make the pieces smaller.",
         "",
         "That is the trap in $2/8$: it is less than the single quarter you started with, so it cannot be two of them.",
       ].join("\n"),
@@ -815,7 +815,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{4}\n$$",
         "",
-        "$3/4$ is the fraction that is *left over* — a good thing to notice, but not what was asked.",
+        "$3/4$ is the fraction that is *left over*, a good thing to notice, but not what was asked.",
       ].join("\n"),
     },
     {
@@ -831,7 +831,7 @@ export const class6Fractions: SeedChapter = {
       solution_md: [
         "The **bottom** number tells you how many equal parts the whole was divided into.",
         "",
-        "In $4/7$ the bottom number is **7**, so the bottle is thought of as 7 equal parts — and 4 of them have water in.",
+        "In $4/7$ the bottom number is **7**, so the bottle is thought of as 7 equal parts, and 4 of them have water in.",
       ].join("\n"),
     },
     {
@@ -868,7 +868,7 @@ export const class6Fractions: SeedChapter = {
       ],
       answer_value: "a",
       solution_md: [
-        "First find $1/3$ of ₹60 — split it into 3 equal parts:",
+        "First find $1/3$ of ₹60, split it into 3 equal parts:",
         "",
         "$$\n60 \\div 3 = 20\n$$",
         "",
@@ -890,7 +890,7 @@ export const class6Fractions: SeedChapter = {
       answer_value: "20",
       input: { kind: "tiles", bank: ["0", "1", "2", "5", "8", "/"] },
       solution_md: [
-        "This one runs backwards — you know the part and you need the whole.",
+        "This one runs backwards, you know the part and you need the whole.",
         "",
         "$2/5$ of the packet is 8 biscuits. So **2 parts = 8 biscuits**.",
         "",
@@ -916,11 +916,11 @@ export const class6Fractions: SeedChapter = {
       solution_md: [
         "Two steps here.",
         "",
-        "**Step 1 — how much is in the tank now?** Find $3/4$ of 40:",
+        "**Step 1, how much is in the tank now?** Find $3/4$ of 40:",
         "",
         "$$\n40 \\div 4 = 10, \\qquad 10 \\times 3 = 30\n$$",
         "",
-        "**Step 2 — how much is missing?**",
+        "**Step 2, how much is missing?**",
         "",
         "$$\n40 - 30 = 10\n$$",
         "",
@@ -952,7 +952,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{2} = \\frac{1 \\times 2}{2 \\times 2} = \\frac{2}{4}\n$$",
         "",
-        "Adding to the top and bottom does not work. $2/3$ is not the same as $1/2$ — half of 3 is 1.5, not 2.",
+        "Adding to the top and bottom does not work. $2/3$ is not the same as $1/2$, half of 3 is 1.5, not 2.",
       ].join("\n"),
     },
     {
@@ -998,10 +998,10 @@ export const class6Fractions: SeedChapter = {
       stem_md:
         "Sita says $3/4$ and $9/12$ are equal fractions.\n\nIs she right?",
       choices: [
-        { id: "a", label: "Yes — because $3 \\times 3 = 9$ and $4 \\times 3 = 12$" },
-        { id: "b", label: "Yes — because $9 - 3 = 6$ and $12 - 4 = 8$" }, // right answer, wrong reason
-        { id: "c", label: "No — the numbers are all different" },
-        { id: "d", label: "No — $9/12$ is bigger because 9 is bigger than 3" },
+        { id: "a", label: "Yes, because $3 \\times 3 = 9$ and $4 \\times 3 = 12$" },
+        { id: "b", label: "Yes, because $9 - 3 = 6$ and $12 - 4 = 8$" }, // right answer, wrong reason
+        { id: "c", label: "No, the numbers are all different" },
+        { id: "d", label: "No, $9/12$ is bigger because 9 is bigger than 3" },
       ],
       answer_value: "a",
       solution_md: [
@@ -1011,7 +1011,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{3}{4} = \\frac{3 \\times 3}{4 \\times 3} = \\frac{9}{12}\n$$",
         "",
-        "Option (d) is a common trap — a bigger top number does not mean a bigger fraction, because the bottom number grew too.",
+        "Option (d) is a common trap, a bigger top number does not mean a bigger fraction, because the bottom number grew too.",
       ].join("\n"),
     },
     {
@@ -1024,7 +1024,7 @@ export const class6Fractions: SeedChapter = {
       answer_value: "4",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "8", "/"] },
       solution_md: [
-        "This one goes the other way — the fraction is being made *simpler*, not bigger.",
+        "This one goes the other way, the fraction is being made *simpler*, not bigger.",
         "",
         "The top went from 18 to 3. $18 \\div 6 = 3$, so it was divided by 6.",
         "",
@@ -1096,7 +1096,7 @@ export const class6Fractions: SeedChapter = {
       choices: [
         { id: "a", label: "$1/4$" },
         { id: "b", label: "$1/6$, because 6 is bigger than 4" }, // THE classic error
-        { id: "c", label: "They are equal — both have 1 on top" },
+        { id: "c", label: "They are equal, both have 1 on top" },
         { id: "d", label: "You cannot compare them" },
       ],
       answer_value: "a",
@@ -1186,7 +1186,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "**Anil ate more.**",
         "",
-        "Option (b) is the trap. A fraction is one amount, not two separate numbers — you cannot compare the tops and bottoms separately.",
+        "Option (b) is the trap. A fraction is one amount, not two separate numbers, you cannot compare the tops and bottoms separately.",
       ].join("\n"),
     },
     {
@@ -1207,7 +1207,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{2}{3} = \\frac{6}{9}\n$$",
         "",
-        "So the box must make a fraction **smaller than** $6/9$ — the number in it has to be less than 6.",
+        "So the box must make a fraction **smaller than** $6/9$, the number in it has to be less than 6.",
         "",
         "The largest whole number less than 6 is **5**.",
         "",
@@ -1234,7 +1234,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{1}{5} + \\frac{2}{5} = \\frac{3}{5}\n$$",
         "",
-        "The bottom number stays 5. It is not telling you how much — it is telling you **what size piece** you are counting.",
+        "The bottom number stays 5. It is not telling you how much. It is telling you **what size piece** you are counting.",
       ].join("\n"),
     },
     {
@@ -1251,7 +1251,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{4}{7} - \\frac{1}{7} = \\frac{3}{7}\n$$",
         "",
-        "Four sevenths take away one seventh leaves three sevenths — you are just counting pieces of the same size.",
+        "Four sevenths take away one seventh leaves three sevenths. You are just counting pieces of the same size.",
       ].join("\n"),
     },
     {
@@ -1290,7 +1290,7 @@ export const class6Fractions: SeedChapter = {
           label:
             "He added the tops and the bottoms. The bottoms must be made the same first",
         },
-        { id: "b", label: "Nothing — $2/5$ is correct" },
+        { id: "b", label: "Nothing, $2/5$ is correct" },
         { id: "c", label: "He should have multiplied instead of adding" },
         { id: "d", label: "He should have got $2/6$" },
       ],
@@ -1298,7 +1298,7 @@ export const class6Fractions: SeedChapter = {
       solution_md: [
         "Rahul added straight across: $1 + 1 = 2$ on top and $2 + 3 = 5$ on the bottom. That is the most common fraction mistake there is.",
         "",
-        "You cannot add halves to thirds any more than you can add apples to mangoes. Make the pieces the same size first — sixths work for both:",
+        "You cannot add halves to thirds any more than you can add apples to mangoes. Make the pieces the same size first, sixths work for both:",
         "",
         "$$\n\\frac{1}{2} = \\frac{3}{6} \\qquad \\frac{1}{3} = \\frac{2}{6}\n$$",
         "",
@@ -1317,7 +1317,7 @@ export const class6Fractions: SeedChapter = {
       answer_value: "7/12",
       input: { kind: "tiles", bank: ["1", "2", "4", "5", "6", "7", "/"] },
       solution_md: [
-        "Sixths and quarters do not match. Find a bottom number both go into — **12** works:",
+        "Sixths and quarters do not match. Find a bottom number both go into, **12** works:",
         "",
         "$$\n\\frac{5}{6} = \\frac{10}{12} \\qquad \\frac{1}{4} = \\frac{3}{12}\n$$",
         "",
@@ -1443,7 +1443,7 @@ export const class6Fractions: SeedChapter = {
       choices: [
         { id: "a", label: "$2/9$" },
         { id: "b", label: "$2/7$" },
-        { id: "c", label: "They are equal — both have 2 on top" },
+        { id: "c", label: "They are equal, both have 2 on top" },
         { id: "d", label: "You cannot compare them" },
       ],
       answer_value: "a",
@@ -1478,7 +1478,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{15}{18} > \\frac{14}{18}\n$$",
         "",
-        "So $5/6$ is bigger — only just.",
+        "So $5/6$ is bigger, only just.",
       ].join("\n"),
     },
     {
@@ -1518,7 +1518,7 @@ export const class6Fractions: SeedChapter = {
         "",
         "$$\n\\frac{5}{15} + \\frac{6}{15} = \\frac{11}{15}\n$$",
         "",
-        "So Ria has read $11/15$ of the book — not quite three quarters.",
+        "So Ria has read $11/15$ of the book, not quite three quarters.",
       ].join("\n"),
     },
   ],

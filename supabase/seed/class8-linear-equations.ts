@@ -57,7 +57,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "### The three words",
         "",
-        "- The **variable** is $x$ — the thing you do not know yet.",
+        "- The **variable** is $x$, the thing you do not know yet.",
         "- An **equation** says two things are equal. The $=$ sign is a claim, not an instruction.",
         "- A **solution** is a value of the variable that makes the claim true.",
         "",
@@ -65,7 +65,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "### Linear, in one variable",
         "",
-        "This chapter is about equations where the variable appears **on its own** — no $x^2$, no $\\sqrt{x}$, and only one letter.",
+        "This chapter is about equations where the variable appears **on its own**, no $x^2$, no $\\sqrt{x}$, and only one letter.",
         "",
         "$$",
         "2x + 5 = 11 \\quad \\checkmark \\qquad x^2 + 3 = 7 \\quad \\times",
@@ -73,7 +73,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "### Checking beats guessing",
         "",
-        "The best habit in this whole chapter: **put your answer back in**. If both sides come out the same, you are right — you never have to wonder.",
+        "The best habit in this whole chapter: **put your answer back in**. If both sides come out the same, you are right, you never have to wonder.",
         "",
         "### Worked example",
         "",
@@ -99,12 +99,12 @@ export const class8LinearEquations: SeedChapter = {
           kind: "reveal",
           md: "3 pens and a ₹5 eraser cost ₹35. What does one pen cost?",
           answer:
-            "₹10 a pen. Take the ₹5 eraser off both sides and ₹30 is left for 3 pens. That move — do the same to both sides — is the whole chapter.",
+            "₹10 a pen. Take the ₹5 eraser off both sides and ₹30 is left for 3 pens. That move, do the same to both sides, is the whole chapter.",
           viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 }, label: "3x + 5 = 35" },
         },
         {
           kind: "see",
-          md: "Algebra writes that down as $3x + 5 = 35$. The letter $x$ stands for the pen's price — it is called the **variable**.",
+          md: "Algebra writes that down as $3x + 5 = 35$. The letter $x$ stands for the pen's price. It is called the **variable**.",
           viz: { kind: "balanceScale", left: { xs: 3, n: 5 }, right: { xs: 0, n: 35 }, label: "3x + 5 = 35" },
         },
         {
@@ -118,7 +118,7 @@ export const class8LinearEquations: SeedChapter = {
         {
           kind: "reveal",
           md: "So is $=$ telling you to do something?",
-          answer: "No. It is a **claim** — that both sides are equal. Your job is to find the value of $x$ that makes the claim true.",
+          answer: "No. It is a **claim**, that both sides are equal. Your job is to find the value of $x$ that makes the claim true.",
         },
         {
           // ── TAUGHT, THEN ASKED ────────────────────────────────────────────
@@ -209,7 +209,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "### The shortcut, and what it really is",
         "",
-        "People say \"take it to the other side and change the sign\". That is not a separate rule — it is what subtracting from both sides *looks like* once you stop writing the middle step.",
+        "People say \"take it to the other side and change the sign\". That is not a separate rule. It is what subtracting from both sides *looks like* once you stop writing the middle step.",
         "",
         "$$",
         "3x + 4 = 19 \\quad \\Rightarrow \\quad 3x = 19 - 4",
@@ -263,7 +263,7 @@ export const class8LinearEquations: SeedChapter = {
           // Named as what it is, so a learner who uses it knows where to look
           // when an answer comes out wrong.
           kind: "see",
-          md: "\"Take it across and change the sign\" is not a new rule — it is this, with the middle step left out.",
+          md: "\"Take it across and change the sign\" is not a new rule. It is this, with the middle step left out.",
         },
         {
           kind: "tap",
@@ -288,7 +288,7 @@ export const class8LinearEquations: SeedChapter = {
       body_md: [
         "Two things make an equation *look* harder than it is. Neither changes the method.",
         "",
-        "### Brackets — open them first",
+        "### Brackets: open them first",
         "",
         "$$",
         "3(x + 2) = 21",
@@ -306,7 +306,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "Forgetting to multiply the second term is the most common slip here. $3(x+2)$ is $3x + 6$, never $3x + 2$.",
         "",
-        "### Fractions — the variable is still just a number",
+        "### Fractions: the variable is still just a number",
         "",
         "$$",
         "\\frac{x}{4} = 3",
@@ -320,7 +320,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "### When the answer is not a whole number",
         "",
-        "That is completely normal — do not assume you have gone wrong.",
+        "That is completely normal, do not assume you have gone wrong.",
         "",
         "$$",
         "4x + 3 = 10",
@@ -385,7 +385,7 @@ export const class8LinearEquations: SeedChapter = {
         },
         {
           kind: "see",
-          md: "An answer that is not a whole number is normal — not a sign you went wrong.",
+          md: "An answer that is not a whole number is normal, not a sign you went wrong.",
         },
         {
           kind: "reveal",
@@ -429,7 +429,7 @@ export const class8LinearEquations: SeedChapter = {
         "x = 6",
         "$$",
         "",
-        "Check both sides separately — this is where checking earns its keep:",
+        "Check both sides separately. This is where checking earns its keep:",
         "",
         "$$",
         "7 \\times 6 - 2 = 40 \\qquad 5 \\times 6 + 10 = 40 \\quad \\checkmark",
@@ -453,7 +453,7 @@ export const class8LinearEquations: SeedChapter = {
         "2x = 6, \\qquad x = 3",
         "$$",
         "",
-        "If you carry the 4 across as $+4$ you get $x = 7$, and the check fails immediately — which is exactly what checking is for.",
+        "If you carry the 4 across as $+4$ you get $x = 7$, and the check fails immediately, which is exactly what checking is for.",
       ].join("\n"),
       // 3x + 4 = x + 10 rather than the 7x of the prose version: a pan holds
       // four boxes, and a picture that cannot show the equation is worse than no
@@ -493,12 +493,12 @@ export const class8LinearEquations: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Carry it across as $+4$ and you get $x = 7$ — and the check fails at once.",
+          md: "Carry it across as $+4$ and you get $x = 7$, and the check fails at once.",
         },
         {
           kind: "reveal",
           md: "Check $x = 3$ in $3x + 4 = x + 10$.",
-          answer: "Left: $9 + 4 = 13$. Right: $3 + 10 = 13$. Both 13 — this is where checking earns its keep.",
+          answer: "Left: $9 + 4 = 13$. Right: $3 + 10 = 13$. Both 13. This is where checking earns its keep.",
         },
       ],
     },
@@ -509,7 +509,7 @@ export const class8LinearEquations: SeedChapter = {
       title: "Turning Words into Equations",
       est_minutes: 5,
       body_md: [
-        "This is the part that matters outside the exam hall, and the part most learners find hardest — not the algebra, but knowing what to write down.",
+        "This is the part that matters outside the exam hall, and the part most learners find hardest, not the algebra, but knowing what to write down.",
         "",
         "### Three steps, every time",
         "",
@@ -527,7 +527,7 @@ export const class8LinearEquations: SeedChapter = {
         "| twice a number, then add 7 | $2x + 7$ |",
         "| ₹15 more than the pen | $x + 15$ |",
         "",
-        "Watch \"5 less than a number\" — it is $x - 5$, not $5 - x$. The order in English is the reverse of the order in symbols.",
+        "Watch \"5 less than a number\". It is $x - 5$, not $5 - x$. The order in English is the reverse of the order in symbols.",
         "",
         "### Worked example",
         "",
@@ -594,7 +594,7 @@ export const class8LinearEquations: SeedChapter = {
           md: "\"Three times a number, then add 7\" is which one?",
           options: [{ label: "$3x + 7$" }, { label: "$3(x + 7)$" }],
           answer: 0,
-          why: "Multiply first, then add — the order the sentence gives them in.",
+          why: "Multiply first, then add, the order the sentence gives them in.",
         },
       ],
     },
@@ -627,7 +627,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_value: "5",
       input: { kind: "tiles", bank: ["1", "2", "3", "5", "8", "/"] },
       solution_md: [
-        "The two sides weigh the same — that is what level means.",
+        "The two sides weigh the same. That is what level means.",
         "",
         "On the left there is one $x$ and a weight of 3. On the right, 8.",
         "",
@@ -653,7 +653,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "The boxes are identical, so share the 12 equally between them: each one is $12 \\div 3 = 4$.",
         "",
-        "The trap is answering **12** — that is what all three weigh together, not what one is worth.",
+        "The trap is answering **12**. That is what all three weigh together, not what one is worth.",
       ].join("\n"),
     },
     {
@@ -697,7 +697,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "Then take 1 off both: $x = 4$.",
         "",
-        "Removing a box from only one side would tip it — and a tipped balance is no longer telling you anything true.",
+        "Removing a box from only one side would tip it, and a tipped balance is no longer telling you anything true.",
       ].join("\n"),
     },
     // ── linear-equation-basics ──────────────────────────────────────────────
@@ -718,10 +718,10 @@ export const class8LinearEquations: SeedChapter = {
       solution_md: [
         "Three things have to be true: there is an $=$ sign, there is exactly **one** letter, and that letter is **not** raised to a power.",
         "",
-        "- (a) $2x + 5 = 11$ — one variable, power 1. **Yes.**",
+        "- (a) $2x + 5 = 11$, one variable, power 1. **Yes.**",
         "- (b) has $x^2$, so it is not linear.",
         "- (c) has two variables, $x$ and $y$.",
-        "- (d) has no variable at all — it is just a true statement.",
+        "- (d) has no variable at all. It is just a true statement.",
       ].join("\n"),
     },
     {
@@ -732,9 +732,9 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "mcq",
       stem_md: "Is $x = 3$ a solution of $4x - 2 = 10$?",
       choices: [
-        { id: "a", label: "Yes — both sides come out as 10" },
-        { id: "b", label: "No — the left side comes out as 14" },
-        { id: "c", label: "No — $x$ should be 4" },
+        { id: "a", label: "Yes, both sides come out as 10" },
+        { id: "b", label: "No, the left side comes out as 14" },
+        { id: "c", label: "No, $x$ should be 4" },
         { id: "d", label: "You cannot tell without solving it first" },
       ],
       answer_value: "a",
@@ -785,7 +785,7 @@ export const class8LinearEquations: SeedChapter = {
         "3 \\times (-2) + 8 = -6 + 8 = 2",
         "$$",
         "",
-        "The sign rules from Class 7 still apply — a negative times a positive is negative.",
+        "The sign rules from Class 7 still apply, a negative times a positive is negative.",
       ].join("\n"),
     },
     {
@@ -820,9 +820,9 @@ export const class8LinearEquations: SeedChapter = {
       answer_type: "mcq",
       stem_md: "Sunita says $x = 4$ solves $5x - 3 = 17$.\n\nIs she right?",
       choices: [
-        { id: "a", label: "Yes — both sides come out as 17" },
-        { id: "b", label: "No — the left side comes out as 20" }, // forgot the -3
-        { id: "c", label: "No — $x$ should be 5" },
+        { id: "a", label: "Yes, both sides come out as 17" },
+        { id: "b", label: "No, the left side comes out as 20" }, // forgot the -3
+        { id: "c", label: "No, $x$ should be 5" },
         { id: "d", label: "You cannot check without solving it again" },
       ],
       answer_value: "a",
@@ -835,7 +835,7 @@ export const class8LinearEquations: SeedChapter = {
         "",
         "That matches the right side, so Sunita is right.",
         "",
-        "Option (b) is what you get by forgetting the $-3$ — worth noticing, because it is the easiest step to skip when checking quickly.",
+        "Option (b) is what you get by forgetting the $-3$, worth noticing, because it is the easiest step to skip when checking quickly.",
       ].join("\n"),
     },
 
@@ -946,7 +946,7 @@ export const class8LinearEquations: SeedChapter = {
         "x = \\frac{7}{4}",
         "$$",
         "",
-        "Not every answer is a whole number, and that is fine. Leave it as a fraction — it is exact.",
+        "Not every answer is a whole number, and that is fine. Leave it as a fraction. It is exact.",
       ].join("\n"),
     },
     {
@@ -1032,7 +1032,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_value: "5",
       input: { kind: "tiles", bank: ["4", "5", "6", "7", "9", "/"] },
       solution_md: [
-        "Here the right side has more $x$s, so move the $x$s there and the numbers to the left — it keeps everything positive.",
+        "Here the right side has more $x$s, so move the $x$s there and the numbers to the left, it keeps everything positive.",
         "",
         "$$",
         "9 + 6 = 7x - 4x",
@@ -1058,7 +1058,7 @@ export const class8LinearEquations: SeedChapter = {
       ].join("\n"),
       choices: [
         { id: "a", label: "He moved the 4 across without changing its sign" },
-        { id: "b", label: "Nothing — $x = 7$ is correct" },
+        { id: "b", label: "Nothing, $x = 7$ is correct" },
         { id: "c", label: "He should have divided by 3 first" },
         { id: "d", label: "He should have got $x = 14$" },
       ],
@@ -1112,7 +1112,7 @@ export const class8LinearEquations: SeedChapter = {
       answer_value: "5",
       input: { kind: "tiles", bank: ["1", "2", "3", "4", "5", "/"] },
       solution_md: [
-        "Open the bracket first — the 2 multiplies **both** terms inside:",
+        "Open the bracket first, the 2 multiplies **both** terms inside:",
         "",
         "$$",
         "2x + 6 = x + 11",
@@ -1318,7 +1318,7 @@ export const class8LinearEquations: SeedChapter = {
       solution_md: [
         "One letter, power 1, and an $=$ sign. Only $3y - 7 = 8$ has all three.",
         "",
-        "The letter does not have to be $x$ — $y$, $a$ or any other letter works the same way.",
+        "The letter does not have to be $x$, $y$, $a$ or any other letter works the same way.",
       ].join("\n"),
     },
     {
@@ -1372,7 +1372,7 @@ export const class8LinearEquations: SeedChapter = {
         "x = \\frac{5}{2}",
         "$$",
         "",
-        "Leave it as a fraction — it is the exact answer.",
+        "Leave it as a fraction. It is the exact answer.",
       ].join("\n"),
     },
     {
@@ -1404,7 +1404,7 @@ export const class8LinearEquations: SeedChapter = {
       stem_md: "$$\n3(x - 2) = x + 6\n$$\n\nWhat is the value of $x$?",
       answer_value: "6",
       solution_md: [
-        "Open the bracket first — the 3 multiplies both terms:",
+        "Open the bracket first, the 3 multiplies both terms:",
         "",
         "$$",
         "3x - 6 = x + 6",

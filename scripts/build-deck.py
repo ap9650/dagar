@@ -1028,7 +1028,11 @@ def main() -> None:
     prs.slide_width, prs.slide_height = Inches(SW), Inches(SH)
     for fn in SLIDES:
         fn(prs)
-    out = "docs/deck/Dagar-Pitch-Deck.pptx"
+    # Renamed. `build-pitch.py` owns Dagar-Pitch-Deck.pptx now, and both
+    # writing the same path meant whichever ran last silently won. This file
+    # still matters: it holds the brand tokens and layout primitives the new
+    # deck imports, so it is a library first and a builder second.
+    out = "docs/deck/Dagar-Pitch-Deck-v1.pptx"
     prs.save(out)
     print(f"wrote {out} — {len(prs.slides.__iter__.__self__._sldIdLst)} slides")
 

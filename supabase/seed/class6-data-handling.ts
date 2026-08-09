@@ -64,13 +64,13 @@ export const class6DataHandling: SeedChapter = {
         "",
         "The answers come in a jumble: *kabaddi, cricket, cricket, kho-kho, cricket, chess, kabaddi…*",
         "",
-        "That jumble is **data** — information you have collected. It is completely correct, and completely useless, because nobody can tell from it which game won.",
+        "That jumble is **data**, information you have collected. It is completely correct, and completely useless, because nobody can tell from it which game won.",
         "",
         "Data has to be **organised** before it can answer anything.",
         "",
         "### Tally marks",
         "",
-        "As each answer comes in, you draw one mark. But a long row of marks is as hard to count as the jumble was — so marks are **bundled in fives**.",
+        "As each answer comes in, you draw one mark. But a long row of marks is as hard to count as the jumble was, so marks are **bundled in fives**.",
         "",
         "Four upright marks, and the fifth drawn *across* them:",
         "",
@@ -98,7 +98,7 @@ export const class6DataHandling: SeedChapter = {
           kind: "reveal",
           md: "You have all 40 answers written down. Can you say which game won?",
           answer:
-            "Not from that jumble. It is correct **data** — information you collected — and useless until somebody organises it.",
+            "Not from that jumble. It is correct **data**, information you collected, and useless until somebody organises it.",
           viz: {
             kind: "chart",
             variant: "tally",
@@ -129,7 +129,7 @@ export const class6DataHandling: SeedChapter = {
           kind: "reveal",
           md: "Why bundle them in fives, and not sevens?",
           answer:
-            "Because you see five at a glance, without counting. Seven you would have to count — and counting is what we are trying to stop doing.",
+            "Because you see five at a glance, without counting. Seven you would have to count, and counting is what we are trying to stop doing.",
         },
         {
           kind: "worked",
@@ -150,7 +150,7 @@ export const class6DataHandling: SeedChapter = {
         {
           kind: "reveal",
           md: "Now the question you actually asked. Which game should the class play on Saturday?",
-          answer: "Cricket, with 17 votes — the most of any game. Organised data answers it in one look.",
+          answer: "Cricket, with 17 votes, the most of any game. Organised data answers it in one look.",
           viz: {
             kind: "chart",
             variant: "tally",
@@ -172,7 +172,7 @@ export const class6DataHandling: SeedChapter = {
       title: "Pictographs, and the Key That Decides Everything",
       est_minutes: 4,
       body_md: [
-        "Tally marks are quick to write, but hard to compare. Which is bigger — 17 marks or 12 marks? You have to count both.",
+        "Tally marks are quick to write, but hard to compare. Which is bigger, 17 marks or 12 marks? You have to count both.",
         "",
         "A **pictograph** uses a picture for each thing, so comparing is just looking at which row is longer.",
         "",
@@ -184,7 +184,7 @@ export const class6DataHandling: SeedChapter = {
         "",
         "> Each circle stands for 5 students.",
         "",
-        "**The key is the whole chart.** Read it as 1 instead of 5 and every single answer is wrong — not slightly wrong, five times wrong.",
+        "**The key is the whole chart.** Read it as 1 instead of 5 and every single answer is wrong, not slightly wrong, five times wrong.",
         "",
         "### Reading a pictograph",
         "",
@@ -285,7 +285,7 @@ export const class6DataHandling: SeedChapter = {
           kind: "reveal",
           md: "Somebody reads that same chart thinking each circle means 1 student. What do they get for kho-kho?",
           answer:
-            "About 1 instead of 8. Ignoring the key does not make you a little wrong — it makes you five times wrong.",
+            "About 1 instead of 8. Ignoring the key does not make you a little wrong. It makes you five times wrong.",
         },
         {
           kind: "see",
@@ -316,8 +316,8 @@ export const class6DataHandling: SeedChapter = {
         "",
         "### The parts of a bar graph",
         "",
-        "- Along the bottom: the **categories** — the things being compared.",
-        "- Up the side: the **scale** — the numbers, with a line at each step.",
+        "- Along the bottom: the **categories**, the things being compared.",
+        "- Up the side: the **scale**, the numbers, with a line at each step.",
         "- The **bars** themselves, all the same width, standing on the bottom line.",
         "",
         "**All bars start at zero.** A bar that starts higher up makes a small difference look enormous, and that is how charts lie.",
@@ -332,7 +332,7 @@ export const class6DataHandling: SeedChapter = {
         "",
         "The scale goes up in 5s. The cricket bar reaches a little above the line marked 15.",
         "",
-        "So cricket is a bit more than 15 — it is 17.",
+        "So cricket is a bit more than 15. It is 17.",
         "",
         "The bars are all the same width on purpose. Only the **height** carries the number; a wider bar does not mean more.",
       ].join("\n"),
@@ -344,7 +344,7 @@ export const class6DataHandling: SeedChapter = {
           // have not been shown yet. Now: the whole school, which is a real
           // place, and then the new picture immediately.
           kind: "see",
-          md: "Now imagine asking the whole school, not just your class. Hundreds of votes — and hundreds of circles to draw.",
+          md: "Now imagine asking the whole school, not just your class. Hundreds of votes, and hundreds of circles to draw.",
           viz: {
             kind: "chart",
             variant: "pictograph",
@@ -392,7 +392,7 @@ export const class6DataHandling: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Along the bottom are the four games. Each one is a **category** — a thing you are comparing.",
+          md: "Along the bottom are the four games. Each one is a **category**, a thing you are comparing.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -411,7 +411,7 @@ export const class6DataHandling: SeedChapter = {
             "Find the top of the cricket bar.",
             "Move straight across to the scale on the left.",
             "It sits a little above the line marked 15.",
-            "So cricket is a bit more than 15 — it is 17.",
+            "So cricket is a bit more than 15. It is 17.",
           ],
         },
         {
@@ -419,11 +419,11 @@ export const class6DataHandling: SeedChapter = {
           md: "Now the kho-kho bar. Its top sits between 5 and 10. Which value is it?",
           options: [{ label: "5" }, { label: "8" }, { label: "12" }, { label: "20" }],
           answer: 1,
-          why: "Between 5 and 10, and closer to 10 — it is 8. Every bar carries its number above it too.",
+          why: "Between 5 and 10, and closer to 10. It is 8. Every bar carries its number above it too.",
         },
         {
           kind: "see",
-          md: "Every bar is the same width. Only the height carries the number — a wider bar does not mean more.",
+          md: "Every bar is the same width. Only the height carries the number, a wider bar does not mean more.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -457,7 +457,7 @@ export const class6DataHandling: SeedChapter = {
         "",
         "### The rule",
         "",
-        "Pick a scale where **the tallest bar nearly fills the height**, and where the numbers are easy to count in — 2s, 5s, 10s, 20s, 100s.",
+        "Pick a scale where **the tallest bar nearly fills the height**, and where the numbers are easy to count in, 2s, 5s, 10s, 20s, 100s.",
         "",
         "For a largest value of 50, going up in 10s gives six lines: 0, 10, 20, 30, 40, 50. That is readable.",
         "",
@@ -490,7 +490,7 @@ export const class6DataHandling: SeedChapter = {
         },
         {
           kind: "reveal",
-          md: "Suppose you make the scale go up in 1s — 0, 1, 2, 3, all the way to 50. What goes wrong?",
+          md: "Suppose you make the scale go up in 1s, 0, 1, 2, 3, all the way to 50. What goes wrong?",
           answer: "You would need 50 lines up the side. They would be squashed together and nobody could read them.",
         },
         {
@@ -498,11 +498,11 @@ export const class6DataHandling: SeedChapter = {
           md: "The largest value is 50. Which scale reads best?",
           options: [{ label: "Up in 1s" }, { label: "Up in 10s" }, { label: "Up in 100s" }],
           answer: 1,
-          why: "Up in 10s gives 0, 10, 20, 30, 40, 50 — six lines, and the tallest bar fills the height.",
+          why: "Up in 10s gives 0, 10, 20, 30, 40, 50, six lines, and the tallest bar fills the height.",
         },
         {
           kind: "see",
-          md: "Up in 100s instead, and every bar becomes a stub. The data has not changed — only the scale has.",
+          md: "Up in 100s instead, and every bar becomes a stub. The data has not changed, only the scale has.",
           viz: {
             kind: "chart",
             variant: "bar",
@@ -553,7 +553,7 @@ export const class6DataHandling: SeedChapter = {
         "",
         "Total students asked: $12 + 17 + 8 + 3 = 40$.",
         "",
-        "That total is worth checking — if it does not match the number of students you asked, something was miscounted.",
+        "That total is worth checking, if it does not match the number of students you asked, something was miscounted.",
       ].join("\n"),
 
       steps: [
@@ -579,14 +579,14 @@ export const class6DataHandling: SeedChapter = {
           md: "Which game was chosen least?",
           options: [{ label: "Kabaddi" }, { label: "Kho-kho" }, { label: "Chess" }],
           answer: 2,
-          why: "Chess, with 3 — the shortest bar. Least means shortest, exactly as most means tallest.",
+          why: "Chess, with 3, the shortest bar. Least means shortest, exactly as most means tallest.",
         },
         {
           // The question type that actually loses marks.
           kind: "worked",
           md: "Now a harder one: how many MORE chose cricket than chess?",
           lines: [
-            "This is not a reading — it is a subtraction.",
+            "This is not a reading. It is a subtraction.",
             "Cricket is 17. Chess is 3.",
             "$17 - 3 = 14$ more students.",
           ],
@@ -729,7 +729,7 @@ export const class6DataHandling: SeedChapter = {
       /*
         Distractors a learner could actually believe HERE, which the previous
         set were not. "The axis" is a word they do not meet until the next
-        lesson — an option nobody has heard of is noise, not a misconception,
+        lesson, an option nobody has heard of is noise, not a misconception,
         and the seed's own rule is that wrong options encode real mistakes.
 
         "The scale" was worse than useless: NCERT calls the value of one picture
@@ -796,7 +796,7 @@ export const class6DataHandling: SeedChapter = {
       answer_type: "integer",
       answer_value: "60",
       solution_md:
-        "Ravi counted 6 pictures. Each is worth 10, so the real number is $6 \\times 10 = 60$. Ignoring the key does not make you a little wrong — it makes you ten times wrong.",
+        "Ravi counted 6 pictures. Each is worth 10, so the real number is $6 \\times 10 = 60$. Ignoring the key does not make you a little wrong. It makes you ten times wrong.",
     },
 
     // ── bar graphs ─────────────────────────────────────────────────────────
@@ -876,7 +876,7 @@ export const class6DataHandling: SeedChapter = {
       },
       answer_type: "integer",
       answer_value: "25",
-      solution_md: "The 6C bar sits between 20 and 30, halfway — it is 25.",
+      solution_md: "The 6C bar sits between 20 and 30, halfway. It is 25.",
     },
     // The chapter's actual assessed skill: given the numbers, DRAW the graph.
     // Every other question here has the learner read a chart somebody else
@@ -893,7 +893,7 @@ export const class6DataHandling: SeedChapter = {
       answer_value: "6,9,4",
       input: { kind: "buildBars", categories: ["Walk", "Cycle", "Bus"], max: 10 },
       solution_md:
-        "Set each bar to its own number: walk 6, cycle 9, bus 4. Read the value off the scale as you go — the bar's top should sit on the line for that number.",
+        "Set each bar to its own number: walk 6, cycle 9, bus 4. Read the value off the scale as you go, the bar's top should sit on the line for that number.",
     },
     {
       slug: "c6-dh-bar-p8",
@@ -1151,7 +1151,7 @@ export const class6DataHandling: SeedChapter = {
       },
       answer_type: "integer",
       answer_value: "35",
-      solution_md: "The 6B bar sits halfway between 30 and 40 — it is 35.",
+      solution_md: "The 6B bar sits halfway between 30 and 40. It is 35.",
     },
     {
       slug: "c6-dh-q7",

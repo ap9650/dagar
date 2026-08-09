@@ -44,7 +44,7 @@ export const class7Integers: SeedChapter = {
       title: "Numbers Below Zero",
       est_minutes: 4,
       body_md: [
-        "In January the temperature in Shimla drops to 4 degrees **below** zero. A basement is one floor **below** the ground. You owe your friend ₹50 — you have less than nothing of that money.",
+        "In January the temperature in Shimla drops to 4 degrees **below** zero. A basement is one floor **below** the ground. You owe your friend ₹50. You have less than nothing of that money.",
         "",
         "Counting numbers cannot say any of this. **Integers** can.",
         "",
@@ -73,7 +73,7 @@ export const class7Integers: SeedChapter = {
         "",
         "### Opposites",
         "",
-        "Every integer has an **opposite** — the same distance from 0, on the other side. The opposite of 7 is $-7$, and the opposite of $-7$ is 7.",
+        "Every integer has an **opposite**, the same distance from 0, on the other side. The opposite of 7 is $-7$, and the opposite of $-7$ is 7.",
         "",
         "### Worked example",
         "",
@@ -104,7 +104,7 @@ export const class7Integers: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Counting numbers cannot say that. **Integers** can — the whole numbers, their **negatives** below zero, and their **positives** above it.",
+          md: "Counting numbers cannot say that. **Integers** can, the whole numbers, their **negatives** below zero, and their **positives** above it.",
           viz: { kind: "numberLine", from: -5, to: 5, step: 1 },
         },
         {
@@ -137,7 +137,7 @@ export const class7Integers: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Every integer has an **opposite** — the same distance from 0, on the other side.",
+          md: "Every integer has an **opposite**, the same distance from 0, on the other side.",
           viz: {
             kind: "numberLine", from: -8, to: 8, step: 4,
             marks: [{ at: -7, label: "−7" }, { at: 7, label: "7", tone: "hint" }],
@@ -170,7 +170,7 @@ export const class7Integers: SeedChapter = {
       body_md: [
         "Adding an integer is **moving along the number line**. Positive moves right, negative moves left. That is the whole idea.",
         "",
-        "### Same signs — add and keep the sign",
+        "### Same signs: add and keep the sign",
         "",
         "Two moves in the same direction just add up.",
         "",
@@ -180,7 +180,7 @@ export const class7Integers: SeedChapter = {
         "",
         "Owe ₹4, then owe ₹3 more: you owe ₹7.",
         "",
-        "### Different signs — subtract, and take the sign of the bigger one",
+        "### Different signs: subtract, and take the sign of the bigger one",
         "",
         "Now the moves fight each other, and the stronger one wins.",
         "",
@@ -272,7 +272,7 @@ export const class7Integers: SeedChapter = {
           md: "And $(-3) + 8$?",
           options: [{ label: "$5$" }, { label: "$-5$" }, { label: "$11$" }],
           answer: 0,
-          why: "Three steps left, then eight right — you end up five right of zero.",
+          why: "Three steps left, then eight right, you end up five right of zero.",
         },
       ],
     },
@@ -283,7 +283,7 @@ export const class7Integers: SeedChapter = {
       title: "Subtracting Integers",
       est_minutes: 4,
       body_md: [
-        "Subtraction looks like a second thing to learn. It is not — it is addition wearing a different hat.",
+        "Subtraction looks like a second thing to learn. It is not. It is addition wearing a different hat.",
         "",
         "> To subtract an integer, **add its opposite**.",
         "",
@@ -307,7 +307,7 @@ export const class7Integers: SeedChapter = {
         "(-6) - (-9) = (-6) + 9 = 3",
         "$$",
         "",
-        "Taking away a debt makes you **better off**. If someone cancels ₹9 that you owed, you have gained ₹9 — even though the word was *subtract*.",
+        "Taking away a debt makes you **better off**. If someone cancels ₹9 that you owed, you have gained ₹9, even though the word was *subtract*.",
         "",
         "**Two minus signs next to each other turn into a plus.** Not because of a trick, but because the opposite of $-9$ is $+9$.",
         "",
@@ -319,7 +319,7 @@ export const class7Integers: SeedChapter = {
         "(-2) - (-11) = (-2) + 11 = 9",
         "$$",
         "",
-        "It fell by 9 degrees. Notice that the answer is positive — a *size* has no minus sign, even when both temperatures do.",
+        "It fell by 9 degrees. Notice that the answer is positive, a *size* has no minus sign, even when both temperatures do.",
       ].join("\n"),
       // Subtraction is not a second thing to learn, and the lesson refuses to
       // present it as one: every step reduces to the walk from lesson 2.
@@ -361,7 +361,7 @@ export const class7Integers: SeedChapter = {
         {
           kind: "reveal",
           md: "So what is $(-6) - (-9)$?",
-          answer: "$3$. Two minus signs together become a plus — because the opposite of $-9$ is $+9$.",
+          answer: "$3$. Two minus signs together become a plus, because the opposite of $-9$ is $+9$.",
         },
         {
           kind: "see",
@@ -472,7 +472,7 @@ export const class7Integers: SeedChapter = {
         {
           kind: "reveal",
           md: "So what must $(-4) \\times (-1)$ be?",
-          answer: "$4$. The pattern has to keep going up by 4 — nothing else fits.",
+          answer: "$4$. The pattern has to keep going up by 4, nothing else fits.",
         },
         {
           kind: "see",
@@ -503,7 +503,7 @@ export const class7Integers: SeedChapter = {
       title: "Dividing Integers",
       est_minutes: 3,
       body_md: [
-        "Division undoes multiplication, so it borrows the same sign rules — no new ones to learn.",
+        "Division undoes multiplication, so it borrows the same sign rules, no new ones to learn.",
         "",
         "> **Same signs give a positive. Different signs give a negative.**",
         "",
@@ -523,7 +523,7 @@ export const class7Integers: SeedChapter = {
         "",
         "### One thing division does not share",
         "",
-        "Multiplication does not care about order — $3 \\times (-5)$ and $(-5) \\times 3$ both give $-15$. Division does:",
+        "Multiplication does not care about order, $3 \\times (-5)$ and $(-5) \\times 3$ both give $-15$. Division does:",
         "",
         "$$",
         "(-12) \\div 4 = -3 \\qquad 4 \\div (-12) \\text{ is not } -3",
@@ -541,7 +541,7 @@ export const class7Integers: SeedChapter = {
         "(-52) \\div (-4) = 13",
         "$$",
         "",
-        "13 days. The answer is positive, and it should be — a count of days cannot be negative.",
+        "13 days. The answer is positive, and it should be, a count of days cannot be negative.",
       ].join("\n"),
       // Nothing new to learn, and the lesson says so first — the whole risk here
       // is a learner treating division as a fresh set of rules to memorise.
@@ -579,7 +579,7 @@ export const class7Integers: SeedChapter = {
         {
           kind: "reveal",
           md: "For how many days has this been going on?",
-          answer: "$(-52) \\div (-4) = 13$ days. Positive, as it must be — a count of days cannot be negative.",
+          answer: "$(-52) \\div (-4) = 13$ days. Positive, as it must be, a count of days cannot be negative.",
         },
         {
           kind: "tap",
@@ -632,7 +632,7 @@ export const class7Integers: SeedChapter = {
         "",
         "$$\n-2 - 3 = -5\n$$",
         "",
-        "Two minuses only make a plus when the second one is attached to the *number* — $-2 - (-3)$. Here the 3 is being taken away, so it is still a walk to the left.",
+        "Two minuses only make a plus when the second one is attached to the *number*, $-2 - (-3)$. Here the 3 is being taken away, so it is still a walk to the left.",
       ].join("\n"),
     },
     {
@@ -659,7 +659,7 @@ export const class7Integers: SeedChapter = {
         "",
         "$$\n(-6) \\div 6 = -1\n$$",
         "",
-        "It stays a **debt** after sharing. Dividing changes how much each person owes, never whether they owe it — so the answer keeps its minus sign.",
+        "It stays a **debt** after sharing. Dividing changes how much each person owes, never whether they owe it, so the answer keeps its minus sign.",
       ].join("\n"),
     },
     // ── PLACE — the answer is a POSITION, which is how the line is taught ─────
@@ -677,7 +677,7 @@ export const class7Integers: SeedChapter = {
         "",
         "From 0, go left three steps: $-1$, $-2$, $-3$.",
         "",
-        "It sits the same distance from zero as $3$ does — just on the other side.",
+        "It sits the same distance from zero as $3$ does, just on the other side.",
       ].join("\n"),
     },
     {
@@ -696,7 +696,7 @@ export const class7Integers: SeedChapter = {
         "",
         "$$\n-1 - 3 = -4\n$$",
         "",
-        "Going left from a negative number takes you further from zero, so the answer is *more* negative — not closer to it.",
+        "Going left from a negative number takes you further from zero, so the answer is *more* negative, not closer to it.",
       ].join("\n"),
     },
     // ─────────────────────────────────────────────────────────────────────────
@@ -747,7 +747,7 @@ export const class7Integers: SeedChapter = {
         "",
         "$$\n-5 + 3 = -2\n$$",
         "",
-        "It is still a negative number — you did not travel far enough to reach zero. That is the whole picture.",
+        "It is still a negative number. You did not travel far enough to reach zero. That is the whole picture.",
       ].join("\n"),
     },
     {
@@ -770,7 +770,7 @@ export const class7Integers: SeedChapter = {
         ],
       },
       solution_md: [
-        "$3 \\times (-2)$ means **three lots of** $-2$ — three groups, each of them a debt of 2.",
+        "$3 \\times (-2)$ means **three lots of** $-2$, three groups, each of them a debt of 2.",
         "",
         "$$\n(-2) + (-2) + (-2) = -6\n$$",
         "",
@@ -814,7 +814,7 @@ export const class7Integers: SeedChapter = {
       solution_md: [
         "The opposite of an integer is the same distance from 0, on the other side.",
         "",
-        "$-9$ is 9 steps to the left of 0, so its opposite is 9 steps to the **right** of 0 — that is $9$.",
+        "$-9$ is 9 steps to the left of 0, so its opposite is 9 steps to the **right** of 0. That is $9$.",
         "",
         "A useful check: a number plus its opposite is always 0, and $(-9) + 9 = 0$.",
       ].join("\n"),
@@ -859,7 +859,7 @@ export const class7Integers: SeedChapter = {
         "-7 < -2 < 0 < 3",
         "$$",
         "",
-        "Option (c) puts $-2$ before $-7$, which is the usual slip — among negatives, the one with the **bigger** digits is the **smaller** number.",
+        "Option (c) puts $-2$ before $-7$, which is the usual slip, among negatives, the one with the **bigger** digits is the **smaller** number.",
       ].join("\n"),
     },
     {
@@ -878,7 +878,7 @@ export const class7Integers: SeedChapter = {
         "-3, -2, -1, 0, 1, 2",
         "$$",
         "",
-        "That is **6** integers. Do not forget 0 — it is an integer, and it is the one most often missed.",
+        "That is **6** integers. Do not forget 0. It is an integer, and it is the one most often missed.",
       ].join("\n"),
     },
     {
@@ -982,7 +982,7 @@ export const class7Integers: SeedChapter = {
       ],
       answer_value: "a",
       solution_md: [
-        "*Fell* means move **left** on the number line — it is already cold, and it got colder.",
+        "*Fell* means move **left** on the number line. It is already cold, and it got colder.",
         "",
         "$$",
         "(-3) - 7 = -10",
@@ -1038,7 +1038,7 @@ export const class7Integers: SeedChapter = {
         "-160 - 40 = -200",
         "$$",
         "",
-        "So his balance is $-200$ — he owes ₹200.",
+        "So his balance is $-200$, he owes ₹200.",
       ].join("\n"),
     },
 
@@ -1083,7 +1083,7 @@ export const class7Integers: SeedChapter = {
         "(-5) \\times (-6) = 30",
         "$$",
         "",
-        "Option (d) is worth ruling out too — multiplication gives the same answer whichever order you write it in.",
+        "Option (d) is worth ruling out too, multiplication gives the same answer whichever order you write it in.",
       ].join("\n"),
     },
     {
@@ -1140,7 +1140,7 @@ export const class7Integers: SeedChapter = {
       answer_value: "-1",
       input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "5"] },
       solution_md: [
-        "Do not multiply one step at a time — **count the minus signs**. There are five, an **odd** number, so the answer is negative.",
+        "Do not multiply one step at a time, **count the minus signs**. There are five, an **odd** number, so the answer is negative.",
         "",
         "The sizes are all 1, so the size of the answer is 1.",
         "",
@@ -1176,7 +1176,7 @@ export const class7Integers: SeedChapter = {
         "(-3) \\times 7 = -21",
         "$$",
         "",
-        "She is 21 m **below** the surface, which we write as $-21$ m. The minus sign is not decoration — it is the difference between 21 m under water and 21 m in the air.",
+        "She is 21 m **below** the surface, which we write as $-21$ m. The minus sign is not decoration. It is the difference between 21 m under water and 21 m in the air.",
       ].join("\n"),
     },
 
@@ -1236,12 +1236,12 @@ export const class7Integers: SeedChapter = {
       solution_md: [
         "Check each one:",
         "",
-        "- $(-25) \\div (-5) = 5$ — same signs, so **positive**. This is the odd one out.",
+        "- $(-25) \\div (-5) = 5$, same signs, so **positive**. This is the odd one out.",
         "- $25 \\div (-5) = -5$",
         "- $(-25) \\div 5 = -5$",
         "- $(-5) \\times 1 = -5$",
         "",
-        "So the answer is (a). Same signs give a positive — even when both numbers look negative.",
+        "So the answer is (a). Same signs give a positive, even when both numbers look negative.",
       ].join("\n"),
     },
     {
@@ -1254,7 +1254,7 @@ export const class7Integers: SeedChapter = {
       answer_value: "-4",
       input: { kind: "tiles", bank: ["-", "1", "2", "3", "4", "8"] },
       solution_md: [
-        "Work **left to right** — division does not let you reorder.",
+        "Work **left to right**, division does not let you reorder.",
         "",
         "$$",
         "(-48) \\div (-4) = 12",
@@ -1285,7 +1285,7 @@ export const class7Integers: SeedChapter = {
         "(-52) \\div (-4) = 13",
         "$$",
         "",
-        "13 days. Same signs give a positive answer — and that is exactly right here, because a number of days cannot be negative.",
+        "13 days. Same signs give a positive answer, and that is exactly right here, because a number of days cannot be negative.",
       ].join("\n"),
     },
     {
@@ -1325,7 +1325,7 @@ export const class7Integers: SeedChapter = {
       ],
       answer_value: "a",
       solution_md: [
-        "All three are to the left of 0, and the greatest is the one **furthest right** — the one closest to zero.",
+        "All three are to the left of 0, and the greatest is the one **furthest right**, the one closest to zero.",
         "",
         "$$",
         "-20 < -11 < -2",
@@ -1411,7 +1411,7 @@ export const class7Integers: SeedChapter = {
       stem_md: "$$\n(-3) \\times (-4) \\times 2\n$$",
       answer_value: "24",
       solution_md: [
-        "Two minus signs — an even number — so the answer is positive.",
+        "Two minus signs, an even number, so the answer is positive.",
         "",
         "$$",
         "3 \\times 4 \\times 2 = 24",

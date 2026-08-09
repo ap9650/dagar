@@ -66,13 +66,13 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "Look at the last digit. If it is 0, 2, 4, 6 or 8, the number is even. If it is 1, 3, 5, 7 or 9, it is odd.",
         "",
-        "That works for 7 and it works for 4,286,391 — you never look at the other digits, because pairing off happens in the ones column.",
+        "That works for 7 and it works for 4,286,391, you never look at the other digits, because pairing off happens in the ones column.",
         "",
         "### Zero, and negative numbers",
         "",
         "**Zero is even.** Nothing left over is exactly what even means.",
         "",
-        "And $-7$ is odd, the same as $7$. Parity does not care about the sign — it is about whether things pair up, and seven debts pair up no better than seven students.",
+        "And $-7$ is odd, the same as $7$. Parity does not care about the sign. It is about whether things pair up, and seven debts pair up no better than seven students.",
       ].join("\n"),
 
       steps: [
@@ -83,7 +83,7 @@ export const class7NumberPlay: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Now seven. Rearrange them however you like — somebody is always left sitting alone.",
+          md: "Now seven. Rearrange them however you like, somebody is always left sitting alone.",
           viz: { kind: "tokenRow", positive: 7, negative: 0, groupsOf: 2, plain: true },
         },
         {
@@ -97,7 +97,7 @@ export const class7NumberPlay: SeedChapter = {
           lines: [
             "Last digit 0, 2, 4, 6 or 8 → even.",
             "Last digit 1, 3, 5, 7 or 9 → odd.",
-            "It works for 7, and it works for 4,286,391 — pairing happens in the ones column.",
+            "It works for 7, and it works for 4,286,391, pairing happens in the ones column.",
           ],
         },
         {
@@ -111,7 +111,7 @@ export const class7NumberPlay: SeedChapter = {
           // Both the cases learners get wrong, in one step each.
           kind: "reveal",
           md: "Two tricky ones. Is **zero** odd or even?",
-          answer: "Even. Nothing left over is exactly what even means — zero pairs perfectly, with nothing spare.",
+          answer: "Even. Nothing left over is exactly what even means, zero pairs perfectly, with nothing spare.",
           viz: { kind: "tokenRow", positive: 0, negative: 0, groupsOf: 2, plain: true },
         },
         {
@@ -119,12 +119,12 @@ export const class7NumberPlay: SeedChapter = {
           // have to have said what a negative number is. It was said only in
           // the prose, which the step player hides.
           kind: "see",
-          md: "Numbers below zero are **negative** — you write them with a minus sign, like $-7$. Seven owed instead of seven owned.",
+          md: "Numbers below zero are **negative**, you write them with a minus sign, like $-7$. Seven owed instead of seven owned.",
         },
         {
           kind: "tap",
           md: "So is $-7$ odd or even?",
-          options: [{ label: "Odd" }, { label: "Even" }, { label: "Neither — it is negative" }],
+          options: [{ label: "Odd" }, { label: "Even" }, { label: "Neither. It is negative" }],
           answer: 0,
           why: "Odd, the same as 7. Odd and even take no notice of the minus sign: seven debts pair up no better than seven students.",
         },
@@ -155,7 +155,7 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "Those two leftovers pair up with each other. Nothing is left, so the total is even.",
         "",
-        "That is not a rule to memorise — it is a picture, and once you have seen it you cannot forget it.",
+        "That is not a rule to memorise. It is a picture, and once you have seen it you cannot forget it.",
         "",
         "### Subtraction behaves the same way",
         "",
@@ -163,20 +163,20 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "### Worked example",
         "",
-        "$47 + 83$: odd + odd, so the answer is even. (It is 130 — but you knew it was even before you knew it was 130.)",
+        "$47 + 83$: odd + odd, so the answer is even. (It is 130, but you knew it was even before you knew it was 130.)",
       ].join("\n"),
 
       steps: [
         {
           kind: "see",
-          md: "Is $47 + 83$ odd or even? You can add them — or you can just look at them.",
+          md: "Is $47 + 83$ odd or even? You can add them, or you can just look at them.",
         },
         {
           // Was a third `see` in a row, which the seed guard rejects — and it
           // was right to. Three screens of being told, before being asked
           // anything, is where a learner stops reading.
           kind: "reveal",
-          md: "Here are five. Pair them up — how many are left over?",
+          md: "Here are five. Pair them up, how many are left over?",
           answer: "One. That is what odd means, and it is the leftover that decides everything here.",
           viz: { kind: "tokenRow", positive: 5, negative: 0, groupsOf: 2, plain: true },
         },
@@ -187,7 +187,7 @@ export const class7NumberPlay: SeedChapter = {
         },
         {
           kind: "reveal",
-          md: "Put them together — 8 in all. What happened to the two leftovers?",
+          md: "Put them together, 8 in all. What happened to the two leftovers?",
           answer: "They paired up with each other. Nothing is left over, so odd + odd is **even**.",
           viz: { kind: "tokenRow", positive: 8, negative: 0, groupsOf: 2, plain: true },
         },
@@ -195,10 +195,10 @@ export const class7NumberPlay: SeedChapter = {
           kind: "worked",
           md: "That gives all four rules, and none of them need adding.",
           lines: [
-            "even + even = even — no leftovers at all.",
-            "odd + odd = even — the two leftovers pair with each other.",
-            "even + odd = odd — one leftover, and nothing to pair it with.",
-            "odd + even = odd — the same thing, the other way round.",
+            "even + even = even, no leftovers at all.",
+            "odd + odd = even, the two leftovers pair with each other.",
+            "even + odd = odd, one leftover, and nothing to pair it with.",
+            "odd + even = odd, the same thing, the other way round.",
           ],
         },
         {
@@ -206,7 +206,7 @@ export const class7NumberPlay: SeedChapter = {
           md: "So is $47 + 83$ odd or even?",
           options: [{ label: "Odd" }, { label: "Even" }, { label: "It depends on the total" }],
           answer: 1,
-          why: "Both are odd, so the total is even. It is 130 — but you knew it was even before you knew it was 130.",
+          why: "Both are odd, so the total is even. It is 130, but you knew it was even before you knew it was 130.",
         },
         {
           kind: "tap",
@@ -242,7 +242,7 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "$2 + 7 + 4 + 9 + 6 + 11$",
         "",
-        "Ignore 2, 4 and 6 — they are even and change nothing.",
+        "Ignore 2, 4 and 6. They are even and change nothing.",
         "",
         "That leaves 7, 9 and 11: **three** odd numbers. Three is an odd count, so the total is odd.",
         "",
@@ -253,7 +253,7 @@ export const class7NumberPlay: SeedChapter = {
         {
           kind: "reveal",
           md: "Odd + odd is even. So what do you think odd + odd + odd is?",
-          answer: "Odd. $1 + 3 + 5 = 9$. Two odds made an even — and then the third one is left over again.",
+          answer: "Odd. $1 + 3 + 5 = 9$. Two odds made an even, and then the third one is left over again.",
         },
         {
           kind: "see",
@@ -266,7 +266,7 @@ export const class7NumberPlay: SeedChapter = {
           lines: [
             "An even count of odd numbers → even.",
             "An odd count of odd numbers → odd.",
-            "The even numbers never matter — they add no leftover.",
+            "The even numbers never matter, they add no leftover.",
           ],
         },
         {
@@ -274,12 +274,12 @@ export const class7NumberPlay: SeedChapter = {
           md: "Is $2 + 7 + 4 + 9 + 6 + 11$ odd or even?",
           options: [{ label: "Odd" }, { label: "Even" }],
           answer: 0,
-          why: "Ignore 2, 4 and 6. That leaves three odd numbers, and three is an odd count — so the total is odd.",
+          why: "Ignore 2, 4 and 6. That leaves three odd numbers, and three is an odd count, so the total is odd.",
         },
         {
           kind: "reveal",
           md: "Last one. Add up every number from 1 to 10. Odd or even?",
-          answer: "Odd. The odd numbers are 1, 3, 5, 7, 9 — five of them, an odd count. (The total is 55.)",
+          answer: "Odd. The odd numbers are 1, 3, 5, 7, 9, five of them, an odd count. (The total is 55.)",
         },
       ],
     },
@@ -303,7 +303,7 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "### Worked example",
         "",
-        "Suppose the top row reads 8, 1, 6 — that is 15, so the magic total is 15.",
+        "Suppose the top row reads 8, 1, 6. That is 15, so the magic total is 15.",
         "",
         "The middle row reads 3, ?, 7. That is $3 + 7 = 10$ so far, and the row must make 15.",
         "",
@@ -336,7 +336,7 @@ export const class7NumberPlay: SeedChapter = {
         },
         {
           kind: "see",
-          md: "Now one cell is missing. Its row shows **?** — a row with a gap has no total yet.",
+          md: "Now one cell is missing. Its row shows **?**, a row with a gap has no total yet.",
           viz: {
             kind: "numberGrid",
             rows: 3,
@@ -392,7 +392,7 @@ export const class7NumberPlay: SeedChapter = {
           kind: "reveal",
           md: "A smaller one. Every row and column here adds to the same number. Where do you start?",
           answer:
-            "With a line that is already complete — the bottom row makes 10. Then the top row has one gap: $10 - 6 = 4$.",
+            "With a line that is already complete, the bottom row makes 10. Then the top row has one gap: $10 - 6 = 4$.",
           viz: {
             kind: "numberGrid",
             rows: 2,
@@ -427,7 +427,7 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "Look at the odd and even of that sequence: odd, odd, even, odd, odd, even, odd, odd, even…",
         "",
-        "It repeats every three terms, forever — and you can see why from the rules you already know: odd + odd is even, then even + odd is odd, then odd + even is odd.",
+        "It repeats every three terms, forever, and you can see why from the rules you already know: odd + odd is even, then even + odd is odd, then odd + even is odd.",
         "",
         "### Cryptarithms",
         "",
@@ -435,7 +435,7 @@ export const class7NumberPlay: SeedChapter = {
         "",
         "$$\nAB + B = 68\n$$",
         "",
-        "Work from what is forced, exactly as in a magic square — never from guessing.",
+        "Work from what is forced, exactly as in a magic square, never from guessing.",
       ].join("\n"),
 
       steps: [
@@ -451,21 +451,21 @@ export const class7NumberPlay: SeedChapter = {
         },
         {
           kind: "see",
-          md: "These are **Virahāṅka numbers** — described in India over a thousand years ago, from counting syllable patterns in poetry.",
+          md: "These are **Virahāṅka numbers**, described in India over a thousand years ago, from counting syllable patterns in poetry.",
         },
         {
           kind: "tap",
           md: "What comes after 21?",
           options: [{ label: "26" }, { label: "34" }, { label: "42" }],
           answer: 1,
-          why: "$13 + 21 = 34$. Add the last two — you never need a formula.",
+          why: "$13 + 21 = 34$. Add the last two, you never need a formula.",
         },
         {
           // Ties the chapter's two halves together.
           kind: "reveal",
           md: "Now mark each one odd or even: 1, 1, 2, 3, 5, 8, 13, 21. What do you notice?",
           answer:
-            "odd, odd, even, odd, odd, even… it repeats every three, forever — because odd + odd is even, then even + odd is odd.",
+            "odd, odd, even, odd, odd, even… it repeats every three, forever, because odd + odd is even, then even + odd is odd.",
         },
         {
           kind: "worked",
@@ -481,7 +481,7 @@ export const class7NumberPlay: SeedChapter = {
           kind: "reveal",
           md: "Last question of the chapter. What did every idea here have in common?",
           answer:
-            "You knew something before you calculated it — the parity, the missing cell, the next term. That is the whole chapter.",
+            "You knew something before you calculated it, the parity, the missing cell, the next term. That is the whole chapter.",
         },
       ],
     },
@@ -520,7 +520,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "neither", label: "Neither" },
       ],
       solution_md:
-        "Even. Nothing left over is exactly what even means — zero pairs perfectly, with nothing spare.",
+        "Even. Nothing left over is exactly what even means, zero pairs perfectly, with nothing spare.",
     },
     {
       slug: "c7-np-par-p3",
@@ -535,7 +535,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "even", label: "Even" },
       ],
       solution_md:
-        "The last digit is 1, so it is odd. The other six digits never mattered — pairing happens in the ones column.",
+        "The last digit is 1, so it is odd. The other six digits never mattered, pairing happens in the ones column.",
     },
     {
       slug: "c7-np-par-p4",
@@ -551,7 +551,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "neither", label: "Neither, because it is negative" },
       ],
       solution_md:
-        "Odd, the same as 7. Parity does not care about the sign — seven debts pair up no better than seven students.",
+        "Odd, the same as 7. Parity does not care about the sign, seven debts pair up no better than seven students.",
     },
     {
       slug: "c7-np-par-p5",
@@ -596,7 +596,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "depends", label: "It depends which numbers" },
       ],
       solution_md:
-        "Even. Each odd number has one left over, and those two leftovers pair up with each other — so nothing is left.",
+        "Even. Each odd number has one left over, and those two leftovers pair up with each other, so nothing is left.",
     },
     {
       slug: "c7-np-rul-p2",
@@ -625,7 +625,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "odd", label: "Odd" },
       ],
       solution_md:
-        "Both are odd, so the total is even. It is 130 — but you knew it was even before you knew it was 130.",
+        "Both are odd, so the total is even. It is 130, but you knew it was even before you knew it was 130.",
     },
     {
       slug: "c7-np-rul-p4",
@@ -670,7 +670,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "even", label: "Even" },
       ],
       solution_md:
-        "Ignore 2, 4 and 6 — even numbers add no leftover. That leaves 7, 9 and 11: three odd numbers, an odd count, so the total is odd.",
+        "Ignore 2, 4 and 6, even numbers add no leftover. That leaves 7, 9 and 11: three odd numbers, an odd count, so the total is odd.",
     },
 
     // ── magic squares ──────────────────────────────────────────────────────
@@ -687,7 +687,7 @@ export const class7NumberPlay: SeedChapter = {
         { id: "same", label: "They all contain the same numbers" },
         { id: "order", label: "They are all in order" },
       ],
-      solution_md: "Every row and every column adds up to the same total — that is what makes it magic.",
+      solution_md: "Every row and every column adds up to the same total. That is what makes it magic.",
     },
     {
       slug: "c7-np-mag-p2",
@@ -766,12 +766,12 @@ export const class7NumberPlay: SeedChapter = {
       answer_type: "mcq",
       answer_value: "no",
       choices: [
-        { id: "no", label: "No — you need a line with only one gap" },
+        { id: "no", label: "No, you need a line with only one gap" },
         { id: "yes", label: "Yes, halve what is left" },
         { id: "sometimes", label: "Only if the total is even" },
       ],
       solution_md:
-        "No. Two gaps in one line leaves a choice. Look for a line that is nearly finished — a gap is only forced when it is the last one.",
+        "No. Two gaps in one line leaves a choice. Look for a line that is nearly finished, a gap is only forced when it is the last one.",
     },
 
     // ── number patterns ────────────────────────────────────────────────────
@@ -808,7 +808,7 @@ export const class7NumberPlay: SeedChapter = {
       stem_md: "What comes after 21 in $1, 1, 2, 3, 5, 8, 13, 21, ?$",
       answer_type: "integer",
       answer_value: "34",
-      solution_md: "$13 + 21 = 34$. You never need a formula — just the two before it.",
+      solution_md: "$13 + 21 = 34$. You never need a formula, just the two before it.",
     },
     {
       slug: "c7-np-pat-p4",

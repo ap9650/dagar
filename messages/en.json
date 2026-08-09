@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Dagar",
-    "description": "Your learning companion — NCERT mathematics for Classes 6 to 8."
+    "description": "Your learning companion. NCERT mathematics for Classes 6 to 8."
   },
   "common": {
     "appName": "Dagar",
@@ -76,7 +76,7 @@
     "startHere": "This is where you begin",
     "continue": "Continue where you left off",
     "strengthen": "Let us strengthen {concept}",
-    "revise": "You have finished this chapter — revise anything you like",
+    "revise": "You have finished this chapter. Revise anything you like",
     "noContent": "Your class is coming soon"
   },
   "streak": {
@@ -87,7 +87,7 @@
     "nextRung": "Ready for {days}?",
     "toNextRung": "{days, plural, one {# more day} other {# more days}} to your {target}-day badge.",
     "ladderDone": "You have kept this going for a whole year.",
-    "graceHint": "Miss a day and your streak still survives — once a week."
+    "graceHint": "Miss a day and your streak still survives, once a week."
   },
   "chapter": {
     "lessonsTitle": "Lessons",
@@ -106,7 +106,7 @@
     "backToChapter": "Back to the chapter",
     "reveal": "Show me",
     "gotIt": "That’s it",
-    "notQuiteHere": "Not quite — here it is",
+    "notQuiteHere": "Not quite. Here it is",
     "listen": "Listen",
     "stopListening": "Stop",
     "listenIn": "Listen in {lang}",
@@ -156,7 +156,7 @@
     "correct": "Correct!",
     "correctWell": "Well done!",
     "correctNice": "Nice one!",
-    "notQuite": "Not quite — here is a hint",
+    "notQuite": "Not quite. Here is a hint",
     "hintTitle": "Hint",
     "solutionTitle": "How it works",
     "emptyAnswer": "Type your answer first",
@@ -164,7 +164,7 @@
   },
   "quiz": {
     "title": "Chapter quiz",
-    "intro": "No hints in the quiz. Take your time — you can retake it later.",
+    "intro": "No hints in the quiz. Take your time, and you can retake it later.",
     "start": "Start the quiz",
     "submit": "Submit quiz",
     "confirmSubmit": "Submit your answers?",
@@ -198,7 +198,7 @@
     "milestoneLocked": "Not yet",
     "empty": "Finish a lesson and your progress shows up here.",
     "longestStreak": "Your best so far: {days, plural, one {# day} other {# days}}",
-    "chapterMastery": "{chapter} — {mastered} of {total} concepts mastered",
+    "chapterMastery": "{chapter}: {mastered} of {total} concepts mastered",
     "notStarted": "Not started",
     "badgeCount": "{earned} of {total}",
     "open": "See your progress"
@@ -239,7 +239,7 @@
     "ctaAction": "Yes, I want this",
     "dismiss": "Not now",
     "requested": "We can't send you a real teacher yet. The more of you ask, the sooner we can. Your tutor is here whenever you're stuck.",
-    "requestedTitle": "Noted — thank you",
+    "requestedTitle": "Noted, and thank you",
     "noteLabel": "Anything you want to tell us?",
     "notePlaceholder": "I get stuck when the bottom numbers are different…",
     "send": "Send"
@@ -266,10 +266,10 @@
     "inviteParentSees": "They will see: lessons you finished, which topics you are getting, your streak and your badges.",
     "inviteParentPrivate": "They will not see the questions you asked the tutor. That stays yours.",
     "inviteParentShare": "Send it on WhatsApp",
-    "inviteParentShareMessage": "I am learning maths on Dagar. You can see how I am doing — open {url} and enter my code {code}",
+    "inviteParentShareMessage": "I am learning maths on Dagar. You can see how I am doing. Open {url} and enter my code {code}",
     "shareLink": "Send it on WhatsApp",
     "shareLinkAgain": "Send the link again",
-    "shareLinkMessage": "I am learning maths on Dagar. You can see how I am doing here — no sign-up needed: {url}",
+    "shareLinkMessage": "I am learning maths on Dagar. You can see how I am doing here, no sign-up needed: {url}",
     "shareLinkViews": "Opened {count, plural, one {# time} other {# times}} so far.",
     "shareLinkUnopened": "Nobody has opened it yet.",
     "shareLinkRevoke": "Turn this link off",
@@ -298,7 +298,7 @@
     "iosSteps": "Tap Share, then Add to Home Screen.",
     "settingsTitle": "Home screen",
     "androidSteps": "Open your browser menu (⋮) and tap “Add to Home screen”.",
-    "launcherNote": "Added it but can’t see it? Some phones put it in your app list instead of the home screen — search for Dagar there.",
+    "launcherNote": "Added it but can’t see it? Some phones put it in your app list instead of the home screen. Search for Dagar there.",
     "inAppBrowser": "You’re in WhatsApp’s browser, which can’t add apps. Tap the menu and choose “Open in Chrome”, then try again.",
     "alreadyInstalled": "Dagar is already on your home screen."
   },
@@ -322,15 +322,15 @@
     "conceptsTitle": "How the topics are going",
     "howToHelp": "If you have ten minutes together, {concept} is the one worth sitting with.",
     "claimIsLearner": "This account is a learner's. Ask a parent to use their own.",
-    "claimSelf": "That is your own code — ask a parent to enter it.",
+    "claimSelf": "That is your own code. Ask a parent to enter it.",
     "lessonsMeaning": "A lesson is a short reading with an example. Each one takes about ten minutes.",
     "practiceMeaning": "Practice questions are how the topic sticks. Around five a day is a good rhythm.",
     "streakMeaning": "Days in a row with some learning done. Streaks are about the habit, not the score.",
     "milestonesMeaning": "Badges are earned automatically for real progress. They are worth saying out loud at home.",
-    "conceptsMeaning": "“Mastered” means they are getting it right consistently. “Getting there” means it is coming — most are right, a few still are not. “Keep practising” is not a fail; it is simply the next thing to work on.",
+    "conceptsMeaning": "“Mastered” means they are getting it right consistently. “Getting there” means it is coming: most are right, a few still are not. “Keep practising” is not a fail; it is simply the next thing to work on.",
     "helpTitle": "What would help most",
-    "helpFocus": "If you have ten minutes together, {concept} is the one worth sitting with. You do not need to teach it — ask them to explain it to you, and see where they get stuck.",
-    "helpAllWell": "Nothing needs fixing this week. Ask them to show you something they worked out — explaining it back is how it sticks.",
+    "helpFocus": "If you have ten minutes together, {concept} is the one worth sitting with. You do not need to teach it. Ask them to explain it to you, and see where they get stuck.",
+    "helpAllWell": "Nothing needs fixing this week. Ask them to show you something they worked out, because explaining it back is how it sticks.",
     "helpEncourage": "Noticing out loud that they showed up is worth more than checking the answers. That is the part only you can do.",
     "linkTitle": "{name}'s learning",
     "linkTitleNoName": "Your child's learning",
@@ -338,7 +338,7 @@
     "linkRevoked": "This link is no longer active.",
     "linkRevokedHelp": "Ask your child to open Dagar, go to Settings, and share a new one.",
     "linkAbout": "What is Dagar?",
-    "private1": "The questions they asked the tutor. That conversation is theirs alone — it is where a learner admits they are stuck."
+    "private1": "The questions they asked the tutor. That conversation is theirs alone, and it is where a learner admits they are stuck."
   },
   "errors": {
     "offlineTitle": "You are offline",
@@ -351,31 +351,31 @@
   },
   "forParents": {
     "title": "For parents",
-    "intro": "Dagar is a personal guide for your child's learning journey — it teaches one idea at a time, gives practice at the right level, and answers their questions when they get stuck. Starting with NCERT maths, Classes 6 to 8. You get a simple weekly picture of how they are doing, and one thing you can do to help.",
+    "intro": "Dagar is a personal guide for your child's learning journey. It teaches one idea at a time, gives practice at the right level, and answers their questions when they get stuck. Starting with NCERT maths, Classes 6 to 8. You get a simple weekly picture of how they are doing, and one thing you can do to help.",
     "back": "Back to sign in",
     "step1": "Your child opens Dagar, goes to Settings, and taps “Invite a parent”. A 6-character code appears on their screen.",
     "step2": "They read it out to you, or send it on WhatsApp. The code works for 3 days.",
-    "step3": "You create your own Dagar account here — your email, your password. It is separate from your child's.",
+    "step3": "You create your own Dagar account here, with your email and your password. It is separate from your child's.",
     "step4": "You enter the code once. From then on you go straight to their summary whenever you sign in.",
     "seesTitle": "What you will see",
     "sees1": "How many lessons and practice questions they finished this week",
     "sees2": "Which ideas are “Mastered”, which are “Getting there”, and which still need practice",
-    "sees3": "Their day streak — and one missed day is forgiven, so a busy day does not undo it",
-    "sees4": "Badges they earned — the moments worth celebrating at home",
+    "sees3": "Their day streak, and one missed day is forgiven, so a busy day does not undo it",
+    "sees4": "Badges they earned, the moments worth celebrating at home",
     "sees5": "One clear thing you could do this week to help. No maths knowledge needed.",
     "privateTitle": "What stays private",
-    "private1": "The questions they asked the Dagar tutor. That conversation is theirs alone — it is where a learner admits they are stuck.",
-    "readOnly": "Your view is read-only. There is nothing you can change, undo or delete — you cannot affect their learning by tapping anything.",
+    "private1": "The questions they asked the Dagar tutor. That conversation is theirs alone, and it is where a learner admits they are stuck.",
+    "readOnly": "Your view is read-only. There is nothing you can change, undo or delete, and you cannot affect their learning by tapping anything.",
     "haveCode": "I have a code",
     "noCodeTitle": "No code yet?",
-    "noCodeBody": "Ask your child to open Dagar and go to Settings. They can either send you a link on WhatsApp — no account needed — or tap “Invite a parent” for a code. Either way it is one tap for them.",
+    "noCodeBody": "Ask your child to open Dagar and go to Settings. They can either send you a link on WhatsApp, which needs no account, or tap “Invite a parent” for a code. Either way it is one tap for them.",
     "sharedPhoneTitle": "Sharing one phone?",
-    "sharedPhoneBody": "That works. Both accounts can live on the same phone — sign out from Settings to swap between your child's view and yours.",
+    "sharedPhoneBody": "That works. Both accounts can live on the same phone. Sign out from Settings to swap between your child's view and yours.",
     "waysTitle": "Two ways to see how they are doing",
-    "linkWayTitle": "The quickest way — a link",
+    "linkWayTitle": "The quickest way is a link",
     "linkWay1": "Your child opens Dagar, goes to Settings, and taps “Share your progress”.",
     "linkWay2": "They send you the link on WhatsApp. You tap it, and their week opens straight away.",
-    "linkWay3": "No account, no password, nothing to install. Keep the link and open it whenever you like — it always shows the latest week.",
+    "linkWay3": "No account, no password, nothing to install. Keep the link and open it whenever you like, and it always shows the latest week.",
     "codeWayTitle": "Or make your own account",
     "codeWayWhy": "Worth doing if more than one adult wants to check in, or if you would rather sign in than keep a link on your phone."
   },
@@ -401,7 +401,7 @@
     "returnMaybe": "Maybe",
     "returnNo": "No",
     "submit": "Send feedback",
-    "sentTitle": "Thank you — that is genuinely useful",
+    "sentTitle": "Thank you, that is genuinely useful",
     "sentBody": "We read every one of these. You can change your answers any time from Settings.",
     "openFromSettings": "Tell us what you think",
     "promptTitle": "Got a minute?",
@@ -416,7 +416,7 @@
     "improvePractice": "More practice questions",
     "improveTutor": "Explain things better when I am stuck",
     "improvePhone": "Make it work better on my phone",
-    "improveOther": "Something else — I will say below",
+    "improveOther": "Something else. I will say below",
     "sectionTitle": "Your feedback"
   },
   "viz": {
@@ -440,7 +440,7 @@
     "account": {
       "title": "Your account",
       "email": "The email address used to sign in.",
-      "grade": "Your class — 6, 7 or 8 — so we show the right chapters.",
+      "grade": "Your class, 6, 7 or 8, so we show the right chapters.",
       "language": "Which language you chose to learn in."
     },
     "learning": {
@@ -474,7 +474,7 @@
   "deleteAccount": {
     "open": "Delete my account",
     "title": "Delete your account?",
-    "body": "This removes your account and everything in it — the lessons you have finished, your practice, your streak and your badges. It cannot be undone, and we cannot get it back for you afterwards.",
+    "body": "This removes your account and everything in it: the lessons you have finished, your practice, your streak and your badges. It cannot be undone, and we cannot get it back for you afterwards.",
     "cancel": "Not now",
     "confirm": "Yes, delete everything",
     "deleting": "Deleting…",
@@ -482,10 +482,10 @@
   },
   "goodbye": {
     "title": "Your account is deleted",
-    "body": "Everything we had is gone — your lessons, your practice, your streak and your badges.",
+    "body": "Everything we had is gone: your lessons, your practice, your streak and your badges.",
     "ask": "If you have a moment, what made you leave? One tap, and it is not linked to you.",
     "skip": "No thanks",
-    "thanks": "Thank you — that helps us make it better for someone else.",
+    "thanks": "Thank you, that helps us make it better for someone else.",
     "reasons": {
       "too_hard": "It was too hard",
       "too_easy": "It was too easy",
@@ -508,7 +508,7 @@
   },
   "moved": {
     "title": "What moved",
-    "empty": "A fresh week — the first thing you finish shows up here.",
+    "empty": "A fresh week. The first thing you finish shows up here.",
     "level": "{concept} → {level}",
     "lesson": "Finished {lesson}",
     "chapter": "Finished the chapter {chapter}",

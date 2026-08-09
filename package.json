@@ -24,11 +24,12 @@
     "verify:answers": "node --no-warnings scripts/verify-answer-keys.ts",
     "demo:data": "node --no-warnings scripts/demo-data.ts",
     "feedback:export": "node --no-warnings scripts/export-feedback.ts",
-    "deck": "python3 scripts/gen-architecture-diagram.py && python3 scripts/gen-persona-illustration.py && python3 scripts/build-deck.py && python3 scripts/build-how-doc.py",
+    "deck": "python3 scripts/gen-architecture-diagram.py && python3 scripts/gen-persona-illustration.py && python3 scripts/build-pitch.py && python3 scripts/build-how-doc.py",
     "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview",
     "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts",
     "deck:shots": "node --no-warnings scripts/capture-screens.ts",
-    "deck:pdf": "node --no-warnings scripts/build-pdfs.ts"
+    "deck:pdf": "node --no-warnings scripts/build-pdfs.ts",
+    "deck:v1": "python3 scripts/build-deck.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
