@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 """
-The persona illustration for slide 5 of the pitch deck.
+The two persona portraits for the pitch deck: Lakshmi, and her father Suresh.
 
-DRAWN, NOT PHOTOGRAPHED — on purpose. Lakshmi is a composite persona, not a real
-child. A stock photograph of a real 13-year-old standing in for "the underserved
-learner" is both a licensing question and a dignity one; an illustration says
-"this is a composite" without anyone having to read the caption.
+DRAWN, NOT PHOTOGRAPHED, on purpose. Both are composite personas, not real
+people. A stock photograph of a real 13-year-old standing in for "the
+underserved learner" is both a licensing question and a dignity one; an
+illustration says "this is a composite" without anyone having to read a caption.
 
-She replaced a boy called Aarav on 3 Aug. Girls are over-represented among the
-learners this product is aimed at — the ones pulled out first when money is
-short, and the ones whose education is likeliest to be treated as optional — so
-a boy sitting in the primary-persona slot was quietly describing an easier case
-than the one we say we are building for.
+Each portrait carries the object that defines that person's relationship to the
+product. Lakshmi holds the app: a progress ring and a streak. Suresh holds a
+message, because he never opens the app at all, and the whole design of the
+parent loop follows from that.
 
 Palette is the product's own (saathi-design), so the deck and the app agree.
-Drawn at 4x and downsampled — PIL has no anti-aliasing on shapes, and a 13-year-old
-with jagged edges undersells the point.
+Drawn at 4x and downsampled, since PIL has no anti-aliasing on shapes.
 
     python3 scripts/gen-persona-illustration.py
 """
@@ -47,7 +45,7 @@ def ellipse(d, cx, cy, rx, ry, fill, outline=None, width=0):
               width=width * S if width else 0)
 
 
-def main() -> None:
+def lakshmi() -> None:
     img = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
 
@@ -140,5 +138,106 @@ def main() -> None:
     print(f"wrote {path}")
 
 
+def suresh() -> None:
+    """
+    Lakshmi's father, and the reason the parent loop is a message.
+
+    Same disc, same palette, deliberately the same visual weight: a secondary
+    persona drawn smaller or plainer would say he matters less, and the product
+    argument is that he is the difference between a learner who keeps going and
+    one who quietly stops.
+
+    He holds a WhatsApp message, not the app. That is the single most important
+    thing this drawing has to say.
+    """
+    img = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+
+    ellipse(d, 500, 500, 490, 490, PRIMARY_SOFT)
+
+    # Shoulders in the strong teal rather than the mid tone, so the two
+    # portraits are distinguishable at thumbnail size without leaving the palette.
+    d.ellipse(px(170, 730, 830, 1250), fill=PRIMARY_STRONG)
+    d.rounded_rectangle(px(452, 606, 548, 782), radius=40 * S, fill=SKIN_SHADE)
+
+    # A collared shirt, not a round neckline: two lapels meeting at the throat.
+    d.polygon(px(430, 742, 500, 812, 500, 890, 396, 800), fill=PRIMARY)
+    d.polygon(px(570, 742, 500, 812, 500, 890, 604, 800), fill=PRIMARY)
+
+    ellipse(d, 338, 486, 30, 40, SKIN)   # ears
+    ellipse(d, 662, 486, 30, 40, SKIN)
+    ellipse(d, 500, 476, 164, 188, SKIN)
+
+    # Short hair, stopping WELL above the brows. The first attempt ran a dome
+    # down to eye level and read as a swimming cap: on a short-haired figure the
+    # hairline is most of the character, so it has to sit where a hairline sits.
+    d.pieslice(px(500 - 178, 436 - 172, 500 + 178, 436 + 172), 182, 358, fill=HAIR)
+    # A fringe swept across the crown, with no gap cut through to the scalp. The
+    # first version lifted a skin-coloured wedge out to suggest a parting and it
+    # read as a bald patch, which is a different man.
+    d.polygon(px(384, 306, 486, 270, 660, 320, 676, 424, 626, 350, 470, 320,
+                 372, 402), fill=HAIR)
+    # Sideburns, in front of the ears rather than over them. The grey ellipses
+    # that were here landed on the ears and read as bruises.
+    for sx in (348, 652):
+        d.rounded_rectangle(px(sx - 16, 424, sx + 16, 496), radius=12 * S, fill=HAIR)
+
+    # Brows drawn as a MIRRORED pair, dipping slightly towards the nose. The
+    # first pass reused Lakshmi's single line for both eyes, which slopes the
+    # same way on each side: on a face with no fringe over it that reads as one
+    # raised brow and one lowered, and the whole portrait looked angry.
+    for ex, outer in ((443, -1), (557, 1)):
+        ellipse(d, ex, 496, 17, 20, INK)
+        ellipse(d, ex + 6, 489, 5, 6, WHITE)
+        # Nearly level, lifting a touch towards the nose. Sloping DOWN towards
+        # the nose is the universal drawn signal for anger, and two attempts at
+        # this face landed there. He is worried about his daughter, not cross.
+        d.line(px(ex + 26 * outer, 461, ex - 26 * outer, 456), fill=HAIR, width=9 * S)
+
+    d.arc(px(478, 508, 522, 562), 20, 160, fill=SKIN_SHADE, width=7 * S)
+
+    # Moustache: a thin stroke under the nose, curving down at the ends. Drawn
+    # as a filled chord first time round, which produced a black slab wider than
+    # the mouth and sitting on top of the nose.
+    # Wide and shallow. A tall narrow arc here reads as a downturned mouth, and
+    # with the brows above it the whole face turns into a scowl.
+    d.arc(px(444, 566, 556, 606), 200, 340, fill=HAIR, width=13 * S)
+    d.arc(px(458, 596, 542, 656), 20, 160, fill=(140, 80, 60), width=9 * S)
+
+    mask = Image.new("L", (W * S, H * S), 0)
+    ImageDraw.Draw(mask).ellipse(px(10, 10, 990, 990), fill=255)
+    img.putalpha(mask)
+
+    out = Image.new("RGB", (W, H), WHITE)
+    small = img.resize((W, H), Image.LANCZOS)
+    out.paste(small, (0, 0), small)
+
+    # ── the message, outside the clip ─────────────────────────────────────
+    # A chat bubble rather than a progress ring. He is not a user of the app and
+    # the portrait should not imply he is.
+    layer = Image.new("RGBA", (W * S, H * S), (0, 0, 0, 0))
+    p = ImageDraw.Draw(layer)
+    p.rounded_rectangle(px(646, 646, 856, 966), radius=30 * S,
+                        fill=WHITE, outline=BORDER, width=5 * S)
+    p.rounded_rectangle(px(672, 674, 830, 722), radius=10 * S, fill=PRIMARY_SOFT)
+    # Incoming bubble, left aligned, with a squared corner where the tail sits.
+    p.rounded_rectangle(px(672, 748, 812, 836), radius=18 * S, fill=PRIMARY_SOFT)
+    p.rectangle(px(672, 812, 692, 836), fill=PRIMARY_SOFT)
+    for i, (x0, x1) in enumerate(((690, 796), (690, 776), (690, 800))):
+        p.rounded_rectangle(px(x0, 766 + i * 22, x1, 780 + i * 22), radius=7 * S,
+                            fill=PRIMARY)
+    p.ellipse(px(672, 872, 700, 900), fill=STREAK)
+    p.rounded_rectangle(px(714, 878, 830, 896), radius=9 * S, fill=(216, 222, 228))
+    p.rounded_rectangle(px(672, 916, 830, 934), radius=9 * S, fill=(216, 222, 228))
+
+    phone = layer.resize((W, H), Image.LANCZOS)
+    out.paste(phone, (0, 0), phone)
+
+    path = "docs/deck/persona-suresh.png"
+    out.save(path)
+    print(f"wrote {path}")
+
+
 if __name__ == "__main__":
-    main()
+    lakshmi()
+    suresh()

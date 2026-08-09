@@ -496,7 +496,403 @@ before they find it.
 """)
 
 
-SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market]
+def s6_competition(prs):
+    """
+    The last slide of the "why this should exist" block.
+
+    ── CATEGORIES, NOT COMPANIES ───────────────────────────────────────────────
+    Naming BYJU'S or ChatGPT invites an argument about a feature one of them
+    shipped last month, and dates the deck the moment they ship another. The
+    categories are stable; the products inside them move.
+
+    ── THE ROW THAT MAKES THE SLIDE CREDIBLE ───────────────────────────────────
+    Dagar takes every tick, which is exactly what a competitive matrix always
+    shows and exactly why nobody believes one. So the band underneath concedes
+    the real thing: a good human tutor beats Dagar at teaching. We are not
+    better than a tutor. We are available to the learner who was never going to
+    get one, which is a different and more honest claim.
+    """
+    s, y = slide_shell(prs, 6, "06 · Competitive gap",
+                       "Everyone solves a piece. Nobody joins them up.",
+                       "Six things a learner falling behind actually needs. Each "
+                       "category delivers some of them.")
+
+    cols = ["Knows the\nsyllabus", "Adapts to\nthe learner", "Teaches, not\njust answers",
+            "Works in\nHindi", "Free", "Reaches\nthe parent"]
+    rows = [
+        ("Video platforms", "Recorded lessons, one pace for everyone",
+         ["y", "n", "y", "p", "y", "n"]),
+        ("Generic AI assistants", "Answer anything, know nothing about this learner",
+         ["n", "n", "p", "y", "p", "n"]),
+        ("Practice and test-prep apps", "Measure the gap, do not close it",
+         ["y", "p", "n", "p", "p", "p"]),
+        ("Private tuition", "Works, and costs more than the family has",
+         ["y", "y", "y", "y", "n", "p"]),
+        ("Dagar", "The combination, not the best of any one",
+         ["y", "y", "y", "y", "y", "y"]),
+    ]
+
+    label_w, col_w, row_h = 3.9, 1.36, 0.58
+    head_h = 0.5
+
+    for i, col in enumerate(cols):
+        text(s, M + label_w + i * col_w, y, col_w, head_h,
+             [{"t": col, "size": 8.5, "bold": True, "color": MUTED, "line": 1.15}],
+             align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.BOTTOM)
+
+    marks = {"y": ("✓", PRIMARY), "p": ("~", AMBER), "n": ("·", MUTED)}
+
+    for r, (name, blurb, scores) in enumerate(rows):
+        ry = y + head_h + r * row_h
+        last = r == len(rows) - 1
+        if last:
+            box(s, M, ry, label_w + 6 * col_w, row_h, fill=PRIMARY_WASH, line=PRIMARY)
+        text(s, M + 0.22, ry, label_w - 0.3, row_h,
+             [{"t": name, "size": 11.5, "bold": True,
+               "color": PRIMARY_STRONG if last else INK, "space_after": 1, "line": 1.05},
+              {"t": blurb, "size": 8.5, "color": MUTED, "line": 1.1}],
+             anchor=MSO_ANCHOR.MIDDLE)
+        for c, score in enumerate(scores):
+            glyph, colour = marks[score]
+            text(s, M + label_w + c * col_w, ry, col_w, row_h,
+                 [{"t": glyph, "size": 15 if score != "n" else 17, "bold": True,
+                   "color": colour}],
+                 align=PP_ALIGN.CENTER, anchor=MSO_ANCHOR.MIDDLE)
+
+    yl = y + head_h + len(rows) * row_h + 0.08
+    text(s, M, yl, CONTENT_W, 0.24,
+         [{"t": "✓  does this well            ~  partly, or only sometimes            ·  does not do this", "size": 8.5, "color": MUTED}])
+
+    yb = yl + 0.34
+    box(s, M, yb, CONTENT_W, 1.02, fill=CELEBRATE_BG, line=AMBER)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.68, 0.8,
+         [{"t": "A good tutor still beats us. That is not the argument.",
+           "size": 12, "bold": True, "color": AMBER, "space_after": 4},
+          {"t": "A person in the room notices what no model can, and we do not "
+                "claim otherwise. The learner in this deck was never going to get "
+                "that person. What is hard to copy is not the AI, which anyone "
+                "can call: it is curriculum grounding, a learning engine that "
+                "decides what comes next, and content authored in two languages.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+IF ASKED TO NAME NAMES
+Deliberately categories, not companies. Naming a product invites an argument
+about a feature it shipped last month and dates the deck when it ships another.
+If pressed: video platforms means YouTube and recorded course apps, generic AI
+means the general assistants, practice apps means the test-prep category.
+
+WHY GENERIC AI SCORES BADLY ON "KNOWS THE SYLLABUS"
+It knows mathematics. It does not know that this learner is on NCERT Class 7
+Integers, failed two questions on sign errors last Tuesday, and reads Hindi. It
+will also hand over the answer when asked, which is the opposite of teaching.
+
+WHY PRIVATE TUITION SCORES WELL
+Because it does work. That is the point. It is the benchmark, and the only box
+it fails is the one that decides whether this learner ever gets it.
+
+THE HONEST CONCESSION, SAY IT BEFORE THEY DO
+A good human tutor is better than Dagar at teaching. We are not competing with
+the tutor a family can afford. We are competing with nothing at all, which is
+what the learner in this deck currently has.
+""")
+
+
+def s7_persona(prs):
+    """
+    Two people, in the shape a persona is normally written.
+
+    ── WHAT CHANGED FROM THE FIRST VERSION ─────────────────────────────────────
+    It ran as two paragraphs of prose and it carried two things that did not
+    belong on a slide.
+
+    The first was a note that Lakshmi replaced a boy called Aarav. That is a
+    real decision and it lives in the PRD, but on a pitch slide it is internal
+    process shown to an audience who has no reason to care, and it spends
+    attention that should go on the learner.
+
+    The second was "not about a segment", which was simply wrong: Lakshmi and
+    Suresh ARE two segments, and saying otherwise contradicts the market slides
+    two ahead of it.
+
+    Now it uses the standard persona frame, because a room reads that shape
+    faster than prose: who they are, what they want, what is in the way, and one
+    sentence in their own voice. Each card ends with the decision that person
+    forced, which is what stops a persona slide being decoration.
+    """
+    # Kept under about 48 characters. The first version ran to 62 and wrapped
+    # onto a second line, which the shell does not reserve room for, so it
+    # printed straight through the subtitle.
+    s, y = slide_shell(prs, 7, "07 · Who this is for",
+                       "Lakshmi is twelve. She is why Dagar exists.",
+                       "One learner and one parent. Every design decision in Dagar "
+                       "was checked against these two.")
+
+    w, gx = 5.94, 0.26
+    card_h = 4.28
+
+    people = [
+        {
+            "accent": PRIMARY,
+            "badge": "PRIMARY  ·  THE LEARNER",
+            "img": "docs/deck/persona-lakshmi.png",
+            "name": "Lakshmi",
+            "role": "12 years old, Class 7",
+            "chips": ["Hindi medium", "Government school", "Shared Android"],
+            "goals": [
+                "Understand a concept, not just finish the homework",
+                "Keep up with the class instead of slipping further behind",
+                "Feel capable at maths again",
+            ],
+            "pains": [
+                "The lesson moves on before her doubt is resolved",
+                "Tuition would help, and costs more than the family has",
+                "Almost every explanation online is in English",
+            ],
+            "quote": "\u201cI understood it in class. By the time I got home, I didn\u2019t.\u201d",
+            "built": "So we built it bilingual in the MVP, and made lessons "
+                     "something she taps through rather than watches.",
+        },
+        {
+            "accent": HINT,
+            "badge": "SECONDARY  ·  THE PARENT",
+            "img": "docs/deck/persona-suresh.png",
+            "name": "Suresh",
+            "role": "Her father, cook at a restaurant",
+            "chips": ["800 km away", "Split shifts", "WhatsApp only"],
+            "goals": [
+                "Know whether she is actually studying",
+                "Be included in her progress, not notified about it",
+                "Support her without having to teach the maths",
+            ],
+            "pains": [
+                "No visibility beyond an exam mark months too late",
+                "No subject knowledge to help, even from the same room",
+                "Long shifts, and a distance he cannot close",
+            ],
+            "quote": "\u201cI ask if she studied. She says yes. That is the whole conversation.\u201d",
+            "built": "So we built a weekly WhatsApp summary that needs no app and "
+                     "no account, timed for the Sunday call.",
+        },
+    ]
+
+    for i, person in enumerate(people):
+        x = M + i * (w + gx)
+        accent = person["accent"]
+        box(s, x, y, w, card_h, fill=WHITE, line=BORDER)
+        box(s, x, y + 0.22, 0.05, card_h - 0.44, fill=accent, shape=MSO_SHAPE.RECTANGLE)
+
+        # Drawn, not photographed. A stock photo of a real child standing in for
+        # "the underserved learner" is a licensing question and a dignity one.
+        s.shapes.add_picture(person["img"], Inches(x + 0.26), Inches(y + 0.22),
+                             Inches(1.16), Inches(1.16))
+
+        text(s, x + 1.56, y + 0.26, w - 1.85, 1.1,
+             [{"t": person["badge"], "size": 8, "bold": True, "color": accent,
+               "space_after": 4},
+              {"t": person["name"], "size": 19, "bold": True, "color": INK,
+               "space_after": 3, "line": 1.0},
+              {"t": person["role"], "size": 11, "color": BODY, "line": 1.15}])
+
+        cx = x + 1.56
+        for label in person["chips"]:
+            cw = 0.17 + 0.075 * len(label)
+            chip(s, cx, y + 1.14, cw, 0.26, label, size=8.5)
+            cx += cw + 0.1
+
+        # Goals and pain points side by side, the way a persona template sets
+        # them: what they are reaching for, and what is in the way.
+        sub_w = (w - 0.72) / 2
+        for j, (heading, items, colour) in enumerate(
+            [("GOALS", person["goals"], accent),
+             ("PAIN POINTS", person["pains"], AMBER)]
+        ):
+            sx = x + 0.3 + j * (sub_w + 0.12)
+            runs = [{"t": heading, "size": 8.5, "bold": True, "color": colour,
+                     "space_after": 5}]
+            for item in items:
+                runs.append({"t": "\u2022  " + item, "size": 9.5, "color": BODY,
+                             "space_after": 4, "line": 1.18})
+            text(s, sx, y + 1.62, sub_w, 1.5, runs)
+
+        box(s, x + 0.3, y + 3.2, w - 0.6, 0.46, fill=SURFACE, line=None)
+        text(s, x + 0.44, y + 3.2, w - 0.88, 0.46,
+             [{"t": person["quote"], "size": 10.5, "bold": True, "color": INK,
+               "line": 1.2}])
+
+        text(s, x + 0.3, y + 3.78, w - 0.6, 0.4,
+             [{"t": person["built"], "size": 9.5, "color": MUTED, "line": 1.2}])
+
+    notes(s, """
+WHY A PARENT PERSONA AT ALL
+Because learner consistency is the metric the whole product turns on, and the
+adult is the strongest lever on it that we do not control. H6 in the hypothesis
+list is exactly this: parent engagement improves learner consistency.
+
+WHY HE DOES NOT GET AN APP
+He would not install it, and the phone he reads on is not the phone she studies
+on. The weekly summary is a WhatsApp message with no account and no download,
+timed so he has something concrete to ask her about on the Sunday call. One
+learner is linked to a parent today, which is honest and small.
+
+THE LINE THAT MATTERS
+Most parent features in edtech are built as if the parent needs persuading to
+care. This one starts from a father who already cares and has nothing to work
+with. That is a truer situation and a different product.
+
+IF ASKED HOW REAL THESE ARE
+Composites, drawn rather than photographed, and grounded in the segment data on
+slide 4: Hindi medium, shared household smartphone, tuition unaffordable. The
+quotes are written, not transcribed, and we would say so if asked.
+""")
+
+
+def s8_solution(prs):
+    """
+    What Dagar is, argued as a sequence rather than a feature list.
+
+    The differentiating claim in the PRD is curriculum-aware adaptive teaching,
+    and the thing that delivers it is the ORDER: a lesson, then practice on that
+    same concept while it is still warm, then a quiz, then proof the week
+    happened. A features grid would show the same six things and lose the only
+    part that is hard to copy.
+
+    The four rules underneath are stated as rules, not features, because each
+    one is a decision somebody could have made the other way and most products
+    did.
+    """
+    s, y = slide_shell(prs, 8, "08 · Solution",
+                       "Not a chatbot with a syllabus attached.",
+                       "A guided journey through the curriculum, where the order "
+                       "of things is the product.")
+
+    steps = [
+        ("01", "Chapter path", "She sees where she is, and the one thing to do next."),
+        ("02", "Micro-lesson", "Taps and answers her way through it, rather than scrolling past."),
+        ("03", "Guided practice", "The same concept, immediately, while it is still warm."),
+        ("04", "Chapter quiz", "Proves the chapter, and sets the mastery band."),
+        ("05", "Progress", "Streak, week strip and what moved. Yesterday was real."),
+    ]
+    sw, sgx = 2.21, 0.24
+    for i, (n, title, body) in enumerate(steps):
+        x = M + i * (sw + sgx)
+        box(s, x, y, sw, 1.34, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+        text(s, x + 0.22, y + 0.14, sw - 0.4, 1.1,
+             [{"t": n, "size": 9, "bold": True, "color": PRIMARY, "space_after": 3},
+              {"t": title, "size": 12.5, "bold": True, "color": INK,
+               "space_after": 4, "line": 1.05},
+              {"t": body, "size": 9.5, "color": BODY, "line": 1.2}])
+        # A chevron in the gap, so the row reads as a sequence and not a menu.
+        if i < len(steps) - 1:
+            text(s, x + sw, y + 0.42, sgx, 0.4,
+                 [{"t": "\u203a", "size": 18, "bold": True, "color": PRIMARY}],
+                 align=PP_ALIGN.CENTER)
+
+    y2 = y + 1.54
+    text(s, M, y2, CONTENT_W, 0.28,
+         [{"t": "FOUR RULES THAT SHAPE ALL OF IT", "size": 10, "bold": True,
+           "color": PRIMARY}])
+
+    rules = [
+        ("The tutor knows the lesson, not just mathematics",
+         "Every call carries the text of the lesson she is on and her weakest "
+         "concepts in that chapter. It teaches inside the curriculum and hints "
+         "before it answers.", PRIMARY),
+        ("Grading is code, never AI",
+         "1/2, 2/4 and 0.5 all mark correct against 1/2. A model that grades is "
+         "a model that is confidently wrong sometimes, and the learner pays for "
+         "it in confidence.", PRIMARY),
+        ("Hints escalate before answers",
+         "A nudge, then the method, then a worked step, then the solution. A "
+         "learner handed the answer straight away has learned nothing, which is "
+         "how a general assistant fails at teaching.", HINT),
+        ("Wrong answers are amber, never red",
+         "Red is reserved for system errors. A child who is already behind must "
+         "not see the colour of danger because she made a sign error.", AMBER),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(rules):
+        card(s, M + i * (cw + 0.22), y2 + 0.34, cw, 1.62, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    # ── SHIPPED vs BEING MEASURED, labelled ──────────────────────────────────
+    # An earlier version put both of these in one sentence and implied Dagar
+    # offers a human mentor. It does not. The route is capture-only (D8): there
+    # is no mentor-side UI, no dispatch, and `status` moves by hand. What exists
+    # is the OFFER and the record of who accepted it, which is how H7 gets an
+    # answer before anybody builds a service.
+    #
+    # Splitting them is not modesty, it is the stronger slide. A team that can
+    # show which parts are real and which are instrumented reads as one that
+    # knows the difference.
+    yb = y2 + 2.14
+    half = (CONTENT_W - 0.22) / 2
+
+    box(s, M, yb, half, 0.9, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.16, 0.05, 0.58, fill=CORRECT, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.3, yb + 0.14, half - 0.55, 0.68,
+         [{"t": "LIVE  ·  THE PARENT LOOP", "size": 8.5, "bold": True,
+           "color": CORRECT, "space_after": 4},
+          {"t": "A weekly summary reaches her parent on WhatsApp. No app to "
+                "download, no account to create, timed so he has something to "
+                "ask her about on Sunday.",
+           "size": 10.5, "color": BODY, "line": 1.24}])
+
+    box(s, M + half + 0.22, yb, half, 0.9, fill=CELEBRATE_BG, line=AMBER)
+    box(s, M + half + 0.22, yb + 0.16, 0.05, 0.58, fill=AMBER,
+        shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + half + 0.52, yb + 0.14, half - 0.55, 0.68,
+         [{"t": "BEING MEASURED  ·  HUMAN SUPPORT", "size": 8.5, "bold": True,
+           "color": AMBER, "space_after": 4},
+          {"t": "When the product can tell she is stuck it offers to put a "
+                "person in touch, and records that she said yes. There is no "
+                "mentor service behind it yet. How often learners ask is what "
+                "decides whether one is worth building.",
+           "size": 10.5, "color": BODY, "line": 1.24}])
+
+    notes(s, """
+THE SENTENCE TO LEAD WITH
+The order is the product. Anyone can put a lesson and a chatbot in one app. The
+thing that is hard is practice on the same concept while it is still warm, a
+tutor that knows which concept that is, and a quiz that decides mastery from
+both.
+
+WHY GRADING IS NOT AI, IF PRESSED
+Because a grader that is wrong 2% of the time tells a child who was right that
+she was wrong, and there is no error message for that. Deterministic code in
+lib/learning/grading.ts owns it, with the equivalence cases tested: unreduced
+fractions, decimal forms, whitespace, sign errors staying wrong.
+
+WHY AMBER MATTERS MORE THAN IT SOUNDS
+It is the smallest decision on this slide and the one teachers respond to. The
+learners we build for have been told they are bad at maths for years. Red is
+the colour of that message.
+
+THE MENTOR OFFER IS A DEMAND TEST, NOT A SERVICE. SAY THIS PLAINLY.
+The route is capture-only. There is no mentor-side interface, nothing is
+dispatched, and a request's status is moved by hand. What the learner sees is
+an offer, and the copy deliberately promises a person rather than a timeframe,
+because an app that says "someone will reply shortly" and then does not is
+worse than one that never offered.
+
+The three triggers are real and they fire: three wrong in a row, hints
+exhausted twice, or a long tutor conversation with no practice attempt. Each
+one records that a learner reached the point of being stuck, and whether she
+took the offer.
+
+That is hypothesis H7: learners who remain stuck will request human support.
+Staffing mentors before knowing how often that happens would be building a
+service on an assumption. The number decides it.
+
+WHAT IS DELIBERATELY NOT HERE
+No leaderboards, no ranks, no hearts or lives, no XP. Those mechanics invert
+for a learner who is already behind: losing a life for a wrong answer punishes
+exactly the child who needed another try.
+""")
+
+
+SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
+          s7_persona, s8_solution]
 
 
 def main() -> None:

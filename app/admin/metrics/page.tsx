@@ -103,6 +103,16 @@ export default async function MetricsPage({
           <p className="text-caption text-muted">{generated} IST</p>
         </div>
 
+        {/* The queue lives on its own page because this one promises never to
+            name a learner, and answering a request for help cannot be done
+            anonymously. A link, so the promise costs nothing in discoverability. */}
+        <Link
+          href="/admin/requests"
+          className="text-label text-primary-strong underline underline-offset-4 min-h-11 inline-flex items-center"
+        >
+          Requests for a person
+        </Link>
+
         <nav aria-label="Time range" className="flex gap-sm">
           {WINDOWS.map((option) => {
             const active = option.key === window;
