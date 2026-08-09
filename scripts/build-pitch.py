@@ -339,11 +339,16 @@ def s4_validation(prs):
     # Marking our own soft numbers. An audience trusts a deck that says which
     # figures are estimates far more than one presenting everything as fact,
     # and the question gets asked either way.
+    # ── AMBER MEANS ONE THING IN THIS DECK ───────────────────────────────────
+    # It marks something NOT YET DONE. It had spread to seven elements across
+    # fourteen slides, including notes like this one and outright strengths, and
+    # a colour that appears everywhere stops carrying a signal. This is a note
+    # about method, so it is neutral.
     yb = y2 + 2.16
-    box(s, M, yb, CONTENT_W, 0.72, fill=CELEBRATE_BG, line=AMBER)
+    box(s, M, yb, CONTENT_W, 0.72, fill=SURFACE, line=BORDER)
     text(s, M + 0.34, yb + 0.13, CONTENT_W - 0.68, 0.5,
          [{"t": "Where we are estimating, we say so.", "size": 11.5, "bold": True,
-           "color": AMBER, "space_after": 3},
+           "color": INK, "space_after": 3},
           {"t": "The figures above are published national data. Our market "
                 "sizing on the next slide is a derived estimate, and the share "
                 "of state boards aligned to NCERT is the softest input in it.",
@@ -439,10 +444,10 @@ def s5_market(prs):
     # children for lessons, which is the opposite of the product, and the ₹370
     # floor is the evidence the thing was costed before it was priced.
     yb = y2 + 1.78
-    box(s, M, yb, CONTENT_W, 0.76, fill=CELEBRATE_BG, line=AMBER)
+    box(s, M, yb, CONTENT_W, 0.76, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
     text(s, M + 0.34, yb + 0.14, CONTENT_W - 0.68, 0.54,
          [{"t": "No child pays anything in these numbers.", "size": 11.5,
-           "bold": True, "color": AMBER, "space_after": 3},
+           "bold": True, "color": PRIMARY_STRONG, "space_after": 3},
           {"t": "Learners never pay for the core learning loop. Institutions "
                 "buy reach: NGOs, CSR programmes and government. The ₹450 floor "
                 "is set by cost, not by ambition, because an active learner "
@@ -564,10 +569,10 @@ def s6_competition(prs):
          [{"t": "✓  does this well            ~  partly, or only sometimes            ·  does not do this", "size": 8.5, "color": MUTED}])
 
     yb = yl + 0.34
-    box(s, M, yb, CONTENT_W, 1.02, fill=CELEBRATE_BG, line=AMBER)
+    box(s, M, yb, CONTENT_W, 1.02, fill=SURFACE, line=BORDER)
     text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.68, 0.8,
          [{"t": "A good tutor still beats us. That is not the argument.",
-           "size": 12, "bold": True, "color": AMBER, "space_after": 4},
+           "size": 12, "bold": True, "color": INK, "space_after": 4},
           {"t": "A person in the room notices what no model can, and we do not "
                 "claim otherwise. The learner in this deck was never going to get "
                 "that person. What is hard to copy is not the AI, which anyone "
@@ -1489,13 +1494,17 @@ def s14_security(prs):
          # boundary you can defend, not a certificate". True, and it landed as
          # a shrug. These are things we ran out of time for, not things we
          # decided against, and the sentence should end on what we did manage.
+         #
+         # "Four days" is also gone from here. It appears on slide 9's headline
+         # as a claim about speed, which is a strength; repeating it beside an
+         # admission turns the same fact into an excuse.
          [{"t": "What we have not done yet.",
            "size": 11.5, "bold": True, "color": AMBER, "space_after": 4},
           {"t": "No penetration test, no SOC 2, no formal data protection impact "
                 "assessment, and no legal review of our DPDP position. Each of "
-                "those needs time we did not have in four days. What we could "
-                "build and prove in that time, we did: the boundary itself, and "
-                "the tests that attack it.",
+                "those needs time we did not have. What we could build and "
+                "prove in the time we had, we did: the boundary itself, and the "
+                "tests that attack it.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     notes(s, """
