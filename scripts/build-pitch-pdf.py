@@ -19,11 +19,13 @@ the ones added deliberately below.
 A PDF cannot reliably play video. Acrobat can embed it, nothing else honours it,
 and a judge on a phone or in a browser gets an empty box.
 
-So slide 26 gets a real link annotation instead, pointing at the file sitting
-beside the PDF. Keep the PDF and the two mp4s in the same folder and the link
-opens the video in the system player. If they are separated, the page still
-carries the address of the live app, and the four screenshots still tell the
-story on their own.
+So slide 26 links out instead, to the two recordings served from the app's own
+domain. An earlier version pointed at files sitting beside the PDF, which broke
+the moment the deck was uploaded on its own. This deck is submitted as a single
+file, so the link has to survive being the only thing that arrives.
+
+The addresses are printed on the page as well as being clickable, so they still
+work from a printout, a screenshot, or a viewer that strips annotations.
 """
 import pathlib
 import shutil
@@ -41,9 +43,13 @@ DPI = 72                      # PDF points per inch
 OUT = pathlib.Path("docs/deck/Dagar-Pitch-Deck.pdf")
 WORK = pathlib.Path(".pdf-build")
 
-# Page (1-based) carrying the demo, and the files it should offer.
+# Page (1-based) carrying the demo, and where the recordings are served from.
+# Same domain as the app, so there is one thing to keep alive rather than two.
 DEMO_PAGE = 26
-DEMO_FILES = ["Dagar-Demo-EN.mp4", "Dagar-Demo-HI.mp4"]
+DEMO_LINKS = [
+    ("Watch in English", "https://dagar-ap19.vercel.app/demo-en.mp4"),
+    ("हिंदी में देखिए", "https://dagar-ap19.vercel.app/demo-hi.mp4"),
+]
 
 
 def render(index):
@@ -80,22 +86,19 @@ def main():
                           preserveAspectRatio=False)
 
         if i + 1 == DEMO_PAGE:
-            # An invisible button over the four screenshots. Two links side by
-            # side, one per language, each opening the file next to the PDF.
+            # The addresses are drawn on the page, not just wrapped around
+            # invisible rectangles. An annotation-only link disappears in a
+            # printout, a screenshot, or a viewer that strips them, and this
+            # deck may be the only file that arrives.
+            # The slide already prints both addresses in its closing band. All
+            # this adds is a clickable region over each half, from the band up
+            # across the screenshots, so a click anywhere sensible works.
             half = width / 2
-            for n, name in enumerate(DEMO_FILES):
-                rect = (n * half + 60, height * 0.28,
-                        (n + 1) * half - 60, height * 0.72)
-                pdf.linkURL(name, rect, relative=1, thickness=0)
-            # A visible cue, because an invisible link nobody knows about is
-            # the same as no link.
-            pdf.setFillColor(Color(0.06, 0.46, 0.43))
-            pdf.setFont("Helvetica-Bold", 11)
-            pdf.drawCentredString(
-                half, height * 0.135,
-                "Click the left half for the English demo, "
-                "the right half for Hindi. Keep the mp4 files beside this PDF.",
-            )
+            for n, (_, url) in enumerate(DEMO_LINKS):
+                pdf.linkURL(url,
+                            (n * half + 40, height * 0.10,
+                             (n + 1) * half - 40, height * 0.74),
+                            relative=0, thickness=0)
 
         pdf.showPage()
 

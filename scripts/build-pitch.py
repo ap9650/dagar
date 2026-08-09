@@ -2819,17 +2819,24 @@ def s26_demo(prs):
         text(s, M + i * col + 0.1, y + ph + 0.36, col - 0.2, 0.6,
              [{"t": body, "size": 9, "color": BODY, "line": 1.24}])
 
-    yb = y + ph + 1.06
-    box(s, M, yb, CONTENT_W, 0.78, fill=SURFACE, line=BORDER)
-    box(s, M, yb + 0.15, 0.06, 0.48, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
-    text(s, M + 0.34, yb + 0.12, CONTENT_W - 0.7, 0.56,
-         [{"t": "Short of time? Play it at 1.5x. The narration is synthetic, in "
-                "both languages, on purpose.",
-           "size": 11.5, "bold": True, "color": INK, "space_after": 2},
-          {"t": "It stays clear up to about 1.5x, and a learner who reads in "
-                "Hindi should be able to watch the demo in Hindi. That is the "
-                "same argument the product makes.",
-           "size": 9.5, "color": BODY}])
+    # The two addresses are printed on the slide rather than hidden behind a
+    # link, because this deck is submitted as a single PDF and may arrive with
+    # nothing beside it. The PDF build lays clickable regions over these.
+    yb = y + ph + 1.02
+    box(s, M, yb, CONTENT_W, 0.86, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.15, 0.06, 0.56, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    half = CONTENT_W / 2
+    for i, (label, url) in enumerate((
+            ("Watch in English", "dagar-ap19.vercel.app/demo-en.mp4"),
+            ("हिंदी में देखिए", "dagar-ap19.vercel.app/demo-hi.mp4"))):
+        text(s, M + 0.34 + i * half, yb + 0.13, half - 0.4, 0.26,
+             [{"t": label, "size": 11.5, "bold": True, "color": PRIMARY}])
+        text(s, M + 0.34 + i * half, yb + 0.38, half - 0.4, 0.24,
+             [{"t": url, "size": 10, "color": BODY}])
+    text(s, M + 0.34, yb + 0.6, CONTENT_W - 0.7, 0.24,
+         [{"t": "Short of time, play it at 1.5x. The narration is generated, "
+                "in both languages, on purpose.",
+           "size": 9.5, "color": MUTED}])
 
     notes(s, """
 IF THE VIDEO CANNOT BE PLAYED
