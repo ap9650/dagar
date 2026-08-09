@@ -31,7 +31,8 @@
     "deck:pdf": "npm run deck && python3 scripts/build-pitch-pdf.py",
     "deck:v1": "python3 scripts/build-deck.py",
     "eval": "node --no-warnings scripts/eval-tutor.ts",
-    "feedback:pdf": "npm run feedback:export && python3 scripts/build-feedback-pdf.py"
+    "feedback:pdf": "npm run feedback:export && python3 scripts/build-feedback-pdf.py",
+    "feedback:doc": "npm run feedback:export && python3 scripts/build-feedback-doc.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
