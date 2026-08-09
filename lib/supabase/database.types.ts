@@ -17,6 +17,7 @@ export type Database = {
       ai_calls: {
         Row: {
           cache_read_tokens: number
+          cache_write_tokens: number
           concept_id: string | null
           cost_inr: number
           created_at: string
@@ -34,6 +35,7 @@ export type Database = {
         }
         Insert: {
           cache_read_tokens?: number
+          cache_write_tokens?: number
           concept_id?: string | null
           cost_inr?: number
           created_at?: string
@@ -51,6 +53,7 @@ export type Database = {
         }
         Update: {
           cache_read_tokens?: number
+          cache_write_tokens?: number
           concept_id?: string | null
           cost_inr?: number
           created_at?: string

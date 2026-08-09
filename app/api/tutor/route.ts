@@ -155,6 +155,10 @@ export async function POST(request: Request) {
           input_tokens: usage.input_tokens,
           output_tokens: usage.output_tokens,
           cache_read_tokens: usage.cache_read_input_tokens ?? 0,
+          // Charged at 1.25x input and, on a first-turn exchange, the
+          // largest single line in the bill. Stored since 0030 so `cost_inr`
+          // can be rebuilt from the columns beside it.
+          cache_write_tokens: usage.cache_creation_input_tokens ?? 0,
           cost_inr: costInr({
             model: TUTOR_MODEL,
             inputTokens: usage.input_tokens,
@@ -193,6 +197,7 @@ export async function POST(request: Request) {
           input_tokens: 0,
           output_tokens: 0,
           cache_read_tokens: 0,
+          cache_write_tokens: 0,
           cost_inr: 0,
           latency_ms: Date.now() - startedAt,
           ok: false,

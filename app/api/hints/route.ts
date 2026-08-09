@@ -133,6 +133,7 @@ export async function POST(request: Request) {
       input_tokens: response.usage.input_tokens,
       output_tokens: response.usage.output_tokens,
       cache_read_tokens: response.usage.cache_read_input_tokens ?? 0,
+      cache_write_tokens: response.usage.cache_creation_input_tokens ?? 0,
       cost_inr: costInr({
         model: TUTOR_MODEL,
         inputTokens: response.usage.input_tokens,
@@ -159,6 +160,7 @@ export async function POST(request: Request) {
       input_tokens: 0,
       output_tokens: 0,
       cache_read_tokens: 0,
+      cache_write_tokens: 0,
       cost_inr: 0,
       latency_ms: Date.now() - startedAt,
       ok: false,

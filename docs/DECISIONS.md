@@ -1008,9 +1008,29 @@ works. Free is a declared stage, not a missing model.
 
 Post-MVP: learners never pay for the core learning loop. Institutions (NGO, CSR,
 government) pay per learner for reach; families pay only for depth via Dagar Plus.
-Institutional pricing floor is **₹300/learner/year** — the D11 cost target for a
+Institutional pricing floor is **₹370/learner/year** — the measured cost of a
 fully active learner. Full tiers, unit economics and market sizing in
 `MARKET_AND_PRICING.md`.
+
+**Corrected 9 Aug 2026, from ₹300.** ₹300 was written before AI costs were
+verified, and `MARKET_AND_PRICING.md` has said ₹370 since. Two floors in two
+documents is worse than either being wrong, because a reader who finds both
+stops trusting the rest. ₹370 is the one measurement supports:
+
+| Line | Per active learner / year |
+|---|---|
+| AI, at ₹6.40/week for ~15 tutor exchanges | ~₹330 |
+| Infrastructure and WhatsApp, at a few thousand learners | ~₹40 |
+| **Cost floor** | **~₹370** |
+
+Measured 9 Aug 2026 against 40 real tutor exchanges: **₹0.4366 each**, against
+a D11 estimate of ~₹0.44. The estimate held.
+
+That figure is the CEILING rather than the run rate, and the difference matters
+when quoting it. Almost every exchange in the pilot was a first turn, so almost
+every one paid to *write* the cache at 1.25× input and almost none got the 0.1×
+read. As conversations lengthen the write amortises and cost per exchange falls
+toward ₹0.17. Being wrong in this direction is the right way round.
 
 ## D18 — Lessons are steps, not prose (2026-08-02)
 

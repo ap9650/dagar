@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/security/adminGuard";
-import { loadMetrics } from "@/lib/analytics/dashboard";
+import { loadMetrics, type Metrics } from "@/lib/analytics/dashboard";
 import { percent, BarList, DailyLine, FunnelBars, LocaleFunnel, Stat } from "@/components/admin/charts";
 import { Glossary } from "@/components/admin/Glossary";
 import type { MetricWindow } from "@/lib/analytics/metrics";
@@ -431,6 +431,11 @@ export default async function MetricsPage({
 
       <hr className="border-border" />
 
+      {/* ── what the AI cost ─────────────────────────────────────────────── */}
+      <SpendPanel spend={m.spend} />
+
+      <hr className="border-border" />
+
       {/* ── §8 the glossary ──────────────────────────────────────────────── */}
       <Glossary />
 
@@ -445,6 +450,108 @@ export default async function MetricsPage({
         </p>
       </section>
     </main>
+  );
+}
+
+/**
+ * What the AI cost, and whether the unit economics still hold.
+ *
+ * ── WHY THIS EARNS A PANEL ──────────────────────────────────────────────────
+ * D17 prices institutions at ₹450 because an active learner costs about ₹370,
+ * and roughly ₹330 of that is this column. The pitch deck quotes it, the price
+ * floor rests on it, and until now it was visible only to somebody willing to
+ * query the database with a service-role key. A number that important should
+ * not need an engineer to read it.
+ *
+ * Unwindowed, unlike the rest of the page: the floor is a lifetime cost per
+ * learner, and one week of it is a different number wearing the same label.
+ */
+function SpendPanel({ spend }: { spend: Metrics["spend"] }) {
+  const rupees = (value: number, dp = 2) =>
+    `₹${value.toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp })}`;
+
+  const ceilingPct = Math.min(100, (spend.todayInr / spend.ceilingInr) * 100);
+  // Amber, never red. Approaching a budget is not a system error, and this page
+  // follows the same colour rule as everything a learner sees.
+  const nearCeiling = spend.todayInr >= spend.ceilingInr * 0.8;
+
+  return (
+    <Panel title="What the AI cost">
+      <p className="text-body-sm text-body">
+        Every model call writes its own cost. This is the number the ₹370 floor
+        and the ₹450 institutional price are built on.
+      </p>
+
+      <dl className="grid grid-cols-2 sm:grid-cols-4 gap-md m-0">
+        {[
+          ["Spent so far", rupees(spend.totalInr), `${spend.calls} calls`],
+          ["Per learner", rupees(spend.perLearnerInr), `${spend.learners} learners`],
+          [
+            "Per tutor exchange",
+            spend.perTutorExchangeInr === null ? "—" : rupees(spend.perTutorExchangeInr, 3),
+            "target ₹0.44",
+          ],
+          ["Today", rupees(spend.todayInr), `ceiling ${rupees(spend.ceilingInr, 0)}`],
+        ].map(([label, value, sub]) => (
+          <div key={label} className="flex flex-col gap-0.5">
+            <dt className="text-caption text-muted">{label}</dt>
+            <dd className="text-h3 text-ink m-0">{value}</dd>
+            <p className="text-caption text-muted m-0">{sub}</p>
+          </div>
+        ))}
+      </dl>
+
+      <div className="flex flex-col gap-xs">
+        <div
+          className="h-2 w-full rounded-full bg-surface overflow-hidden"
+          role="img"
+          aria-label={`Today's spend is ${rupees(spend.todayInr)} of the ${rupees(
+            spend.ceilingInr,
+            0,
+          )} daily ceiling.`}
+        >
+          <div
+            className={`h-full rounded-full ${nearCeiling ? "bg-celebrate" : "bg-primary"}`}
+            style={{ width: `${ceilingPct}%` }}
+          />
+        </div>
+        <p className="text-caption text-muted">
+          At the ceiling the tutor returns its unavailable state and lessons,
+          practice and quizzes keep working.
+        </p>
+      </div>
+
+      <table className="w-full text-body-sm border-collapse">
+        <thead>
+          <tr className="text-left text-caption text-muted">
+            <th scope="col" className="font-medium py-xs">Kind</th>
+            <th scope="col" className="font-medium py-xs text-right">Calls</th>
+            <th scope="col" className="font-medium py-xs text-right">Total</th>
+            <th scope="col" className="font-medium py-xs text-right">Each</th>
+          </tr>
+        </thead>
+        <tbody>
+          {spend.byKind.map((k) => (
+            <tr key={k.kind} className="border-t border-border">
+              <td className="py-sm text-ink">{k.kind}</td>
+              <td className="py-sm text-right text-body">{k.calls}</td>
+              <td className="py-sm text-right text-body">{rupees(k.inr)}</td>
+              <td className="py-sm text-right text-body">{rupees(k.perCall, 3)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {spend.cacheWriteShare !== null && (
+        <p className="text-caption text-muted">
+          {Math.round(spend.cacheWriteShare * 100)}% of tutor input tokens went
+          on <em>writing</em> the cache rather than reading it, which bills at
+          1.25× instead of 0.1×. That is what a first-turn question costs. As
+          learners hold longer conversations this falls, and so does the cost of
+          an exchange.
+        </p>
+      )}
+    </Panel>
   );
 }
 

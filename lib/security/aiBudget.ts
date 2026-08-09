@@ -96,6 +96,14 @@ export async function logAiCall(row: {
   input_tokens: number;
   output_tokens: number;
   cache_read_tokens: number;
+  /**
+   * Required, not optional, since 0030. It bills at 1.25x input and dominates a
+   * first-turn exchange, so a call site that forgets it under-reports the most
+   * expensive tokens in the product and `cost_inr` stops being reconstructable
+   * from the row beside it. Making it mandatory means the compiler catches the
+   * next call site rather than a spreadsheet catching it months later.
+   */
+  cache_write_tokens: number;
   cost_inr: number;
   latency_ms?: number | null;
   ttft_ms?: number | null;

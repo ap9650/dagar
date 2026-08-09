@@ -1,5 +1,6 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { summariseSpend, type AiCallRow } from "@/lib/analytics/spend";
 import {
   againstTargets,
   byProp,
@@ -68,7 +69,7 @@ export async function loadMetrics(window: MetricWindow = "all", now: Date = new 
   const admin = createAdminClient();
   const from = windowStart(window, now);
 
-  const [eventsResult, chapters, lessons, progress, exits, feedback] = await Promise.all([
+  const [eventsResult, chapters, lessons, progress, exits, feedback, aiCalls] = await Promise.all([
     admin
       .from("events")
       .select("name, student_id, props, created_at")
@@ -82,6 +83,16 @@ export async function loadMetrics(window: MetricWindow = "all", now: Date = new 
     // never leaves this module — without it a windowed view would show every
     // answer ever given beside a conversion rate for one week.
     admin.from("product_feedback").select("user_id, respondent_role, understood, would_return"),
+    // Spend. Unwindowed on purpose: the ₹370 floor in D17 is a lifetime cost
+    // per learner, and a one-week slice of it would be a different number
+    // wearing the same label.
+    admin
+      .from("ai_calls")
+      .select(
+        "kind, student_id, input_tokens, output_tokens, cache_read_tokens, " +
+          "cache_write_tokens, cost_inr, ok, created_at",
+      )
+      .neq("model", "test-model"),
   ]);
 
   if (eventsResult.error) {
@@ -105,6 +116,9 @@ export async function loadMetrics(window: MetricWindow = "all", now: Date = new 
     window,
     generatedAt: now.toISOString(),
     truncated,
+
+    // ── what the AI cost ────────────────────────────────────────────────────
+    spend: summariseSpend((aiCalls.data ?? []) as unknown as AiCallRow[], now),
 
     // ── §6 the CEO view ─────────────────────────────────────────────────────
     headline: headline(cohortRows, members),
