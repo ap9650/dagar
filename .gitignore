@@ -61,3 +61,7 @@ public/_viz-preview.html
 # Playwright screenshots are run artefacts — regenerated, never reviewed in a diff.
 /e2e/__screenshots__/
 evals/runs/
+
+# Demo video build artefacts. Regenerate with scripts/make-demo-video.py
+.demo-build/
+docs/deck/Dagar-Demo-*.mp4

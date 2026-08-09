@@ -2793,9 +2793,10 @@ def s26_demo(prs):
     both, so the demo of it does too.
     """
     s, y = slide_shell(prs, 26, "26 · Demo",
-                       "Ninety seconds, one learner's evening.",
-                       f"The recording follows the loop end to end, narrated in "
-                       f"English and in Hindi. Or open it yourself: {APP_URL}")
+                       "Five minutes, one learner's evening.",
+                       f"The recording runs the loop end to end, from choosing a "
+                       f"language to a finished lesson, narrated in English and "
+                       f"in Hindi. Or open it yourself: {APP_URL}")
 
     steps = [
         ("docs/deck/screens/dashboard-en.png", "1 · She opens it",
