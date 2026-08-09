@@ -1647,10 +1647,101 @@ twenty learners have used the tutor. That is a start, not evidence.
 """)
 
 
+def s16_accessibility(prs):
+    """
+    Accessibility as an MVP constraint rather than a later phase.
+
+    The PRD's vision names disabled and neurodiverse learners in its first
+    paragraph. A product that says that and then schedules accessibility for
+    Phase 3 has written a sentence it does not mean, which is the whole reason
+    this is a slide rather than a footnote.
+
+    The amber rule is the one that lands with teachers, and it is guarded by a
+    test, so it is the example worth leading with.
+    """
+    s, y = slide_shell(prs, 16, "16 · Accessibility",
+                       "Built in now, because we said who this is for.",
+                       "The vision names disabled and neurodiverse learners in "
+                       "its first paragraph. Scheduling that for later would "
+                       "make it a sentence we did not mean.")
+
+    # The rule teachers respond to, given the room it deserves.
+    box(s, M, y, CONTENT_W, 1.24, fill=WHITE, line=AMBER)
+    box(s, M, y + 0.2, 0.06, 0.84, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, y + 0.18, CONTENT_W - 0.7, 0.96,
+         [{"t": "A wrong answer is amber. Red is only ever a system error.",
+           "size": 15, "bold": True, "color": INK, "space_after": 5},
+          {"t": "The smallest decision in the product and the one teachers "
+                "notice first. These learners have been told they are bad at "
+                "maths for years, and red is the colour of that message. Amber "
+                "says not yet, and it never appears without a next step beside "
+                "it: a hint, a worked example, or an invitation to try again. A "
+                "test fails the build if the two colours are ever confused.",
+           "size": 10.5, "color": BODY, "line": 1.28}])
+
+    items = [
+        ("Contrast is a function, not a preference",
+         "Body text reaches AAA, everything else AA. These are cheap LCD screens "
+         "read outdoors at low brightness to save battery, where grey on grey "
+         "is not subtle, it is invisible."),
+        ("Every target is at least 44 pixels",
+         "Including icon buttons. A thumb on a cracked screen is the input "
+         "device, and a 30-pixel target is a tax on the learner who can least "
+         "afford it."),
+        ("Colour is never the only signal",
+         "A filled day carries a tick, a rest day carries a dot, correct "
+         "carries a check and not quite carries its own word. Nothing on any "
+         "screen depends on telling two hues apart."),
+        ("Any step can be listened to",
+         "In either language, chosen separately from the interface. Reading is "
+         "a barrier for some learners even in their own language, and the "
+         "browser's own voice costs nothing to serve."),
+        ("Motion asks permission",
+         "Every animation sits behind prefers-reduced-motion. Under it a "
+         "celebration becomes a static badge rather than disappearing, because "
+         "the learner should lose the movement, not the moment."),
+        ("Keyboard reaches everything",
+         "Semantic HTML, real landmarks, an accessible name on every control, "
+         "and a visible focus ring. Text reflows at 200% zoom with no sideways "
+         "scroll."),
+    ]
+    cw = (CONTENT_W - 2 * 0.22) / 3
+    for i, (title, body) in enumerate(items):
+        col, row = i % 3, i // 3
+        card(s, M + col * (cw + 0.22), y + 1.42 + row * 1.34, cw, 1.22,
+             title, body, title_size=11.5, body_size=9.5)
+
+    notes(s, """
+LEAD WITH THE COLOUR
+It is the smallest thing on the slide and the one teachers respond to. Say the
+reason out loud: a learner who is already behind must never see the colour of
+danger because she made a sign error. Amber says not yet. Red says you failed.
+
+WHY THIS IS NOT PHASE 3
+Because the vision names disabled and neurodiverse learners in its first
+paragraph, and a roadmap that defers accessibility turns that into decoration.
+It is also far cheaper now than later: contrast, target size and focus order
+are almost free while a component is being written and expensive once fifty
+screens exist.
+
+WHAT WE HAVE NOT DONE
+No screen reader testing with an actual screen reader user. No audit against
+WCAG by anyone independent. The rules are followed and the tokens are
+contrast-checked, but nobody who relies on assistive technology has used Dagar
+yet, and that is the gap that matters most on this slide.
+
+THE AUDIO IS NOT A FEATURE FOR BLIND LEARNERS
+It helps them, but that is not why it exists. It is there for a learner who
+reads slowly in her own language, which is a much larger group and one nobody
+builds for.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
           s11_bilingual, s12_intelligence, s13_architecture,
-          s14_security, s15_tutor]
+          s14_security, s15_tutor,
+          s16_accessibility]
 
 
 def main() -> None:
