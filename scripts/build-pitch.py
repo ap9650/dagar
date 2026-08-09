@@ -1847,11 +1847,106 @@ more often anyway.
 """)
 
 
+def s18_tradeoffs(prs):
+    """
+    The gaps as decisions, and the mistakes as mistakes.
+
+    Two columns because they are different kinds of honesty. The left is
+    judgement: things a room might expect that we chose against, each with the
+    reason. The right is the rarer one, and the one that actually persuades:
+    what we would do differently, told about ourselves.
+    """
+    s, y = slide_shell(prs, 18, "18 · Trade-offs",
+                       "The gaps were choices. The mistakes were ours.",
+                       "An honest list is a stronger artefact than a silent one, "
+                       "and the second column is the half most decks leave out.")
+
+    half = (CONTENT_W - 0.3) / 2
+
+    text(s, M, y, half, 0.3,
+         [{"t": "DELIBERATELY NOT BUILT", "size": 10, "bold": True,
+           "color": PRIMARY}])
+    text(s, M + half + 0.3, y, half, 0.3,
+         [{"t": "WHAT WE WOULD DO DIFFERENTLY", "size": 10, "bold": True,
+           "color": AMBER}])
+
+    chose = [
+        ("No leaderboards, hearts, lives or XP",
+         "Every one of those mechanics inverts for a learner who is already "
+         "behind. Losing a life for a wrong answer punishes exactly the child "
+         "who needed another try."),
+        ("No mentor service behind the offer",
+         "Staffing a rota before knowing how often learners ask would be "
+         "building on an assumption. 34 offers and 1 acceptance is the "
+         "beginning of the answer."),
+        ("No automatic WhatsApp delivery",
+         "It needs business verification and an opt-in from the parent's own "
+         "handset. The link already lets them see progress with no account at "
+         "all."),
+        ("No evaluation set for the tutor yet",
+         "This is the one that bothers us. Until it exists every prompt edit is "
+         "an untested deploy, and the tutor is the differentiator. First thing "
+         "after submission."),
+    ]
+    learned = [
+        ("Instrument first, then build",
+         "Three events were not firing at all, and we found out only when we "
+         "went looking for the numbers. Adding the call while writing the "
+         "feature costs seconds. Discovering it missing costs the whole period "
+         "of data."),
+        ("Get it onto a real phone on day one",
+         "Six genuine defects came from twenty minutes on an Android handset. "
+         "No test caught any of them, and several had shipped days earlier."),
+        ("Write the evaluation set before the prompt",
+         "We tuned the tutor prompt several times with no harness. Every one of "
+         "those edits was an act of faith."),
+        ("Exercise the system, do not read the code",
+         "Twice we believed something worked because the code said so. Reading "
+         "a policy is not testing a policy, and running the query is."),
+    ]
+
+    rh = 1.16
+    for i, (title, body) in enumerate(chose):
+        card(s, M, y + 0.36 + i * rh, half, rh - 0.1, title, body,
+             accent=PRIMARY, title_size=11, body_size=9.5)
+    for i, (title, body) in enumerate(learned):
+        card(s, M + half + 0.3, y + 0.36 + i * rh, half, rh - 0.1, title, body,
+             accent=AMBER, title_size=11, body_size=9.5)
+
+    notes(s, """
+WHY THE RIGHT-HAND COLUMN MATTERS MORE
+Anybody can list features they cut. Very few teams will say what they would do
+differently, and it is the strongest signal on this slide that the reflection
+is real rather than performed. Every one of those four cost us something
+measurable.
+
+THE ONE THAT BOTHERS US MOST
+No evaluation set for the tutor. The tutor is the differentiating claim in the
+whole product, and every prompt edit so far has been an untested deploy. We
+have twenty learners' worth of real questions to build it from, which is
+exactly the input it needs, and it is first after submission.
+
+IF ASKED ABOUT THE GAMIFICATION CHOICE
+Duolingo's mechanics work brilliantly for an adult learning Spanish by choice.
+For a child who is behind and knows it, a streak that can be lost and a heart
+that can be spent turn a learning tool into another place to fail. We kept the
+streak because it rewards showing up, and gave it a forgiven day so one missed
+evening cannot erase three weeks.
+
+IF ASKED WHAT WE CUT THAT WE MISS
+A wider quiz pool. Eight questions per chapter quiz and the quiz is all eight,
+so a retake cannot contain anything new. Order varies per attempt, which is the
+cheap half. The real fix is doubling the bank, and most of that work is
+verifying answer keys rather than writing questions.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
-          s16_accessibility, s17_testing]
+          s16_accessibility, s17_testing,
+          s18_tradeoffs]
 
 
 def main() -> None:
