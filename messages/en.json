@@ -279,15 +279,15 @@
     "hapticsTitle": "Feedback",
     "hapticsLabel": "Buzz when you get something right",
     "gradeHelp": "Your progress is kept. You can switch back any time.",
-    "whatsappTitle": "Send it to WhatsApp every Sunday",
-    "whatsappWhy": "Add the number and the weekly summary goes there on its own, once they agree from their own WhatsApp.",
+    "whatsappTitle": "WhatsApp updates, later",
+    "whatsappWhy": "We cannot send on WhatsApp yet. Leave a number and we will use it when we can. For now, share the link above and they can open it whenever they like.",
     "whatsappLabel": "Their WhatsApp number",
     "whatsappPlaceholder": "+919876543210",
     "whatsappHelp": "Include the country code.",
-    "whatsappSave": "Save number",
+    "whatsappSave": "Save it for later",
     "whatsappSaved": "Number saved",
     "whatsappRemove": "Remove number",
-    "whatsappPending": "Waiting for them to agree. Until they do, nothing is sent to this number, and the link above keeps working.",
+    "whatsappPending": "Saved for later. Nothing is being sent yet, and the link above is what they should use for now.",
     "whatsappInvalid": "Add the country code too, like +919876543210"
   },
   "install": {
@@ -351,7 +351,7 @@
   },
   "forParents": {
     "title": "For parents",
-    "intro": "Dagar is a personal guide for your child's learning journey. It teaches one idea at a time, gives practice at the right level, and answers their questions when they get stuck. Starting with NCERT maths, Classes 6 to 8. You get a simple weekly picture of how they are doing, and one thing you can do to help.",
+    "intro": "Dagar is a personal guide for your child's learning journey. It teaches one idea at a time, gives practice at the right level, and answers their questions when they get stuck. Starting with NCERT maths, Classes 6 to 8. Your child can share a link with you, and you can open it any time to see how the last week has gone.",
     "back": "Back to sign in",
     "step1": "Your child opens Dagar, goes to Settings, and taps “Invite a parent”. A 6-character code appears on their screen.",
     "step2": "They read it out to you, or send it on WhatsApp. The code works for 3 days.",
@@ -466,7 +466,7 @@
     },
     "parents": {
       "title": "For parents",
-      "body": "If you are a parent or guardian, you can see how your child is getting on through a weekly summary, without creating an account yourself. You can also ask us to delete your child's information at any time.",
+      "body": "If you are a parent or guardian, your child can share a link with you that shows how they are getting on, without you creating an account. You can also ask us to delete your child's information at any time.",
       "link": "How the parent summary works"
     },
     "sectionTitle": "Your information"
