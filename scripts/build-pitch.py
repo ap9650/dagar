@@ -1659,11 +1659,17 @@ def s16_accessibility(prs):
     The amber rule is the one that lands with teachers, and it is guarded by a
     test, so it is the example worth leading with.
     """
+    # Plainer than the first version, which argued from our own PRD ("the vision
+    # names them in its first paragraph"). True, and it asks a room to take our
+    # document on trust. The simpler argument is the real one: access is cheap
+    # to build in and expensive to retrofit, so it is a foundation rather than a
+    # feature, and naming WCAG says which foundation.
     s, y = slide_shell(prs, 16, "16 · Accessibility",
-                       "Built in now, because we said who this is for.",
-                       "The vision names disabled and neurodiverse learners in "
-                       "its first paragraph. Scheduling that for later would "
-                       "make it a sentence we did not mean.")
+                       "Accessibility is the base, not a later feature.",
+                       "No learner with a disability has used Dagar yet. We "
+                       "built to WCAG 2.1 AA anyway, because access designed in "
+                       "from the start costs almost nothing and access "
+                       "retrofitted costs a rebuild.")
 
     # The rule teachers respond to, given the room it deserves.
     box(s, M, y, CONTENT_W, 1.24, fill=WHITE, line=AMBER)
@@ -1680,10 +1686,11 @@ def s16_accessibility(prs):
            "size": 10.5, "color": BODY, "line": 1.28}])
 
     items = [
-        ("Contrast is a function, not a preference",
-         "Body text reaches AAA, everything else AA. These are cheap LCD screens "
-         "read outdoors at low brightness to save battery, where grey on grey "
-         "is not subtle, it is invisible."),
+        ("WCAG 2.1 AA everywhere, AAA for body text",
+         "Every colour in the product is contrast-checked against that standard "
+         "before it is used. These are cheap LCD screens read outdoors at low "
+         "brightness to save battery, where grey on grey is not subtle, it is "
+         "invisible."),
         ("Every target is at least 44 pixels",
          "Including icon buttons. A thumb on a cracked screen is the input "
          "device, and a 30-pixel target is a tax on the learner who can least "
@@ -1717,12 +1724,19 @@ It is the smallest thing on the slide and the one teachers respond to. Say the
 reason out loud: a learner who is already behind must never see the colour of
 danger because she made a sign error. Amber says not yet. Red says you failed.
 
-WHY THIS IS NOT PHASE 3
-Because the vision names disabled and neurodiverse learners in its first
-paragraph, and a roadmap that defers accessibility turns that into decoration.
-It is also far cheaper now than later: contrast, target size and focus order
-are almost free while a component is being written and expensive once fifty
-screens exist.
+WHY THIS IS NOT PHASE 3, IN ONE SENTENCE
+Because you cannot add access to a product later without rebuilding it.
+Contrast, target size, focus order and an accessible name are almost free while
+a component is being written, and a rewrite once fifty screens exist. Every
+team that schedules accessibility for "later" is choosing the expensive version
+of the same work.
+
+AND BE HONEST THAT THE COHORT IS NOT THERE YET
+Nobody in the beta has told us they have a disability. We built to the standard
+anyway, because the alternative is discovering the gap when the first such
+learner arrives, at which point it is a rebuild rather than a fix. The PRD's
+vision names these learners, and a foundation is how you mean a sentence like
+that rather than merely writing it.
 
 WHAT WE HAVE NOT DONE
 No screen reader testing with an actual screen reader user. No audit against
