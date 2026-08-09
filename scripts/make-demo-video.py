@@ -43,9 +43,12 @@ FFMPEG = imageio_ffmpeg.get_ffmpeg_exe()
 OUT_DIR = pathlib.Path("docs/deck")
 WORK = pathlib.Path(".demo-build")
 
-# Words per minute. 165 rather than the 175 default: the viewer is reading a
-# screen they have never seen while listening.
-RATE = 165
+# Words per minute. 190 rather than the 175 default: at 165 the delivery
+# dragged against the pace of the screen, leaving each line finished long
+# before the next thing happened. Override without editing this file:
+#
+#     RATE=205 python3 scripts/make-demo-video.py <recording.mp4>
+RATE = int(os.environ.get("RATE", 190))
 
 # (cue seconds, English, Hindi)
 LINES = [
