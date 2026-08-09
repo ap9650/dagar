@@ -240,6 +240,13 @@ def s2_vision(prs):
                 "a locked door.",
            "size": 10.5, "color": BODY, "line": 1.28}])
 
+    # The vision is a claim until someone opens it, so the address goes here as
+    # well as on the cover. A reader who wants to check it should never have to
+    # go looking for where.
+    text(s, M, yb + 1.2, CONTENT_W - 0.6, 0.28,
+         [{"t": f"It is live and free to open right now:  {APP_URL}",
+           "size": 11, "bold": True, "color": PRIMARY}])
+
     text(s, M, SH - 0.44, 6.0, 0.24,
          [{"t": "Dagar  ·  A personal guide for every learner's journey",
            "size": 8.5, "color": MUTED}])
@@ -2448,9 +2455,9 @@ def s23_adoption(prs):
     """
     s, y = slide_shell(prs, 23, "23 · Adoption",
                        "Nothing to download, and nothing to pay.",
-                       "The hardest step in Indian edtech is the first one. "
-                       "Dagar removes the install, the app store and the "
-                       "parent's account.")
+                       f"The hardest step in Indian edtech is the first one. "
+                       f"Dagar removes the install, the app store and the "
+                       f"parent's account. Open it now: {APP_URL}")
 
     tiles = [("1", "link to open it"), ("0", "apps to install"),
              ("46", "joined from one class"), ("0", "spent on marketing")]
@@ -2660,11 +2667,14 @@ def s25_voices(prs):
     would be fabricating a UI. The words are verbatim, and where a quote is cut
     it is marked.
     """
+    # The title used to be "fifteen people had nothing to gain by answering",
+    # which argues about the respondents' motives instead of showing what they
+    # said. The feedback is the point, so let it be the headline.
     s, y = slide_shell(prs, 25, "25 · In their words",
-                       "Fifteen people had nothing to gain by answering.",
-                       "Every response below came from inside the product, from "
-                       "an account that had used it. Spelling and grammar are "
-                       "left exactly as they were typed.")
+                       "They told us it works, and what to fix.",
+                       f"Every response came from inside the product, from an "
+                       f"account that had used it, spelling left as typed. "
+                       f"Try it yourself: {APP_URL}")
 
     # ── Left: the numbers, as bars ──────────────────────────────────────────
     lw = 3.5
@@ -2732,8 +2742,8 @@ def s25_voices(prs):
          [{"t": "Fifteen of fifteen said it helped them understand something.",
            "size": 12, "bold": True, "color": INK, "space_after": 3},
           {"t": "Fourteen would come back. The one who said no still said it "
-                "helped. And the loudest request, from people who owed us "
-                "nothing, was simply more of it.",
+                "helped. And the loudest request was simply more of it: more "
+                "chapters, more practice.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     notes(s, """
@@ -2764,6 +2774,97 @@ Two are on the slide on purpose. "Data handling chapter" as an answer to what
 confused them is a content problem in a specific chapter and it is on the list
 to rewrite. "Please add a few more chapters" is the roadmap's top item arriving
 unprompted from a user.
+""")
+
+
+def s26_close(prs):
+    """
+    The close. Bookends the cover rather than summarising the deck.
+
+    The cover says "every learner deserves a guide, most never get one. So we
+    built one." This slide is allowed to say only one new thing: that it is
+    real, it is open right now, and thirty children have already used it.
+
+    No feature list. By this point a room has seen twenty five slides and the
+    last thing they should be given is a number they can check themselves, and
+    a sentence about who it is for.
+    """
+    s = prs.slides.add_slide(prs.slide_layouts[6])
+
+    box(s, M, 0.52, 0.34, 0.055, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.46, 0.42, 9.0, 0.3,
+         [{"t": "26 · THE ASK", "size": 10.5, "bold": True, "color": PRIMARY,
+           "space_after": 0}])
+
+    # 34, not 40: at 40 the second line ran to three lines and sat on the URL.
+    text(s, M, 1.2, CONTENT_W - 0.6, 1.6,
+         [{"t": "It is not a prototype.", "size": 34, "bold": True,
+           "color": INK, "line": 1.08, "space_after": 8},
+          {"t": "Open it on your phone and give it to a child.",
+           "size": 34, "bold": True, "color": PRIMARY, "line": 1.08}])
+
+    text(s, M, 2.78, CONTENT_W - 0.6, 0.5,
+         [{"t": f"{APP_URL}   ·   no download, no account for parents, no cost",
+           "size": 15, "color": MUTED}])
+
+    y = 3.72
+    proof = [("30", "learners, real ones"),
+             ("133", "lessons finished"),
+             ("761", "questions answered"),
+             ("15 of 15", "said it helped")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(proof):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    yb = y + 1.16
+    box(s, M, yb, CONTENT_W, 1.5, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.24, 0.06, 1.02, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.2, CONTENT_W - 0.7, 1.14,
+         [{"t": "Every learner deserves a guide. Most never get one.",
+           "size": 15, "bold": True, "color": INK, "space_after": 6},
+          {"t": "The learners we built this for are the ones a stretched "
+                "classroom cannot reach: behind in mathematics, studying in "
+                "Hindi, on a phone they share, in families who cannot buy the "
+                "tuition that would fix it. Four days does not solve that. It "
+                "was enough to show that a tutor which knows their exact "
+                "lesson, answers in their language and costs them nothing is "
+                "buildable, and that when you put it in front of thirty of "
+                "them, they use it.",
+           "size": 11.5, "color": BODY, "line": 1.3}])
+
+    text(s, M, SH - 0.44, 6.0, 0.24,
+         [{"t": "Dagar  ·  A personal guide for every learner's journey",
+           "size": 8.5, "color": MUTED}])
+    text(s, SW - M - 2.0, SH - 0.44, 2.0, 0.24,
+         [{"t": "26", "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
+
+    notes(s, """
+DO NOT SUMMARISE THE DECK
+They have just watched twenty five slides. Repeating them is the fastest way to
+lose the room in the last minute. This slide says one new thing: it is real,
+it is open now, and children have already used it.
+
+THE ONE INSTRUCTION
+"Open it on your phone and give it to a child." That is the ask. Not funding,
+not a pilot, not a follow-up meeting. Everything about this product is judged
+by whether a twelve-year-old can use it unaided, and the fastest way to find
+out is to hand a phone over. No download and no account stands between a judge
+and that test, which is the whole point of slide 23.
+
+THE FOUR NUMBERS ARE THE ONLY CLAIM
+30 learners, 133 lessons finished, 761 questions answered, 15 of 15 saying it
+helped them understand something. Every one is checkable in the product and
+none of them is a projection.
+
+IF THERE IS TIME FOR ONE LAST SENTENCE
+The mission is that every learner reaches their full potential whatever they
+can afford, wherever they start, however they learn. Four days does not deliver
+that. It delivers evidence that the shape of the answer is right.
+
+IF ASKED WHAT WE NEED
+Access, not money. Two or three classrooms in Hindi-medium government schools,
+and a teacher willing to tell us what breaks. Everything on the roadmap moves
+faster with real learners in front of it than with anything else.
 """)
 
 
@@ -2878,7 +2979,8 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
           s19_tradeoffs, s20_users, s21_roadmap,
-          s22_horizon, s23_adoption, s24_money, s25_voices]
+          s22_horizon, s23_adoption, s24_money, s25_voices,
+          s26_close]
 
 
 def main() -> None:
