@@ -493,7 +493,7 @@ def s5_market(prs):
                 "buy reach: NGOs, CSR programmes and government. The ₹450 floor "
                 "is set by cost, not by ambition, because an active learner "
                 "costs about ₹370 a year to serve, most of it AI inference. "
-                "Full tiers and unit economics on slide 22.",
+                "Full tiers and unit economics on slide 24.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     source(s, SH - 0.72,
@@ -2564,58 +2564,60 @@ def s24_money(prs):
                        "consumer subscription cannot be the engine without "
                        "contradicting who the product is for.")
 
-    tiles = [("₹0", "for the learning loop"), ("₹370", "modelled cost floor"),
-             ("₹450", "institutional, per year"), ("1 to 2%", "consumer conversion")]
-    tw, tgx = 2.259, 0.2
-    for i, (big, label) in enumerate(tiles):
-        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+    # The tiers were one dense card. Four columns instead: the price is the
+    # thing a room reads first on this slide and it should carry from the back.
+    tiers = [
+        ("Dagar Free", "₹0", PRIMARY,
+         "Everything needed to learn. Full curriculum, lessons, practice, "
+         "quizzes, progress, streaks and the parent summary. AI tutor capped "
+         "at 10 questions a day."),
+        ("Dagar Plus", "₹99 / month", PRIMARY,
+         "Depth, for the families who want it and can pay. Unlimited AI tutor, "
+         "deeper adaptive practice, revision plans and fuller parent insight."),
+        ("Dagar Mentor", "+ ₹299 / month", MUTED,
+         "Sessions with a real person. Not sold until mentors are verified and "
+         "on call, because selling ahead of supply loses a parent's trust once "
+         "and for good."),
+        ("Institutions", "₹450 to ₹600", AMBER,
+         "Per learner, per year. The scalable engine: NGO, CSR and government "
+         "licences with cohort dashboards, reporting and bulk onboarding."),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    th = 2.26
+    for i, (name, price, accent, body) in enumerate(tiers):
+        cx = M + i * (cw + 0.22)
+        box(s, cx, y, cw, th, fill=WHITE, line=BORDER)
+        box(s, cx, y, cw, 0.88, fill=SURFACE, shape=MSO_SHAPE.RECTANGLE)
+        box(s, cx, y, 0.05, th, fill=accent, shape=MSO_SHAPE.RECTANGLE)
+        text(s, cx + 0.2, y + 0.13, cw - 0.36, 0.24,
+             [{"t": name.upper(), "size": 9, "bold": True, "color": accent}])
+        text(s, cx + 0.2, y + 0.38, cw - 0.36, 0.44,
+             [{"t": price, "size": 17, "bold": True, "color": INK}])
+        text(s, cx + 0.2, y + 1.02, cw - 0.36, 1.14,
+             [{"t": body, "size": 9.5, "color": BODY, "line": 1.28}])
 
-    y2 = y + 1.08
-    cards = [
-        ("Four tiers, one rule",
-         "Free keeps the whole loop: curriculum, practice, quizzes, progress, "
-         "parent summary, tutor capped at 10 questions a day. Plus is ₹99 a "
-         "month for unlimited tutoring and depth. Mentor adds ₹299 and only "
-         "sells once mentors exist. Institutions pay ₹450 to ₹600 a learner.",
-         PRIMARY),
-        ("The floor is a cost, not a target",
-         "A fully active learner costs about ₹370 a year, roughly ₹330 of AI "
-         "and ₹40 of infrastructure. No institutional licence is priced below "
-         "it. This is modelled from published token pricing, not measured "
-         "per learner, and we say which it is.", AMBER),
-        ("Institutions, because the maths works",
+    y2 = y + th + 0.22
+    below = [
+        ("The floor: ₹370 a learner a year",
+         "Roughly ₹330 of AI and ₹40 of infrastructure, modelled from published "
+         "token pricing rather than measured per learner. Nothing is priced "
+         "below it, so ₹450 leaves ₹80. Thin, and the risk is an institution "
+         "treating ₹450 as a ceiling.", AMBER),
+        ("Institutions, not families",
          "Conversion among families who cannot afford tuition is realistically "
          "1 to 2%. CSR budgets are mandated in India and already buy per "
          "beneficiary, so one NGO cohort beats a thousand families we would "
          "rather not charge.", PRIMARY),
-        ("Advertising is not on the table",
+        ("No advertising, ever",
          "The DPDP Act 2023 forbids behavioural tracking and targeted "
-         "advertising directed at anyone under 18, and parental consent does "
-         "not unlock it. Our entire user base is 11 to 14. That closes the "
-         "default way free products make money, and we would not want it open.",
-         AMBER),
+         "advertising aimed at under-18s, and parental consent does not unlock "
+         "it. Every user we have is 11 to 14. The usual way a free product pays "
+         "for itself is closed, and we would not want it open.", AMBER),
     ]
-    cw = (CONTENT_W - 3 * 0.22) / 4
-    for i, (title, body, accent) in enumerate(cards):
-        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+    nw = (CONTENT_W - 2 * 0.22) / 3
+    for i, (title, body, accent) in enumerate(below):
+        card(s, M + i * (nw + 0.22), y2, nw, 1.62, title, body,
              accent=accent, title_size=11.5, body_size=9.5)
-
-    yb = y2 + 1.92
-    box(s, M, yb, CONTENT_W, 1.14, fill=SURFACE, line=BORDER)
-    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
-    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
-         [{"t": "The margin is thin, and that is the honest headline.",
-           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
-          {"t": "₹450 against a ₹370 floor is ₹80 a learner, and the risk is "
-                "that institutions treat ₹450 as a ceiling rather than a "
-                "starting point, at which point the margin goes negative. Two "
-                "things move it: inference prices have fallen every year of "
-                "this technology's existence, and most learners are not fully "
-                "active, so a cohort costs less than its worst case. Neither "
-                "is a plan. The plan is to price above cost, publish the "
-                "number we are pricing against, and not sell reach we cannot "
-                "afford to serve.",
-           "size": 10.5, "color": BODY, "line": 1.26}])
 
     notes(s, """
 THE ONE SENTENCE
