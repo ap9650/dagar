@@ -999,8 +999,191 @@ violation, then one end-to-end walk of the demo path.
 """)
 
 
+# Phone screenshots are 1080x2280. Height drives the layout on a 7.5in slide,
+# so widths are derived rather than guessed.
+PHONE_RATIO = 1080 / 2280
+
+
+def phone(slide, cx, top, height, path):
+    """A screenshot, centred on cx, sized from its height."""
+    width = height * PHONE_RATIO
+    slide.shapes.add_picture(path, Inches(cx - width / 2), Inches(top),
+                             Inches(width), Inches(height))
+    return width
+
+
+def s10_walkthrough(prs):
+    """
+    The loop from slide 8, as it actually looks.
+
+    Real screenshots, captured from the running app by `npm run deck:shots`
+    rather than drawn in a design tool. A mockup on this slide would be the one
+    dishonest thing in the deck, and the product is finished enough not to need
+    one.
+    """
+    # All four from ONE chapter. Mixing chapters made it four unrelated screens
+    # rather than one learner's evening, and the slide's whole claim is that the
+    # ORDER is the product.
+    s, y = slide_shell(prs, 10, "10 · The product",
+                       "One chapter, four screens, and the loop is the product.",
+                       "Fractions, end to end. Captured from the running app, "
+                       "not mocked up.")
+
+    shots = [
+        ("docs/deck/screens/chapter-path.png", "One thing to do next",
+         "A path through Fractions, not a menu. She always knows where she is."),
+        ("docs/deck/screens/lesson-step.png", "A lesson she answers",
+         "A real diagram, and Show me appears before the answer does."),
+        ("docs/deck/screens/practice-tiles.png", "Practice, straight after",
+         "The same concept while it is warm. Tiles, not a keyboard, on a shared phone."),
+        ("docs/deck/screens/progress-en.png", "Proof yesterday was real",
+         "Streak, the week, and what moved. The only screen that changes daily."),
+    ]
+
+    col = (CONTENT_W - 3 * 0.24) / 4
+    ph = 3.62
+    for i, (path, title, note) in enumerate(shots):
+        x = M + i * (col + 0.24)
+        phone(s, x + col / 2, y, ph, path)
+        text(s, x, y + ph + 0.12, col, 0.8,
+             [{"t": title, "size": 12, "bold": True, "color": INK,
+               "space_after": 3, "line": 1.08},
+              {"t": note, "size": 9.5, "color": BODY, "line": 1.2}])
+
+    notes(s, """
+SAY THAT THESE ARE REAL
+Captured from the running app by a script, not drawn. If anyone wants to check,
+the URL is on the cover and they can sign up in about twenty seconds.
+
+THE SECOND SCREEN IS THE ARGUMENT
+"Show me" appears before the answer does. The learner is asked to commit to a
+guess and then shown, which is the difference between a lesson and a video. It
+is also why D18 rewrote every lesson from prose into steps: a teacher told us
+her students cannot hold two paragraphs.
+
+WHY TILES AND NOT A KEYBOARD
+A shared Android in the evening, often with a cracked screen. Tapping a tile
+works; typing a fraction into a text field on that phone does not.
+
+THE FOURTH SCREEN EXISTS BECAUSE OF A COMPLAINT
+An early tester said the progress screen was static. It was: everything on it
+reported a state, so it read identically the morning after a hard evening's
+work. "What moved" is the fix, and it is the only element that can prove
+yesterday happened.
+""")
+
+
+def s11_bilingual(prs):
+    """
+    The same lesson, the same step, two languages.
+
+    This is the one claim in the deck that a screenshot can settle outright.
+    "Bilingual" usually means the buttons were translated over English content;
+    two identical steps side by side, with the diagram labelled in Hindi and the
+    numerals still Arabic, shows what it actually means here.
+
+    It also carries the deck's most uncomfortable number, on purpose. One
+    learner in twenty-three has chosen Hindi, and a teacher told us English is
+    hard in her area. Showing the feature and moving on would invite exactly the
+    question we cannot answer; asking it ourselves is the stronger position.
+    """
+    s, y = slide_shell(prs, 11, "11 · Language",
+                       "The same lesson. Her language.",
+                       "Not an interface toggle over English content. The same "
+                       "step of the same lesson, in both.")
+
+    # Budget, top to bottom: phones 2.98, cards 1.0, band 0.68, and the footer
+    # sits at 7.06. The first pass used 3.5 for the phones and pushed the band
+    # off the bottom of the slide entirely.
+    ph = 2.98
+    half = (CONTENT_W - 0.3) / 2
+
+    for i, (path, label, note, extra) in enumerate([
+        ("docs/deck/screens/lesson-step.png", "English",
+         "Cut it into 4 equal pieces. Tap one piece to take it.",
+         "Listen reads the step aloud. Reading is a barrier for some learners "
+         "even in their own language, so every step can be heard."),
+        ("docs/deck/screens/lesson-step-hi.png", "हिंदी",
+         "The same step. The lesson, the diagram's labels and the buttons all "
+         "in Hindi, while the numerals stay Arabic, the way NCERT Hindi "
+         "editions print them.",
+         "The audio is Hindi too, and its language is chosen separately from "
+         "the interface, because the two needs are not the same one."),
+    ]):
+        x = M + i * (half + 0.3)
+        pw = phone(s, x + 0.95, y, ph, path)
+        text(s, x + 0.95 + pw / 2 + 0.26, y + 0.1, half - pw - 0.5, 2.7,
+             [{"t": label, "size": 15, "bold": True, "color": PRIMARY_STRONG,
+               "space_after": 6},
+              {"t": note, "size": 10.5, "color": BODY, "space_after": 9,
+               "line": 1.28},
+              {"t": extra, "size": 9.5, "color": MUTED, "line": 1.26}])
+
+    y2 = y + ph + 0.2
+    facts = [
+        ("Must Have, not Phase 2",
+         "A learner who cannot read the lesson gains nothing from adaptive "
+         "personalisation, so language came ahead of it."),
+        ("The tutor reads the Hindi lesson",
+         "Grounded in the Hindi body text, not translating an English one on "
+         "the fly. Translation nobody reviews is how wrong maths reaches a child."),
+        ("All of it, not the shell",
+         "25 lessons and 181 questions carry both languages, including every "
+         "diagram label."),
+    ]
+    cw = (CONTENT_W - 2 * 0.22) / 3
+    for i, (title, body) in enumerate(facts):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.0, title, body,
+             title_size=11.5, body_size=9.5)
+
+    # ── A TEACHER, NOT A CAVEAT ──────────────────────────────────────────────
+    # This band used to ask why only one learner in twenty-three had chosen
+    # Hindi. That framing was wrong: the beta link went to a single
+    # English-medium classroom, so the cohort could not test the question. A
+    # sampling artefact presented as an open question invites doubt about a
+    # feature the sample was never able to judge.
+    #
+    # The same space now carries a teacher who volunteered, unprompted, exactly
+    # why the investment was right. External validation beats a self-doubt note
+    # in the same six centimetres.
+    yb = y2 + 1.12
+    box(s, M, yb, CONTENT_W, 0.68, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, M + 0.34, yb + 0.1, CONTENT_W - 0.68, 0.52,
+         [{"t": "\u201cEnglish is quite difficult to understand for Class 6 "
+                "kids, especially in a Hindi-dominant area.\u201d",
+           "size": 11.5, "bold": True, "color": PRIMARY_STRONG, "space_after": 3},
+          {"t": "A teacher, in our beta, asked what confused her students. "
+                "Nobody prompted her about language.",
+           "size": 10, "color": BODY, "line": 1.22}])
+
+    notes(s, """
+THE SENTENCE THAT MATTERS
+Most products that say bilingual mean the buttons. Here the lesson text, the
+diagram labels, the practice questions and the tutor's grounding are all in the
+learner's language. The screenshots are the same step of the same lesson, so
+there is nothing to take on trust.
+
+WHY THE NUMERALS ARE STILL ARABIC
+NCERT Hindi mathematics editions print 1/2, not १/२, and KaTeX renders Arabic
+numerals regardless. Localising the digits would make the app disagree with the
+textbook in the learner's hand.
+
+IF ASKED HOW MANY LEARNERS ACTUALLY CHOSE HINDI
+One of twenty-three, and say why before it sounds like a problem: the beta went
+to a single English-medium classroom through one WhatsApp message. That cohort
+contains almost no Hindi-medium learners, so it cannot test the question. The
+teacher quoted on this slide teaches the segment that can, and she raised
+language herself.
+
+Distributing to a Hindi-medium school is in the roadmap for exactly this
+reason. Until then the honest statement is that the capability is built and
+tested, and the demand for it is not yet measured.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
-          s7_persona, s8_solution, s9_mvp]
+          s7_persona, s8_solution, s9_mvp, s10_walkthrough,
+          s11_bilingual]
 
 
 def main() -> None:

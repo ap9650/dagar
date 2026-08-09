@@ -83,6 +83,36 @@ async function conceptId(slug: string): Promise<string> {
   return data.id as string;
 }
 
+const chapterIds = new Map<string, string>();
+
+/**
+ * A chapter by slug, so a screenshot can name the chapter it wants.
+ *
+ * The lesson capture used to take "the first chapter on /learn", which is
+ * whichever one sits at order_index 1. That made the walkthrough slide a tour
+ * of two different chapters: a Data Handling lesson beside a Fractions practice
+ * question, which reads as four unrelated screens rather than one journey.
+ */
+async function chapterId(slug: string): Promise<string> {
+  if (chapterIds.has(slug)) return chapterIds.get(slug)!;
+  const { data } = await db.from("chapters").select("id").eq("slug", slug).maybeSingle();
+  if (!data) throw new Error(`no chapter "${slug}" — has npm run seed been run?`);
+  chapterIds.set(slug, data.id as string);
+  return data.id as string;
+}
+
+async function firstLessonId(chapter: string): Promise<string> {
+  const { data } = await db
+    .from("lessons")
+    .select("id")
+    .eq("chapter_id", chapter)
+    .order("order_index")
+    .limit(1)
+    .maybeSingle();
+  if (!data) throw new Error("chapter has no lessons");
+  return data.id as string;
+}
+
 const shots: string[] = [];
 
 async function shot(page: Page, name: string) {
@@ -239,11 +269,42 @@ async function walkConcept(
 }
 
 /** A lesson step that carries a diagram, which is the whole point of D18. */
-async function lessonShot(page: Page, name: string) {
-  await page.goto(`${BASE}/learn`);
-  // By href, not by label: this runs in Hindi too, where the recommendation
-  // reads "यहाँ से शुरू करें".
-  await page.locator('a[href^="/learn/"]').first().click();
+/**
+ * The word on the button, in whichever language the run is in.
+ *
+ * `/^continue$/i` matched nothing in Hindi, where the button reads "आगे बढ़ो",
+ * so the Hindi walk never advanced past step 1. Data Handling puts its diagram
+ * on step 2, so the Hindi lesson screenshot silently became a wall of text
+ * while the run reported a tick.
+ *
+ * Read from the message files rather than hardcoded, so a copy change moves
+ * this with it. This is the same trap the href-based link selection already
+ * documents; the button was simply missed.
+ */
+function continueLabels(): RegExp {
+  const words = ["en", "hi"].map((locale) => {
+    const messages = JSON.parse(
+      readFileSync(`messages/${locale}.json`, "utf8"),
+    ) as { common?: { continue?: string } };
+    return (messages.common?.continue ?? "Continue").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  });
+  return new RegExp(`^(${words.join("|")})$`, "i");
+}
+
+const CONTINUE = continueLabels();
+
+async function chapterPathShot(page: Page, slug: string, name: string) {
+  await page.goto(`${BASE}/learn/${await chapterId(slug)}`);
+  await page.waitForTimeout(400);
+  await shot(page, name);
+}
+
+async function lessonShot(page: Page, slug: string, name: string) {
+  // The named chapter's FIRST lesson. Lesson 1 opens on a visual in every
+  // chapter (step 1, or step 2 for Data Handling) because that is how D18 says
+  // a lesson should start, so the diagram is at most one Continue away.
+  const chapter = await chapterId(slug);
+  await page.goto(`${BASE}/learn/${chapter}/${await firstLessonId(chapter)}`);
   await page.waitForURL(/\/learn\/[^/]+\/[^/]+/, { timeout: 20_000 });
 
   // Prefer a step carrying a diagram, since that is the whole point of D18 and
@@ -263,7 +324,7 @@ async function lessonShot(page: Page, name: string) {
       await shot(page, name);
       fallback = true;
     }
-    const cont = page.getByRole("button", { name: /^continue$/i }).first();
+    const cont = page.getByRole("button", { name: CONTINUE }).first();
     if (!(await cont.count())) break;
     await cont.click();
     await page.waitForTimeout(300);
@@ -325,9 +386,9 @@ async function run() {
     await page.goto(`${BASE}/learn`);
     await page.waitForTimeout(600);
     await dismissInstallCard(page);
-    await shot(page, "dashboard-en");
+    await chapterPathShot(page, "class6-fractions", "chapter-path");
 
-    await lessonShot(page, "lesson-step");
+    await lessonShot(page, "class6-fractions", "lesson-step");
     // Several concepts per shot: a practice set is five questions chosen
     // adaptively, so whether the one pictorial question in a concept lands in
     // it depends on the learner's history. Trying the concepts that carry that
@@ -363,7 +424,7 @@ async function run() {
     await page.goto(`${BASE}/learn`);
     await page.waitForTimeout(600);
     await shot(page, "dashboard-hi");
-    await lessonShot(page, "lesson-step-hi");
+    await lessonShot(page, "class6-fractions", "lesson-step-hi");
   } finally {
     // Leave the demo learner exactly as found — Class 6, English. A capture run
     // that quietly reassigns the demo account to Class 8 is a landmine for
