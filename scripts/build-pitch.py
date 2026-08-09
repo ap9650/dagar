@@ -2779,7 +2779,79 @@ unprompted from a user.
 """)
 
 
-def s26_close(prs):
+def s26_demo(prs):
+    """
+    The demo slide: what the attached recording shows, in the order it shows it.
+
+    A deck that travels without its presenter needs this. The video is a
+    separate file and someone may open the deck without it, so the slide has to
+    stand alone: the same journey, the same order, and the address to go and do
+    it themselves if they would rather.
+
+    Narration is generated in English and Hindi rather than recorded, which is
+    the point being demonstrated as well as a convenience. The product speaks
+    both, so the demo of it does too.
+    """
+    s, y = slide_shell(prs, 26, "26 · Demo",
+                       "Ninety seconds, one learner's evening.",
+                       f"The recording follows the loop end to end, narrated in "
+                       f"English and in Hindi. Or open it yourself: {APP_URL}")
+
+    steps = [
+        ("docs/deck/screens/dashboard-en.png", "1 · She opens it",
+         "One thing to do next, a streak, and a goal she can finish tonight."),
+        ("docs/deck/screens/lesson-step.png", "2 · A lesson she answers",
+         "One idea per screen, a real diagram, and a hint before any answer."),
+        ("docs/deck/screens/practice-tiles.png", "3 · Practice while it is warm",
+         "Graded by code, not by AI. Wrong is amber, and it comes with a way "
+         "forward."),
+        ("docs/deck/screens/progress-en.png", "4 · Progress she can see",
+         "Mastery per concept, the week, and the same numbers her parent sees."),
+    ]
+    ph = 2.62
+    col = CONTENT_W / 4
+    for i, (path, title, body) in enumerate(steps):
+        cx = M + i * col + col / 2
+        phone(s, cx, y, ph, path)
+        text(s, M + i * col + 0.1, y + ph + 0.12, col - 0.2, 0.24,
+             [{"t": title, "size": 11, "bold": True, "color": INK}])
+        text(s, M + i * col + 0.1, y + ph + 0.36, col - 0.2, 0.6,
+             [{"t": body, "size": 9, "color": BODY, "line": 1.24}])
+
+    yb = y + ph + 1.06
+    box(s, M, yb, CONTENT_W, 0.78, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.15, 0.06, 0.48, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.12, CONTENT_W - 0.7, 0.56,
+         [{"t": "The narration is synthetic, in both languages, on purpose.",
+           "size": 11.5, "bold": True, "color": INK, "space_after": 2},
+          {"t": "A learner who reads in Hindi should be able to watch the demo "
+                "in Hindi. It is the same argument the product makes.",
+           "size": 9.5, "color": BODY}])
+
+    notes(s, """
+IF THE VIDEO CANNOT BE PLAYED
+This slide is the demo. Four screens in the order a learner meets them, and the
+address to open it live. Nothing in the recording is on the video only.
+
+WHAT TO POINT AT WHILE IT PLAYS
+The order, not the features. Lesson, then practice on the same concept while it
+is still warm, then progress that the parent sees without an account. Every
+competitor has lessons and quizzes. The sequence is the product.
+
+WHY THE VOICE IS SYNTHETIC
+Two reasons and the second is the real one. It keeps the demo re-recordable
+when the product changes, and it means the Hindi version exists at all rather
+than waiting for someone to record it. The product's whole argument is that a
+learner should not have to work in their second language to get help, and a
+demo that is English-only would contradict that on the way out of the room.
+
+IF ASKED WHETHER IT IS A REAL RECORDING
+Yes. It is the running app on a phone, not a prototype and not a mock-up. Only
+the voice is generated.
+""")
+
+
+def s27_close(prs):
     """
     The close. Bookends the cover rather than summarising the deck.
 
@@ -2795,7 +2867,7 @@ def s26_close(prs):
 
     box(s, M, 0.52, 0.34, 0.055, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.46, 0.42, 9.0, 0.3,
-         [{"t": "26 · THE ASK", "size": 10.5, "bold": True, "color": PRIMARY,
+         [{"t": "27 · THE ASK", "size": 10.5, "bold": True, "color": PRIMARY,
            "space_after": 0}])
 
     # 34, not 40: at 40 the second line ran to three lines and sat on the URL.
@@ -2838,7 +2910,7 @@ def s26_close(prs):
          [{"t": "Dagar  ·  A personal guide for every learner's journey",
            "size": 8.5, "color": MUTED}])
     text(s, SW - M - 2.0, SH - 0.44, 2.0, 0.24,
-         [{"t": "26", "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
+         [{"t": "27", "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
 
     notes(s, """
 DO NOT SUMMARISE THE DECK
@@ -2982,7 +3054,7 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s16_accessibility, s17_testing, s18_evals,
           s19_tradeoffs, s20_users, s21_roadmap,
           s22_horizon, s23_adoption, s24_money, s25_voices,
-          s26_close]
+          s26_demo, s27_close]
 
 
 def main() -> None:
