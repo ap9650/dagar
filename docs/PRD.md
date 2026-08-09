@@ -634,7 +634,7 @@ already hit the problem.
 | D1 | Curriculum scope & content source | New NCERT (Ganita Prakash) only; one chapter per grade in the MVP |
 | D2 | Accounts & parent linking | Learner owns the account; a parent reads via link or code, and never writes |
 | D3 | Question bank & grading | Grading is deterministic code, never AI; `1/2`, `2/4` and `0.5` all mark correct |
-| D4 | Parent summaries | WhatsApp where opted in, in-app otherwise |
+| D4 | Parent summaries | A link the parent opens any time. Automatic WhatsApp delivery deferred, 9 Aug |
 | D5 | Mastery | Per concept, over the last five attempts; ≥0.8 with ≥3 attempts is mastered |
 | D6 | Struggle detection | What triggers a mentor escalation |
 | D7 | Streaks | One lesson **or** five practice questions a day; one forgiven day per rolling week; IST |

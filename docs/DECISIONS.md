@@ -532,6 +532,50 @@ WhatsApp sandbox. Replace with **Parent Summary Engagement** = (summary delivere
 AND parent opened `/parent` within 72h) / summaries delivered. The summary
 message carries a deep link with a tracking token.
 
+### Amended 9 Aug 2026: automatic WhatsApp delivery is deferred, and the UI for it is removed
+
+**Nothing has ever been delivered.** `parent_summary_sent` is zero. The weekly
+cron has run and sent nothing, because every `summary_links` row holds a null
+`recipient_e164` and delivery correctly refuses without a number and an opt-in.
+
+Two gaps, and only one of them is ours:
+
+1. **Nothing collected the number.** Migration 0015 added the columns, the cron
+   reads them, the adapter is written and Twilio has been configured in
+   production since 31 July. The step where a learner enters a parent's number
+   was never built, so the path was unreachable by construction.
+2. **The Twilio sandbox cannot carry a weekly cadence.** A business may only
+   message freely within 72 hours of the user's last inbound message, and
+   messaging outside that needs a pre-approved template the sandbox will not
+   register. Meta business verification lifts both and is weeks of paperwork.
+
+A capture field was built on 9 Aug and **removed the same day**. Collecting an
+adult's phone number, typed by a child, for a feature with no working delivery
+path fails the rule this product is otherwise held to: collect the minimum,
+because what you never collect cannot leak. Honest labelling does not rescue
+it; the number still could not be used.
+
+**What is left is enough.** The learner shares `/s/[token]`, which needs no
+account, no download and no phone number, and shows the last seven days
+recomputed on every open. A parent is not blocked from seeing progress. They
+are only not pushed it.
+
+So automatic WhatsApp delivery is a roadmap item, not a gap in the MVP:
+
+| | |
+|---|---|
+| Needs | Meta business verification, a template, a number capture, an opt-in webhook |
+| Blocked on | Paperwork that takes weeks and a registered business entity |
+| Worth it when | There is evidence parents want a push rather than a link they already have |
+
+The columns, the adapter, the cron and the four-channel registry all stay. The
+work that remains is a form, a webhook and an approval, not an architecture.
+
+**The copy was corrected with it.** The app said "a simple weekly picture" and
+"Send it to WhatsApp every Sunday". Nothing is sent, and what the link shows is
+a rolling seven days rather than a fixed weekly report, so both were wrong. It
+now says the child shares a link the parent can open any time.
+
 ## D5 — Mastery (PRD uses the word, never defines it)
 
 - **Concept mastery score** = correct ÷ attempted over the learner's **last 5

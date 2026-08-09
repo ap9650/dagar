@@ -278,17 +278,7 @@
     "inviteParentCodeToggle": "Or give them a code for their own account",
     "hapticsTitle": "Feedback",
     "hapticsLabel": "Buzz when you get something right",
-    "gradeHelp": "Your progress is kept. You can switch back any time.",
-    "whatsappTitle": "WhatsApp updates, later",
-    "whatsappWhy": "We cannot send on WhatsApp yet. Leave a number and we will use it when we can. For now, share the link above and they can open it whenever they like.",
-    "whatsappLabel": "Their WhatsApp number",
-    "whatsappPlaceholder": "+919876543210",
-    "whatsappHelp": "Include the country code.",
-    "whatsappSave": "Save it for later",
-    "whatsappSaved": "Number saved",
-    "whatsappRemove": "Remove number",
-    "whatsappPending": "Saved for later. Nothing is being sent yet, and the link above is what they should use for now.",
-    "whatsappInvalid": "Add the country code too, like +919876543210"
+    "gradeHelp": "Your progress is kept. You can switch back any time."
   },
   "install": {
     "title": "Add Dagar to your home screen",

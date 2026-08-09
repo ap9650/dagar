@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Eye, MessageCircle, Share2, XCircle } from "lucide-react";
+import { Check, Eye, Share2, XCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
 import { linkCodeHoursLeft } from "@/lib/parent/linkCode";
@@ -35,12 +35,7 @@ export function InviteParentCard() {
   const [code, setCode] = useState<string | null>(null);
   const [codeCreatedAt, setCodeCreatedAt] = useState<string | null>(null);
 
-  const [phone, setPhone] = useState("");
-  const [savedPhone, setSavedPhone] = useState<string | null>(null);
-  const [optedIn, setOptedIn] = useState(false);
-  const [phoneError, setPhoneError] = useState(false);
-
-  const [busy, setBusy] = useState<null | "link" | "code" | "revoke" | "phone">(null);
+  const [busy, setBusy] = useState<null | "link" | "code" | "revoke">(null);
   const [failed, setFailed] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showCode, setShowCode] = useState(false);
@@ -63,17 +58,11 @@ export function InviteParentCard() {
       }
       const body = (await response.json()) as {
         token: string;
-        recipient_e164?: string | null;
-        recipient_opted_in?: boolean;
         view_count: number;
         last_viewed_at: string | null;
       };
       setToken(body.token);
       setViews({ count: body.view_count, last: body.last_viewed_at });
-      // A number saved in an earlier session, so the field shows what is
-      // already there instead of looking as though nothing was ever entered.
-      setSavedPhone(body.recipient_e164 ?? null);
-      setOptedIn(Boolean(body.recipient_opted_in));
 
       const message = t("settings.shareLinkMessage", { url: summaryUrl(body.token) });
 
@@ -114,48 +103,6 @@ export function InviteParentCard() {
       }
       setToken(null);
       setViews({ count: 0, last: null });
-      // Revoking the link revokes the delivery relationship with it.
-      setSavedPhone(null);
-      setPhone("");
-      setOptedIn(false);
-    } catch {
-      setFailed(true);
-    } finally {
-      setBusy(null);
-    }
-  }
-
-  /**
-   * Where the weekly summary should go.
-   *
-   * ── THE NUMBER IS AN INTENTION, NOT A PERMISSION ───────────────────────────
-   * A learner typing an adult's number cannot consent for that adult, so
-   * saving it starts nothing. The server stores the number and leaves the
-   * opt-in null; delivery checks the opt-in, and only the adult's own handset
-   * can set it. The copy says so plainly rather than implying a message is now
-   * on its way.
-   */
-  async function savePhone(next: string | null) {
-    setBusy("phone");
-    setFailed(false);
-    setPhoneError(false);
-    try {
-      const response = await fetch("/api/summary-links", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ recipient_e164: next }),
-      });
-      if (response.status === 400) {
-        setPhoneError(true);
-        return;
-      }
-      if (!response.ok) {
-        setFailed(true);
-        return;
-      }
-      setSavedPhone(next);
-      setOptedIn(false);
-      if (next === null) setPhone("");
     } catch {
       setFailed(true);
     } finally {
@@ -232,77 +179,6 @@ export function InviteParentCard() {
               ? t("settings.shareLinkViews", { count: views.count })
               : t("settings.shareLinkUnopened")}
           </p>
-
-          {/* ── WhatsApp, beneath the link and not instead of it ───────────
-              The link is what works today with no setup at all. The number is
-              an upgrade on top of it, so it sits underneath, and the copy never
-              suggests the link stops mattering once a number is saved. */}
-          <div className="flex flex-col gap-sm border-t border-primary-soft pt-md">
-            <p className="flex items-center gap-sm text-body-sm font-medium text-ink">
-              <MessageCircle
-                size={20}
-                strokeWidth={1.75}
-                aria-hidden
-                className="text-primary shrink-0"
-              />
-              {t("settings.whatsappTitle")}
-            </p>
-
-            {savedPhone ? (
-              <>
-                <p className="text-body-sm text-ink font-mono">{savedPhone}</p>
-                <p className="text-body-sm text-body">
-                  {optedIn ? t("settings.whatsappSaved") : t("settings.whatsappPending")}
-                </p>
-                <Button
-                  variant="ghost"
-                  loading={busy === "phone"}
-                  onClick={() => savePhone(null)}
-                >
-                  {t("settings.whatsappRemove")}
-                </Button>
-              </>
-            ) : (
-              <>
-                <p className="text-body-sm text-body">{t("settings.whatsappWhy")}</p>
-                <label htmlFor="summary-phone" className="text-label font-medium text-ink">
-                  {t("settings.whatsappLabel")}
-                </label>
-                <input
-                  id="summary-phone"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  value={phone}
-                  onChange={(event) => {
-                    setPhone(event.target.value);
-                    setPhoneError(false);
-                  }}
-                  placeholder={t("settings.whatsappPlaceholder")}
-                  aria-describedby="summary-phone-help"
-                  aria-invalid={phoneError || undefined}
-                  className="w-full min-h-12 rounded-(--radius-control) border border-border-strong
-                             bg-background px-md text-body text-ink
-                             focus:border-primary focus:outline-none focus:ring-[3px]
-                             focus:ring-primary-soft"
-                />
-                <p
-                  id="summary-phone-help"
-                  className={`text-caption ${phoneError ? "text-notquite" : "text-muted"}`}
-                >
-                  {phoneError ? t("settings.whatsappInvalid") : t("settings.whatsappHelp")}
-                </p>
-                <Button
-                  variant="secondary"
-                  loading={busy === "phone"}
-                  disabled={phone.trim().length === 0}
-                  onClick={() => savePhone(phone.trim())}
-                >
-                  {t("settings.whatsappSave")}
-                </Button>
-              </>
-            )}
-          </div>
 
           <Button variant="ghost" loading={busy === "revoke"} onClick={revokeLink}>
             <XCircle size={20} strokeWidth={1.75} aria-hidden />
