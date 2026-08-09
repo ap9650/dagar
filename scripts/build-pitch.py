@@ -2823,10 +2823,12 @@ def s26_demo(prs):
     box(s, M, yb, CONTENT_W, 0.78, fill=SURFACE, line=BORDER)
     box(s, M, yb + 0.15, 0.06, 0.48, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.34, yb + 0.12, CONTENT_W - 0.7, 0.56,
-         [{"t": "The narration is synthetic, in both languages, on purpose.",
+         [{"t": "Short of time? Play it at 1.5x. The narration is synthetic, in "
+                "both languages, on purpose.",
            "size": 11.5, "bold": True, "color": INK, "space_after": 2},
-          {"t": "A learner who reads in Hindi should be able to watch the demo "
-                "in Hindi. It is the same argument the product makes.",
+          {"t": "It stays clear up to about 1.5x, and a learner who reads in "
+                "Hindi should be able to watch the demo in Hindi. That is the "
+                "same argument the product makes.",
            "size": 9.5, "color": BODY}])
 
     notes(s, """

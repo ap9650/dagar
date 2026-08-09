@@ -65,3 +65,4 @@ evals/runs/
 # Demo video build artefacts. Regenerate with scripts/make-demo-video.py
 .demo-build/
 docs/deck/Dagar-Demo-*.mp4
+.pdf-build/

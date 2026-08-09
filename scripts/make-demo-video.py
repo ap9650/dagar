@@ -188,7 +188,12 @@ def remap(t):
 
 
 def run(args):
-    subprocess.run(args, check=True, capture_output=True)
+    done = subprocess.run(args, capture_output=True, text=True)
+    if done.returncode != 0:
+        # ffmpeg puts the useful line at the end of stderr, and swallowing it
+        # turns a one-line filter typo into a bare exit code.
+        tail = "\n".join(done.stderr.strip().splitlines()[-6:])
+        raise SystemExit(f"\ncommand failed:\n{tail}\n")
 
 
 def clip(lang, index, words):
@@ -199,6 +204,53 @@ def clip(lang, index, words):
     run([FFMPEG, "-v", "error", "-y", "-i", str(aiff), "-ar", "44100",
          "-ac", "1", str(wav)])
     return wav
+
+
+# ── REGIONS BLURRED OUT ─────────────────────────────────────────────────────
+# (start, end, x, y, w, h) on the CUT timeline, not the source one, because
+# that is where they were measured. If CUTS changes, re-measure these.
+#
+# The share link is revoked, so it resolves to nothing, but it is still a real
+# address pointing at a real learner's summary and there is no reason for it to
+# be legible in a file that travels.
+#
+# Two boxes rather than one because the WhatsApp cut lands in the middle of
+# this stretch, and the link sits at a different height on either side of the
+# join. The first box is wide and short-lived to cover the jump.
+BLURS = [
+    (129.0, 130.4, 26, 430, 524, 460),
+    (129.6, 133.5, 26, 370, 524, 115),
+]
+
+
+def blur_video(source):
+    """The share link, made unreadable wherever it is on screen."""
+    if not BLURS:
+        return source
+    # Each stage needs an explicit split: one branch is cropped and blurred,
+    # the other is the background it gets laid back onto. A filter output can
+    # only be consumed once, so reusing the same label for both fails.
+    parts, current = [], "0:v"
+    for i, (a, b, x, y, w, h) in enumerate(BLURS):
+        parts.append(f"[{current}]split=2[bg{i}][src{i}]")
+        parts.append(f"[src{i}]crop={w}:{h}:{x}:{y},boxblur=18:2[blur{i}]")
+        parts.append(
+            f"[bg{i}][blur{i}]overlay={x}:{y}:"
+            f"enable='between(t,{a},{b})'[base{i + 1}]"
+        )
+        current = f"base{i + 1}"
+
+    # The concat above leaves irregular timestamps behind, and overlay hands
+    # the encoder frames it will not mux. Forcing a constant frame rate and
+    # pixel format here settles both.
+    parts.append(f"[{current}]format=yuv420p[outv]")
+
+    out = WORK / "blurred.mp4"
+    run([FFMPEG, "-v", "error", "-y", "-i", str(source),
+         "-filter_complex", ";".join(parts),
+         "-map", "[outv]", "-an", "-fps_mode", "cfr", "-r", "30",
+         "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", str(out)])
+    return out
 
 
 def cut_video(source):
@@ -273,7 +325,10 @@ def main():
 
     trimmed = cut_video(source)
     for start, end in CUTS:
-        print(f"cut {start:.1f}s to {end:.1f}s  ({end - start:.1f}s)")
+        print(f"cut  {start:.1f}s to {end:.1f}s  ({end - start:.1f}s)")
+    trimmed = blur_video(trimmed)
+    for a, b, x, y, w, h in BLURS:
+        print(f"blur {a:.1f}s to {b:.1f}s  at {w}x{h}+{x}+{y}")
 
     for lang in ("en", "hi"):
         out = build(trimmed, lang)
