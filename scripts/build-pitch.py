@@ -2112,6 +2112,151 @@ defaulting to Hindi by region rather than asking the child to choose.
 """)
 
 
+def s21_roadmap(prs):
+    """
+    What we build next, scored rather than asserted.
+
+    ICE (Impact, Confidence, Ease) rather than RICE, because Reach is close to
+    meaningless at 46 accounts: every item reaches essentially the same people.
+    Ease carries real weight when the team is one person, so an item that is
+    valuable and slow can honestly rank below one that is valuable and quick.
+
+    The ordering is the argument. The loudest user request, more chapters, is
+    third. The top item is one nobody asked for out loud, because the evidence
+    for it is behavioural (D28). A roadmap that just ranks the feature requests
+    is a suggestion box with a Gantt chart.
+    """
+    s, y = slide_shell(prs, 21, "21 · Roadmap",
+                       "Depth before breadth.",
+                       "Impact, Confidence and Ease, each scored out of 10 and "
+                       "averaged. Reach is left out: at this size every item "
+                       "reaches the same learners.")
+
+    rows = [
+        ("Make the answer box and the tutor impossible to miss",
+         "9 of 25 tutor messages are about the screen. 11 of 30 have ever "
+         "opened the tutor", 9, 9, 8, "NOW", PRIMARY),
+        ("Default to Hindi where the school is Hindi-medium",
+         "A mathematics teacher: the English is too hard for Class 6 in a "
+         "Hindi-dominant area", 8, 7, 9, "NOW", PRIMARY),
+        ("More chapters across Classes 6 to 8",
+         "The loudest request, 7 of 15. Third because authoring and verifying "
+         "answer keys is slow, not because it matters less", 8, 9, 5, "NOW",
+         PRIMARY),
+        ("Practice aimed at the mistake a learner keeps making",
+         "Asked for by a learner in their own words. The mastery data to target "
+         "it already exists", 8, 6, 5, "NEXT", MUTED),
+        ("Lessons that keep working without internet",
+         "Now that we can see which lessons learners return to, we know what is "
+         "worth storing", 7, 6, 4, "NEXT", MUTED),
+        ("Weekly progress report to parents on WhatsApp",
+         "Gate: Meta business verification and an opt-in from the parent's own "
+         "phone. Built and waiting", 6, 6, 3, "GATED", AMBER),
+        ("Real people behind the offer of human help",
+         "Gate: demand. 34 offers and 1 acceptance is not yet a reason to pay "
+         "anyone to be on call", 7, 3, 2, "GATED", AMBER),
+        # Deliberately unscored. Putting a 6.1 next to "more subjects" would be
+        # inventing precision about work nobody has specified, and this slide's
+        # whole argument is that breadth is earned rather than scheduled.
+        ("More subjects, more grades, more languages, a view for teachers",
+         "Not scored, and that is the point. Breadth is what solving one "
+         "learner properly earns you, so these get numbers when the rows above "
+         "are done", None, None, None, "LATER", MUTED),
+    ]
+
+    # Column geometry, fixed once so the header and every row cannot drift.
+    # Everything must land inside M + CONTENT_W (12.71"): an earlier draft put
+    # the NOW / NEXT / GATED tag at 13.87" and it fell off the slide entirely.
+    x_score = M + 8.0
+    col_w = 0.7
+    x_ice = M + 10.2
+    x_tag = x_ice + 0.95
+
+    text(s, M, y - 0.04, 6.0, 0.24,
+         [{"t": "WHAT WE DO NEXT", "size": 9, "bold": True, "color": MUTED}])
+    for i, head in enumerate(("I", "C", "E")):
+        text(s, x_score + i * col_w, y - 0.04, col_w, 0.24,
+             [{"t": head, "size": 9, "bold": True, "color": MUTED}],
+             align=PP_ALIGN.CENTER)
+    text(s, x_ice, y - 0.04, 0.9, 0.24,
+         [{"t": "ICE", "size": 9, "bold": True, "color": MUTED}],
+         align=PP_ALIGN.CENTER)
+
+    # 0.52, not 0.62: seven rows plus a closing band at 0.62 pushed the band
+    # through the footer and off the bottom of the slide.
+    rh = 0.47
+    for i, (title, why, imp, conf, ease, tag, accent) in enumerate(rows):
+        ry = y + 0.2 + i * rh
+        if i % 2 == 0:
+            box(s, M - 0.1, ry - 0.06, CONTENT_W + 0.2, rh - 0.02,
+                fill=SURFACE, shape=MSO_SHAPE.RECTANGLE)
+        box(s, M - 0.1, ry - 0.06, 0.05, rh - 0.02, fill=accent,
+            shape=MSO_SHAPE.RECTANGLE)
+        text(s, M + 0.06, ry - 0.05, 7.2, 0.22,
+             [{"t": title, "size": 10.5, "bold": True, "color": INK}])
+        text(s, M + 0.06, ry + 0.14, 7.2, 0.22,
+             [{"t": why, "size": 8.5, "color": MUTED}])
+        scored = imp is not None
+        for j, v in enumerate((imp, conf, ease)):
+            text(s, x_score + j * col_w, ry + 0.0, col_w, 0.28,
+                 [{"t": str(v) if scored else "·", "size": 11.5, "color": BODY}],
+                 align=PP_ALIGN.CENTER)
+        ice = f"{round((imp + conf + ease) / 3, 1)}" if scored else "·"
+        text(s, x_ice, ry - 0.04, 0.9, 0.32,
+             [{"t": ice, "size": 14.5, "bold": True, "color": accent}],
+             align=PP_ALIGN.CENTER)
+        text(s, x_tag, ry + 0.02, 0.9, 0.24,
+             [{"t": tag, "size": 8.5, "bold": True, "color": accent}])
+
+    yb = y + 0.2 + len(rows) * rh + 0.18
+    box(s, M, yb, CONTENT_W, 0.62, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.13, 0.06, 0.36, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.15, CONTENT_W - 0.7, 0.36,
+         [{"t": "The top item is the one nobody asked for. More chapters is the "
+                "loudest request, and it is third.",
+           "size": 11.5, "bold": True, "color": INK}])
+
+    notes(s, """
+WHY ICE AND NOT RICE
+Reach is the R, and at 46 accounts every item on this list reaches the same
+people, so scoring it adds a column of identical numbers and a false sense of
+rigour. Ease earns its place instead: the team is one person, and an item that
+is valuable and slow genuinely should sit below one that is valuable and quick.
+
+DEFEND THE ORDER, NOT THE SCORES
+The scores are judgement, not measurement, and anyone can argue a point either
+way. What matters is that the ordering changes if you argue successfully, which
+is the whole purpose of writing them down. Do not defend an 8 against a 7.
+
+WHY MORE CHAPTERS IS THIRD
+It has the highest Confidence on the board at 9, because 7 of 15 asked for it
+in a forced choice. It is third on Ease: authoring a chapter is not the slow
+part, verifying every answer key is, and a wrong key teaches a child they are
+wrong when they are right. We would rather have three chapters we trust than
+six we hope about.
+
+WHY DISCOVERABILITY IS FIRST
+Three independent signals, and only one of them is an opinion. 9 of 25 messages
+sent to the tutor are about the screen rather than the mathematics. A learner
+asked us to build an AI tutor in an app that has one on every lesson. And 11 of
+30 active learners have ever opened it, against a 50% target. More content
+behind a door a third of learners cannot find multiplies the problem.
+
+WHY THE LAST ROW HAS NO SCORES
+More subjects, more grades, more languages and a teacher view are real and they
+are in the PRD. They are deliberately unscored here, because putting a 6.1
+beside "more subjects" would be inventing precision about work nobody has
+specified yet, and this slide argues that breadth is earned rather than
+scheduled. They get numbers when the rows above them are done.
+
+IF ASKED WHAT UNLOCKS THE TWO GATED ITEMS
+WhatsApp needs Meta business verification and an opt-in from the parent's own
+handset, and the summary itself is already built and running as a link. The
+mentor service needs demand: 34 offers and 1 acceptance. If that ratio moves,
+the item moves with it. Neither is a technical unknown.
+""")
+
+
 def s19_tradeoffs(prs):
     """
     The gaps, as decisions.
@@ -2222,7 +2367,7 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
-          s19_tradeoffs, s20_users]
+          s19_tradeoffs, s20_users, s21_roadmap]
 
 
 def main() -> None:
