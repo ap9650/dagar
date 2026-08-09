@@ -1424,9 +1424,119 @@ repo in about thirty seconds.
 """)
 
 
+def s14_security(prs):
+    """
+    The slide most edtech decks do not have.
+
+    Every number on it was checked against the repo before it was written: 22
+    tables and 22 RLS statements, 19 tests that attempt the violation rather
+    than re-read the policy, and a profile schema with four columns. After a day
+    spent finding claims that had drifted, none of this goes on a slide unread.
+
+    The gap list at the bottom is the point. A security slide with no admissions
+    reads as a security slide nobody thought hard about.
+    """
+    s, y = slide_shell(prs, 14, "14 · Security",
+                       "These are children. That changed where the boundary lives.",
+                       "Learners are 11 to 14. A leak here is not an incident, it "
+                       "is harm to a minor, so the boundary was built before the "
+                       "features were.")
+
+    rules = [
+        ("22 of 22 tables carry row-level security",
+         "Added in the same migration that creates the table, never afterwards. "
+         "A Supabase table without it is readable by anyone holding the key that "
+         "ships in the browser, so 'we will add policies later' has a window in "
+         "it.", PRIMARY),
+        ("Answer keys cannot be reached from a browser",
+         "Learners read a view with no answer column. Grading happens on the "
+         "server. Our end-to-end test cannot assert a correct answer, and that "
+         "is the proof rather than the limitation.", PRIMARY),
+        ("We collect four things about a child",
+         "A display name, a class, a language and a timezone. No date of birth, "
+         "no address, no photograph, no location, no phone number. What is never "
+         "collected cannot leak, and it is the only protection that never "
+         "fails.", CORRECT),
+        ("No tracking, no profiling, no targeted advertising",
+         "India's DPDP Act forbids all three for anyone under 18, and forbids "
+         "them even with a parent's consent. We designed around that rather "
+         "than into it, so there is no third-party tracker anywhere in the "
+         "product.", CORRECT),
+    ]
+    cw = (CONTENT_W - 0.24) / 2
+    for i, (title, body, accent) in enumerate(rules):
+        col, row = i % 2, i // 2
+        card(s, M + col * (cw + 0.24), y + row * 1.44, cw, 1.32, title, body,
+             accent=accent, title_size=12.5, body_size=10)
+
+    y2 = y + 2.88 + 0.16
+    # 1.16, not 0.98: the softened admission runs to four lines and spilled
+    # below its border. Both boxes grow together so the row stays even.
+    box(s, M, y2, cw, 1.16, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, M + 0.3, y2 + 0.14, cw - 0.55, 0.92,
+         [{"t": "19 tests attempt the violation, rather than re-read the policy.",
+           "size": 11.5, "bold": True, "color": PRIMARY_STRONG, "space_after": 4},
+          {"t": "One learner tries to read another's attempts, profile, quiz and "
+                "answers, and tries to write a row belonging to them. A policy "
+                "nobody has attacked is a policy nobody has tested.",
+           "size": 10, "color": BODY, "line": 1.24}])
+
+    # The admissions. A security slide without them reads as one nobody thought
+    # hard about, and every reviewer is looking for exactly this list.
+    box(s, M + cw + 0.24, y2, cw, 1.16, fill=CELEBRATE_BG, line=AMBER)
+    text(s, M + cw + 0.54, y2 + 0.14, cw - 0.55, 0.92,
+         # Softer than the first version, which ended "four days buys a
+         # boundary you can defend, not a certificate". True, and it landed as
+         # a shrug. These are things we ran out of time for, not things we
+         # decided against, and the sentence should end on what we did manage.
+         [{"t": "What we have not done yet.",
+           "size": 11.5, "bold": True, "color": AMBER, "space_after": 4},
+          {"t": "No penetration test, no SOC 2, no formal data protection impact "
+                "assessment, and no legal review of our DPDP position. Each of "
+                "those needs time we did not have in four days. What we could "
+                "build and prove in that time, we did: the boundary itself, and "
+                "the tests that attack it.",
+           "size": 10, "color": BODY, "line": 1.24}])
+
+    notes(s, """
+OPEN WITH THE REASON, NOT THE MECHANISM
+Every learner is 11 to 14. Under India's DPDP Act every one of them is a child,
+and a leak is not an incident report, it is harm to a minor. That is why the
+security work happened before the feature work rather than after it, which is
+the opposite of how a four-day build usually goes.
+
+THE ANSWER-KEY POINT IS THE ONE TO DWELL ON
+A learner reading the questions table gets nothing back, though the row exists.
+They read a view that has no answer column at all. Grading runs on the server
+with a key the browser has never seen. The consequence is that our own
+end-to-end test cannot assert a correct answer, which sounds like a weakness
+and is the strongest evidence on the slide: if the test could know the answer,
+so could a determined thirteen-year-old with the developer console open.
+
+IF ASKED ABOUT DPDP
+Section 9(3) prohibits tracking, behavioural monitoring and targeted
+advertising directed at children, and it holds even with verifiable parental
+consent. Penalties reach 200 crore. That is also why advertising is not in the
+revenue model: it is not a preference, it is the law, and designing around it
+early was cheaper than retrofitting.
+
+IF ASKED WHAT WOULD WORRY YOU MOST
+The service-role key. It bypasses every policy on this slide, so it lives only
+in server code, is never imported into a client component, and there is a
+grep in the pre-deploy check for exactly that. If it ever reached the browser
+bundle none of the rest would matter.
+
+RETENTION
+Tutor transcripts are kept 90 days and then aggregated. Analytics carry no free
+text a learner typed, because a child's question can contain anything and an
+events table is not the place for it.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
-          s11_bilingual, s12_intelligence, s13_architecture]
+          s11_bilingual, s12_intelligence, s13_architecture,
+          s14_security]
 
 
 def main() -> None:
