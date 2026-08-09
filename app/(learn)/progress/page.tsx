@@ -76,6 +76,7 @@ export default async function ProgressPage() {
     { data: weekPractice },
     { data: diaryEvents },
     { data: allLessons },
+    { data: namedChapters },
     { data: passedQuizzes },
   ] = await Promise.all([
     supabase
@@ -149,6 +150,14 @@ export default async function ProgressPage() {
     // chapters-finished count. Whole-curriculum rather than per-entry: one read
     // of a small seeded table beats a query per diary line.
     supabase.from("lessons").select("id, chapter_id, title, i18n"),
+
+    // Names for the diary, across EVERY grade rather than the learner's current
+    // one. The chapter list above is filtered by grade because that is the
+    // learner's own curriculum; the diary is a record of what they did, and a
+    // learner who changed class still did it. Filtering both left a level-up
+    // rendering as " -> Keep practising", with nothing where the concept name
+    // should be. Five rows and twenty concepts, so the extra read is free.
+    supabase.from("chapters").select("id, title, i18n, concepts(id, name, i18n)"),
 
     // Which chapter quizzes have been passed at the Mastered band — the last
     // condition on a chapter reaching Mastered (Khan Academy's rule: the top
@@ -224,7 +233,7 @@ export default async function ProgressPage() {
   // curriculum we already fetched plus the lesson list.
   const diaryNames = {
     concepts: new Map(
-      (chapters ?? []).flatMap((chapter) =>
+      (namedChapters ?? []).flatMap((chapter) =>
         chapter.concepts.map((c) => [c.id, tContent(c, "name", locale)] as const),
       ),
     ),
@@ -232,7 +241,9 @@ export default async function ProgressPage() {
       (allLessons ?? []).map((lesson) => [lesson.id, tContent(lesson, "title", locale)] as const),
     ),
     chapters: new Map(
-      (chapters ?? []).map((chapter) => [chapter.id, tContent(chapter, "title", locale)] as const),
+      (namedChapters ?? []).map(
+        (chapter) => [chapter.id, tContent(chapter, "title", locale)] as const,
+      ),
     ),
   };
 

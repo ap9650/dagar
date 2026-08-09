@@ -891,8 +891,116 @@ exactly the child who needed another try.
 """)
 
 
+def s9_mvp(prs):
+    """
+    Scope, arriving on slide nine rather than slide one.
+
+    Everything before this argued that the problem is real and that a specific
+    child is failed by it. Only now does the deck say how much got built, and in
+    that position it reads as evidence the thesis was executable rather than as
+    the definition of the company.
+
+    Every number here is counted from the live database, not from the plan.
+    """
+    s, y = slide_shell(prs, 9, "09 · What we shipped",
+                       "One subject. Three grades. Four days.",
+                       "The scope is narrow on purpose. Proving the learning loop "
+                       "matters more than covering more syllabus.")
+
+    tiles = [("5", "chapters"), ("25", "lessons"), ("181", "practice questions"),
+             ("100%", "in Hindi and English"), ("1,733", "automated tests")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.95, big, label)
+
+    y2 = y + 1.15
+    text(s, M, y2, CONTENT_W, 0.28,
+         [{"t": "EVERY CAPABILITY THE MVP PROMISED, LIVE", "size": 10, "bold": True,
+           "color": PRIMARY}])
+
+    shipped = [
+        ("Chapter learning", "bilingual, as steps"),
+        ("AI Tutor", "grounded in the lesson"),
+        ("Guided practice", "hints before answers"),
+        ("Chapter quiz", "sets the mastery band"),
+        ("Progress and streaks", "IST day boundary"),
+        ("Daily goal", "closable in one session"),
+        ("Parent summary", "WhatsApp, no account"),
+        ("Ask for a person", "offered and recorded"),
+    ]
+    fw, fh, fgx, fgy = 2.873, 0.56, 0.2, 0.14
+    for i, (title, note) in enumerate(shipped):
+        col, row = i % 4, i // 4
+        x = M + col * (fw + fgx)
+        fy = y2 + 0.34 + row * (fh + fgy)
+        last = i == len(shipped) - 1
+        box(s, x, fy, fw, fh, fill=CELEBRATE_BG if last else PRIMARY_WASH,
+            line=AMBER if last else PRIMARY_SOFT)
+        text(s, x + 0.18, fy, fw - 0.3, fh,
+             [{"t": ("~  " if last else "\u2713  ") + title, "size": 11,
+               "bold": True, "color": AMBER if last else PRIMARY_STRONG,
+               "space_after": 1},
+              {"t": note, "size": 9, "color": MUTED}],
+             anchor=MSO_ANCHOR.MIDDLE)
+
+    yb = y2 + 0.34 + 2 * fh + fgy + 0.22
+    half = (CONTENT_W - 0.22) / 2
+
+    box(s, M, yb, half, 1.06, fill=WHITE, line=BORDER)
+    box(s, M, yb + 0.18, 0.05, 0.7, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.3, yb + 0.15, half - 0.55, 0.8,
+         [{"t": "Why only mathematics", "size": 12, "bold": True, "color": INK,
+           "space_after": 4},
+          {"t": "A second subject would have doubled the content and proved "
+                "nothing new. The architecture takes more subjects, grades and "
+                "languages without a redesign, and the thing worth proving first "
+                "was whether the loop teaches anybody anything.",
+           "size": 10, "color": BODY, "line": 1.24}])
+
+    # The gap, said before anybody finds it. It is also the top request from
+    # real users, which turns an admission into a roadmap.
+    box(s, M + half + 0.22, yb, half, 1.06, fill=CELEBRATE_BG, line=AMBER)
+    box(s, M + half + 0.22, yb + 0.18, 0.05, 0.7, fill=AMBER,
+        shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + half + 0.52, yb + 0.15, half - 0.55, 0.8,
+         [{"t": "And the limit we already know about", "size": 12, "bold": True,
+           "color": AMBER, "space_after": 4},
+          {"t": "One chapter per grade. A fast learner finishes it in an evening "
+                "and hits a wall, and six of our thirteen respondents asked for "
+                "more chapters before anything else. It is the first thing in "
+                "the roadmap for that reason.",
+           "size": 10, "color": BODY, "line": 1.24}])
+
+    source(s, SH - 0.7,
+           "Counted from the live database on 9 August 2026, not from the plan")
+
+    notes(s, """
+THE FRAMING, IF THE SCOPE IS CHALLENGED
+Narrow was the decision, not the constraint. Four days buys either one subject
+built properly or three subjects half built, and only one of those answers the
+question the MVP exists to answer.
+
+WHAT "100% IN HINDI AND ENGLISH" MEANS
+All 25 lessons and all 181 questions carry both languages, not an interface
+toggle over English content. A learner switching to Hindi gets Hindi lesson
+text, Hindi questions and a tutor grounded in the Hindi lesson body rather than
+translating an English one on the fly.
+
+WHY THE LAST TILE IS AMBER AND NOT A TICK
+"Ask for a person" is offered and recorded, and there is no mentor service
+behind it. It is a demand test for H7. Every other tile is a capability a
+learner can use today.
+
+IF ASKED ABOUT THE TESTS
+1,733 automated, and the priority was harm rather than coverage: grading first,
+because a grading bug marks a correct learner wrong and nothing looks broken.
+Then the learning engine, then RLS boundaries tested by attempting the
+violation, then one end-to-end walk of the demo path.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
-          s7_persona, s8_solution]
+          s7_persona, s8_solution, s9_mvp]
 
 
 def main() -> None:

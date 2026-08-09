@@ -82,7 +82,7 @@
   "streak": {
     "days": "{days, plural, =0 {No streak yet} one {# day streak} other {# day streak}}",
     "broken": "Start again today",
-    "grace": "Rest day used — your streak is safe",
+    "grace": "Rest day used. Your streak is safe.",
     "extended": "{days, plural, one {# day in a row} other {# days in a row}}",
     "nextRung": "Ready for {days}?",
     "toNextRung": "{days, plural, one {# more day} other {# more days}} to your {target}-day badge.",

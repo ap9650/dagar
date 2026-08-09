@@ -55,7 +55,9 @@ export async function WhatMoved({
       ) : (
         <ol className="flex flex-col gap-md list-none m-0 p-0">
           {entries.map((entry, index) => {
-            const { icon, text } = describe(entry, names, t);
+            const line = describe(entry, names, t);
+            if (!line) return null;
+            const { icon, text } = line;
 
             return (
               <li key={`${entry.kind}-${index}`} className="flex items-start gap-md">
@@ -83,28 +85,47 @@ export async function WhatMoved({
  */
 type Translator = Awaited<ReturnType<typeof getTranslations<never>>>;
 
+/**
+ * One line, or null if we cannot name what it is about.
+ *
+ * Every branch used to fall back to an empty string, which produced a line
+ * reading " -> Keep practising" with a hole where the concept belonged. That
+ * looks like a rendering fault to a learner, and it reached a screenshot bound
+ * for the pitch deck before anybody noticed.
+ *
+ * The root cause is fixed upstream (names are now loaded for every grade, not
+ * just the learner's current one). This is the net under it: a diary entry
+ * whose subject cannot be named is dropped, because saying nothing is honest
+ * and saying half a sentence is not.
+ */
 function describe(entry: DiaryEntry, names: DiaryNames, t: Translator) {
   switch (entry.kind) {
-    case "level":
+    case "level": {
+      const concept = names.concepts.get(entry.conceptId);
+      if (!concept) return null;
       return {
         // Green, because a level going up is the strongest good news here — and
         // the only direction that reaches this list at all.
         icon: <ArrowUpRight size={16} strokeWidth={2.25} aria-hidden className="text-correct" />,
-        text: t("moved.level", {
-          concept: names.concepts.get(entry.conceptId) ?? "",
-          level: t(`level.${entry.to}` as never),
-        }),
+        text: t("moved.level", { concept, level: t(`level.${entry.to}` as never) }),
       };
-    case "lesson":
+    }
+    case "lesson": {
+      const lesson = names.lessons.get(entry.lessonId);
+      if (!lesson) return null;
       return {
         icon: <BookCheck size={16} strokeWidth={1.75} aria-hidden className="text-primary" />,
-        text: t("moved.lesson", { lesson: names.lessons.get(entry.lessonId) ?? "" }),
+        text: t("moved.lesson", { lesson }),
       };
-    case "chapter":
+    }
+    case "chapter": {
+      const chapter = names.chapters.get(entry.chapterId);
+      if (!chapter) return null;
       return {
         icon: <Sparkles size={16} strokeWidth={1.75} aria-hidden className="text-primary" />,
-        text: t("moved.chapter", { chapter: names.chapters.get(entry.chapterId) ?? "" }),
+        text: t("moved.chapter", { chapter }),
       };
+    }
     case "badge":
       return {
         icon: <Award size={16} strokeWidth={1.75} aria-hidden className="text-celebrate" />,

@@ -246,18 +246,33 @@ async function lessonShot(page: Page, name: string) {
   await page.locator('a[href^="/learn/"]').first().click();
   await page.waitForURL(/\/learn\/[^/]+\/[^/]+/, { timeout: 20_000 });
 
-  for (let step = 0; step < 12; step++) {
+  // Prefer a step carrying a diagram, since that is the whole point of D18 and
+  // the thing a deck needs to show. But a lesson whose visuals sit late, or a
+  // recommendation that lands on a text-heavy one, used to produce NO
+  // screenshot at all and the deck silently kept a six-day-old file. A worse
+  // screenshot beats a stale one, so remember the first step and fall back.
+  let fallback = false;
+  for (let step = 0; step < 20; step++) {
     if (await page.getByRole("img", { name: /.+/ }).count()) {
       await page.waitForTimeout(250);
       await shot(page, name);
       return;
+    }
+    if (!fallback) {
+      await page.waitForTimeout(250);
+      await shot(page, name);
+      fallback = true;
     }
     const cont = page.getByRole("button", { name: /^continue$/i }).first();
     if (!(await cont.count())) break;
     await cont.click();
     await page.waitForTimeout(300);
   }
-  console.log(`  ✗ ${name} — no diagram step found`);
+  console.log(
+    fallback
+      ? `  ~ ${name} — no diagram step, kept the opening step`
+      : `  ✗ ${name} — captured nothing`,
+  );
 }
 
 async function setGrade(page: Page, grade: number) {
