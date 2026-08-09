@@ -2128,21 +2128,35 @@ def s21_roadmap(prs):
     """
     s, y = slide_shell(prs, 21, "21 · Roadmap",
                        "Depth before breadth.",
-                       "Impact, Confidence and Ease, each scored out of 10 and "
-                       "averaged. Reach is left out: at this size every item "
-                       "reaches the same learners.")
+                       "Impact, Confidence and Ease, each out of 10 and "
+                       "averaged, on what learners tell us and on what we watch "
+                       "them do. Reach is left out: every item reaches the same "
+                       "learners.")
 
+    # Rows are in ICE order. Four scores changed when they were re-examined
+    # honestly, and the reasons are recorded here because a score nobody can
+    # audit is a decoration:
+    #   chapters   C 9 -> 10  a forced choice is the strongest stated signal we
+    #                         have, and 7 of 15 picked this over everything else
+    #   chapters   E 6 -> 7   the content model, the step player and the
+    #                         answer-key verification script already exist, so
+    #                         widening the syllabus is authoring, not building
+    #   discovery  I 9 -> 8   learners demonstrably get past the friction: 133
+    #                         lessons completed and 761 questions answered
+    #                         through it. Serious, but not a wall
+    #   discovery  C 9 -> 8   we are certain the problem is real. We are less
+    #                         certain a redesign fully closes it
     rows = [
+        ("More chapters across Classes 6 to 8",
+         "The loudest request, 7 of 15 in a forced choice. One chapter per "
+         "grade is a ceiling: finish it and there is nothing to return to",
+         10, 10, 7, "NOW", PRIMARY),
         ("Make the answer box and the tutor impossible to miss",
          "9 of 25 tutor messages are about the screen. 11 of 30 have ever "
-         "opened the tutor", 9, 9, 8, "NOW", PRIMARY),
+         "opened the tutor, against a 50% target", 9, 8, 8, "NOW", PRIMARY),
         ("Default to Hindi where the school is Hindi-medium",
          "A mathematics teacher: the English is too hard for Class 6 in a "
          "Hindi-dominant area", 8, 7, 9, "NOW", PRIMARY),
-        ("More chapters across Classes 6 to 8",
-         "The loudest request, 7 of 15. Third because authoring and verifying "
-         "answer keys is slow, not because it matters less", 8, 9, 5, "NOW",
-         PRIMARY),
         ("Practice aimed at the mistake a learner keeps making",
          "Asked for by a learner in their own words. The mastery data to target "
          "it already exists", 8, 6, 5, "NEXT", MUTED),
@@ -2172,7 +2186,13 @@ def s21_roadmap(prs):
     x_ice = M + 10.2
     x_tag = x_ice + 0.95
 
-    text(s, M, y - 0.04, 6.0, 0.24,
+    # An explicit rank column. Without it the table looks sorted by ICE and
+    # broken, because row 1 scores 8.3 and row 2 scores 8.7. Numbering the
+    # rank makes the order read as a decision, which is what it is, and puts
+    # the score back where it belongs: an input to that decision.
+    text(s, M + 0.06, y - 0.04, 0.4, 0.24,
+         [{"t": "RANK", "size": 9, "bold": True, "color": MUTED}])
+    text(s, M + 0.62, y - 0.04, 6.0, 0.24,
          [{"t": "WHAT WE DO NEXT", "size": 9, "bold": True, "color": MUTED}])
     for i, head in enumerate(("I", "C", "E")):
         text(s, x_score + i * col_w, y - 0.04, col_w, 0.24,
@@ -2192,9 +2212,11 @@ def s21_roadmap(prs):
                 fill=SURFACE, shape=MSO_SHAPE.RECTANGLE)
         box(s, M - 0.1, ry - 0.06, 0.05, rh - 0.02, fill=accent,
             shape=MSO_SHAPE.RECTANGLE)
-        text(s, M + 0.06, ry - 0.05, 7.2, 0.22,
+        text(s, M + 0.06, ry - 0.02, 0.4, 0.3,
+             [{"t": str(i + 1), "size": 13, "bold": True, "color": accent}])
+        text(s, M + 0.62, ry - 0.05, 7.0, 0.22,
              [{"t": title, "size": 10.5, "bold": True, "color": INK}])
-        text(s, M + 0.06, ry + 0.14, 7.2, 0.22,
+        text(s, M + 0.62, ry + 0.14, 7.0, 0.22,
              [{"t": why, "size": 8.5, "color": MUTED}])
         scored = imp is not None
         for j, v in enumerate((imp, conf, ease)):
@@ -2212,8 +2234,9 @@ def s21_roadmap(prs):
     box(s, M, yb, CONTENT_W, 0.62, fill=SURFACE, line=BORDER)
     box(s, M, yb + 0.13, 0.06, 0.36, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.34, yb + 0.15, CONTENT_W - 0.7, 0.36,
-         [{"t": "The top item is the one nobody asked for. More chapters is the "
-                "loudest request, and it is third.",
+         [{"t": "Both signals sit at the top: what learners asked us for, and "
+                "what we watched them struggle with. Nothing below them starts "
+                "until those three are done.",
            "size": 11.5, "bold": True, "color": INK}])
 
     notes(s, """
@@ -2228,19 +2251,38 @@ The scores are judgement, not measurement, and anyone can argue a point either
 way. What matters is that the ordering changes if you argue successfully, which
 is the whole purpose of writing them down. Do not defend an 8 against a 7.
 
-WHY MORE CHAPTERS IS THIRD
-It has the highest Confidence on the board at 9, because 7 of 15 asked for it
-in a forced choice. It is third on Ease: authoring a chapter is not the slow
-part, verifying every answer key is, and a wrong key teaches a child they are
-wrong when they are right. We would rather have three chapters we trust than
-six we hope about.
+THE TWO SOURCES, AND WHY BOTH ARE ON THE LIST
+What learners say and what learners do are different instruments and the
+roadmap uses both. More chapters is what they asked for: 7 of 15 in a forced
+choice, the highest Confidence on the board. Discoverability is what they did:
+9 of 25 tutor messages are about the screen, a learner asked us to build a
+tutor we already ship, and 11 of 30 have ever opened it against a 50% target.
+Neither instrument sees what the other sees, so we ship both first.
 
-WHY DISCOVERABILITY IS FIRST
-Three independent signals, and only one of them is an opinion. 9 of 25 messages
-sent to the tutor are about the screen rather than the mathematics. A learner
-asked us to build an AI tutor in an app that has one on every lesson. And 11 of
-30 active learners have ever opened it, against a 50% target. More content
-behind a door a third of learners cannot find multiplies the problem.
+WHY MORE CHAPTERS SCORES 9.0
+Impact 10: one chapter per grade is a hard ceiling. A learner who finishes it
+has nothing to come back to, and that is the only failure on this list with no
+workaround. Confidence 10: 7 of 15 chose it in a forced choice, over practice,
+over the tutor, over everything else, which is the strongest stated signal we
+have. Ease 7: the content model, the lesson player and the answer-key
+verification script already exist, so widening the syllabus is authoring work
+rather than building work. It is not a 9, because a human still has to check
+every key and a wrong one tells a child they are wrong when they are right.
+
+WHY DISCOVERABILITY SCORES 8.3 AND NOT HIGHER
+Impact 8 rather than 9, because learners demonstrably get past the friction:
+133 lessons completed and 761 practice questions answered through exactly the
+confusion we are describing. It is serious and it is not a wall. Confidence 8,
+because we are certain the problem is real and less certain a redesign closes
+it completely. This is the more honest reading of our own evidence.
+
+IF ASKED WHETHER THE SCORES WERE FITTED TO THE ANSWER
+A fair question and the answer is that four of them moved when we re-examined
+them, in both directions: chapters went up on Confidence and Ease, and
+discoverability came down on Impact and Confidence. The reasons are the two
+notes above and each is independently arguable. If someone argues one
+successfully the order should change, which is the entire reason for writing
+the numbers down instead of asserting a priority.
 
 WHY THE LAST ROW HAS NO SCORES
 More subjects, more grades, more languages and a teacher view are real and they
