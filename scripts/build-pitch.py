@@ -1751,11 +1751,107 @@ builds for.
 """)
 
 
+def s17_testing(prs):
+    """
+    Tests chosen by harm, and the story of being wrong about it.
+
+    The honest version of this slide is not "we wrote 1,743 tests". It is that
+    the first thousand tested flows, four progress bugs walked straight past
+    them, a learner reported every one from her phone, and the fix was a
+    different KIND of test rather than more of the same. A deck that only shows
+    the number has not learned anything worth telling.
+    """
+    s, y = slide_shell(prs, 17, "17 · How we tested",
+                       "Chosen by harm, not by coverage.",
+                       "1,743 automated tests. The interesting part is which "
+                       "ones exist, and why one whole kind had to be invented "
+                       "after a learner found what the others missed.")
+
+    # Labels kept to one rendered line. "attempt an RLS violation" wrapped and
+    # spilled out of its tile onto the cards below.
+    tiles = [("1,743", "automated tests"), ("46", "on grading alone"),
+             ("19", "attack the boundary"), ("7", "walk the journey")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    y2 = y + 1.08
+    order = [
+        ("1. Grading, before anything else",
+         "A grading bug is silent. Nothing errors, nothing looks broken, and a "
+         "learner who was right is told she was wrong and concludes she is bad "
+         "at maths. 46 tests, including that 1/2, 2/4 and 0.5 all pass and that "
+         "a sign error stays wrong.", AMBER),
+        ("2. The learning engine",
+         "Mastery at exactly 0.8, a streak surviving one forgiven day and "
+         "breaking on two, the Asia/Kolkata boundary where 11:50pm and 12:10am "
+         "are different days. Pure functions, so the edges are cheap to reach.",
+         PRIMARY),
+        ("3. Security, by attacking it",
+         "19 tests where one learner tries to read another's attempts, profile "
+         "and answers, and tries to write a row that is not hers. A policy "
+         "nobody has attacked is a policy nobody has tested.", PRIMARY),
+        ("4. One walk of the whole journey",
+         "Sign up, lesson, practice, quiz, progress. It never asserts a correct "
+         "answer, because answer keys are unreachable from a browser by design "
+         "and a test that knew one would prove the opposite.", PRIMARY),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(order):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    # The part worth telling.
+    yb = y2 + 1.92
+    box(s, M, yb, CONTENT_W, 1.14, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
+         [{"t": "Then a learner found four bugs the suite could not see.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "A lesson that opened blank on revisit. A concept marked keep "
+                "practising with no way to practise it. Two days on the week "
+                "strip above a one day streak. Every one passed a full green "
+                "suite, because every test asserted a FLOW and every bug was a "
+                "relationship between two numbers on one screen. So we wrote "
+                "the missing kind: feed one activity log to every element, then "
+                "assert the elements agree. The strip, the count, the streak "
+                "and the diary now have to tell the same story, and a script "
+                "checks the same thing against the live database.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+DO NOT LEAD WITH THE NUMBER
+1,743 is a fact about effort, not about quality. Lead with the ordering:
+grading first because a grading bug is the highest-harm, lowest-visibility
+failure in the product. Everything else on this slide follows from that
+principle.
+
+THE STORY IS THE SLIDE
+Four progress bugs, all found by a real user on her phone, all passing a green
+suite. The suite was not weak, it was the wrong shape: flow tests answer "can
+she reach the screen", and every one of those bugs was "do the numbers on it
+agree". Saying that out loud is stronger than the count, because it shows a
+team that changed its method rather than added to it.
+
+IF ASKED WHAT IS STILL UNTESTED
+The AI's teaching quality. There is a golden set and an LLM judge, and that
+measures whether an explanation is on-curriculum and hints before answering. It
+does not measure whether a child understood, and nothing automated does.
+
+IF ASKED WHY E2E NEVER ASSERTS A CORRECT ANSWER
+Because it cannot reach one. Answer keys are unreachable from the browser (D3),
+so a test that knew the right answer would either be hardcoding a fixture that
+rots when the seed changes, or proving the key had leaked. Practice is
+exercised through the WRONG path instead, which is the one a learner meets far
+more often anyway.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
-          s16_accessibility]
+          s16_accessibility, s17_testing]
 
 
 def main() -> None:
