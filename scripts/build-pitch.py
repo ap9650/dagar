@@ -2536,6 +2536,117 @@ is curriculum alignment at about 62%.
 """)
 
 
+def s24_money(prs):
+    """
+    How this pays for itself without charging the people it is for.
+
+    The whole slide follows from one constraint: Dagar's learners are defined
+    by not being able to afford tuition. Any model that leans on them paying
+    contradicts the targeting, so the question is not "what do we charge" but
+    "who can pay without breaking the product".
+
+    ₹370 is presented as a MODELLED floor, because that is what it is. The
+    derivation is in MARKET_AND_PRICING.md and it is bounded by published token
+    pricing, but per-learner cost cannot currently be verified in production:
+    test-account purges null the attribution on `ai_calls`. Calling a model a
+    measurement is exactly the drift D26 exists to catch.
+    """
+    s, y = slide_shell(prs, 24, "24 · Monetisation",
+                       "Learners never pay. Institutions do.",
+                       "Our learners are defined by not affording tuition, so a "
+                       "consumer subscription cannot be the engine without "
+                       "contradicting who the product is for.")
+
+    tiles = [("₹0", "for the learning loop"), ("₹370", "modelled cost floor"),
+             ("₹450", "institutional, per year"), ("1 to 2%", "consumer conversion")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    y2 = y + 1.08
+    cards = [
+        ("Four tiers, one rule",
+         "Free keeps the whole loop: curriculum, practice, quizzes, progress, "
+         "parent summary, tutor capped at 10 questions a day. Plus is ₹99 a "
+         "month for unlimited tutoring and depth. Mentor adds ₹299 and only "
+         "sells once mentors exist. Institutions pay ₹450 to ₹600 a learner.",
+         PRIMARY),
+        ("The floor is a cost, not a target",
+         "A fully active learner costs about ₹370 a year, roughly ₹330 of AI "
+         "and ₹40 of infrastructure. No institutional licence is priced below "
+         "it. This is modelled from published token pricing, not measured "
+         "per learner, and we say which it is.", AMBER),
+        ("Institutions, because the maths works",
+         "Conversion among families who cannot afford tuition is realistically "
+         "1 to 2%. CSR budgets are mandated in India and already buy per "
+         "beneficiary, so one NGO cohort beats a thousand families we would "
+         "rather not charge.", PRIMARY),
+        ("Advertising is not on the table",
+         "The DPDP Act 2023 forbids behavioural tracking and targeted "
+         "advertising directed at anyone under 18, and parental consent does "
+         "not unlock it. Our entire user base is 11 to 14. That closes the "
+         "default way free products make money, and we would not want it open.",
+         AMBER),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(cards):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    yb = y2 + 1.92
+    box(s, M, yb, CONTENT_W, 1.14, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
+         [{"t": "The margin is thin, and that is the honest headline.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "₹450 against a ₹370 floor is ₹80 a learner, and the risk is "
+                "that institutions treat ₹450 as a ceiling rather than a "
+                "starting point, at which point the margin goes negative. Two "
+                "things move it: inference prices have fallen every year of "
+                "this technology's existence, and most learners are not fully "
+                "active, so a cohort costs less than its worst case. Neither "
+                "is a plan. The plan is to price above cost, publish the "
+                "number we are pricing against, and not sell reach we cannot "
+                "afford to serve.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+THE ONE SENTENCE
+Learners never pay for the core learning loop. Institutions pay for reach,
+families pay only for depth. Everything else on this slide is a consequence of
+that, and it comes from the product's own targeting rather than from a pricing
+workshop.
+
+BE PRECISE THAT ₹370 IS MODELLED
+It is derived in MARKET_AND_PRICING.md from D11's cost targets and published
+token pricing: about ₹330 of AI inference and ₹40 of infrastructure for a fully
+active learner per year. It is not yet validated against production, because
+test-account purges null the learner attribution on our AI spend rows. Say
+"modelled" and not "measured". Someone will ask, and the difference is the
+whole credibility of the slide.
+
+WHY NOT ADVERTISING, IN ONE LINE
+Section 9(3) of the DPDP Act 2023 prohibits tracking, behavioural monitoring
+and targeted advertising directed at children, and parental consent does not
+lift it. Every user we have is 11 to 14. This is worth saying out loud because
+it removes the obvious answer to "how does a free product survive", and because
+a team that knows the regulation reads as a team that read it.
+
+IF ASKED ABOUT THE 1 TO 2% CONVERSION
+It is deliberately pessimistic and it should be. The people we serve are
+defined by not being able to afford ₹500 a month of tuition, so assuming they
+will pay ₹99 a month at typical freemium rates would be assuming away the
+problem the product exists to solve.
+
+IF ASKED WHAT KILLS THIS MODEL
+Institutions buying on cost per beneficiary and treating ₹450 as a ceiling.
+That is in MARKET_AND_PRICING.md as a named risk rather than a footnote. The
+mitigation is volume tiers and the fact that a free-tier learner costs about
+₹120 rather than ₹370, so a realistic cohort mix carries more margin than the
+worst case implies.
+""")
+
+
 def s19_tradeoffs(prs):
     """
     The gaps, as decisions.
@@ -2647,7 +2758,7 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
           s19_tradeoffs, s20_users, s21_roadmap,
-          s22_horizon, s23_adoption]
+          s22_horizon, s23_adoption, s24_money]
 
 
 def main() -> None:
