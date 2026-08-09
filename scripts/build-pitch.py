@@ -1181,9 +1181,227 @@ tested, and the demand for it is not yet measured.
 """)
 
 
+def s12_intelligence(prs):
+    """
+    The three numbers behind every word a learner reads.
+
+    ── WHY THIS SITS HERE AND NOT IN THE BUILD SECTION ─────────────────────────
+    Slide 6 gives Dagar a tick for "adapts to the learner" and slide 8 says the
+    tutor knows her weakest concepts. Both were asserted and nothing backed
+    either. Meanwhile slides 10 and 11 put a flame, a mastery badge and a "Keep
+    practising" chip on screen, so the audience's next question is who decides
+    those words. Answering it immediately is worth more than answering it
+    correctly six slides later.
+
+    It also makes the right hinge: the most product-facing of the engineering
+    slides, so the deck moves from what it does to how it works without a jolt.
+
+    Each rule is stated, then justified. The rule alone is a spec; the reason is
+    what makes it comprehensible, and the reasons are where the product thinking
+    actually lives.
+    """
+    s, y = slide_shell(prs, 12, "12 · Learning intelligence",
+                       "Three numbers decide everything she sees.",
+                       "The badge, the flame and the next question are not "
+                       "opinions. Each comes from a rule we can state.")
+
+    rules = [
+        ("MASTERY", "What turns a concept green", PRIMARY,
+         "Score = correct \u00f7 attempted over her last 5 attempts on that "
+         "concept. Mastered at 0.8 or above, with at least 3 attempts.",
+         "Last five and not all time, so a bad start does not follow her for "
+         "months, and a concept can fall back when it stops being understood. "
+         "Three attempts minimum, because one lucky answer is not mastery."),
+        ("STREAK", "What makes a day count", AMBER,
+         "One lesson, or five practice questions. The day boundary is "
+         "Asia/Kolkata, stored as a date. One forgiven day per rolling week.",
+         "A goal a struggling learner can still finish on a bad day, or the "
+         "streak becomes a daily reminder that she failed. The forgiveness is "
+         "there because one missed evening should not erase three weeks."),
+        ("DIFFICULTY", "What she is asked next", HINT,
+         "Two correct in a row steps the difficulty up. Two wrong steps it "
+         "down and serves a worked example. Bounded between 1 and 3.",
+         "Chosen from a bank somebody wrote, not generated. A generated "
+         "question has no verified answer, and a wrong answer key does more "
+         "damage than an easy question ever could."),
+    ]
+
+    cw = (CONTENT_W - 2 * 0.24) / 3
+    for i, (tag, title, accent, rule, why) in enumerate(rules):
+        x = M + i * (cw + 0.24)
+        box(s, x, y, cw, 3.2, fill=WHITE, line=BORDER)
+        box(s, x, y + 0.22, 0.05, 2.76, fill=accent, shape=MSO_SHAPE.RECTANGLE)
+        text(s, x + 0.3, y + 0.2, cw - 0.55, 2.9,
+             [{"t": tag, "size": 8.5, "bold": True, "color": accent,
+               "space_after": 4},
+              {"t": title, "size": 14, "bold": True, "color": INK,
+               "space_after": 8, "line": 1.05},
+              {"t": rule, "size": 11, "bold": True, "color": PRIMARY_STRONG,
+               "space_after": 9, "line": 1.26},
+              {"t": why, "size": 10, "color": BODY, "line": 1.26}])
+
+    # The rule under all three, and the one a judge should hear.
+    yb = y + 3.4
+    box(s, M, yb, CONTENT_W, 0.86, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, M + 0.34, yb + 0.14, CONTENT_W - 0.68, 0.62,
+         [{"t": "Every one of these is computed on the server, on write.",
+           "size": 12, "bold": True, "color": PRIMARY_STRONG, "space_after": 4},
+          {"t": "A streak or a score the browser can supply is a number the "
+                "learner can edit, and a progress screen worth showing is one "
+                "that cannot be faked. None of the three is AI. They are "
+                "arithmetic, they are the same every time, and they are tested.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+THE LINE TO OPEN WITH
+None of this is AI. Mastery, streaks and difficulty are arithmetic, and that is
+deliberate. AI writes hints and explanations; it never decides whether a learner
+was right, how well she knows something, or what she sees next. A model that is
+wrong two percent of the time would be telling a child who was right that she
+was wrong, and there is no error message for that.
+
+WHY THE STREAK RULE AND THE DAILY GOAL ARE THE SAME RULE
+One lesson or five practice questions closes the goal AND extends the streak, so
+the ring and the flame can never disagree. Two elements on one screen
+contradicting each other is worse than either being absent, and we learned that
+the hard way on the progress screen.
+
+IF ASKED WHY MASTERY CAN GO DOWN
+Because it should. A five-attempt window means a concept she has stopped
+understanding stops being marked Mastered, which is the honest signal and the
+one the tutor needs. It is also why the diary only ever reports levels going UP:
+the data must be truthful, the narration does not have to rub it in.
+
+IF ASKED ABOUT THE GRACE DAY
+It preserves the chain without awarding a day nobody worked. A learner who
+studied Monday and Wednesday with Tuesday forgiven has a two-day streak, not
+three. Getting that wrong would mean congratulating a child for an evening she
+did not spend.
+""")
+
+
+def s13_architecture(prs):
+    """
+    Six layers, and the one shape decision worth defending.
+
+    The Learning Intelligence Engine sits BETWEEN the screens and the data, not
+    beside them. That is what makes personalisation a property of the system
+    rather than a feature bolted onto one screen, and it is the reason adding a
+    subject is authoring work instead of a rebuild.
+
+    Diagram left because a room reads a picture before it reads a table. The
+    stack sits beside it with one reason per choice, since "we used Next.js" is
+    not an argument and "a lesson costs her HTML, not a JavaScript parser" is.
+    """
+    s, y = slide_shell(prs, 13, "13 · Architecture",
+                       "The intelligence sits between the screens and the data.",
+                       "Six layers. Personalisation is a property of the system, "
+                       "not a feature on one screen.")
+
+    dw = 6.72
+    s.shapes.add_picture("docs/architecture.png", Inches(M), Inches(y),
+                         Inches(dw), Inches(dw * 1180 / 1800))
+
+    x = M + dw + 0.3
+    cw = CONTENT_W - dw - 0.3
+
+    text(s, x, y, cw, 0.28,
+         [{"t": "THE STACK, AND WHY EACH PIECE", "size": 10, "bold": True,
+           "color": PRIMARY}])
+
+    # ── PLAIN LANGUAGE, ONE CONSEQUENCE EACH ─────────────────────────────────
+    # The first version explained these to engineers: "the authorisation
+    # boundary lives in the database", "three implementations of one interface".
+    # Both true, neither comprehensible to a room, and a slide nobody can parse
+    # is a slide that gets skipped.
+    #
+    # Each reason now says what it means for the learner or for her safety, in
+    # words that need no translation. Four entries rather than five, so each has
+    # room to actually explain itself; the analytics point moved to the security
+    # slide, where "no tracker follows children" belongs anyway.
+    stack = [
+        ("Next.js 16, rendered on the server",
+         "Her phone receives a finished page instead of code it has to run "
+         "first. On a slow, cheap Android that is the difference between a "
+         "lesson opening and a lesson stalling."),
+        ("Supabase Postgres, with row-level security",
+         "The rules about who may read what live inside the database, not only "
+         "in our code. If we write a bug in a page, the database still refuses "
+         "to hand one child's data to another."),
+        ("Claude Sonnet 5 to teach, Haiku 4.5 for summaries",
+         "Sonnet replies word by word, so she never watches a blank screen, and "
+         "it reads Hindi properly. Haiku is smaller and cheaper, so a weekly "
+         "parent summary costs about 13 paise."),
+        # Four adapters, not one and a promise. The earlier version said
+        # "switching to SMS later changes one file", which understated it
+        # twice: the file is already written, and the caller never picks a
+        # channel at all.
+        ("Four ways to reach a parent, already written",
+         "In-app, WhatsApp, web push and SMS. Nothing in the product chooses "
+         "between them: it hands over a message, and the layer tries whichever "
+         "reaches that household, with in-app as the floor that always works."),
+    ]
+    ry = y + 0.36
+    for title, why in stack:
+        text(s, x, ry, cw, 0.84,
+             [{"t": title, "size": 10.5, "bold": True, "color": INK,
+               "space_after": 3, "line": 1.1},
+              {"t": why, "size": 9.5, "color": BODY, "line": 1.22}])
+        # 0.88: a reason that runs to three lines collided with the next
+        # heading at 0.82, and one of them always will.
+        ry += 0.88
+
+    box(s, x, ry + 0.02, cw, 0.82, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
+    text(s, x + 0.26, ry + 0.12, cw - 0.5, 0.64,
+         [{"t": "Curriculum is data, not code.", "size": 11.5, "bold": True,
+           "color": PRIMARY_STRONG, "space_after": 3},
+          {"t": "Chapters, lessons and questions are rows loaded from seed "
+                "files. Adding a subject is authoring work, not a rebuild. That "
+                "is a fact about the schema, not a roadmap promise.",
+           "size": 9.5, "color": BODY, "line": 1.22}])
+
+    notes(s, """
+THE ONE SHAPE DECISION TO DEFEND
+The Learning Intelligence Engine is between the experience and the data, not
+beside the other services. Every stage asks it what to do next: which lesson to
+recommend, how deep an explanation should go, what difficulty to serve, when to
+offer a person. Bolt personalisation onto one screen and you have a feature;
+put it in the middle and it is a property of the system.
+
+IF ASKED ABOUT NEXT.JS 16
+It is newer than most model training data: middleware became proxy, Turbopack is
+the default, next lint is gone. The repo carries an instruction to read the
+bundled framework docs before writing app code. That was not pedantry. Next's
+own documentation says proxy MUST NOT be an authorisation solution, which is
+exactly why the enforcing auth check lives in the route-group layout and in
+every route handler instead.
+
+WHY RLS RATHER THAN CHECKS IN CODE
+Because route handlers are written by people in a hurry. A policy in the
+database is checked on every query no matter which code path reached it, and
+the tests attempt the violation rather than re-reading the policy.
+
+IF ASKED WHY SMS IS BUILT BUT OFF
+India's TRAI requires DLT registration for any automated SMS to an Indian
+number: a registered business entity, a registered sender ID, and approval per
+template. That is multi-day and needs a company, so it could not be done in a
+buildathon. The adapter is written and wired in, and reports itself as not
+configured because it genuinely is not. Three environment variables turn it on
+and no calling code changes.
+
+That is the difference between "we would add SMS later" and "SMS is one config
+change away", and only one of those is true here.
+
+CURRICULUM AS DATA, IF PRESSED
+Five chapters, twenty concepts, twenty-five lessons and a hundred and eighty-one
+questions are rows. A sixth chapter is a seed file. This is checkable in the
+repo in about thirty seconds.
+""")
+
+
 SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition,
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
-          s11_bilingual]
+          s11_bilingual, s12_intelligence, s13_architecture]
 
 
 def main() -> None:

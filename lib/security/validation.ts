@@ -139,6 +139,27 @@ export const productFeedbackSchema = z.object({
   confusing: z.string().trim().max(FEEDBACK_TEXT_MAX).optional(),
 });
 
+/**
+ * The WhatsApp number a weekly summary goes to (migration 0015).
+ *
+ * ── AN ADULT'S NUMBER, TYPED BY A CHILD ─────────────────────────────────────
+ * E.164 only, so the value that reaches Twilio is already the shape it expects
+ * and no formatting guesswork happens near a phone number. India's +91 is the
+ * common case but the pattern is deliberately general: a parent working abroad
+ * is exactly the person this feature exists for.
+ *
+ * Whatever a learner types here is an INTENTION, not a permission. Nothing is
+ * delivered until the adult opts in from their own handset, which is a separate
+ * column and a separate act.
+ */
+export const summaryRecipientSchema = z.object({
+  recipient_e164: z
+    .string()
+    .trim()
+    .regex(/^\+[1-9][0-9]{7,14}$/, "Enter a number with its country code, like +919876543210")
+    .nullable(),
+});
+
 export const tutorMessageSchema = z.object({
   lesson_id: zUuid,
   // Cap input length BEFORE the model call, not after — the whole point is to

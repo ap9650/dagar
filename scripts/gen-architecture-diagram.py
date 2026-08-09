@@ -145,7 +145,7 @@ varrow(BUS, 614, 656)
 # ---- Learning Intelligence Engine ----
 band(704, "INTELLIGENCE")
 box(L, 656, R, 778, LIE, "Learning Intelligence Engine",
-    "Maintains the learner profile and personalises every stage — next lesson, explanation depth,\npractice difficulty, revision and mentor escalation")
+    "Maintains the learner profile and personalises every stage: next lesson,\nexplanation depth, practice difficulty, revision and mentor escalation")
 varrow(BUS, 778, 852)
 
 # ---- Data ----
