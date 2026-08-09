@@ -328,8 +328,8 @@ def s4_validation(prs):
          "we give away."),
         ("The phone is shared, and it is the only device",
          "So Dagar is built mobile first at 360 pixels, works on a slow "
-         "connection, and needs no download. The parent summary arrives on "
-         "WhatsApp because that is where the parent already is."),
+         "connection, and needs no download. Her progress reaches her parent "
+         "as a link they open on the phone they already have."),
     ]
     w2, gx2 = 4.06, 0.22
     for i, (t, b) in enumerate(pairs):
@@ -671,8 +671,9 @@ def s7_persona(prs):
                 "Long shifts, and a distance he cannot close",
             ],
             "quote": "\u201cI ask if she studied. She says yes. That is the whole conversation.\u201d",
-            "built": "So we built a weekly WhatsApp summary that needs no app and "
-                     "no account, timed for the Sunday call.",
+            "built": "So we built him a link with no app, no account and no "
+                     "password behind it, showing how the last week has gone, "
+                     "open whenever he asks.",
         },
     ]
 
@@ -731,9 +732,15 @@ list is exactly this: parent engagement improves learner consistency.
 
 WHY HE DOES NOT GET AN APP
 He would not install it, and the phone he reads on is not the phone she studies
-on. The weekly summary is a WhatsApp message with no account and no download,
-timed so he has something concrete to ask her about on the Sunday call. One
-learner is linked to a parent today, which is honest and small.
+on. What he gets is a link his daughter sends him: no account, no download, no
+password, showing the last seven days recomputed every time he opens it.
+
+NOTHING IS SENT TO HIM AUTOMATICALLY, AND SAY SO
+A weekly WhatsApp message is not built. It needs Meta business verification and
+an opt-in from his own handset, which is weeks of paperwork and a registered
+company, so it is a roadmap item rather than a gap. He opens the link when he
+wants it, and nobody has yet told us they would rather be pushed. That evidence
+is what would justify building it.
 
 THE LINE THAT MATTERS
 Most parent features in edtech are built as if the parent needs persuading to
@@ -816,11 +823,17 @@ def s8_solution(prs):
              accent=accent, title_size=11.5, body_size=9.5)
 
     # ── SHIPPED vs BEING MEASURED, labelled ──────────────────────────────────
-    # An earlier version put both of these in one sentence and implied Dagar
-    # offers a human mentor. It does not. The route is capture-only (D8): there
+    # TWO overclaims lived here. The first implied Dagar offers a human mentor.
+    # It does not. The route is capture-only (D8): there
     # is no mentor-side UI, no dispatch, and `status` moves by hand. What exists
     # is the OFFER and the record of who accepted it, which is how H7 gets an
     # answer before anybody builds a service.
+    #
+    # The second said a weekly summary "reaches her parent on WhatsApp".
+    # Nothing has ever been sent: `parent_summary_sent` is zero, and automatic
+    # delivery needs Meta business verification and an opt-in from the parent's
+    # own handset (D4, amended 9 Aug). What IS live is the link, which needs
+    # none of that, and the box now says which is which.
     #
     # Splitting them is not modesty, it is the stronger slide. A team that can
     # show which parts are real and which are instrumented reads as one that
@@ -833,9 +846,9 @@ def s8_solution(prs):
     text(s, M + 0.3, yb + 0.14, half - 0.55, 0.68,
          [{"t": "LIVE  ·  THE PARENT LOOP", "size": 8.5, "bold": True,
            "color": CORRECT, "space_after": 4},
-          {"t": "A weekly summary reaches her parent on WhatsApp. No app to "
-                "download, no account to create, timed so he has something to "
-                "ask her about on Sunday.",
+          {"t": "She sends her parent a link. No app, no account, no password, "
+                "and it shows the last seven days every time they open it. "
+                "Sending it to WhatsApp automatically is not built yet.",
            "size": 10.5, "color": BODY, "line": 1.24}])
 
     box(s, M + half + 0.22, yb, half, 0.9, fill=CELEBRATE_BG, line=AMBER)
@@ -925,7 +938,7 @@ def s9_mvp(prs):
         ("Chapter quiz", "sets the mastery band"),
         ("Progress and streaks", "IST day boundary"),
         ("Daily goal", "closable in one session"),
-        ("Parent summary", "WhatsApp, no account"),
+        ("Share with a parent", "a link, no account"),
         ("Ask for a person", "offered and recorded"),
     ]
     fw, fh, fgx, fgy = 2.873, 0.56, 0.2, 0.14
@@ -990,6 +1003,13 @@ WHY THE LAST TILE IS AMBER AND NOT A TICK
 "Ask for a person" is offered and recorded, and there is no mentor service
 behind it. It is a demand test for H7. Every other tile is a capability a
 learner can use today.
+
+WHAT "SHARE WITH A PARENT" MEANS, EXACTLY
+A link the learner sends. No account, no download, no password, showing the
+last seven days recomputed on every open. Automatic WhatsApp delivery is NOT in
+this list and is not built: it needs Meta business verification and an opt-in
+from the parent's own handset. It is a roadmap item, and the link is why its
+absence does not block a parent from seeing progress.
 
 IF ASKED ABOUT THE TESTS
 1,733 automated, and the priority was harm rather than coverage: grading first,
