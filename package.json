@@ -29,7 +29,8 @@
     "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts",
     "deck:shots": "node --no-warnings scripts/capture-screens.ts",
     "deck:pdf": "node --no-warnings scripts/build-pdfs.ts",
-    "deck:v1": "python3 scripts/build-deck.py"
+    "deck:v1": "python3 scripts/build-deck.py",
+    "eval": "node --no-warnings scripts/eval-tutor.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",

@@ -60,3 +60,4 @@ public/_viz-preview.html
 
 # Playwright screenshots are run artefacts — regenerated, never reviewed in a diff.
 /e2e/__screenshots__/
+evals/runs/
