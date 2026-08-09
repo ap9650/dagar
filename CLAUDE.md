@@ -21,6 +21,8 @@ of the ESLint CLI. Read `node_modules/next/dist/docs/` before writing app code.
 - `docs/BUILD_PLAN.md` — what we're building, in what order.
 - `docs/PRD.md` — product strategy, personas, metrics.
 - `docs/HINDI_STYLE.md` — **load before any Hindi copy or translation.**
+- `docs/EVALS.md` — the tutor golden set, its criteria and how to add a case.
+  **Load before editing `lib/ai/prompts/tutor.ts`.**
 
 If `DECISIONS.md` and the PRD disagree, `DECISIONS.md` wins and the PRD gets a follow-up edit.
 

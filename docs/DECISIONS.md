@@ -1576,6 +1576,7 @@ the last mile were finished.
 | Share progress with a parent | **Shipped, as a link** | `/s/[token]`: no account, no download, no password, last seven days recomputed on every open |
 | Weekly summary **delivered to WhatsApp** | **Not shipped** | `parent_summary_sent` is zero and always has been. Blocked on Meta business verification and an opt-in from the parent's own handset (D4, amended) |
 | **Request a human mentor** | **Offer and capture only** | The offer fires on three real triggers and the request is recorded. There is no mentor-side interface, nothing is dispatched, status moves by hand (D8). It is a demand test for H7, not a service |
+| Tutor quality, measured | **Shipped** | 50-case golden set, majority of three runs, blocking before any prompt edit (D27). Results in `docs/EVALS.md` §9 |
 
 ### How to describe the last two, out loud
 
@@ -1590,6 +1591,75 @@ Neither is a gap. Each is a deliberate stopping point with a reason:
 
 Say both before being asked. A team that can show which parts are real and
 which are instrumented reads as one that knows the difference.
+
+## D27 — The tutor is evaluated against real learner messages, and that is MVP scope (9 Aug 2026)
+
+**The tutor is measured before it ships, not after.** `evals/golden/tutor.jsonl`
+is a 50-case golden set, `evals/rubric.md` is the criteria, `npm run eval` is the
+gate, and `docs/EVALS.md` is the full reference. It runs before any edit to
+`lib/ai/prompts/tutor.ts`.
+
+### Why this became MVP scope rather than Phase 2
+
+The tutor is the differentiating claim in the product. Everything else is
+deterministic and testable by ordinary means: grading is arithmetic, mastery is a
+formula, a streak is a fold over dates. The tutor was the one part where quality
+was asserted rather than measured, and it was edited several times with no
+harness. Each of those edits was an act of faith.
+
+A product whose central claim is the only untested thing in it has the priority
+backwards.
+
+### The four sources, and why one of them decides the shape
+
+| Source | Cases | Answers |
+|---|---|---|
+| `real` | 22 | Does it work on actual traffic |
+| `synthetic` | 16 | Does it generalise inside a known failure mode |
+| `adversarial` | 9 | Do the safety rules hold under pressure |
+| `regression` | 3 | Did a fix stay fixed |
+
+**Real traffic defines the taxonomy. Synthetic cases only fill it in.** This is
+the decision, not a preference. Written from imagination, the set would have been
+full of well-formed questions like "explain equivalent fractions". The first 25
+real messages were nothing like that: **9 of 25 were learners lost in the
+interface**, 5 were "don't know" with no specifics, 4 were "yes" or "0k", and
+only 3 were an actual conceptual question.
+
+Over a third of tutor traffic is a learner confused by the screen, and no amount
+of careful imagination produces that category. The first run failed three of the
+four cases in it.
+
+### Three rules that came out of building it
+
+1. **Every criterion must be independently satisfiable.** A criterion requiring
+   the reply to both redirect the learner and keep them moving pulls against
+   itself, and fails on whichever the judge weighted harder that run.
+2. **The judge must be able to check what it is asked to score.** "Grounded" is
+   the first non-negotiable, and for two days the judge was given only the lesson
+   slug. It failed correct replies for inventing context that was verbatim in the
+   lesson.
+3. **Three runs, majority verdict.** Three identical runs each scored 16 of 22
+   and not the same 16. Both the tutor and the judge are models, so one pass is a
+   sample and not a measurement. A number that moves on its own teaches people to
+   ignore it.
+
+### Cost, and the boundary that matters
+
+50 cases at three passes is 150 Sonnet calls and 150 Haiku calls, roughly ₹80 and
+twenty minutes. The judge is Haiku deliberately: marking is a classification job,
+and paying Sonnet rates to mark homework is how a harness stops being run.
+
+**Eval spend never writes to `ai_calls`.** It is not product spend, and mixing the
+two would corrupt the cost-per-learner figure the institutional price floor rests
+on (D17).
+
+### Target size
+
+50 to 80 cases, not 250. Statistical rigour would want roughly 250 per slice for
+a 5% margin at 95% confidence, which is the right target at scale and the wrong
+one here: at 250 a run takes an hour and nobody executes it. Grow it by
+harvesting real traffic weekly, not by inventing more.
 
 ## Still open
 

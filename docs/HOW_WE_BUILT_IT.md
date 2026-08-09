@@ -321,7 +321,7 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 
 **Get it onto a real phone on day one.** Six genuine defects came from twenty minutes on an Android device — none of which any test caught, and several of which had shipped days earlier. A cheap phone in a real hand is the highest-yield testing tool in this project, and we used it too late.
 
-**Write the golden set before the prompt.** We tuned the tutor prompt several times with no evaluation harness. Every one of those edits was an act of faith.
+**Write the golden set before the prompt.** We tuned the tutor prompt several times with no evaluation harness. Every one of those edits was an act of faith. The harness exists now (D27, `docs/EVALS.md`), and building it settled the argument: 9 of the first 25 messages learners actually sent the tutor were not about mathematics at all, they were about the interface. We had been editing a prompt for a year-eight maths question that most learners were never asking.
 
 **Verify by exercising the system, not by reading the code.** Twice we believed something worked because the code said so. The quiz-order bug survived correct unit tests and a correct implementation. Reading a policy is not testing a policy; running the query is.
 

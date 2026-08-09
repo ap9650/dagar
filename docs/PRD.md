@@ -459,6 +459,41 @@ The engine continuously:
 | Adaptive | Explanations and practice adjust based on learner performance. |
 | Supportive | AI guides learners with hints before revealing answers. |
 | Escalation-Aware | AI recommends mentor support when repeated struggles are detected. |
+| **Measured** | Every principle above is tested against real learner messages before a prompt ships. See below and D27. |
+
+### Tutor Evaluation (MVP scope, D27)
+
+The five principles above are claims. Until they are measured they are only
+claims, so the tutor is evaluated against a golden set before any change to its
+prompt reaches a learner.
+
+| | |
+|---|---|
+| The set | `evals/golden/tutor.jsonl`, 50 cases |
+| The criteria | `evals/rubric.md`: eight criteria, five of them non-negotiable |
+| The gate | `npm run eval`, blocking before any edit to the tutor prompt |
+| The reference | `docs/EVALS.md` |
+
+**Why it is MVP scope and not Phase 2.** Curriculum-aware, context-aware tutoring
+is the differentiating claim in this document. Everything else in the product is
+deterministic and testable by ordinary means. The tutor was the only part where
+quality was asserted rather than measured, which is the wrong thing to leave
+until later.
+
+**The set is built from real traffic, and that changed what it contains.** Of the
+first 25 messages learners actually sent the tutor, **9 were learners lost in the
+interface**, 5 were "don't know" with no specifics, 4 were "yes" or "0k", and only
+3 were a conceptual question. An imagined set would have been entirely the last
+category. Over a third of tutor traffic is a learner confused by the screen, and
+the first evaluation run failed three of the four cases covering it.
+
+This is a **product finding as much as an engineering one**: it says the interface
+is doing worse than assumed, and it feeds the roadmap (§10).
+
+Four sources sit in the set: `real` (22) from live traffic, `synthetic` (16)
+filling thin categories, `adversarial` (9) for injection, personal-information
+and distress handling, and `regression` (3), each frozen from a defect that
+actually shipped.
 
 # 8. User Stories
 
@@ -579,6 +614,12 @@ These are the hypotheses defined in Section 3, with the indicator used to evalua
 | Recommendation acceptance | ≥30% |
 | Day-7 retention | ≥25% |
 | Parent summary open rate | ≥40% |
+| **Tutor golden set pass rate** | **≥90%, and 100% on the safety and regression cases** |
+
+The tutor target is deliberately split. A general pass rate can be traded off
+against effort, but a reply that hands a child an answer, grades them, or
+mishandles a disclosure of harm is not a percentage point. Those cases pass or
+the prompt does not ship (D27).
 
 These targets are initial benchmarks for evaluating product direction during the MVP phase and should be refined as real user data becomes available.
 
@@ -598,12 +639,13 @@ These targets are initial benchmarks for evaluating product direction during the
 | Assessment Engine | Delivers and evaluates practice and quizzes. |
 | Progress Engine | Tracks learner progress, mastery and consistency. |
 | Analytics Layer | Captures product events for continuous improvement. |
+| Evaluation Harness | Scores the tutor against a golden set of real learner messages before a prompt ships (D27). |
 
 # 14. Risks, Assumptions & Mitigations
 
 | Risk | Assumption | Mitigation |
 |---|---|---|
-| AI explanations may be inaccurate. | Curriculum-grounded prompts improve reliability. | Review prompts, validate responses and include feedback mechanisms. |
+| AI explanations may be inaccurate. | Curriculum-grounded prompts improve reliability. | Grounding in the current lesson, plus a 50-case golden set that gates every prompt change and holds safety and regression cases at 100% (D27). Learner feedback on every reply. |
 | Learners may lose motivation over time. | Progress visibility encourages consistency. | Use streaks, milestones and personalised reminders. |
 | Parents may not engage regularly. | Simple insights are easier to consume than detailed reports. | Deliver concise weekly summaries with clear next steps. |
 | AI may not resolve every doubt. | Complex cases benefit from human support. | Provide Learning Support Network escalation. |
@@ -670,6 +712,7 @@ already hit the problem.
 | D24 | One formatter names every weekday | The strip said `We` where the diary said `Wed`; a screen you cannot cross-check reads as broken |
 | D25 | Every worked day gets a line in "What moved" | A ticked square with nothing beside it reads as the app contradicting itself, not as an abbreviated list |
 | D26 | What actually shipped, and what did not | One table the PRD and the deck both defer to, so three documents cannot disagree about what exists |
+| D27 | The tutor is evaluated against real learner messages | A 50-case golden set gates every prompt change. Real traffic sets the categories, because 9 of the first 25 messages were learners lost in the interface |
 
 ### What this register is for
 

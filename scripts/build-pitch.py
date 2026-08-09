@@ -24,6 +24,8 @@ Output is .pptx, which is editable in PowerPoint, Keynote and Google Slides.
 """
 
 import importlib.util
+import json
+import pathlib
 import subprocess
 import sys
 
@@ -58,6 +60,38 @@ slide_shell = bd.slide_shell
 # carries a notesSlide part, and a thumbnail cannot show notes anyway, so
 # preview renders skip them. The saved deck always keeps them.
 PREVIEW = False
+
+
+def eval_pass_rate():
+    """
+    The tutor's golden-set score, read from the most recent run of the harness.
+
+    ── WHY THIS IS NOT A TYPED-IN NUMBER ───────────────────────────────────────
+    D26 exists because four claims drifted in one afternoon, each one describing
+    something real as though the last mile were finished. A hardcoded pass rate
+    is exactly that shape of mistake waiting to happen: the prompt gets edited,
+    the score moves, and the deck goes on saying what was true last Tuesday.
+
+    So the slide reads `evals/runs/`. If no run exists, the build stops rather
+    than printing a plausible number, because a made-up score on a slide about
+    rigour is worse than no slide at all.
+    """
+    # `evals/latest.json` is the committed summary a full run leaves behind.
+    # The transcripts under `evals/runs/` are gitignored, so reading those
+    # directly would make the deck unbuildable from a fresh clone.
+    summary = pathlib.Path("evals/latest.json")
+    if not summary.exists():
+        raise SystemExit(
+            "evals/latest.json is missing. Run `npm run eval` before building "
+            "the deck: slide 18 quotes the tutor's real score and will not "
+            "invent one."
+        )
+    run = json.loads(summary.read_text())
+    passed, total = run["passed"], run["total"]
+    return f"{round(100 * passed / total)}%", passed, total, run.get("run", "")
+
+
+EVAL_PASS, EVAL_PASSED, EVAL_TOTAL, EVAL_RUN = eval_pass_rate()
 
 
 def notes(slide, body):
@@ -1847,28 +1881,131 @@ more often anyway.
 """)
 
 
-def s18_tradeoffs(prs):
+def s18_evals(prs):
     """
-    The gaps as decisions, and the mistakes as mistakes.
+    How we test the one part a unit test cannot reach.
 
-    Two columns because they are different kinds of honesty. The left is
-    judgement: things a room might expect that we chose against, each with the
-    reason. The right is the rarer one, and the one that actually persuades:
-    what we would do differently, told about ourselves.
+    Slide 17 covers everything deterministic. This one covers the tutor, which
+    is the differentiating claim in the whole product and was, until 9 August,
+    the only part of it whose quality was asserted rather than measured.
+
+    The slide leads with the FINDING, not the harness. "9 of the first 25
+    messages were learners lost in the interface" is a product insight a judge
+    can use, and it is the reason the set is built from real traffic rather
+    than imagination. The harness is only how we know it.
     """
-    s, y = slide_shell(prs, 18, "18 · Trade-offs",
-                       "The gaps were choices. The mistakes were ours.",
-                       "An honest list is a stronger artefact than a silent one, "
-                       "and the second column is the half most decks leave out.")
+    s, y = slide_shell(prs, 18, "18 · How we tested the tutor",
+                       "The one part no unit test can reach.",
+                       "Grading is arithmetic and a streak is a fold over dates. "
+                       "The tutor is the differentiating claim, and it was the "
+                       "last thing in the product still being taken on trust.")
+
+    tiles = [("50", "golden cases"), ("22", "verbatim from learners"),
+             ("3", "runs, majority wins"), ("95s", "for the whole set")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    y2 = y + 1.08
+    cards = [
+        ("Learners wrote the test set",
+         "22 of the 50 cases are messages real learners aged 11 to 14 typed "
+         "into the live tutor, verbatim, typos and all. The other 28 fill gaps "
+         "those exposed. An imagined set would have been full of questions "
+         "nobody actually asks.", AMBER),
+        ("Seven criteria, five that never bend",
+         "Grounded in the lesson. Hints before answers. Never grades, because "
+         "grading is code. Replies in the learner's language, not the "
+         "interface's. Safe for a child. A reply that fails one of those fails, "
+         "however well it reads.", PRIMARY),
+        ("Three runs, majority verdict",
+         "Both the tutor and the judge are models, so one pass is a sample and "
+         "not a measurement. The judge is pinned at temperature zero, so when "
+         "three runs disagree it means the TUTOR answered differently, which is "
+         "the thing worth knowing.", PRIMARY),
+        # Honest, and specific about which parts hold. An earlier draft of this
+        # card said "safety and regression are held at 100%", which was true of
+        # regression and wellbeing and NOT of adversarial. D26 is about exactly
+        # that kind of round-up.
+        (f"Where it stands: {EVAL_PASSED} of {EVAL_TOTAL}",
+         "Regression holds at 3 of 3 and the wellbeing cases at 2 of 2. Real "
+         "learner traffic scores 18 of 21. The overall figure is below the 90% "
+         "we set, and the weakest source is the cases we invented rather than "
+         "collected.", AMBER),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(cards):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    yb = y2 + 1.92
+    box(s, M, yb, CONTENT_W, 1.14, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
+         [{"t": "Then the real messages told us something we had not asked.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "Of the first 25 questions learners sent the tutor, 9 were not "
+                "about mathematics at all. They were about the screen: where "
+                "do I type the answer, I cannot see the options. Five more were "
+                "\"don't know\" with nothing to go on, four were \"yes\" or "
+                "\"0k\", and three were an actual conceptual question. Over a "
+                "third of our AI traffic is a learner lost in the interface, "
+                "and the first run of the set failed three of the four cases "
+                "covering it. That is a design finding we would never have "
+                "reached by imagining what a learner might ask.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+LEAD WITH THE FINDING, NOT THE HARNESS
+The bottom box is the slide. Anyone can say they wrote an eval set. Almost
+nobody can say what their real users turned out to be asking, and "a third of
+our AI tutor traffic is people lost in the UI" is a sentence a judge will
+remember. The harness is only how we know it.
+
+WHY THIS IS MVP SCOPE AND NOT PHASE 2
+Every other part of the product is deterministic and testable by ordinary
+means. The tutor is the one differentiating claim, and it was the only part
+whose quality was asserted rather than measured. A product whose central claim
+is the only untested thing in it has the priority backwards. Recorded as D27.
+
+IF ASKED WHETHER IT ACTUALLY CAUGHT ANYTHING
+Yes, and it caught our own harness too. It found the tutor opening corrections
+with verdict words like "careful", which a child grades exactly the same as
+"incorrect". It found the tutor telling a learner their message was empty when
+they had sent "?". And the first run failed several CORRECT replies, because
+the judge was scoring "is this grounded in the lesson" without being shown the
+lesson. A judge that cannot check a criterion must not be asked to score it.
+
+IF ASKED WHY ONLY 50 CASES
+Statistical rigour would want roughly 250 for a 5% margin at 95% confidence.
+That is the right target at scale and the wrong one now: at 250 a run takes an
+hour and nobody executes it. 50 to 80 is enough to cover every category and
+cheap enough to run before every prompt change. It grows by harvesting real
+traffic weekly, not by inventing more.
+
+IF ASKED WHAT IT STILL DOES NOT MEASURE
+Whether a child actually understood. Nothing automated measures that. The set
+measures whether the reply was grounded, hinted before answering, stayed in the
+learner's language and was safe. Understanding is what the mastery numbers and
+the quiz are for.
+""")
+
+
+def s19_tradeoffs(prs):
+    """
+    The gaps, as decisions.
+
+    Four things a room might expect to see, each absent on purpose, each with
+    the reason. Kept to what was CHOSEN rather than what was learned: a deck is
+    a case for the product, and a retrospective on our own process belongs in
+    the written document, not on a slide someone has ninety seconds to read.
+    """
+    s, y = slide_shell(prs, 19, "19 · Trade-offs",
+                       "The gaps were choices.",
+                       "Four things you might expect to find and will not, and "
+                       "the reason each one was left out.")
 
     half = (CONTENT_W - 0.3) / 2
-
-    text(s, M, y, half, 0.3,
-         [{"t": "DELIBERATELY NOT BUILT", "size": 10, "bold": True,
-           "color": PRIMARY}])
-    text(s, M + half + 0.3, y, half, 0.3,
-         [{"t": "WHAT WE WOULD DO DIFFERENTLY", "size": 10, "bold": True,
-           "color": AMBER}])
 
     chose = [
         ("No leaderboards, hearts, lives or XP",
@@ -1883,48 +2020,57 @@ def s18_tradeoffs(prs):
          "It needs business verification and an opt-in from the parent's own "
          "handset. The link already lets them see progress with no account at "
          "all."),
-        ("No evaluation set for the tutor yet",
-         "This is the one that bothers us. Until it exists every prompt edit is "
-         "an untested deploy, and the tutor is the differentiator. First thing "
-         "after submission."),
+        # This card used to read "no evaluation set for the tutor yet". The set
+        # shipped (D27, slide 18), so leaving it would have been the deck
+        # claiming a gap that no longer exists, which is D26 in reverse.
+        ("No offline mode",
+         "Lessons need a connection. Worth building, and not before we knew "
+         "which lessons learners actually return to. Guessing that would have "
+         "cost days of caching the wrong things."),
     ]
-    learned = [
-        ("Instrument first, then build",
-         "Three events were not firing at all, and we found out only when we "
-         "went looking for the numbers. Adding the call while writing the "
-         "feature costs seconds. Discovering it missing costs the whole period "
-         "of data."),
-        ("Get it onto a real phone on day one",
-         "Six genuine defects came from twenty minutes on an Android handset. "
-         "No test caught any of them, and several had shipped days earlier."),
-        ("Write the evaluation set before the prompt",
-         "We tuned the tutor prompt several times with no harness. Every one of "
-         "those edits was an act of faith."),
-        ("Exercise the system, do not read the code",
-         "Twice we believed something worked because the code said so. Reading "
-         "a policy is not testing a policy, and running the query is."),
-    ]
-
-    rh = 1.16
+    # Two by two now that there is one list rather than two. Four cards in a
+    # single column would leave the right half of the slide empty, and four
+    # across would squeeze each reason into a column too narrow to read.
+    # Heights are tight to the copy: with only four cards, generous boxes read
+    # as padding rather than as breathing room.
+    rh = 1.42
     for i, (title, body) in enumerate(chose):
-        card(s, M, y + 0.36 + i * rh, half, rh - 0.1, title, body,
-             accent=PRIMARY, title_size=11, body_size=9.5)
-    for i, (title, body) in enumerate(learned):
-        card(s, M + half + 0.3, y + 0.36 + i * rh, half, rh - 0.1, title, body,
-             accent=AMBER, title_size=11, body_size=9.5)
+        card(s, M + (i % 2) * (half + 0.3), y + 0.06 + (i // 2) * rh,
+             half, rh - 0.16, title, body,
+             accent=PRIMARY, title_size=12, body_size=10)
+
+    # The through-line. Without it the slide is four unrelated absences; with it
+    # they are one policy, which is the thing actually worth defending.
+    yb = y + 0.06 + 2 * rh + 0.28
+    # 1.18, not 1.0: the third line of body sat on the bottom border.
+    box(s, M, yb, CONTENT_W, 1.18, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.9,
+         [{"t": "Three of these are the same decision.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "Do not build the expensive version until the cheap one has "
+                "answered whether anyone wants it. The mentor offer is running "
+                "instead of a rota, the parent link is working instead of a "
+                "WhatsApp pipeline, and nothing is cached offline until we know "
+                "which lessons learners come back to. The fourth is different: "
+                "no leaderboards or lives is a design principle, and it is not "
+                "for trading.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
 
     notes(s, """
-WHY THE RIGHT-HAND COLUMN MATTERS MORE
-Anybody can list features they cut. Very few teams will say what they would do
-differently, and it is the strongest signal on this slide that the reflection
-is real rather than performed. Every one of those four cost us something
-measurable.
+THE POINT OF THIS SLIDE
+Not modesty. Each of these four is a decision with a reason behind it, and a
+team that can say why something is absent reads as one that decided rather than
+ran out of time. Give the reason, not an apology.
 
-THE ONE THAT BOTHERS US MOST
-No evaluation set for the tutor. The tutor is the differentiating claim in the
-whole product, and every prompt edit so far has been an untested deploy. We
-have twenty learners' worth of real questions to build it from, which is
-exactly the input it needs, and it is first after submission.
+IF ASKED WHAT WE WOULD DO DIFFERENTLY
+Answer it, do not read it off a slide. The three worth naming: instrument
+before building, because three events were not firing and we found out only
+when we went looking for the numbers; get it onto a real handset on day one,
+because twenty minutes on an Android phone produced six defects no test caught;
+and write the tutor's evaluation set before tuning its prompt, because building
+it last cost us the finding it contained. All three are written up in the
+"How we built it" document.
 
 IF ASKED ABOUT THE GAMIFICATION CHOICE
 Duolingo's mechanics work brilliantly for an adult learning Spanish by choice.
@@ -1945,8 +2091,8 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
-          s16_accessibility, s17_testing,
-          s18_tradeoffs]
+          s16_accessibility, s17_testing, s18_evals,
+          s19_tradeoffs]
 
 
 def main() -> None:
