@@ -86,7 +86,9 @@ LINES = [
      "least likely to finish a sign up form.",
      "बात यही है। जिन माता-पिता तक हमें सबसे ज़्यादा पहुँचना है, वही फ़ॉर्म "
      "भरने में सबसे कम रुचि रखते हैं।"),
-    (93.0,
+    # 82.5 rather than 93: the account picker this used to sit over is cut, so
+    # the line moves onto the sign-in screen just before it.
+    (82.5,
      "Signing in. Google, or an email and a password.",
      "साइन इन। गूगल से, या ईमेल और पासवर्ड से।"),
     (105.0,
@@ -98,7 +100,9 @@ LINES = [
      "the home screen, with no app store and no download.",
      "सही जवाब पर हल्का सा कंपन। रोज़ाना एक याद दिलाना। और डगर पहले से होम "
      "स्क्रीन पर, बिना किसी ऐप स्टोर या डाउनलोड के।"),
-    (137.0,
+    # 132 rather than 137: the share sheet itself is cut, so this lands while
+    # the Send it on WhatsApp button is still on screen.
+    (132.0,
      "Sharing progress with a parent. One tap, and it goes on WhatsApp.",
      "प्रगति माता-पिता तक भेजना। एक टैप, और वह व्हाट्सएप पर चली जाती है।"),
     (150.0,
@@ -152,6 +156,36 @@ LINES = [
 
 VOICES = {"en": "Rishi", "hi": "Lekha"}
 
+# ── SEGMENTS REMOVED BEFORE ANYTHING ELSE ───────────────────────────────────
+# (start, end) in the SOURCE recording, and why. This video goes to judges, so
+# anything on screen that belongs to a real person who did not agree to be in
+# it comes out. Both of these were found by scanning the whole recording for
+# dark overlays, which is what a system share sheet or an account picker looks
+# like on top of a white app.
+#
+# Cues in LINES are written against the SOURCE timeline and remapped
+# automatically, so the two lists stay independent: edit one without touching
+# the other.
+CUTS = [
+    # Google account chooser: two personal Gmail addresses, profile photos and
+    # the Supabase project URL. The sign-in screen before it is kept.
+    (85.0, 91.6),
+    # WhatsApp share sheet: five contacts, their photos and a phone number.
+    (137.3, 140.7),
+]
+
+
+def remap(t):
+    """A cue on the source timeline, moved to where it lands after the cuts."""
+    shift = 0.0
+    for start, end in CUTS:
+        if t >= end:
+            shift += end - start
+        elif t > start:
+            # Inside a removed segment: pull it to the join.
+            return start - shift
+    return t - shift
+
 
 def run(args):
     subprocess.run(args, check=True, capture_output=True)
@@ -167,6 +201,35 @@ def clip(lang, index, words):
     return wav
 
 
+def cut_video(source):
+    """The recording with every CUTS segment removed, video only.
+
+    Done with trim and concat rather than a stream copy, because the cuts do
+    not fall on keyframes and a copy would either drift or freeze at the join.
+    """
+    if not CUTS:
+        return source
+    keep, last = [], 0.0
+    for start, end in CUTS:
+        keep.append((last, start))
+        last = end
+    keep.append((last, None))
+
+    parts, labels = [], []
+    for i, (a, b) in enumerate(keep):
+        window = f"start={a}" + (f":end={b}" if b is not None else "")
+        parts.append(f"[0:v]trim={window},setpts=PTS-STARTPTS[v{i}]")
+        labels.append(f"[v{i}]")
+    parts.append("".join(labels) + f"concat=n={len(keep)}:v=1:a=0[out]")
+
+    out = WORK / "cut.mp4"
+    run([FFMPEG, "-v", "error", "-y", "-i", str(source),
+         "-filter_complex", ";".join(parts), "-map", "[out]",
+         "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+         str(out)])
+    return out
+
+
 def build(source, lang):
     clips = [clip(lang, i, line[1 if lang == "en" else 2])
              for i, line in enumerate(LINES)]
@@ -176,7 +239,7 @@ def build(source, lang):
     # afterwards rather than arriving at a whisper.
     parts, labels = [], []
     for i, (line, path) in enumerate(zip(LINES, clips)):
-        ms = int(line[0] * 1000)
+        ms = int(remap(line[0]) * 1000)
         parts.append(f"[{i + 1}:a]adelay={ms}|{ms}[d{i}]")
         labels.append(f"[d{i}]")
     parts.append(
@@ -207,8 +270,13 @@ def main():
 
     WORK.mkdir(exist_ok=True)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    trimmed = cut_video(source)
+    for start, end in CUTS:
+        print(f"cut {start:.1f}s to {end:.1f}s  ({end - start:.1f}s)")
+
     for lang in ("en", "hi"):
-        out = build(source, lang)
+        out = build(trimmed, lang)
         size = os.path.getsize(out) / 1_000_000
         print(f"wrote {out}  ({size:.1f} MB)")
     print(f"\n{len(LINES)} narration lines, voices "
