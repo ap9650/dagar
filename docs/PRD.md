@@ -57,8 +57,15 @@ Core Features
 - Chapter Quiz
 - Progress Tracking
 - Daily Learning Streak
-- Parent Progress Summary
-- Request a Human Mentor
+- Share progress with a parent, as a link needing no account
+- Request a Human Mentor — **the offer and the record of it, not a mentor service**
+
+> **What shipped, exactly:** `DECISIONS.md` **D26** is the single source of truth
+> on scope and this list defers to it. Two items are deliberately partial. The
+> mentor request is captured and never dispatched, because it exists to answer
+> H7 before anybody staffs a rota. Automatic WhatsApp delivery of the parent
+> summary is **not** built; the shared link does that job and needs no account,
+> no download and no phone number.
 Dagar ships **bilingual — English and Hindi** — from the MVP. Dagar's learners are
 disproportionately in Hindi-medium government schools; for them an English-only
 interface is not a missing feature but a barrier to entry, and adaptive
@@ -204,16 +211,21 @@ This focused scope allows the team to validate the core product experience while
 
 ### Phase 1 – Buildathon MVP
 
-- NCERT Mathematics (Classes 6–8)
+- NCERT Mathematics (Classes 6 to 8), bilingual
 - AI Tutor
 - Guided Practice
 - Chapter Quiz
-- Progress Tracking
-- Parent Progress Summary
-- Request Human Mentor
+- Progress Tracking, streaks and milestones
+- Parent progress, shared as a link
+- Request Human Mentor — offer and capture only
+
+Status per capability is in `DECISIONS.md` D26.
 
 ### Phase 2 – Product Expansion
 
+- Automatic WhatsApp delivery of the parent summary, which needs Meta business
+  verification, an approved template and an opt-in from the parent's own handset
+- A mentor service behind the request, if H7 shows learners want one
 - Additional subjects
 - More grade levels
 - Additional regional languages (Marathi, Tamil, Bengali)
@@ -657,6 +669,7 @@ already hit the problem.
 | D23 | The progress screen has tested invariants | Where two numbers derive from one fact, their agreement is asserted, not just their rendering |
 | D24 | One formatter names every weekday | The strip said `We` where the diary said `Wed`; a screen you cannot cross-check reads as broken |
 | D25 | Every worked day gets a line in "What moved" | A ticked square with nothing beside it reads as the app contradicting itself, not as an abbreviated list |
+| D26 | What actually shipped, and what did not | One table the PRD and the deck both defer to, so three documents cannot disagree about what exists |
 
 ### What this register is for
 

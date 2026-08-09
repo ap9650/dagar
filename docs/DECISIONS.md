@@ -1554,6 +1554,43 @@ empty "What moved", which is exactly the contradiction above. Acceptable because
 cannot happen to a real learner, whose events are real. Revisit by tagging seeded
 events rather than by fabricating untagged ones.
 
+## D26 — What actually shipped, and what did not (9 Aug 2026)
+
+**This table is the single source of truth on scope.** The PRD points at it, the
+pitch deck is built from it, and nothing anywhere should describe the MVP's
+contents without agreeing with this. Three documents disagreeing about what
+exists is how a deck ends up claiming a feature a judge can ask to see.
+
+It exists because four claims drifted in one afternoon, all in the same
+direction: something real and carefully built in the code, described as though
+the last mile were finished.
+
+| Capability (PRD §1) | Status | Evidence |
+|---|---|---|
+| Curriculum, Classes 6 to 8, bilingual | **Shipped** | 5 chapters, 20 concepts, 25 lessons, 181 questions, all carrying Hindi and English |
+| AI Tutor | **Shipped** | Grounded in the current lesson and the learner's weak concepts, in their language |
+| Guided practice | **Shipped** | Deterministic grading, hints escalating before answers |
+| Chapter quiz | **Shipped** | Sets the mastery band |
+| Progress, mastery, streaks, milestones | **Shipped** | Computed server-side on write, invariants tested (D23) |
+| Daily goal | **Shipped** | Same rule as the streak, so the two cannot disagree (D17) |
+| Share progress with a parent | **Shipped, as a link** | `/s/[token]`: no account, no download, no password, last seven days recomputed on every open |
+| Weekly summary **delivered to WhatsApp** | **Not shipped** | `parent_summary_sent` is zero and always has been. Blocked on Meta business verification and an opt-in from the parent's own handset (D4, amended) |
+| **Request a human mentor** | **Offer and capture only** | The offer fires on three real triggers and the request is recorded. There is no mentor-side interface, nothing is dispatched, status moves by hand (D8). It is a demand test for H7, not a service |
+
+### How to describe the last two, out loud
+
+Neither is a gap. Each is a deliberate stopping point with a reason:
+
+- **The mentor offer** answers H7 before anybody staffs a rota. Building a
+  service on the assumption that learners want one would be the expensive
+  mistake; 34 offers and 1 acceptance so far is the beginning of an answer.
+- **The parent link** already does the job the WhatsApp message would do. A
+  parent is not blocked from seeing progress, they are only not pushed it, and
+  nobody has yet asked to be pushed.
+
+Say both before being asked. A team that can show which parts are real and
+which are instrumented reads as one that knows the difference.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3

@@ -1004,6 +1004,11 @@ WHY THE LAST TILE IS AMBER AND NOT A TICK
 behind it. It is a demand test for H7. Every other tile is a capability a
 learner can use today.
 
+THE AUTHORITATIVE LIST IS DECISIONS.md D26
+This slide is built from it, and the PRD defers to it. If anyone finds those
+three disagreeing about what exists, D26 is the one that is right and the other
+two are stale.
+
 WHAT "SHARE WITH A PARENT" MEANS, EXACTLY
 A link the learner sends. No account, no download, no password, showing the
 last seven days recomputed on every open. Automatic WhatsApp delivery is NOT in
