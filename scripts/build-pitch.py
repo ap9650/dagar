@@ -2128,37 +2128,45 @@ def s19_tradeoffs(prs):
 
     half = (CONTENT_W - 0.3) / 2
 
+    # Each title names the FEATURE a stranger would look for, in the words they
+    # would use. An earlier draft said "no mentor service behind the offer" and
+    # "staffing a rota", which assume you already know what the mentor offer is
+    # and what a rota means. A judge should not have to ask.
     chose = [
-        ("No leaderboards, hearts, lives or XP",
-         "Every one of those mechanics inverts for a learner who is already "
-         "behind. Losing a life for a wrong answer punishes exactly the child "
-         "who needed another try."),
-        ("No mentor service behind the offer",
-         "Staffing a rota before knowing how often learners ask would be "
-         "building on an assumption. 34 offers and 1 acceptance is the "
-         "beginning of the answer."),
-        ("No automatic WhatsApp delivery",
-         "It needs business verification and an opt-in from the parent's own "
-         "handset. The link already lets them see progress with no account at "
-         "all."),
+        ("No leaderboard ranking children against each other",
+         "Many learning apps show a public table of who is ahead, and take away "
+         "a life when an answer is wrong. Both land hardest on the child who is "
+         "already behind. Dagar has streaks and badges, which reward turning up, "
+         "and nothing that compares one learner to another."),
+        ("No real teacher yet behind the offer of human help",
+         "When a learner keeps getting stuck, Dagar offers to connect them with "
+         "a person. Today that request is recorded and nobody is employed to "
+         "answer it. 34 offers made, 1 accepted so far. That number is what we "
+         "wanted before paying anyone to be on call."),
+        ("No weekly progress report sent to a parent on WhatsApp",
+         "Parents are not left out: they open a private link any time and see "
+         "the last seven days, with no account, no app and no password. What is "
+         "missing is Dagar sending it to them unprompted, which needs Meta "
+         "business approval and an opt-in from the parent's own phone."),
         # This card used to read "no evaluation set for the tutor yet". The set
         # shipped (D27, slide 18), so leaving it would have been the deck
         # claiming a gap that no longer exists, which is D26 in reverse.
-        ("No offline mode",
-         "Lessons need a connection. Worth building, and not before we knew "
-         "which lessons learners actually return to. Guessing that would have "
-         "cost days of caching the wrong things."),
+        ("No lessons that keep working without internet",
+         "Nothing is saved to the phone for use offline. It matters for these "
+         "learners and it is on the roadmap. We did not want to guess which "
+         "lessons to store before we could see which ones learners actually "
+         "come back to."),
     ]
     # Two by two now that there is one list rather than two. Four cards in a
     # single column would leave the right half of the slide empty, and four
     # across would squeeze each reason into a column too narrow to read.
     # Heights are tight to the copy: with only four cards, generous boxes read
     # as padding rather than as breathing room.
-    rh = 1.42
+    rh = 1.6
     for i, (title, body) in enumerate(chose):
-        card(s, M + (i % 2) * (half + 0.3), y + 0.06 + (i // 2) * rh,
-             half, rh - 0.16, title, body,
-             accent=PRIMARY, title_size=12, body_size=10)
+        card(s, M + (i % 2) * (half + 0.3), y + 0.02 + (i // 2) * rh,
+             half, rh - 0.14, title, body,
+             accent=PRIMARY, title_size=11.5, body_size=9.5)
 
     # The through-line. Without it the slide is four unrelated absences; with it
     # they are one policy, which is the thing actually worth defending.
@@ -2170,12 +2178,13 @@ def s19_tradeoffs(prs):
          [{"t": "Three of these are the same decision.",
            "size": 12.5, "bold": True, "color": INK, "space_after": 4},
           {"t": "Do not build the expensive version until the cheap one has "
-                "answered whether anyone wants it. The mentor offer is running "
-                "instead of a rota, the parent link is working instead of a "
-                "WhatsApp pipeline, and nothing is cached offline until we know "
-                "which lessons learners come back to. The fourth is different: "
-                "no leaderboards or lives is a design principle, and it is not "
-                "for trading.",
+                "told you whether anyone wants it. We are counting how many "
+                "learners ask for a human before we pay anyone to be one. "
+                "Parents already have a link that works, so the WhatsApp "
+                "message can wait for approval. Nothing is stored offline until "
+                "we know what is worth storing. The fourth is not a "
+                "wait-and-see: no leaderboard is a decision about what this "
+                "product is for, and it is not for trading.",
            "size": 10.5, "color": BODY, "line": 1.26}])
 
     notes(s, """
