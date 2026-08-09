@@ -1991,6 +1991,127 @@ the quiz are for.
 """)
 
 
+def s20_users(prs):
+    """
+    First-party evidence: what the people using it actually said.
+
+    Slide 4 is other people's research. This is ours, and the difference
+    matters: every response here comes from a signed-in account that had used
+    the product, so nobody is reacting to a screenshot or a demo.
+
+    The fourth quote is the one that earns the slide. A learner asking for an
+    AI tutor inside an app that puts an AI tutor on every lesson screen is not
+    a feature request, it is a discoverability finding, and it is what sends
+    the next slide where it goes.
+    """
+    # The title used to say "one classroom, four days". 46 accounts include
+    # teachers, a parent and people outside the class, so "one classroom" was
+    # not true, and usage did not stop when the build did.
+    s, y = slide_shell(prs, 20, "20 · What real users said",
+                       "Thirty learners used it. Fifteen told us what they think.",
+                       "Every response below came from a signed-in account that "
+                       "had used Dagar. Nobody here is reacting to a demo.")
+
+    tiles = [("46", "signed up"), ("30", "finished a lesson"),
+             ("15", "left feedback"), ("14 of 15", "would use it again")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    y2 = y + 1.08
+    quotes = [
+        # Two drafts were wrong here. First "neither was asked to", invented.
+        # Then "approached and asked to try it", which read as an apology. Both
+        # teach MATHEMATICS and were asked for exactly that reason: it is
+        # expert review, sought on purpose, not a soft sample.
+        ("A mathematics teacher, on the adaptivity",
+         "“It adapts to students level and make practice feel like a game "
+         "instead of homework.”  Two of the fifteen teach mathematics, and "
+         "were asked because they do.", PRIMARY),
+        ("A student, on the content design",
+         "“The way it explained fraction with rotis made them easy to "
+         "understand.”  Fractions was the chapter written most deliberately "
+         "concrete first. The comment is about the lesson we most wanted it "
+         "to be about.", PRIMARY),
+        ("A mathematics teacher, on what is still wrong",
+         "“Language as it is quite difficult to understand english "
+         "language for class 6 grade kids especially in hindi dominance "
+         "area.”  Hindi shipped in the MVP for this reason, and one "
+         "teacher still says it is not enough.", AMBER),
+        ("A student, asking for what we built",
+         "“Their could be an ai tutor which would explain ur problems in "
+         "the notes if you ask it.”  There is an AI tutor on every lesson "
+         "screen. They named the quiz as what worked, so they were using it.",
+         AMBER),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(quotes):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    # 1.46, not 1.14: naming the teachers as expert review added a fourth line
+    # of body and the last one sat below the box.
+    yb = y2 + 1.92
+    box(s, M, yb, CONTENT_W, 1.46, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 1.02, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 1.2,
+         [{"t": "Fifteen responses is not a market study, and the last quote "
+                "is worth more than the other fourteen.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "Mostly one class, reached through a family connection, so the "
+                "learners most likely to answer are the ones most likely to be "
+                "kind. The two mathematics teachers are the opposite case: they "
+                "were asked because they teach this syllabus to this age group, "
+                "and one used the space to tell us the English is too hard for "
+                "Class 6 in a Hindi-dominant area. What survives the discount: "
+                "15 of 15 said it helped them understand something, 14 of 15 "
+                "would come back, a learner asked us to build the feature we "
+                "already ship, and only 11 of 30 active learners have ever "
+                "opened the tutor.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+THE NUMBER TO SAY OUT LOUD
+14 of 15 would use it again, and 15 of 15 said it helped them understand
+something (14 "yes", 1 "a bit"). Say the split rather than rounding it to 100%,
+because someone will ask and the honest version is stronger than the round one.
+
+DISCOUNT THE LEARNER SAMPLE BEFORE ANYONE ELSE DOES
+Mostly one class, reached through a family connection. The selection bias runs
+towards kindness and we should say so first, because the room will think it
+either way and saying it first is what makes the rest credible. It is still 15
+responses from 15 distinct signed-in accounts that had used the product, which
+is more first-party evidence than most four-day builds have at all.
+
+THE TEACHERS ARE A DIFFERENT KIND OF EVIDENCE, SO SAY SO
+Both teach mathematics, and both were asked for exactly that reason. That is
+not a friendly sample, it is subject-matter review, sought on purpose, by
+people who teach this syllabus to this age group every day. If someone frames
+it as "you asked your contacts", the answer is that we went looking for the
+readers most able to find fault with the teaching, and one of them did: the
+English is too hard for Class 6 in a Hindi-dominant area. Nobody being polite
+hands you that.
+
+THE FOURTH QUOTE IS THE SLIDE
+A learner asking for an AI tutor in an app with an AI tutor on every lesson
+screen. They named the quiz as what worked, so they had used the product
+properly. Pair it with the behavioural number: 11 of 30 active learners have
+ever sent the tutor a message, against a 50% target. That is discoverability,
+and it is measured rather than felt.
+
+IF ASKED WHY NOT MORE RESPONSES
+It ran for four days inside one class. The form is in the product and still
+collecting. We would rather show 15 real responses with the bias named than a
+larger number gathered from people who never opened it.
+
+IF ASKED ABOUT THE TEACHER'S LANGUAGE COMMENT
+It is the most useful criticism we received. Hindi is in the MVP rather than a
+later phase precisely because the learners are Hindi-medium, and a teacher is
+still telling us the English is a barrier for Class 6. That is an argument for
+defaulting to Hindi by region rather than asking the child to choose.
+""")
+
+
 def s19_tradeoffs(prs):
     """
     The gaps, as decisions.
@@ -2092,7 +2213,7 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
-          s19_tradeoffs]
+          s19_tradeoffs, s20_users]
 
 
 def main() -> None:
