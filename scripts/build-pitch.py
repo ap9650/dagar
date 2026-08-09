@@ -2151,6 +2151,13 @@ def s21_roadmap(prs):
          "The loudest request, 7 of 15 in a forced choice. One chapter per "
          "grade is a ceiling: finish it and there is nothing to return to",
          10, 10, 7, "NOW", PRIMARY),
+        # Missing from the first draft and it should not have been. Practice
+        # was the second loudest ask at 6 of 15, and the quiz-pool defect was
+        # already written down in slide 19's notes without being scheduled.
+        ("More practice questions, and a wider quiz pool",
+         "Second loudest ask, 6 of 15. A chapter quiz is 8 questions and a "
+         "retake is the same 8, so there is nothing new to come back for",
+         9, 9, 8, "NOW", PRIMARY),
         ("Make the answer box and the tutor impossible to miss",
          "9 of 25 tutor messages are about the screen. 11 of 30 have ever "
          "opened the tutor, against a 50% target", 9, 8, 8, "NOW", PRIMARY),
@@ -2172,10 +2179,10 @@ def s21_roadmap(prs):
         # Deliberately unscored. Putting a 6.1 next to "more subjects" would be
         # inventing precision about work nobody has specified, and this slide's
         # whole argument is that breadth is earned rather than scheduled.
-        ("More subjects, more grades, more languages, a view for teachers",
-         "Not scored, and that is the point. Breadth is what solving one "
-         "learner properly earns you, so these get numbers when the rows above "
-         "are done", None, None, None, "LATER", MUTED),
+        ("More subjects, more classes, more languages, a view for teachers",
+         "The next slide. Not scored here, because breadth is what solving one "
+         "learner properly earns you, and these get numbers when the rows "
+         "above are done", None, None, None, "LATER", MUTED),
     ]
 
     # Column geometry, fixed once so the header and every row cannot drift.
@@ -2234,9 +2241,8 @@ def s21_roadmap(prs):
     box(s, M, yb, CONTENT_W, 0.62, fill=SURFACE, line=BORDER)
     box(s, M, yb + 0.13, 0.06, 0.36, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.34, yb + 0.15, CONTENT_W - 0.7, 0.36,
-         [{"t": "Both signals sit at the top: what learners asked us for, and "
-                "what we watched them struggle with. Nothing below them starts "
-                "until those three are done.",
+         [{"t": "Depth first, and depth is specific: more to learn, more to "
+                "practise, and a screen that does not hide either of them.",
            "size": 11.5, "bold": True, "color": INK}])
 
     notes(s, """
@@ -2296,6 +2302,237 @@ WhatsApp needs Meta business verification and an opt-in from the parent's own
 handset, and the summary itself is already built and running as a link. The
 mentor service needs demand: 34 offers and 1 acceptance. If that ratio moves,
 the item moves with it. Neither is a technical unknown.
+""")
+
+
+def s22_horizon(prs):
+    """
+    The long arc, in phases, at the altitude slide 21 deliberately avoids.
+
+    Slide 21 is the next few weeks with scores attached. This one is the shape
+    of the product over years, and it is drawn from the PRD's own phases rather
+    than invented for the deck, so the two documents cannot drift.
+
+    The discipline is the same as slide 21's last row: no dates, and no
+    pretending a phase is scheduled when it is conditional. Each phase names
+    the thing that has to be true before it starts.
+    """
+    s, y = slide_shell(prs, 22, "22 · Long-term roadmap",
+                       "One learner, solved properly, then repeated.",
+                       "Three phases. Each one starts when the phase before it "
+                       "has been proven, not when a date arrives.")
+
+    phases = [
+        ("PHASE 1", "Shipped", PRIMARY,
+         [("One subject, three classes, two languages",
+           "NCERT Mathematics for Classes 6 to 8, every lesson in Hindi and "
+           "English"),
+          ("The full learning loop",
+           "Lessons, AI tutor, practice, quiz, mastery, streaks, milestones"),
+          ("A parent who needs no account",
+           "Progress as a private link, and a mentor request captured for "
+           "demand"),
+          ("Free, deliberately",
+           "Pricing now would contaminate the activation and retention numbers "
+           "we are trying to read")]),
+        ("PHASE 2", "Expansion, once depth is done", MUTED,
+         [("More subjects, more classes",
+           "Science next, then the classes either side of 6 to 8. The content "
+           "model already takes them"),
+          ("More languages",
+           "Marathi, Tamil and Bengali. The bilingual work was built as a "
+           "pattern, not a special case"),
+          ("Views for the adults",
+           "A teacher dashboard for a class, an NGO dashboard for a cohort, "
+           "and the WhatsApp summary once Meta approves"),
+          ("First money, from institutions",
+           "Paid CSR and NGO pilots that test willingness to pay for outcomes "
+           "rather than for features")]),
+        # Voice-first sits inside the accessibility item rather than beside it,
+        # which is where the PRD puts it, and the slot it frees goes to the
+        # persona expansion.
+        ("PHASE 3", "The platform it is meant to be", AMBER,
+         [("Accessibility as the product, not a setting",
+           "For learners with visual, hearing and speech impairments and for "
+           "neurodiverse learners, with voice-first learning throughout"),
+          ("New personas, not just new content",
+           "Adult literacy learners, and the groups above designed for rather "
+           "than accommodated. Same engine, a different learner"),
+          ("Learning that works offline",
+           "The last barrier that is about infrastructure rather than teaching"),
+          ("A verified mentor network",
+           "Only if the demand signal we are collecting today says learners "
+           "want one")]),
+    ]
+
+    cw = (CONTENT_W - 2 * 0.3) / 3
+    for i, (label, sub, accent, items) in enumerate(phases):
+        cx = M + i * (cw + 0.3)
+        box(s, cx, y, cw, 0.52, fill=SURFACE, line=BORDER)
+        box(s, cx, y, 0.06, 0.52, fill=accent, shape=MSO_SHAPE.RECTANGLE)
+        text(s, cx + 0.22, y + 0.05, cw - 0.4, 0.22,
+             [{"t": label, "size": 10, "bold": True, "color": accent}])
+        text(s, cx + 0.22, y + 0.26, cw - 0.4, 0.22,
+             [{"t": sub, "size": 9.5, "color": MUTED}])
+        for j, (head, body) in enumerate(items):
+            iy = y + 0.66 + j * 0.86
+            text(s, cx + 0.06, iy, cw - 0.2, 0.24,
+                 [{"t": head, "size": 10.5, "bold": True, "color": INK}])
+            text(s, cx + 0.06, iy + 0.22, cw - 0.2, 0.62,
+                 [{"t": body, "size": 9, "color": BODY, "line": 1.24}])
+
+    # 0.86 spacing, not 0.98: at 0.98 the closing band landed on the footer.
+    yb = y + 0.66 + 4 * 0.86 + 0.12
+    box(s, M, yb, CONTENT_W, 0.62, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.13, 0.06, 0.36, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.15, CONTENT_W - 0.7, 0.36,
+         [{"t": "No dates on this slide. A phase starts when the one before it "
+                "is proven, and saying otherwise would be the easiest thing "
+                "here to be wrong about.",
+           "size": 11.5, "bold": True, "color": INK}])
+
+    notes(s, """
+WHY THERE ARE NO DATES
+Because we would be guessing, and a roadmap with invented dates is the fastest
+way to lose a room that has seen a few. Each phase names its precondition
+instead. Phase 2 starts when the depth work on slide 21 is done. Phase 3 starts
+when Phase 2 has paying institutions and a reason to believe the model holds.
+
+THIS IS THE PRD, NOT A DECK INVENTION
+These three phases are lifted from the PRD's own roadmap section, so the two
+cannot drift apart. If someone asks to see it written down, it is there with
+the full feature lists.
+
+THE ORDER OF PHASE 2 IS DELIBERATE
+Subjects and classes before languages, and both before dashboards for adults.
+Every one of those widens the product, but only the first two widen it for the
+learner, and the learner is who the product is for.
+
+WHAT "NEW PERSONAS" MEANS, IF ASKED
+Everything up to here serves one persona: a learner in Classes 6 to 8 who is
+behind and cannot afford tuition. Phase 3 widens who the product is for, not
+just what it teaches. Adult literacy learners are the clearest case, and they
+need the same thing our learners need: one idea at a time, in their language,
+with no cost and no judgement. The accessibility groups stop being people we
+accommodate and become people we design for. The engine does not change. The
+learner does.
+
+WHY ACCESSIBILITY IS A PHASE AND NOT A CHECKBOX
+WCAG AA is already in the MVP: contrast, keyboard, focus, touch targets,
+reduced motion. That is table stakes and it is done. Phase 3 is different in
+kind, not degree: a product designed from the start for a learner who cannot
+see the screen, or cannot hear the audio, or reads differently. That is a
+rebuild of the interaction model, not a settings page, which is why it is
+honest to call it a phase.
+
+IF ASKED WHICH PHASE 2 ITEM IS CLOSEST
+Science. The content model, the lesson player, the practice engine and the
+grading are all subject-agnostic already. Adding a subject is authoring and
+review, not engineering, and that was a deliberate architectural choice made in
+the first two days.
+""")
+
+
+def s23_adoption(prs):
+    """
+    How a learner actually gets in, and which channel we have proven.
+
+    The temptation on an adoption slide is to draw four channels and imply all
+    four are running. One is running. It produced 46 accounts in days and it is
+    the same motion the institutional plan scales, which is a stronger thing to
+    say than a diagram of hypotheses.
+
+    Every claim here is checked in the repo rather than asserted: the manifest
+    and service worker exist, `display: standalone` is set, and the parent route
+    at /s/[token] genuinely resolves without a session.
+    """
+    s, y = slide_shell(prs, 23, "23 · Adoption",
+                       "Nothing to download, and nothing to pay.",
+                       "The hardest step in Indian edtech is the first one. "
+                       "Dagar removes the install, the app store and the "
+                       "parent's account.")
+
+    tiles = [("1", "link to open it"), ("0", "apps to install"),
+             ("46", "joined from one class"), ("0", "spent on marketing")]
+    tw, tgx = 2.259, 0.2
+    for i, (big, label) in enumerate(tiles):
+        stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
+
+    y2 = y + 1.08
+    cards = [
+        ("Opening it is a link, not a download",
+         "Dagar is a web app that installs to the home screen with its own "
+         "icon and no browser bar. On a shared phone with 16GB and a data plan "
+         "that matters, asking a family to install a 40MB app from a store "
+         "loses most of them before the first lesson.", PRIMARY),
+        ("A parent needs no account, ever",
+         "They open a private link and see the last seven days. No sign-up, no "
+         "password, no app, nothing to remember. The parent we most want to "
+         "reach is the one least likely to complete a registration form.",
+         PRIMARY),
+        ("One teacher onboards a whole class",
+         "That is how the 46 accounts happened: a teacher shared one link. No "
+         "advertising, no incentive, no per-learner effort. The unit of "
+         "adoption is a classroom, and the cost of adding one is a message.",
+         PRIMARY),
+        ("Institutions are the path to scale",
+         "NGO, CSR and government programmes buy per learner and already fund "
+         "exactly this. The three-year target is roughly 250,000 learners, "
+         "which is under 1% of the 30 million in Classes 6 to 8 who follow "
+         "this curriculum.", AMBER),
+    ]
+    cw = (CONTENT_W - 3 * 0.22) / 4
+    for i, (title, body, accent) in enumerate(cards):
+        card(s, M + i * (cw + 0.22), y2, cw, 1.72, title, body,
+             accent=accent, title_size=11.5, body_size=9.5)
+
+    yb = y2 + 1.92
+    box(s, M, yb, CONTENT_W, 1.14, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.2, 0.06, 0.74, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
+         [{"t": "One channel is proven. The other is an argument.",
+           "size": 12.5, "bold": True, "color": INK, "space_after": 4},
+          {"t": "A teacher sharing a link with her class is tested, and it "
+                "works: 46 accounts, 30 of them finishing a lesson, with "
+                "nothing spent. Selling to an NGO or a CSR programme is not "
+                "tested at all, and we are not going to pretend a funnel "
+                "exists because we drew one. What makes it credible is that "
+                "the institutional motion is the same motion, repeated: an "
+                "institution is a room full of teachers, and each of them "
+                "already has the only thing needed to start, which is a class "
+                "and a link.",
+           "size": 10.5, "color": BODY, "line": 1.26}])
+
+    notes(s, """
+THE FIRST STEP IS THE WHOLE PROBLEM
+Every number on this slide is about removing friction before learning starts.
+No Play Store account, no APK, no 40MB download on a phone shared between
+siblings, and no registration for the parent. Each of those is a place where a
+family in the target segment drops out, and none of them has anything to do
+with whether the teaching is good.
+
+WHY NOT THE PLAY STORE, IF ASKED
+A personal developer account opened after November 2023 must run a closed test
+with 12 or more testers for 14 continuous days before it can even apply for
+production. That is longer than this build. The same web app wraps into a
+Trusted Web Activity later with no rewrite, so the store is a packaging
+decision we can take whenever it helps, not a dependency. Recorded as D15.
+
+BE HONEST ABOUT WHICH CHANNEL IS PROVEN
+One. A teacher shared a link with her class and 46 accounts followed, 30 of
+which completed a lesson. The NGO and CSR route is reasoned rather than
+demonstrated, and saying so is what makes the first number believable.
+
+THE INSTITUTIONAL ARGUMENT IN ONE LINE
+An institution is a room full of teachers, and the motion that already worked
+is one teacher with one class and one link. We are not proposing a different
+machine at scale, we are proposing the same one, more times.
+
+IF ASKED ABOUT THE 250,000 FIGURE
+It is roughly 0.8% of the ~30 million learners in Classes 6 to 8 on this
+curriculum with household smartphone access, over three years. The derivation
+and its confidence levels are in MARKET_AND_PRICING.md, and the weakest input
+is curriculum alignment at about 62%.
 """)
 
 
@@ -2409,7 +2646,8 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
-          s19_tradeoffs, s20_users, s21_roadmap]
+          s19_tradeoffs, s20_users, s21_roadmap,
+          s22_horizon, s23_adoption]
 
 
 def main() -> None:
