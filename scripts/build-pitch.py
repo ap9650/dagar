@@ -2647,6 +2647,126 @@ worst case implies.
 """)
 
 
+def s25_voices(prs):
+    """
+    The feedback itself: the numbers as bars, the words as they were typed.
+
+    Slide 20 uses four quotes analytically, to set up the roadmap. This one is
+    the whole response set near the end of the deck, where the last thing a
+    room hears before the close should be the people the product is for.
+
+    These are rendered as cards rather than as screenshots of a screen. No such
+    screen exists in the product, and inventing a convincing picture of one
+    would be fabricating a UI. The words are verbatim, and where a quote is cut
+    it is marked.
+    """
+    s, y = slide_shell(prs, 25, "25 · In their words",
+                       "Fifteen people had nothing to gain by answering.",
+                       "Every response below came from inside the product, from "
+                       "an account that had used it. Spelling and grammar are "
+                       "left exactly as they were typed.")
+
+    # ── Left: the numbers, as bars ──────────────────────────────────────────
+    lw = 3.5
+    groups = [
+        ("Did it help you understand something?",
+         [("Yes", 14, PRIMARY), ("A bit", 1, AMBER), ("No", 0, MUTED)]),
+        ("Would you use Dagar again?",
+         [("Yes", 14, PRIMARY), ("No", 1, AMBER)]),
+        ("If we could do only ONE more thing",
+         [("More chapters", 7, PRIMARY), ("More practice", 6, PRIMARY),
+          ("The tutor", 1, MUTED), ("Something else", 1, MUTED)]),
+    ]
+    gy = y
+    for title, options in groups:
+        text(s, M, gy, lw, 0.24,
+             [{"t": title, "size": 9.5, "bold": True, "color": INK}])
+        by = gy + 0.24
+        for label, n, colour in options:
+            text(s, M, by, 1.28, 0.22,
+                 [{"t": label, "size": 8.5, "color": BODY}])
+            box(s, M + 1.3, by + 0.045, 1.75, 0.13, fill=SURFACE,
+                shape=MSO_SHAPE.RECTANGLE)
+            if n:
+                box(s, M + 1.3, by + 0.045, 1.75 * (n / 15), 0.13, fill=colour,
+                    shape=MSO_SHAPE.RECTANGLE)
+            text(s, M + 3.12, by - 0.01, 0.4, 0.22,
+                 [{"t": str(n), "size": 9, "bold": True, "color": colour}])
+            by += 0.26
+        gy = by + 0.24
+
+    # ── Right: the words ────────────────────────────────────────────────────
+    rx = M + lw + 0.35
+    rw = CONTENT_W - lw - 0.35
+    cw = (rw - 0.22) / 2
+    quotes = [
+        ("Parent", "“It feels like having a patient math tutor in my "
+                   "pocket 24/7.”", PRIMARY),
+        ("Student", "“The way it engages with us to making learning "
+                    "simpler.”", PRIMARY),
+        ("Other", "“Dagar ka concept kaafi accha laga. Lessons simple aur easy "
+                  "to understand hain, aur practice questions bhi helpful hain. "
+                  "Hindi/English dono m h.”", PRIMARY),
+        ("Student", "“Explanation is very important. … Now this app is like "
+                    "practice paper. It can help students to practice more and "
+                    "make it in fun way.”", PRIMARY),
+        ("Other", "“Okay, but please add a few more chapters along with some "
+                  "additional practice questions.”", AMBER),
+        ("Student", "Asked what confused them, one answer was two words: "
+                    "“Data handling chapter.”", AMBER),
+    ]
+    for i, (who, quote, accent) in enumerate(quotes):
+        qx = rx + (i % 2) * (cw + 0.22)
+        qy = y + (i // 2) * 1.24
+        box(s, qx, qy, cw, 1.12, fill=WHITE, line=BORDER)
+        box(s, qx, qy, 0.05, 1.12, fill=accent, shape=MSO_SHAPE.RECTANGLE)
+        text(s, qx + 0.18, qy + 0.08, cw - 0.34, 0.2,
+             [{"t": who.upper(), "size": 8, "bold": True, "color": accent}])
+        text(s, qx + 0.18, qy + 0.3, cw - 0.34, 0.76,
+             [{"t": quote, "size": 9.5, "color": INK, "line": 1.26}])
+
+    yb = y + 3 * 1.24 + 0.16
+    box(s, M, yb, CONTENT_W, 0.92, fill=SURFACE, line=BORDER)
+    box(s, M, yb + 0.16, 0.06, 0.6, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
+    text(s, M + 0.34, yb + 0.12, CONTENT_W - 0.7, 0.72,
+         [{"t": "Fifteen of fifteen said it helped them understand something.",
+           "size": 12, "bold": True, "color": INK, "space_after": 3},
+          {"t": "Fourteen would come back. The one who said no still said it "
+                "helped. And the loudest request, from people who owed us "
+                "nothing, was simply more of it.",
+           "size": 10, "color": BODY, "line": 1.24}])
+
+    notes(s, """
+WHY THIS SLIDE IS SO LATE IN THE DECK
+Because the last thing a room should hear before the close is the people the
+product is for, in their own words, rather than another claim from us. Slide 20
+used four of these analytically to set up the roadmap. This is the whole set.
+
+THESE ARE CARDS, NOT SCREENSHOTS
+There is no screen in Dagar that displays other people's feedback, so a
+screenshot would have meant inventing a picture of a product surface that does
+not exist. The words are verbatim from the database, spelling included, and
+where a quote is trimmed there is an ellipsis.
+
+THE NUMBER THAT MATTERS MOST
+15 of 15 said it helped them understand something: 14 "yes" and 1 "a bit". Say
+the split. One respondent said they would not use it again and still said it
+helped them understand, which is a more interesting data point than a clean
+sweep would have been.
+
+THE HINGLISH RESPONSE IS EVIDENCE, NOT DECORATION
+A learner writing back in Hinglish, unprompted, and specifically noting that
+both languages are there, is the bilingual decision being validated by the
+person it was made for.
+
+IF ASKED ABOUT THE NEGATIVE ONES
+Two are on the slide on purpose. "Data handling chapter" as an answer to what
+confused them is a content problem in a specific chapter and it is on the list
+to rewrite. "Please add a few more chapters" is the roadmap's top item arriving
+unprompted from a user.
+""")
+
+
 def s19_tradeoffs(prs):
     """
     The gaps, as decisions.
@@ -2758,7 +2878,7 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s14_security, s15_tutor,
           s16_accessibility, s17_testing, s18_evals,
           s19_tradeoffs, s20_users, s21_roadmap,
-          s22_horizon, s23_adoption, s24_money]
+          s22_horizon, s23_adoption, s24_money, s25_voices]
 
 
 def main() -> None:
