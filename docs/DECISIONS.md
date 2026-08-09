@@ -1661,6 +1661,57 @@ a 5% margin at 95% confidence, which is the right target at scale and the wrong
 one here: at 250 a run takes an hour and nobody executes it. Grow it by
 harvesting real traffic weekly, not by inventing more.
 
+## D28 — Discoverability is the top roadmap item, and two independent sources say so (9 Aug 2026)
+
+**The next thing we build is not a feature. It is making the features we have
+findable.** This outranks more chapters, which is the loudest thing users asked
+for out loud.
+
+### The evidence, from two places that cannot both be wrong in the same way
+
+**Production behaviour: 9 of 25 messages sent to the tutor are about the screen,
+not the mathematics.**
+
+```
+  "Where to select answers 🤔"
+  "I am asking that where to fill the answers of the quiz"
+  "Isme me likhu kaise"
+  "I am note able to seen the options"
+  "4"   "A"   "Cricket"   "Answer 40"   "17 answer hai"
+```
+
+The last five matter as much as the first four. Those learners could not find
+the answer box, so they told the tutor instead. It is the same failure wearing
+different clothes.
+
+**Feedback: a learner asked us to build the AI tutor.** In an app that puts an
+AI tutor on every lesson screen, one respondent wrote *"their could be an ai
+tutor which would explain ur problems in the notes if you ask it"*. They had
+used the product enough to name the quiz as what worked. They never found the
+tutor. One more picked "tutor" in the forced choice of one more thing.
+
+### Why the survey did not say "fix the interface"
+
+Because a survey structurally cannot. Nobody writes *"I could not find the
+answer box"*, partly for lack of the words and partly because it reads as their
+own failure rather than the product's. They give up quietly, or they ask the
+tutor. **That is precisely why the tutor logs caught what the form could not.**
+
+It also explains the forced choice: 7 of 15 asked for more chapters. The
+learners who got stuck were not the ones filling in the form.
+
+**Keep the two signals apart when describing this.** Stated preference is what
+people ask for; behaviour is what happens to them. Both are real, they disagree
+here, and a team that can tell them apart is making a different quality of
+decision from one that only runs surveys.
+
+### What it means for order of work
+
+Content is worth nothing to a learner who cannot submit an answer. More
+chapters against an interface a third of learners are lost in multiplies the
+problem rather than solving it. Discoverability first, chapters immediately
+after, and both in horizon 1.
+
 ## Still open
 
 - Market inputs are **derived estimates, not commissioned research.** Assumption A3

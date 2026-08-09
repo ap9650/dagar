@@ -223,6 +223,13 @@ Status per capability is in `DECISIONS.md` D26.
 
 ### Phase 2 – Product Expansion
 
+**First, before anything on this list: make what already exists findable (D28).**
+Nine of the first twenty five messages sent to the tutor were about the screen
+rather than the mathematics, and one feedback respondent asked us to build an AI
+tutor in an app that puts one on every lesson. Depth before breadth is not a
+slogan here: more chapters behind an interface a third of learners are lost in
+multiplies the problem instead of solving it.
+
 - Automatic WhatsApp delivery of the parent summary, which needs Meta business
   verification, an approved template and an opt-in from the parent's own handset
 - A mentor service behind the request, if H7 shows learners want one
@@ -713,6 +720,7 @@ already hit the problem.
 | D25 | Every worked day gets a line in "What moved" | A ticked square with nothing beside it reads as the app contradicting itself, not as an abbreviated list |
 | D26 | What actually shipped, and what did not | One table the PRD and the deck both defer to, so three documents cannot disagree about what exists |
 | D27 | The tutor is evaluated against real learner messages | A 50-case golden set gates every prompt change. Real traffic sets the categories, because 9 of the first 25 messages were learners lost in the interface |
+| D28 | Discoverability is the top roadmap item | Ahead of more chapters, the loudest stated ask. Tutor logs and a learner asking us to build the tutor we already ship both point at the same gap |
 
 ### What this register is for
 
