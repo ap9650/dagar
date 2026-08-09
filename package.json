@@ -28,9 +28,10 @@
     "deck:preview": "python3 scripts/preview-deck.py /tmp/deck-preview",
     "viz:preview": "node --no-warnings scripts/gen-viz-preview.ts",
     "deck:shots": "node --no-warnings scripts/capture-screens.ts",
-    "deck:pdf": "node --no-warnings scripts/build-pdfs.ts",
+    "deck:pdf": "npm run deck && python3 scripts/build-pitch-pdf.py",
     "deck:v1": "python3 scripts/build-deck.py",
-    "eval": "node --no-warnings scripts/eval-tutor.ts"
+    "eval": "node --no-warnings scripts/eval-tutor.ts",
+    "feedback:pdf": "npm run feedback:export && python3 scripts/build-feedback-pdf.py"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
