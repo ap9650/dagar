@@ -118,6 +118,30 @@ def main():
     pdf.save()
     size = OUT.stat().st_size / 1_000_000
     print(f"wrote {OUT}  ({count} pages, {size:.1f} MB)")
+    publish_web(count)
+
+
+def publish_web(count):
+    """The same pages, sized for the browser, into `public/deck/`.
+
+    Done here rather than by hand because a hand-copied asset is a stale asset
+    waiting to happen, and this deck has already shipped stale once. Whatever
+    the PDF says, dagar-ap19.vercel.app/deck says the same thing.
+    """
+    web = pathlib.Path("public/deck")
+    web.mkdir(parents=True, exist_ok=True)
+    total = 0
+    for i in range(count):
+        with Image.open(WORK / f"{i:02d}.png") as im:
+            rgb = im.convert("RGB")
+            rgb = rgb.resize((1600, round(1600 * rgb.height / rgb.width)),
+                             Image.LANCZOS)
+            path = web / f"{i + 1:02d}.jpg"
+            rgb.save(path, quality=88, optimize=True)
+            total += path.stat().st_size
+    shutil.copy(OUT, web / OUT.name)
+    print(f"wrote {web}/  ({count} slides, {total / 1_000_000:.1f} MB) "
+          f"— deploy to publish at /deck")
 
 
 if __name__ == "__main__":

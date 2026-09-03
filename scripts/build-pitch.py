@@ -470,7 +470,7 @@ def s5_market(prs):
         ("500K", "learners  ·  SOM",
          "Three years. Half funded by institutions, half reached directly, "
          "of whom a small share subscribe.",
-         "₹13 Cr  ·  $1.53M ARR", HINT),
+         "₹13 Cr  ·  $1.48M ARR", HINT),
     ]
     w, gx = 3.87, 0.24
     for i, (big, label, blurb, money, accent) in enumerate(tiers):
@@ -546,23 +546,57 @@ price any family is asked to pay.
 
 TAM   247M learners x ₹500 = ₹12,350 Cr, which is $1.40B at ₹88 = $1.
 SAM   29.6M x ₹500 = ₹1,480 Cr, which is $168M.
-SOM   250,000 x ₹450 = ₹11.25 Cr, which is $1.28M ARR.
+SOM   two segments, worked below, = ₹13 Cr, which is $1.48M ARR.
 
-SOM uses ₹450 rather than ₹500 because the institutional volume tier prices at
-₹450 above 25,000 learners. Blending it at ₹500 would overstate the figure.
+SOM is not multiplied by ₹500, because at this size we can model the actual mix
+instead of using a blended ceiling. Most of the SOM learners pay nothing at all.
 
-THE 250,000 IS A CHANNEL BUILD-UP, NOT A PERCENTAGE WE PICKED
-  NGO and CSR programmes   ~150,000   15 to 25 partner orgs, 6 to 10k each
-  Government school pilots  ~75,000   2 to 3 district-level pilots
-  Organic and word of mouth ~25,000   no paid acquisition
-  Total                     ~250,000  which is 0.84% of SAM
+── HOW SOM IS BUILT ────────────────────────────────────────────────────────
 
-IF ASKED WHY DIRECT-TO-CONSUMER IS NOT THE ENGINE
-Indian consumer edtech converts free to paid at roughly 2 to 5%. For a segment
-defined by inability to afford tuition, assume 1 to 2%. A consumer-led model
-would need around twenty times the user base for the same revenue, and paid
-acquisition is not available to a product whose users are selected for having
-no money to spend.
+STEP 1, LEARNERS, CHANNEL BY CHANNEL. The percentage of SAM is the OUTPUT of
+this, never the input. Starting from "let us say 1% of the market" is working
+backwards from a number that merely sounds humble.
+
+  NGO and CSR programmes    150,000   15 to 25 partners, 6 to 10k learners each
+  Government pilots          75,000   2 to 3 district-level pilots
+  Direct to consumer        275,000   organic plus modest paid acquisition,
+                                      aimed at parents in tier 2 and tier 3
+  TOTAL                     500,000   which is 1.7% of the 29.6M SAM
+
+STEP 2, WHO ACTUALLY PAYS. The two halves behave completely differently.
+
+  Institutional   225,000 learners, every one funded by the institution
+                  225,000 x ₹450        = ₹10.1 Cr
+
+  Consumer        275,000 reached, 4% subscribe = 11,000 people
+                  Plus         60%   6,600 x ₹799     = ₹0.5 Cr
+                  Live         35%   3,850 x ₹3,999   = ₹1.5 Cr
+                  One to one    5%     550 x ₹14,999  = ₹0.8 Cr
+                  Free                264,000 x ₹0    = ₹0
+
+  TOTAL           500,000 learners                    = ₹13 Cr, $1.48M ARR
+
+Blended, that is about ₹260 per learner per year across all 500,000, because
+most of them never pay anything. That is the model working as intended, not a
+disappointing number.
+
+WHERE THE 4% COMES FROM, IF ASKED
+Benchmarked rather than guessed. Indian edtech converts 2 to 5% on general
+learning and 8 to 15% on exam preparation. Consumer freemium generally runs 2 to
+4%. Duolingo, whose daily habit loop we deliberately copied, reaches 8.9% of
+monthly actives. We are general learning, so 4% is the top of the honest band
+and comfortably under the product we learned the mechanics from.
+
+THE THREE SOFT SPOTS IN SOM, SAID BEFORE THEY ARE FOUND
+1. The pipeline is zero today. No NGO signed, no district agreed, no CSR
+   conversation started. Every channel number is a plausible shape for something
+   not yet opened. Logged as assumption A6, low confidence.
+2. The 60 / 35 / 5 tier split is an assumption, not a measurement. If everyone
+   lands on Plus, revenue drops by roughly ₹2 Cr. If Live carries it, revenue
+   rises.
+3. District pilots are the most ambitious line. 25,000 to 37,000 learners in one
+   district is a large pilot. The defensible retreat is one district and 10,000
+   learners: the model still stands, the total just moves.
 
 IF ASKED ABOUT THE COST FLOOR
 About ₹370 per active learner per year: roughly ₹330 AI inference and ₹40

@@ -10,7 +10,7 @@ monetisation model appeared anywhere.
 > CSR partner. The derivation chain matters more than the totals — if you swap one
 > input, the arithmetic still holds.
 
-Geography: **India only.** Currency: ₹, converted at **₹85 = $1**.
+Geography: **India only.** Currency: ₹, converted at **₹88 = $1** — the same rate `lib/ai/pricing.ts` bills at, so the deck and the code cannot disagree.
 
 ---
 
@@ -24,7 +24,7 @@ Every school-going learner who could use personalised digital learning support.
 |---|---|
 | Students enrolled, Classes 1–12 (UDISE+, latest) * | ~248 million |
 | Monetisable ARPU ceiling (see §2) | ₹500 / learner / year |
-| **TAM** | **~248M learners · ₹12,400 Cr (~$1.46B)** |
+| **TAM** | **~248M learners · ₹12,400 Cr (~$1.41B)** |
 
 ### SAM — the curriculum and grades Dagar actually serves
 
@@ -36,7 +36,7 @@ curriculum alignment, and device access.
 | 1 | Upper-primary enrolment, Classes 6–8 * | ~65 million |
 | 2 | × ~62% following NCERT or NCERT-aligned state curricula * | ~40 million |
 | 3 | × ~75% with household smartphone access * | **~30 million** |
-| | **SAM** | **~30M learners · ₹1,500 Cr (~$176M)** |
+| | **SAM** | **~30M learners · ₹1,500 Cr (~$170M)** |
 
 Step 2 matters because NCERT textbooks are used by CBSE and adopted or adapted by
 a majority of state boards — the content asset is reusable well beyond CBSE.
@@ -59,7 +59,7 @@ selected for being unable to afford tuition.
 | Direct to consumer | ~275,000 | Organic plus modest paid acquisition, aimed at parents in tier 2 and tier 3 cities |
 | **SOM** | **~500,000 learners** | **≈ 1.7% of SAM** |
 
-**Year-3 revenue at SOM:** ~₹11.6 Cr (~$1.36M ARR) — see §2.
+**Year-3 revenue at SOM:** ~₹13 Cr (~$1.48M ARR) — see §2.
 
 ### Why direct-to-consumer runs in parallel, not after
 
@@ -188,7 +188,7 @@ is not.
 | Consumer Plus (60% of subscribers) | 6,600 | ₹799/yr | ₹0.5 Cr |
 | Consumer Live (35% of subscribers) | 3,850 | ₹3,999/yr | ₹1.5 Cr |
 | Consumer one to one (5% of subscribers) | 550 | ₹14,999/yr | ₹0.8 Cr |
-| **Total** | **~500,000 learners** | | **~₹13 Cr (~$1.53M ARR)** |
+| **Total** | **~500,000 learners** | | **~₹13 Cr (~$1.48M ARR)** |
 
 Subscribers are 4% of the 275,000 reached directly, split 60 / 35 / 5 across the
 three paid tiers. The split is an assumption, not a measurement: most people who
