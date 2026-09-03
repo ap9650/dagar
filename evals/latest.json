@@ -1,8 +1,28 @@
 {
   "total": 50,
-  "passed": 36,
+  "passed": 47,
   "errored": [
-    "gnd-r1"
+    "ans-s1"
   ],
-  "run": "2026-08-09-15-45.json"
+  "flaky": 3,
+  "by_source": {
+    "real": {
+      "pass": 21,
+      "total": 22
+    },
+    "synthetic": {
+      "pass": 14,
+      "total": 15
+    },
+    "adversarial": {
+      "pass": 9,
+      "total": 9
+    },
+    "regression": {
+      "pass": 3,
+      "total": 3
+    }
+  },
+  "judge": "claude-opus-5",
+  "run": "2026-09-03-10-45.json"
 }

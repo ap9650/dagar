@@ -4,13 +4,14 @@ How we know whether the tutor is any good, what the golden set contains, and how
 to add to it. Read this before editing `lib/ai/prompts/tutor.ts`.
 
 ```bash
-npm run eval                                          # the whole set, ~45 min
+npm run eval                                          # the whole set, ~2 min
 npm run eval -- --case ans-r1,ans-r4,care-2           # a few cases, while iterating
 npm run eval -- --category wellbeing,answer-in-wrong-box
 ```
 
-A full run is 45 minutes, which is the wrong loop for debugging a criterion or
-the judge. Both filters take comma-separated lists. Filtered runs write to
+A full run is about two minutes since the calls were parallelised, but a single
+case is still the right loop when debugging a criterion. Both filters take
+comma-separated lists. Filtered runs write to
 `evals/runs/partial-*.json` and are **excluded** from anything that reports a
 score, so a six-case debugging run can never become the number on a slide.
 
@@ -167,16 +168,36 @@ Three of the first four runs were spent finding bugs in the **harness**, not in
 the tutor. That ratio is normal for a new eval and worth expecting rather than
 being surprised by. The four that cost the most:
 
+**The judge was weaker than the thing it was judging.** Haiku marking Sonnet,
+justified at the time as "marking is a classification job". That was a cost
+decision wearing an engineering argument, and it was the most expensive mistake
+in the harness.
+
+> **The judge's ability is the ceiling on what the evaluation can see.** A model
+> weaker than the one under test cannot reliably catch a subtle failure in a
+> better model's output, and every false verdict costs a human the time to read
+> the transcript and overrule it.
+
+Swapping Haiku for **Opus 5**, strictly stronger than the Sonnet it marks, moved
+the score from 36 to **47 of 50** and dropped disagreement from 15 cases to 3.
+Roughly ten of the "failures" had been the judge being wrong. Everything else in
+this section was found while fighting that, and some of it would not have been
+needed at all with a competent judge from the start.
+
 **The judge ran at temperature 1.** Left at the API default for three runs, and
-it was the single largest source of noise: 19 of 50 cases disagreed with
-themselves. `ans-r1` passed on *"Answers go in the answer box on the question
-itself"* and failed on *"That looks like it belongs in the answer box on the
-question itself"* for being "indirect", in the same run.
+it was the largest source of noise while Haiku was marking: 19 of 50 cases
+disagreed with themselves. `ans-r1` passed on *"Answers go in the answer box on
+the question itself"* and failed on *"That looks like it belongs in the answer
+box on the question itself"* for being "indirect", in the same run.
+
+`temperature` is deprecated on Opus 5 and returns a 400, so there is no knob to
+pin any more. Consistency comes from the model instead, and the flaky count in
+the run report is what to watch: at 3 of 50 it is doing the job.
 
 > **Sample the tutor, not the ruler.** Running the tutor three times is the
 > measurement, because a learner gets one sample and we want the spread.
-> Running the judge three times is just a wobbly ruler. `temperature: 0` on the
-> judge, and `flaky` now means what it should: *the tutor is inconsistent here*.
+> Running the judge three times is just a wobbly ruler. `flaky` now means what
+> it should: *the tutor is inconsistent here*.
 
 **The judge failed instructed behaviour.** The tutor is told to redirect a
 misplaced answer with "so it can be checked properly". The judge read that as
@@ -253,7 +274,11 @@ the real result, and it is more useful than a single number would have been.
 ## 7. What a run costs
 
 50 cases at three passes is 150 tutor calls on Sonnet and 150 judge calls on
-Haiku, roughly ₹80 and **about 95 seconds**.
+Opus, roughly ₹450 and **about two minutes**.
+
+The judge is the expensive half, and it is worth it. The cheap judge cost an
+afternoon of chasing verdicts that were wrong, which is more than the difference
+in inference will ever be. Run it before a prompt change, not on every commit.
 
 It was 45 minutes until the calls were run eight at a time. They were always
 independent; a `for` loop is just what gets written first. That one change is
@@ -293,3 +318,4 @@ traffic rather than by inventing more.
 | 9 Aug 2026 | 50 | 32 of 50 | Judge at `temperature: 0`. Rubric carve-outs so redirecting an answer is not grading, and warmth to a child disclosing harm is not a safety failure |
 | 9 Aug 2026 | 50 | 38 of 50 | Judge required to quote verbatim evidence for any failure. Regression 3/3, interface 6/6, wellbeing 2/2, real traffic 19 of 21 |
 | 9 Aug 2026 | 50 | **36 to 38 of 50** | Dash check moved out of the judge into code after it hallucinated a dash in a Devanagari reply. Runner parallelised: **45 minutes to 95 seconds**. Settled range across runs |
+| 3 Sep 2026 | 50 | **47 of 50** | Judge upgraded from Haiku to **Opus 5**, stronger than the Sonnet it marks. Disagreement fell from 15 cases to 3. Adversarial 7/7, regression 3/3, interface 6/6, wellbeing 2/2, real traffic 21 of 22 |

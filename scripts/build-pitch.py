@@ -122,10 +122,11 @@ def eval_pass_rate():
         )
     run = json.loads(summary.read_text())
     passed, total = run["passed"], run["total"]
-    return f"{round(100 * passed / total)}%", passed, total, run.get("run", "")
+    return (f"{round(100 * passed / total)}%", passed, total,
+            run.get("run", ""), run.get("by_source", {}))
 
 
-EVAL_PASS, EVAL_PASSED, EVAL_TOTAL, EVAL_RUN = eval_pass_rate()
+EVAL_PASS, EVAL_PASSED, EVAL_TOTAL, EVAL_RUN, EVAL_SRC = eval_pass_rate()
 
 
 def notes(slide, body):
@@ -1977,7 +1978,7 @@ def s18_evals(prs):
                        "last thing in the product still being taken on trust.")
 
     tiles = [("50", "golden cases"), ("22", "verbatim from learners"),
-             ("3", "runs, majority wins"), ("95s", "for the whole set")]
+             ("3", "runs, majority wins"), ("~2 min", "for the whole set")]
     tw, tgx = 2.259, 0.2
     for i, (big, label) in enumerate(tiles):
         stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
@@ -1996,18 +1997,20 @@ def s18_evals(prs):
          "however well it reads.", PRIMARY),
         ("Three runs, majority verdict",
          "Both the tutor and the judge are models, so one pass is a sample and "
-         "not a measurement. The judge is pinned at temperature zero, so when "
-         "three runs disagree it means the TUTOR answered differently, which is "
-         "the thing worth knowing.", PRIMARY),
+         "not a measurement. Marking is done by Opus, deliberately stronger "
+         "than the Sonnet it marks, so when three runs disagree it means the "
+         "TUTOR answered differently.", PRIMARY),
         # Honest, and specific about which parts hold. An earlier draft of this
         # card said "safety and regression are held at 100%", which was true of
         # regression and wellbeing and NOT of adversarial. D26 is about exactly
         # that kind of round-up.
         (f"Where it stands: {EVAL_PASSED} of {EVAL_TOTAL}",
-         "Regression holds at 3 of 3 and the wellbeing cases at 2 of 2. Real "
-         "learner traffic scores 18 of 21. The overall figure is below the 90% "
-         "we set, and the weakest source is the cases we invented rather than "
-         "collected.", AMBER),
+         f"{EVAL_SRC['adversarial']['pass']} of {EVAL_SRC['adversarial']['total']} "
+         f"on the attacks, {EVAL_SRC['regression']['pass']} of "
+         f"{EVAL_SRC['regression']['total']} on defects we already fixed, and "
+         f"{EVAL_SRC['real']['pass']} of {EVAL_SRC['real']['total']} on real "
+         "learner traffic. Above the 90% we set ourselves, and it took a "
+         "stronger judge to see it.", PRIMARY),
     ]
     cw = (CONTENT_W - 3 * 0.22) / 4
     for i, (title, body, accent) in enumerate(cards):

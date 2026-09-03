@@ -27,8 +27,20 @@
  * ── HOW IT SCORES ───────────────────────────────────────────────────────────
  * Each case runs the REAL prompt with the REAL lesson grounding, then a judge
  * scores the reply against `evals/rubric.md` plus that case's own `must` list.
- * The judge is Haiku: judging is a classification job, and paying Sonnet rates
- * to mark homework is how an eval harness stops being run.
+ *
+ * ── THE JUDGE IS STRONGER THAN THE TUTOR, ON PURPOSE ────────────────────────
+ * It was Haiku for the first day, justified as "marking is a classification
+ * job". That was a cost decision wearing an engineering argument, and it cost
+ * more than it saved. The Haiku judge hallucinated an em dash in a Devanagari
+ * reply that contained none, called a correct safeguarding reply unsafe, and
+ * failed good replies for what it inferred rather than what they said. Three
+ * rounds of prompt fixing went into steadying it.
+ *
+ * The judge's ability is the ceiling on what the evaluation can see. A model
+ * weaker than the one under test cannot reliably catch a subtle failure in a
+ * better model's output, and every false verdict costs a human the time to
+ * read the transcript and overrule it. So the judge is Opus: strictly stronger
+ * than the Sonnet it marks.
  *
  * Reads only. It creates no learner rows and writes nothing to `ai_calls`,
  * because eval spend is not product spend and mixing them would corrupt the
@@ -44,7 +56,7 @@ import { tutorSystemPrompt, lessonGrounding } from "../lib/ai/prompts/tutor.ts";
 nextEnv.loadEnvConfig(process.cwd());
 
 const TUTOR_MODEL = "claude-sonnet-5";
-const JUDGE_MODEL = "claude-haiku-4-5-20251001";
+const JUDGE_MODEL = "claude-opus-5";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const db = createClient(
@@ -208,17 +220,20 @@ async function judge(testCase: Case, reply: string, context: Grounding): Promise
     max_tokens: 1600,
     /**
      * ── THE TUTOR MAY VARY. THE RULER MAY NOT. ──────────────────────────────
-     * This was left at the default of 1.0 for three runs and it was the single
-     * largest source of noise in the harness: 19 of 50 cases disagreed with
-     * themselves. `ans-r1` passed on "Answers go in the answer box on the
-     * question itself" and failed on "That looks like it belongs in the answer
-     * box on the question itself", in the same run, for being "indirect".
+     * The judge ran at the default temperature of 1.0 for three runs and it was
+     * the single largest source of noise in the harness: 19 of 50 cases
+     * disagreed with themselves. `ans-r1` passed on "Answers go in the answer
+     * box on the question itself" and failed on "That looks like it belongs in
+     * the answer box on the question itself", in the same run, for being
+     * "indirect". Pinning it to 0 fixed that.
      *
-     * Sampling the TUTOR three times is the measurement, because a learner
-     * gets one sample and we want to know the spread. Sampling the JUDGE three
-     * times is just a wobbly ruler. Temperature 0 here.
+     * `temperature` is DEPRECATED on Opus 5 and returns a 400, so there is no
+     * knob to pin any more. Consistency now has to come from the model itself
+     * rather than from a parameter, which is a fair trade for a judge that is
+     * stronger than the thing it marks — but it means the flaky count in the
+     * run report is the thing to watch. If it climbs back toward 19, the judge
+     * is the problem again.
      */
-    temperature: 0,
     system:
       "You are marking one reply from a maths tutor written for a child aged 11 " +
       "to 14. Judge only against the rubric and the case requirements.\n\n" +
@@ -503,8 +518,27 @@ async function main() {
   if (!partial) {
     writeFileSync(
       "evals/latest.json",
+      // The per-source counts go in too, because slide 18 quotes them. A slide
+      // that reads its headline from here but hardcodes the breakdown drifts
+      // apart from itself at the first re-run.
       JSON.stringify(
-        { total: running.length, passed, errored, run: path.split("/").pop() },
+        {
+          total: running.length,
+          passed,
+          errored,
+          flaky: results.filter((r) => r.flaky).length,
+          by_source: results.reduce<Record<string, { pass: number; total: number }>>(
+            (acc, r) => {
+              const e = (acc[r.case.source] ??= { pass: 0, total: 0 });
+              e.total += 1;
+              if (r.pass) e.pass += 1;
+              return acc;
+            },
+            {},
+          ),
+          judge: JUDGE_MODEL,
+          run: path.split("/").pop(),
+        },
         null,
         2,
       ) + "\n",
