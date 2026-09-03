@@ -470,7 +470,7 @@ def s5_market(prs):
         ("500K", "learners  ·  SOM",
          "Three years. Half funded by institutions, half reached directly, "
          "of whom a small share subscribe.",
-         "₹13 Cr  ·  $1.48M ARR", HINT),
+         "₹13.3 Cr  ·  $1.51M ARR", HINT),
     ]
     w, gx = 3.87, 0.24
     for i, (big, label, blurb, money, accent) in enumerate(tiers):
@@ -546,7 +546,7 @@ price any family is asked to pay.
 
 TAM   247M learners x ₹500 = ₹12,350 Cr, which is $1.40B at ₹88 = $1.
 SAM   29.6M x ₹500 = ₹1,480 Cr, which is $168M.
-SOM   two segments, worked below, = ₹13 Cr, which is $1.48M ARR.
+SOM   two segments, worked below, = ₹13.3 Cr, which is $1.51M ARR.
 
 SOM is not multiplied by ₹500, because at this size we can model the actual mix
 instead of using a blended ceiling. Most of the SOM learners pay nothing at all.
@@ -569,12 +569,12 @@ STEP 2, WHO ACTUALLY PAYS. The two halves behave completely differently.
                   225,000 x ₹450        = ₹10.1 Cr
 
   Consumer        275,000 reached, 4% subscribe = 11,000 people
-                  Plus         60%   6,600 x ₹799     = ₹0.5 Cr
+                  Plus         60%   6,600 x ₹999     = ₹0.7 Cr
                   Live         35%   3,850 x ₹3,999   = ₹1.5 Cr
-                  One to one    5%     550 x ₹14,999  = ₹0.8 Cr
-                  Free                264,000 x ₹0    = ₹0
+                  One to one    5%     550 x ₹17,988   = ₹1.0 Cr
+                  Free                264,000 x ₹0     = ₹0
 
-  TOTAL           500,000 learners                    = ₹13 Cr, $1.48M ARR
+  TOTAL           500,000 learners                     = ₹13.3 Cr, $1.51M ARR
 
 Blended, that is about ₹260 per learner per year across all 500,000, because
 most of them never pay anything. That is the model working as intended, not a
@@ -2657,8 +2657,9 @@ def s24_money(prs):
          "teacher explaining concepts to a batch, the model PhysicsWallah "
          "proved at scale."),
         ("One to one", "₹1,499 / mo", MUTED,
-         "Live, and two private sessions a month. Priced at what a teacher's "
-         "hour actually costs. Gated on verified supply."),
+         "Live, and two private sessions a month. Priced at a teacher's real "
+         "hourly cost. Monthly only: we will not take a year up front for "
+         "teachers we have not hired."),
         ("Institutions", "₹450–600 / yr", AMBER,
          "Per learner. NGO, CSR and government licences, and they can fund "
          "one-to-one for the learners our struggle signals flag."),
