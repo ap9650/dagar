@@ -1050,11 +1050,35 @@ old H3→H3, old H4→**H6**, old H5→**H7**, old H6→**H5**.
 contaminate the activation and retention metrics that decide whether the product
 works. Free is a declared stage, not a missing model.
 
-Post-MVP: learners never pay for the core learning loop. Institutions (NGO, CSR,
-government) pay per learner for reach; families pay only for depth via Dagar Plus.
-Institutional pricing floor is **₹370/learner/year** — the measured cost of a
+Post-MVP, **two routes run in parallel rather than one after the other.**
+
+1. **Institutions buy reach** for learners who cannot pay. NGO, CSR and
+   government, per learner per year.
+2. **Families who can pay subscribe** for depth. Direct to consumer, aimed at
+   tier 2 and tier 3 households who can find ₹99 a month but never ₹5,000 for
+   a tutor.
+
+**The core learning loop stays free for everyone, permanently.** Lessons,
+practice, quizzes, progress and the parent summary are never behind a paywall.
+Dagar Plus sells more practice, more depth and an uncapped tutor on top of a
+free tier that stays genuinely useful. Crippling the free tier to force
+conversion would break the mission and the institutional pitch in the same move.
+
+Institutional pricing floor is **₹370/learner/year** — the modelled cost of a
 fully active learner. Full tiers, unit economics and market sizing in
 `MARKET_AND_PRICING.md`.
+
+**Amended 9 Aug 2026.** This decision previously read "learners never pay",
+which described only the institutional half and quietly ruled out a paying
+consumer. Two reasons it changed. Institutional sales cycles run 6 to 18 months,
+so a model with only that line has a long silence before any revenue and no way
+to learn what a family will actually pay. And there is no harm in serving people
+who are willing to pay, provided the learners who cannot are never worse off.
+Dagar is for everyone; not everyone pays the same.
+
+**Marketing speaks to parents, never to children.** DPDP §9(3) forbids targeted
+advertising directed at under-18s and the whole user base is 11 to 14. That is a
+constraint on how the consumer channel is run, not a reason to avoid it.
 
 **Corrected 9 Aug 2026, from ₹300.** ₹300 was written before AI costs were
 verified, and `MARKET_AND_PRICING.md` has said ₹370 since. Two floors in two

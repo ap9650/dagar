@@ -157,15 +157,15 @@ def cover(prs):
          [{"t": "Every learner deserves a guide. Most never get one.",
            "size": 25, "bold": True, "color": INK, "space_after": 10, "line": 1.18},
           {"t": "So we built one. Dagar gives every learner a tutor that adapts "
-                "to them, in their own language, at no cost.",
+                "to them, in their own language, whatever their family can pay.",
            "size": 14, "color": BODY, "line": 1.35}])
 
     # Proof, not promise. A cover claiming a live product with real learners on
     # it is checkable in the room, and every number here is queried from the
     # database rather than rounded upward from memory.
     for i, (big, label) in enumerate([("Live", "in learners' hands"),
-                                      ("32", "learners signed up"),
-                                      ("13", "responses collected"),
+                                      ("46", "learners signed up"),
+                                      ("15", "responses collected"),
                                       ("100%", "said it helped")]):
         stat(s, 1.1 + i * 2.42, 5.42, 2.22, 0.86, big, label)
 
@@ -244,7 +244,7 @@ def s2_vision(prs):
     # well as on the cover. A reader who wants to check it should never have to
     # go looking for where.
     text(s, M, yb + 1.2, CONTENT_W - 0.6, 0.28,
-         [{"t": f"It is live and free to open right now:  {APP_URL}",
+         [{"t": f"It is live right now, and free to open:  {APP_URL}",
            "size": 11, "bold": True, "color": PRIMARY}])
 
     text(s, M, SH - 0.44, 6.0, 0.24,
@@ -433,9 +433,10 @@ def s5_market(prs):
         ("29.6M", "learners  ·  SAM",
          "Classes 6 to 8 on NCERT-aligned curricula, with a smartphone at home.",
          "29.6M × ₹500  =  ₹1,480 Cr  ·  $168M", PRIMARY),
-        ("250K", "learners  ·  SOM",
-         "Three years, through NGO and CSR programmes, government pilots and word of mouth.",
-         "250K × ₹450  =  ₹11 Cr  ·  $1.28M ARR", HINT),
+        ("500K", "learners  ·  SOM",
+         "Three years. Half funded by institutions, half reached directly, "
+         "of whom a small share subscribe.",
+         "₹11.6 Cr  ·  $1.36M ARR", HINT),
     ]
     w, gx = 3.87, 0.24
     for i, (big, label, blurb, money, accent) in enumerate(tiers):
@@ -487,13 +488,13 @@ def s5_market(prs):
     yb = y2 + 1.78
     box(s, M, yb, CONTENT_W, 0.76, fill=PRIMARY_WASH, line=PRIMARY_SOFT)
     text(s, M + 0.34, yb + 0.14, CONTENT_W - 0.68, 0.54,
-         [{"t": "No child pays anything in these numbers.", "size": 11.5,
+         [{"t": "No child is ever priced out of learning here.", "size": 11.5,
            "bold": True, "color": PRIMARY_STRONG, "space_after": 3},
-          {"t": "Learners never pay for the core learning loop. Institutions "
-                "buy reach: NGOs, CSR programmes and government. The ₹450 floor "
-                "is set by cost, not by ambition, because an active learner "
-                "costs about ₹370 a year to serve, most of it AI inference. "
-                "Full tiers and unit economics on slide 24.",
+          {"t": "Two routes to the same product. Institutions buy reach for "
+                "learners who cannot pay, at ₹450 each. Families who can pay "
+                "subscribe for depth and fund the rest. The core lessons stay "
+                "free either way, and ₹450 is a floor set by cost: an active "
+                "learner costs about ₹370 a year. Tiers on slide 24.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     source(s, SH - 0.72,
@@ -2339,9 +2340,9 @@ def s22_horizon(prs):
           ("A parent who needs no account",
            "Progress as a private link, and a mentor request captured for "
            "demand"),
-          ("Free, deliberately",
+          ("Free while we learn",
            "Pricing now would contaminate the activation and retention numbers "
-           "we are trying to read")]),
+           "we are reading. It is a stage, not the model")]),
         ("PHASE 2", "Expansion, once depth is done", MUTED,
          [("More subjects, more classes",
            "Science next, then the classes either side of 6 to 8. The content "
@@ -2352,9 +2353,9 @@ def s22_horizon(prs):
           ("Views for the adults",
            "A teacher dashboard for a class, an NGO dashboard for a cohort, "
            "and the WhatsApp summary once Meta approves"),
-          ("First money, from institutions",
-           "Paid CSR and NGO pilots that test willingness to pay for outcomes "
-           "rather than for features")]),
+          ("First money, from both sides",
+           "Paid CSR and NGO pilots, and a subscription for families who can "
+           "pay, tested in parallel rather than one after the other")]),
         # Voice-first sits inside the accessibility item rather than beside it,
         # which is where the PRD puts it, and the slot it frees goes to the
         # persona expansion.
@@ -2454,7 +2455,7 @@ def s23_adoption(prs):
     at /s/[token] genuinely resolves without a session.
     """
     s, y = slide_shell(prs, 23, "23 · Adoption",
-                       "Nothing to download, and nothing to pay.",
+                       "Nothing to install, and nothing in the way.",
                        f"The hardest step in Indian edtech is the first one. "
                        f"Dagar removes the install, the app store and the "
                        f"parent's account. Open it now: {APP_URL}")
@@ -2559,18 +2560,19 @@ def s24_money(prs):
     measurement is exactly the drift D26 exists to catch.
     """
     s, y = slide_shell(prs, 24, "24 · Monetisation",
-                       "Learners never pay. Institutions do.",
-                       "Our learners are defined by not affording tuition, so a "
-                       "consumer subscription cannot be the engine without "
-                       "contradicting who the product is for.")
+                       "Some pay. Some never will. Both get the same product.",
+                       "The lessons stay free for everyone. Institutions fund "
+                       "the learners who cannot pay, and families who can pay "
+                       "subscribe for more.")
 
     # The tiers were one dense card. Four columns instead: the price is the
     # thing a room reads first on this slide and it should carry from the back.
     tiers = [
         ("Dagar Free", "₹0", PRIMARY,
-         "Everything needed to learn. Full curriculum, lessons, practice, "
-         "quizzes, progress, streaks and the parent summary. AI tutor capped "
-         "at 10 questions a day."),
+         "The core stays free for good: lessons, practice, quizzes, progress "
+         "and the parent summary, with the tutor capped at 10 questions a day. "
+         "Today the whole product is free, because we are still gathering "
+         "evidence."),
         ("Dagar Plus", "₹99 / month", PRIMARY,
          "Depth, for the families who want it and can pay. Unlimited AI tutor, "
          "deeper adaptive practice, revision plans and fuller parent insight."),
@@ -2598,21 +2600,21 @@ def s24_money(prs):
 
     y2 = y + th + 0.22
     below = [
-        ("The floor: ₹370 a learner a year",
-         "Roughly ₹330 of AI and ₹40 of infrastructure, modelled from published "
-         "token pricing rather than measured per learner. Nothing is priced "
-         "below it, so ₹450 leaves ₹80. Thin, and the risk is an institution "
-         "treating ₹450 as a ceiling.", AMBER),
-        ("Institutions, not families",
-         "Conversion among families who cannot afford tuition is realistically "
-         "1 to 2%. CSR budgets are mandated in India and already buy per "
-         "beneficiary, so one NGO cohort beats a thousand families we would "
-         "rather not charge.", PRIMARY),
+        ("Two routes, running in parallel",
+         "Institutions buy reach for learners who cannot pay: CSR is mandated "
+         "in India by Section 135 and already buys per beneficiary. Alongside "
+         "that we sell directly to families in tier 2 and tier 3 cities who "
+         "can find ₹99 a month but never ₹5,000 for a tutor.", PRIMARY),
+        ("4% of free users subscribing",
+         "Indian edtech converts 2 to 5% on general learning and 8 to 15% on "
+         "exam prep. Duolingo, whose daily habit loop we copied deliberately, "
+         "reaches 8.9%. We model 4%: the top of the general band, well below "
+         "the app we learned it from.", PRIMARY),
         ("No advertising, ever",
          "The DPDP Act 2023 forbids behavioural tracking and targeted "
-         "advertising aimed at under-18s, and parental consent does not unlock "
-         "it. Every user we have is 11 to 14. The usual way a free product pays "
-         "for itself is closed, and we would not want it open.", AMBER),
+         "advertising aimed at under-18s, so our marketing speaks to parents "
+         "and never to children. The usual way a free product pays for itself "
+         "is closed to us, and we would not want it open.", AMBER),
     ]
     nw = (CONTENT_W - 2 * 0.22) / 3
     for i, (title, body, accent) in enumerate(below):
@@ -2621,10 +2623,20 @@ def s24_money(prs):
 
     notes(s, """
 THE ONE SENTENCE
-Learners never pay for the core learning loop. Institutions pay for reach,
-families pay only for depth. Everything else on this slide is a consequence of
-that, and it comes from the product's own targeting rather than from a pricing
-workshop.
+The lessons are free for everyone, for good. Institutions pay to reach the
+learners who never could, and families who can pay subscribe for more practice
+and more content. Both run at once, and the second funds the first.
+
+WHY THE MVP IS FREE TODAY, IF ASKED
+Because it is still being validated, not because free is the business. Charging
+now would contaminate the activation and retention numbers we are reading, and
+we would rather know whether it works than know whether it sells. The paid tier
+follows once H1 to H7 have data.
+
+WHAT WE COPIED FROM DUOLINGO, AND WHAT WE DID NOT
+The daily habit loop, and the principle that the free tier stays genuinely
+useful forever rather than being crippled to force conversion. Not the hearts,
+not the lives, not the leaderboard, for the reasons on slide 19.
 
 BE PRECISE THAT ₹370 IS MODELLED
 It is derived in MARKET_AND_PRICING.md from D11's cost targets and published
@@ -2888,7 +2900,7 @@ def s27_close(prs):
            "size": 34, "bold": True, "color": PRIMARY, "line": 1.08}])
 
     text(s, M, 2.78, CONTENT_W - 0.6, 0.5,
-         [{"t": f"{APP_URL}   ·   no download, no account for parents, no cost",
+         [{"t": f"{APP_URL}   ·   no download, no account for parents, free to try",
            "size": 15, "color": MUTED}])
 
     y = 3.72

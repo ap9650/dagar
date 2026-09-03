@@ -169,12 +169,19 @@ hypotheses in Section 12; introducing pricing would contaminate the activation a
 retention metrics that determine whether the product works at all. Free is a
 deliberate stage, not an absent model.
 
-The model that follows is shaped by one constraint: Dagar's learners are defined
-by their inability to afford tuition. A consumer subscription cannot be the primary
-revenue engine without contradicting the product's own targeting.
+The model that follows serves two groups at once. Learners reached through NGO,
+CSR and government programmes are there precisely because they cannot pay, and
+their access is funded by the institution. Alongside them, families in tier 2 and
+tier 3 cities who can afford ₹99 a month but not ₹5,000 for a tutor subscribe
+directly. The second funds the first, and both run in parallel from Phase 2
+rather than in sequence (D14).
 
-> **Learners never pay for the core learning loop. Institutions pay for reach;
-> families pay only for depth.**
+> **The core learning loop is free for everyone, permanently. Institutions pay
+> to reach learners who cannot. Families who can pay, pay for depth.**
+
+The free tier is not a trial and it is not crippled to force conversion. It
+carries the full curriculum, practice, quizzes, progress and the parent summary,
+for good. What Plus sells is more of it.
 
 | Tier | Price | Includes |
 |---|---|---|

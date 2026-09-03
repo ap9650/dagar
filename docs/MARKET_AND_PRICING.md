@@ -56,10 +56,26 @@ selected for being unable to afford tuition.
 |---|---|---|
 | NGO / CSR education programmes | ~150,000 | 15–25 partner orgs, 6–10k learners each |
 | Government school pilots | ~75,000 | 2–3 district-level pilots |
-| Organic / direct consumer | ~25,000 | Word of mouth, no paid acquisition |
-| **SOM** | **~250,000 learners** | **≈ 0.8% of SAM** |
+| Direct to consumer | ~275,000 | Organic plus modest paid acquisition, aimed at parents in tier 2 and tier 3 cities |
+| **SOM** | **~500,000 learners** | **≈ 1.7% of SAM** |
 
-**Year-3 revenue at SOM:** ~₹10–11 Cr (~$1.2–1.3M ARR) — see §2.
+**Year-3 revenue at SOM:** ~₹11.6 Cr (~$1.36M ARR) — see §2.
+
+### Why direct-to-consumer runs in parallel, not after
+
+Institutional sales cycles run 6 to 18 months. A model with only that line has
+a long silence before any revenue arrives, and no way to learn what a family
+will actually pay. The consumer channel pays earlier, and it tests willingness
+to pay against real money rather than a survey.
+
+The two segments are genuinely different people. The institutional cohort is
+reached *because* they cannot pay. The consumer cohort is a family in a tier 2
+city who can find ₹99 a month but not ₹5,000 for a tutor. Selling to the second
+funds the first, and the core lessons stay free for both.
+
+**Marketing speaks to parents, never to children.** DPDP §9(3) forbids targeted
+advertising directed at under-18s, and the entire user base is 11 to 14. This is
+a constraint on the channel, not a reason to avoid it.
 
 For a social-impact product, **learners reached is the honest headline metric** and
 revenue is the sustainability constraint. Lead with 250,000 learners, not $1M ARR.
@@ -148,9 +164,28 @@ is not.
 | Segment | Learners | Rate | Revenue |
 |---|---|---|---|
 | Institutional (NGO/CSR/gov) | 225,000 | ₹450/yr | ₹10.1 Cr |
-| Consumer Plus (1.5% of 25,000 organic… plus institutional upsell) | ~4,000 | ₹799/yr | ₹0.3 Cr |
-| Mentor add-on | ~600 | ₹3,588/yr | ₹0.2 Cr |
-| **Total** | **~250,000 learners** | | **~₹10.6 Cr (~$1.25M ARR)** |
+| Consumer, free tier | 264,000 | ₹0 | ₹0 |
+| Consumer Plus (4% of 275,000) | 11,000 | ₹799/yr | ₹0.9 Cr |
+| Mentor add-on (15% of Plus) | 1,650 | ₹3,588/yr | ₹0.6 Cr |
+| **Total** | **~500,000 learners** | | **~₹11.6 Cr (~$1.36M ARR)** |
+
+### Where the 4% comes from
+
+| Benchmark | Conversion |
+|---|---|
+| Consumer freemium generally (Evernote, Dropbox, Typeform) | 2–4% |
+| Indian edtech, general learning | 2–5% |
+| Indian edtech, exam preparation | 8–15% |
+| Duolingo, whose daily habit loop Dagar copies (D17) | 8.9% |
+
+Dagar is general learning, not exam preparation, so the honest band is 2–5%.
+**We model 4%:** the top of that band, because the streak, the daily goal and
+the parent summary are the mechanics that drive Duolingo's number, and well
+below the 8.9% of the product we learned them from.
+
+The upside case is real and deliberately not modelled: framing the same content
+around board exams moves a product into the 8–15% band. That is a Phase 3
+question, and claiming it now would be assuming the answer.
 
 Gross margin at that mix ≈ ₹450 − ₹370 = **₹80/learner institutional**, thin by
 design, subsidised by Plus. Margin improves as inference costs fall and caching
