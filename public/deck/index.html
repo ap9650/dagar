@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dagar — Pitch Deck</title>
+<meta name="description" content="Dagar: a personal guide for every learner's journey. Buildathon MVP, 2026.">
+<meta property="og:title" content="Dagar — Pitch Deck">
+<meta property="og:description" content="A personal guide for every learner's journey.">
+<meta property="og:image" content="https://dagar-ap19.vercel.app/deck/01.jpg">
+<link rel="icon" href="/icons/icon-192.png">
+<style>
+  :root{
+    --ink:#1A2733; --body:#3F4A57; --muted:#5B6673;
+    --primary:#0F766E; --wash:#F0FDFA; --border:#D8DEE4;
+    --bg:#0B1418;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);
+    font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+
+  .stage{position:fixed;inset:0;display:flex;align-items:center;
+    justify-content:center;padding:clamp(8px,2.5vh,28px)}
+  .slide{max-width:100%;max-height:100%;width:auto;height:auto;
+    border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,.55);
+    background:#fff;display:block}
+
+  /* Click the left or right third of the stage to move. Invisible, because a
+     deck should look like a deck, not like a media player. */
+  .tap{position:fixed;top:0;bottom:0;width:32%;cursor:pointer;border:0;
+    background:transparent;-webkit-tap-highlight-color:transparent}
+  .tap.prev{left:0} .tap.next{right:0}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:center;
+    gap:14px;padding:10px clamp(12px,3vw,22px);
+    background:linear-gradient(to top,rgba(11,20,24,.92),rgba(11,20,24,0));
+    color:#cfd8dc;font-size:13px;opacity:0;transition:opacity .25s;
+    pointer-events:none}
+  .bar.show{opacity:1;pointer-events:auto}
+  .bar strong{color:#fff;font-weight:600}
+  .bar a{color:#7fded3;text-decoration:none;border-bottom:1px solid #2c5f59}
+  .bar a:hover{border-bottom-color:#7fded3}
+  .spacer{flex:1}
+  .btn{appearance:none;border:1px solid #2b3b42;background:#132025;color:#cfd8dc;
+    border-radius:7px;padding:5px 11px;font-size:13px;cursor:pointer;
+    font-family:inherit}
+  .btn:hover{background:#1a2b31;color:#fff}
+  .track{position:fixed;left:0;top:0;height:2px;background:var(--primary);
+    transition:width .2s ease;z-index:5}
+  @media (prefers-reduced-motion:reduce){
+    .bar,.track{transition:none}
+  }
+</style>
+</head>
+<body>
+  <div class="track" id="track"></div>
+  <div class="stage"><img class="slide" id="slide" alt="" decoding="async"></div>
+
+  <button class="tap prev" id="prev" aria-label="Previous slide"></button>
+  <button class="tap next" id="next" aria-label="Next slide"></button>
+
+  <div class="bar" id="bar">
+    <strong id="count">1 / 27</strong>
+    <span>Dagar &middot; a personal guide for every learner's journey</span>
+    <span class="spacer"></span>
+    <a href="/">Open the app</a>
+    <a href="/deck/Dagar-Pitch-Deck.pdf">Download PDF</a>
+    <button class="btn" id="full">Fullscreen</button>
+  </div>
+
+<script>
+  const TOTAL = 27;
+  const img = document.getElementById('slide');
+  const count = document.getElementById('count');
+  const track = document.getElementById('track');
+  const bar = document.getElementById('bar');
+
+  const pad = n => String(n).padStart(2, '0');
+
+  // Deep-linkable: /deck/#12 opens slide 12, so a specific slide can be sent
+  // to someone rather than "scroll to the roadmap one".
+  let i = Math.min(Math.max(parseInt(location.hash.slice(1)) || 1, 1), TOTAL);
+
+  function show(n, push) {
+    i = Math.min(Math.max(n, 1), TOTAL);
+    img.src = `/deck/${pad(i)}.jpg`;
+    img.alt = `Dagar pitch deck, slide ${i} of ${TOTAL}`;
+    count.textContent = `${i} / ${TOTAL}`;
+    track.style.width = (i / TOTAL * 100) + '%';
+    if (push) history.replaceState(null, '', '#' + i);
+    // Warm the next slide so a click feels instant on a slow connection.
+    if (i < TOTAL) new Image().src = `/deck/${pad(i + 1)}.jpg`;
+  }
+
+  document.getElementById('next').onclick = () => show(i + 1, true);
+  document.getElementById('prev').onclick = () => show(i - 1, true);
+
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { show(i + 1, true); e.preventDefault(); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { show(i - 1, true); e.preventDefault(); }
+    if (e.key === 'Home') show(1, true);
+    if (e.key === 'End') show(TOTAL, true);
+  });
+  addEventListener('hashchange', () => show(parseInt(location.hash.slice(1)) || 1, false));
+
+  // Swipe, for the phone this is most likely to be opened on.
+  let x0 = null;
+  addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, {passive:true});
+  addEventListener('touchend', e => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 45) show(i + (dx < 0 ? 1 : -1), true);
+    x0 = null;
+  }, {passive:true});
+
+  document.getElementById('full').onclick = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen?.();
+  };
+
+  // The bar fades out so it does not sit over the slide while reading, and
+  // comes back on any sign of a person.
+  let idle;
+  const wake = () => {
+    bar.classList.add('show');
+    clearTimeout(idle);
+    idle = setTimeout(() => bar.classList.remove('show'), 2600);
+  };
+  ['mousemove','touchstart','keydown','click'].forEach(ev => addEventListener(ev, wake, {passive:true}));
+  wake();
+
+  show(i, false);
+</script>
+</body>
+</html>
