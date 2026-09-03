@@ -1618,7 +1618,7 @@ Neither is a gap. Each is a deliberate stopping point with a reason:
 
 - **The mentor offer** answers H7 before anybody staffs a rota. Building a
   service on the assumption that learners want one would be the expensive
-  mistake; 34 offers and 1 acceptance so far is the beginning of an answer.
+  mistake; 53 offers and 3 accepted so far is the beginning of an answer.
 - **The parent link** already does the job the WhatsApp message would do. A
   parent is not blocked from seeing progress, they are only not pushed it, and
   nobody has yet asked to be pushed.
@@ -1703,7 +1703,7 @@ for out loud.
 
 ### The evidence, from two places that cannot both be wrong in the same way
 
-**Production behaviour: 9 of 25 messages sent to the tutor are about the screen,
+**Production behaviour: 11 of 36 messages sent to the tutor are about the screen,
 not the mathematics.**
 
 ```

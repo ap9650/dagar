@@ -62,6 +62,40 @@ slide_shell = bd.slide_shell
 PREVIEW = False
 
 
+def live_stats():
+    """
+    The learner numbers, read from `docs/deck/stats.json` rather than typed.
+
+    ── WHY ─────────────────────────────────────────────────────────────────────
+    These were hand-typed into this file and they drifted, which is bad, and
+    they drifted INCONSISTENTLY, which is worse: the cover said 32 learners
+    while slide 20 said 46, in the same build. A reader who catches that stops
+    believing every other number on the deck, and they are right to.
+
+    `npm run stats` regenerates the file from the database and the deck build
+    runs it first, so a rebuild cannot quote yesterday's product.
+    """
+    path = pathlib.Path("docs/deck/stats.json")
+    if not path.exists():
+        raise SystemExit(
+            "docs/deck/stats.json is missing. Run `npm run stats` first: the "
+            "deck quotes live learner numbers and will not invent them."
+        )
+    return json.loads(path.read_text())
+
+
+S = live_stats()
+
+# Learner messages to the tutor that are about the SCREEN rather than the
+# mathematics, counted by hand from `tutor_messages`. Four are explicit ("where
+# do I fill the answers", "isme me likhu kaise"), and the rest are answers typed
+# into the chat because the learner could not find the answer box. There is no
+# query for this: it needs reading, so it is recorded here with its denominator
+# and re-counted when the traffic grows.
+INTERFACE_MESSAGES = 11
+INTERFACE_OF = S["tutor_messages"]
+
+
 def eval_pass_rate():
     """
     The tutor's golden-set score, read from the most recent run of the harness.
@@ -164,9 +198,9 @@ def cover(prs):
     # it is checkable in the room, and every number here is queried from the
     # database rather than rounded upward from memory.
     for i, (big, label) in enumerate([("Live", "in learners' hands"),
-                                      ("46", "learners signed up"),
-                                      ("15", "responses collected"),
-                                      ("100%", "said it helped")]):
+                                      (str(S["learners_signed_up"]), "learners signed up"),
+                                      (str(S["feedback_responses"]), "responses collected"),
+                                      (f"{round(100 * (S['feedback_understood'].get('yes', 0) + S['feedback_understood'].get('a_bit', 0)) / max(S['feedback_responses'], 1))}%", "said it helped")]):
         stat(s, 1.1 + i * 2.42, 5.42, 2.22, 0.86, big, label)
 
     text(s, 1.1, SH - 0.72, 10.6, 0.5,
@@ -1952,7 +1986,7 @@ def s18_evals(prs):
     text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 0.88,
          [{"t": "Then the real messages told us something we had not asked.",
            "size": 12.5, "bold": True, "color": INK, "space_after": 4},
-          {"t": "Of the first 25 questions learners sent the tutor, 9 were not "
+          {"t": f"Of the {INTERFACE_OF} questions learners have sent the tutor, {INTERFACE_MESSAGES} were not "
                 "about mathematics at all. They were about the screen: where "
                 "do I type the answer, I cannot see the options. Five more were "
                 "\"don't know\" with nothing to go on, four were \"yes\" or "
@@ -2016,12 +2050,17 @@ def s20_users(prs):
     # teachers, a parent and people outside the class, so "one classroom" was
     # not true, and usage did not stop when the build did.
     s, y = slide_shell(prs, 20, "20 · What real users said",
-                       "Thirty learners used it. Fifteen told us what they think.",
+                       f"{S['learners_finished_lesson']} learners used it. {S['feedback_responses']} told us what they think.",
                        "Every response below came from a signed-in account that "
                        "had used Dagar. Nobody here is reacting to a demo.")
 
-    tiles = [("46", "signed up"), ("30", "finished a lesson"),
-             ("15", "left feedback"), ("14 of 15", "would use it again")]
+    helped = S["feedback_understood"].get("yes", 0) + \
+        S["feedback_understood"].get("a_bit", 0)
+    returning = S["feedback_would_return"].get("yes", 0)
+    tiles = [(str(S["learners_signed_up"]), "signed up"),
+             (str(S["learners_finished_lesson"]), "finished a lesson"),
+             (str(S["feedback_responses"]), "left feedback"),
+             (f"{returning} of {S['feedback_responses']}", "would use it again")]
     tw, tgx = 2.259, 0.2
     for i, (big, label) in enumerate(tiles):
         stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
@@ -2034,8 +2073,8 @@ def s20_users(prs):
         # expert review, sought on purpose, not a soft sample.
         ("A mathematics teacher, on the adaptivity",
          "“It adapts to students level and make practice feel like a game "
-         "instead of homework.”  Two of the fifteen teach mathematics, and "
-         "were asked because they do.", PRIMARY),
+         "instead of homework.”  Two of the respondents teach mathematics, "
+         "and were asked because they do.", PRIMARY),
         ("A student, on the content design",
          "“The way it explained fraction with rotis made them easy to "
          "understand.”  Fractions was the chapter written most deliberately "
@@ -2063,8 +2102,8 @@ def s20_users(prs):
     box(s, M, yb, CONTENT_W, 1.46, fill=SURFACE, line=BORDER)
     box(s, M, yb + 0.2, 0.06, 1.02, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.34, yb + 0.16, CONTENT_W - 0.7, 1.2,
-         [{"t": "Fifteen responses is not a market study, and the last quote "
-                "is worth more than the other fourteen.",
+         [{"t": f"{S['feedback_responses']} responses is not a market study, and the last quote "
+                "is worth more than all the rest.",
            "size": 12.5, "bold": True, "color": INK, "space_after": 4},
           {"t": "Mostly one class, reached through a family connection, so the "
                 "learners most likely to answer are the ones most likely to be "
@@ -2072,9 +2111,9 @@ def s20_users(prs):
                 "were asked because they teach this syllabus to this age group, "
                 "and one used the space to tell us the English is too hard for "
                 "Class 6 in a Hindi-dominant area. What survives the discount: "
-                "15 of 15 said it helped them understand something, 14 of 15 "
+                f"{helped} of {S['feedback_responses']} said it helped them understand something, {returning} "
                 "would come back, a learner asked us to build the feature we "
-                "already ship, and only 11 of 30 active learners have ever "
+                f"already ship, and only {S['tutor_learners']} of {S['learners_finished_lesson']} active learners have ever "
                 "opened the tutor.",
            "size": 10.5, "color": BODY, "line": 1.26}])
 
@@ -2103,7 +2142,7 @@ hands you that.
 THE FOURTH QUOTE IS THE SLIDE
 A learner asking for an AI tutor in an app with an AI tutor on every lesson
 screen. They named the quiz as what worked, so they had used the product
-properly. Pair it with the behavioural number: 11 of 30 active learners have
+properly. Pair it with the behavioural number: 14 of 38 active learners have
 ever sent the tutor a message, against a 50% target. That is discoverability,
 and it is measured rather than felt.
 
@@ -2156,19 +2195,20 @@ def s21_roadmap(prs):
     #                         certain a redesign fully closes it
     rows = [
         ("More chapters across Classes 6 to 8",
-         "The loudest request, 7 of 15 in a forced choice. One chapter per "
+         f"Joint loudest request, {S['feedback_improve_most'].get('chapters', 0)} of {S['feedback_responses']} in a forced choice. One chapter per "
          "grade is a ceiling: finish it and there is nothing to return to",
          10, 10, 7, "NOW", PRIMARY),
         # Missing from the first draft and it should not have been. Practice
         # was the second loudest ask at 6 of 15, and the quiz-pool defect was
         # already written down in slide 19's notes without being scheduled.
         ("More practice questions, and a wider quiz pool",
-         "Second loudest ask, 6 of 15. A chapter quiz is 8 questions and a "
+         f"Joint loudest too, {S['feedback_improve_most'].get('practice', 0)} of {S['feedback_responses']}. A chapter quiz is 8 questions and a "
          "retake is the same 8, so there is nothing new to come back for",
          9, 9, 8, "NOW", PRIMARY),
         ("Make the answer box and the tutor impossible to miss",
-         "9 of 25 tutor messages are about the screen. 11 of 30 have ever "
-         "opened the tutor, against a 50% target", 9, 8, 8, "NOW", PRIMARY),
+         f"{INTERFACE_MESSAGES} of {INTERFACE_OF} tutor messages are about the screen. "
+         f"{S['tutor_learners']} of {S['learners_finished_lesson']} have ever opened the tutor",
+         9, 8, 8, "NOW", PRIMARY),
         ("Default to Hindi where the school is Hindi-medium",
          "A mathematics teacher: the English is too hard for Class 6 in a "
          "Hindi-dominant area", 8, 7, 9, "NOW", PRIMARY),
@@ -2182,7 +2222,7 @@ def s21_roadmap(prs):
          "Gate: Meta business verification and an opt-in from the parent's own "
          "phone. Built and waiting", 6, 6, 3, "GATED", AMBER),
         ("Real people behind the offer of human help",
-         "Gate: demand. 34 offers and 1 acceptance is not yet a reason to pay "
+         "Gate: demand. 53 offers and 3 accepted is not yet a reason to pay "
          "anyone to be on call", 7, 3, 2, "GATED", AMBER),
         # Deliberately unscored. Putting a 6.1 next to "more subjects" would be
         # inventing precision about work nobody has specified, and this slide's
@@ -2269,8 +2309,8 @@ THE TWO SOURCES, AND WHY BOTH ARE ON THE LIST
 What learners say and what learners do are different instruments and the
 roadmap uses both. More chapters is what they asked for: 7 of 15 in a forced
 choice, the highest Confidence on the board. Discoverability is what they did:
-9 of 25 tutor messages are about the screen, a learner asked us to build a
-tutor we already ship, and 11 of 30 have ever opened it against a 50% target.
+11 of 36 tutor messages are about the screen, a learner asked us to build a
+tutor we already ship, and 14 of 38 have ever opened it against a 50% target.
 Neither instrument sees what the other sees, so we ship both first.
 
 WHY MORE CHAPTERS SCORES 9.0
@@ -2308,7 +2348,7 @@ scheduled. They get numbers when the rows above them are done.
 IF ASKED WHAT UNLOCKS THE TWO GATED ITEMS
 WhatsApp needs Meta business verification and an opt-in from the parent's own
 handset, and the summary itself is already built and running as a link. The
-mentor service needs demand: 34 offers and 1 acceptance. If that ratio moves,
+mentor service needs demand: 53 offers and 3 accepted. If that ratio moves,
 the item moves with it. Neither is a technical unknown.
 """)
 
@@ -2461,7 +2501,7 @@ def s23_adoption(prs):
                        f"parent's account. Open it now: {APP_URL}")
 
     tiles = [("1", "link to open it"), ("0", "apps to install"),
-             ("46", "joined from one class"), ("0", "spent on marketing")]
+             (str(S["learners_signed_up"]), "have joined"), ("0", "spent on marketing")]
     tw, tgx = 2.259, 0.2
     for i, (big, label) in enumerate(tiles):
         stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
@@ -2664,7 +2704,7 @@ otherwise is how a promised service quietly stops being deliverable.
 THE ORDER THEY ARRIVE IN
 Plus in Phase 2, alongside the first institutional pilots. Live in Phase 3,
 because it needs teachers on a timetable and a batch big enough to fill.
-One-to-one last, and only if the demand signal holds: 34 offers and 1 acceptance
+One-to-one last, and only if the demand signal holds: 53 offers and 3 accepted
 today is not yet a reason to hire anybody.
 
 THE INSTITUTIONAL VERSION OF ONE-TO-ONE
@@ -2718,14 +2758,23 @@ def s25_voices(prs):
 
     # ── Left: the numbers, as bars ──────────────────────────────────────────
     lw = 3.5
+    # Read from stats.json, not typed. These bars are the same rows the
+    # feedback report prints, so the two cannot disagree.
+    u, r, w = (S["feedback_understood"], S["feedback_would_return"],
+               S["feedback_improve_most"])
+    total = S["feedback_responses"]
     groups = [
         ("Did it help you understand something?",
-         [("Yes", 14, PRIMARY), ("A bit", 1, AMBER), ("No", 0, MUTED)]),
+         [("Yes", u.get("yes", 0), PRIMARY), ("A bit", u.get("a_bit", 0), AMBER),
+          ("No", u.get("no", 0), AMBER)]),
         ("Would you use Dagar again?",
-         [("Yes", 14, PRIMARY), ("No", 1, AMBER)]),
+         [("Yes", r.get("yes", 0), PRIMARY), ("Maybe", r.get("maybe", 0), MUTED),
+          ("No", r.get("no", 0), AMBER)]),
         ("If we could do only ONE more thing",
-         [("More chapters", 7, PRIMARY), ("More practice", 6, PRIMARY),
-          ("The tutor", 1, MUTED), ("Something else", 1, MUTED)]),
+         [("More practice", w.get("practice", 0), PRIMARY),
+          ("More chapters", w.get("chapters", 0), PRIMARY),
+          ("Something else", w.get("other", 0), MUTED),
+          ("The tutor", w.get("tutor", 0), MUTED)]),
     ]
     gy = y
     for title, options in groups:
@@ -2738,7 +2787,7 @@ def s25_voices(prs):
             box(s, M + 1.3, by + 0.045, 1.75, 0.13, fill=SURFACE,
                 shape=MSO_SHAPE.RECTANGLE)
             if n:
-                box(s, M + 1.3, by + 0.045, 1.75 * (n / 15), 0.13, fill=colour,
+                box(s, M + 1.3, by + 0.045, 1.75 * (n / max(total, 1)), 0.13, fill=colour,
                     shape=MSO_SHAPE.RECTANGLE)
             text(s, M + 3.12, by - 0.01, 0.4, 0.22,
                  [{"t": str(n), "size": 9, "bold": True, "color": colour}])
@@ -2779,11 +2828,10 @@ def s25_voices(prs):
     box(s, M, yb, CONTENT_W, 0.92, fill=SURFACE, line=BORDER)
     box(s, M, yb + 0.16, 0.06, 0.6, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.34, yb + 0.12, CONTENT_W - 0.7, 0.72,
-         [{"t": "Fifteen of fifteen said it helped them understand something.",
+         [{"t": f"{u.get('yes', 0) + u.get('a_bit', 0)} of {total} said it helped them understand something.",
            "size": 12, "bold": True, "color": INK, "space_after": 3},
-          {"t": "Fourteen would come back. The one who said no still said it "
-                "helped. And the loudest request was simply more of it: more "
-                "chapters, more practice.",
+          {"t": f"{r.get('yes', 0)} would come back. And the loudest request was "
+                "simply more of it: practice and chapters, tied.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     notes(s, """
@@ -2930,10 +2978,12 @@ def s27_close(prs):
            "size": 15, "color": MUTED}])
 
     y = 3.72
-    proof = [("30", "learners, real ones"),
-             ("133", "lessons finished"),
-             ("761", "questions answered"),
-             ("15 of 15", "said it helped")]
+    helped = S["feedback_understood"].get("yes", 0) + \
+        S["feedback_understood"].get("a_bit", 0)
+    proof = [(str(S["learners_finished_lesson"]), "learners, real ones"),
+             (str(S["lessons_completed"]), "lessons finished"),
+             (f"{S['practice_attempts']:,}", "questions answered"),
+             (f"{helped} of {S['feedback_responses']}", "said it helped")]
     tw, tgx = 2.259, 0.2
     for i, (big, label) in enumerate(proof):
         stat(s, M + i * (tw + tgx), y, tw, 0.9, big, label)
@@ -2950,8 +3000,8 @@ def s27_close(prs):
                 "tuition that would fix it. Four days does not solve that. It "
                 "was enough to show that a tutor which knows their exact "
                 "lesson, answers in their language and costs them nothing is "
-                "buildable, and that when you put it in front of thirty of "
-                "them, they use it.",
+                f"buildable, and that when you put it in front of "
+                f"{S['learners_finished_lesson']} of them, they use it.",
            "size": 11.5, "color": BODY, "line": 1.3}])
 
     text(s, M, SH - 0.44, 6.0, 0.24,
@@ -3019,7 +3069,7 @@ def s19_tradeoffs(prs):
         ("No real teacher yet behind the offer of human help",
          "When a learner keeps getting stuck, Dagar offers to connect them with "
          "a person. Today that request is recorded and nobody is employed to "
-         "answer it. 34 offers made, 1 accepted so far. That number is what we "
+         "answer it. 53 offers made, 3 accepted so far. That number is what we "
          "wanted before paying anyone to be on call."),
         ("No weekly progress report sent to a parent on WhatsApp",
          "Parents are not left out: they open a private link any time and see "

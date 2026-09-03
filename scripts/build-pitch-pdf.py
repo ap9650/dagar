@@ -52,10 +52,23 @@ DEMO_LINKS = [
 ]
 
 
+SOURCE = pathlib.Path("scripts/build-pitch.py")
+
+
 def render(index):
-    """One slide as a PNG, through the same renderer used for review."""
+    """One slide as a PNG, through the same renderer used for review.
+
+    ── THE CACHE HAS TO EXPIRE ─────────────────────────────────────────────────
+    This used to reuse any PNG that existed, full stop. Every rebuild after the
+    first therefore produced a PDF of the slides as they were the first time,
+    silently: the build printed "wrote ... 27 pages" and the file was days out
+    of date. A whole afternoon of edits shipped to nobody.
+
+    A cache keyed on nothing is not a cache, it is a stale copy. This one
+    expires whenever the deck source is newer than the render.
+    """
     png = WORK / f"{index:02d}.png"
-    if png.exists():
+    if png.exists() and png.stat().st_mtime > SOURCE.stat().st_mtime:
         return png
     subprocess.run(
         [sys.executable, "scripts/build-pitch.py", "--only", str(index)],
