@@ -187,7 +187,8 @@ for good. What Plus sells is more of it.
 |---|---|---|
 | Dagar Free | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones and parent summaries. AI Tutor capped at 10 questions per day. |
 | Dagar Plus | ₹99/month · ₹799/year | Unlimited AI Tutor, adaptive practice depth, revision plans and detailed parent insights. |
-| Dagar Mentor | +₹299/month | Adds human mentor sessions. Gated on verified mentor supply. |
+| Dagar Live | ₹399/month · ₹3,999/year | Adds live cohort classes several times a week: one teacher explaining concepts to a batch. |
+| Dagar One to One | ₹1,499/month · ₹14,999/year | Adds two private sessions a month. Priced at what a teacher's hour costs. Gated on verified supply. |
 | Dagar for Institutions | ₹450–600/learner/year | NGO, CSR and government licences with cohort dashboards and reporting. The scalable revenue engine. |
 
 Pricing is bounded below by cost: at the Section 13 targets, a fully active learner

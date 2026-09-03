@@ -436,7 +436,7 @@ def s5_market(prs):
         ("500K", "learners  ·  SOM",
          "Three years. Half funded by institutions, half reached directly, "
          "of whom a small share subscribe.",
-         "₹11.6 Cr  ·  $1.36M ARR", HINT),
+         "₹13 Cr  ·  $1.53M ARR", HINT),
     ]
     w, gx = 3.87, 0.24
     for i, (big, label, blurb, money, accent) in enumerate(tiers):
@@ -2354,8 +2354,8 @@ def s22_horizon(prs):
            "A teacher dashboard for a class, an NGO dashboard for a cohort, "
            "and the WhatsApp summary once Meta approves"),
           ("First money, from both sides",
-           "Paid CSR and NGO pilots, and a subscription for families who can "
-           "pay, tested in parallel rather than one after the other")]),
+           "Paid CSR and NGO pilots, and Dagar Plus for families who can pay, "
+           "tested in parallel rather than one after the other")]),
         # Voice-first sits inside the accessibility item rather than beside it,
         # which is where the PRD puts it, and the slot it frees goes to the
         # persona expansion.
@@ -2368,9 +2368,9 @@ def s22_horizon(prs):
            "than accommodated. Same engine, a different learner"),
           ("Learning that works offline",
            "The last barrier that is about infrastructure rather than teaching"),
-          ("A verified mentor network",
-           "Only if the demand signal we are collecting today says learners "
-           "want one")]),
+          ("Live classes, then a mentor",
+           "A teacher to a batch first, because that scales. One-to-one after, "
+           "and only if the demand signal we collect today holds up")]),
     ]
 
     cw = (CONTENT_W - 2 * 0.3) / 3
@@ -2567,36 +2567,41 @@ def s24_money(prs):
 
     # The tiers were one dense card. Four columns instead: the price is the
     # thing a room reads first on this slide and it should carry from the back.
+    # Five columns, and the order is the argument: each one adds a person.
+    # Free and Plus are software. Live shares a teacher across fifty learners,
+    # which is why it can be ₹399. One-to-one is a teacher for one child, so
+    # its cost does not fall with scale and its price cannot pretend otherwise.
     tiers = [
         ("Dagar Free", "₹0", PRIMARY,
-         "The core stays free for good: lessons, practice, quizzes, progress "
-         "and the parent summary, with the tutor capped at 10 questions a day. "
-         "Today the whole product is free, because we are still gathering "
-         "evidence."),
-        ("Dagar Plus", "₹99 / month", PRIMARY,
-         "Depth, for the families who want it and can pay. Unlimited AI tutor, "
-         "deeper adaptive practice, revision plans and fuller parent insight."),
-        ("Dagar Mentor", "+ ₹299 / month", MUTED,
-         "Sessions with a real person. Not sold until mentors are verified and "
-         "on call, because selling ahead of supply loses a parent's trust once "
-         "and for good."),
-        ("Institutions", "₹450 to ₹600", AMBER,
-         "Per learner, per year. The scalable engine: NGO, CSR and government "
-         "licences with cohort dashboards, reporting and bulk onboarding."),
+         "The core, free for good: lessons, practice, quizzes, progress and the "
+         "parent summary, tutor capped at 10 questions a day."),
+        ("Dagar Plus", "₹99 / mo", PRIMARY,
+         "Depth. Unlimited AI tutor, deeper adaptive practice, revision plans "
+         "and fuller parent insight."),
+        ("Dagar Live", "₹399 / mo", PRIMARY,
+         "Plus, and a teacher. Live cohort classes several times a week, one "
+         "teacher explaining concepts to a batch, the model PhysicsWallah "
+         "proved at scale."),
+        ("One to one", "₹1,499 / mo", MUTED,
+         "Live, and two private sessions a month. Priced at what a teacher's "
+         "hour actually costs. Gated on verified supply."),
+        ("Institutions", "₹450–600 / yr", AMBER,
+         "Per learner. NGO, CSR and government licences, and they can fund "
+         "one-to-one for the learners our struggle signals flag."),
     ]
-    cw = (CONTENT_W - 3 * 0.22) / 4
+    cw = (CONTENT_W - 4 * 0.18) / 5
     th = 2.26
     for i, (name, price, accent, body) in enumerate(tiers):
-        cx = M + i * (cw + 0.22)
+        cx = M + i * (cw + 0.18)
         box(s, cx, y, cw, th, fill=WHITE, line=BORDER)
-        box(s, cx, y, cw, 0.88, fill=SURFACE, shape=MSO_SHAPE.RECTANGLE)
+        box(s, cx, y, cw, 0.84, fill=SURFACE, shape=MSO_SHAPE.RECTANGLE)
         box(s, cx, y, 0.05, th, fill=accent, shape=MSO_SHAPE.RECTANGLE)
-        text(s, cx + 0.2, y + 0.13, cw - 0.36, 0.24,
-             [{"t": name.upper(), "size": 9, "bold": True, "color": accent}])
-        text(s, cx + 0.2, y + 0.38, cw - 0.36, 0.44,
-             [{"t": price, "size": 17, "bold": True, "color": INK}])
-        text(s, cx + 0.2, y + 1.02, cw - 0.36, 1.14,
-             [{"t": body, "size": 9.5, "color": BODY, "line": 1.28}])
+        text(s, cx + 0.16, y + 0.11, cw - 0.28, 0.24,
+             [{"t": name.upper(), "size": 8.5, "bold": True, "color": accent}])
+        text(s, cx + 0.16, y + 0.35, cw - 0.28, 0.42,
+             [{"t": price, "size": 15, "bold": True, "color": INK}])
+        text(s, cx + 0.16, y + 0.96, cw - 0.28, 1.22,
+             [{"t": body, "size": 9, "color": BODY, "line": 1.26}])
 
     y2 = y + th + 0.22
     below = [
@@ -2645,6 +2650,27 @@ active learner per year. It is not yet validated against production, because
 test-account purges null the learner attribution on our AI spend rows. Say
 "modelled" and not "measured". Someone will ask, and the difference is the
 whole credibility of the slide.
+
+WHY LIVE IS ₹399 AND ONE-TO-ONE IS ₹1,499
+Because one is shared and the other is not. A live cohort is one teacher across
+roughly fifty learners: at ₹1,200 a session, eight sessions a month, that is
+about ₹190 of teacher time per learner, so ₹399 carries it. One-to-one is a
+teacher for one child and the cost does not fall with scale. Two private
+sessions a month is real money however large we get, which is why it is priced
+at four figures and gated on verified supply. Every other margin in this model
+improves as inference gets cheaper. Human time does not, and pretending
+otherwise is how a promised service quietly stops being deliverable.
+
+THE ORDER THEY ARRIVE IN
+Plus in Phase 2, alongside the first institutional pilots. Live in Phase 3,
+because it needs teachers on a timetable and a batch big enough to fill.
+One-to-one last, and only if the demand signal holds: 34 offers and 1 acceptance
+today is not yet a reason to hire anybody.
+
+THE INSTITUTIONAL VERSION OF ONE-TO-ONE
+An NGO can fund private sessions for the learners our struggle detection flags,
+rather than a family paying ₹1,499. That is the same feature reaching the
+learners who need it most, paid for by the budget that exists for exactly that.
 
 WHY NOT ADVERTISING, IN ONE LINE
 Section 9(3) of the DPDP Act 2023 prohibits tracking, behavioural monitoring

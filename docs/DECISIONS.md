@@ -1064,6 +1064,16 @@ Dagar Plus sells more practice, more depth and an uncapped tutor on top of a
 free tier that stays genuinely useful. Crippling the free tier to force
 conversion would break the mission and the institutional pitch in the same move.
 
+**Live teaching is priced by whether the teacher is shared.** A live cohort is
+one teacher across roughly fifty learners, about ₹190 of teacher time each per
+month, so ₹399 carries it. One-to-one is a teacher for one child and that cost
+does not fall with scale, so it is ₹1,499 and gated on verified supply. The
+earlier ₹299 mentor add-on was not viable: it valued two hours of a teacher's
+month at ₹150 an hour. **This is the only line in the model that does not
+improve as inference gets cheaper**, which is why the shared format carries the
+volume and one-to-one stays small, or is funded by an institution for learners
+flagged by struggle detection (D6).
+
 Institutional pricing floor is **₹370/learner/year** — the modelled cost of a
 fully active learner. Full tiers, unit economics and market sizing in
 `MARKET_AND_PRICING.md`.

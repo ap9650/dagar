@@ -136,10 +136,30 @@ That floor is the single most important number in this document.
 
 | Tier | Price | Includes |
 |---|---|---|
-| **Dagar Free** | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones, parent summary. AI Tutor capped at 10 questions/day. |
+| **Dagar Free** | ₹0 | Full curriculum, micro-lessons, practice, quizzes, progress, streaks, milestones, parent summary. AI Tutor capped at 10 questions/day. **Free permanently, not a trial.** |
 | **Dagar Plus** | ₹99/mo · ₹799/yr | Unlimited AI Tutor, adaptive practice depth, revision plans, detailed parent insights. |
-| **Dagar Mentor** | +₹299/mo | Plus 2 human mentor sessions/month. Gated on mentor supply — do not sell ahead of capacity. |
-| **Dagar for Institutions** | ₹450–600/learner/yr | NGO, CSR and government licences. Cohort dashboards, reporting, bulk onboarding. **The scalable revenue engine.** |
+| **Dagar Live** | ₹399/mo · ₹3,999/yr | Plus, and live cohort classes several times a week: one teacher explaining concepts to a batch. |
+| **Dagar One to One** | ₹1,499/mo · ₹14,999/yr | Live, and two private sessions a month. Gated on verified supply — do not sell ahead of capacity. |
+| **Dagar for Institutions** | ₹450–600/learner/yr | NGO, CSR and government licences. Cohort dashboards, reporting, bulk onboarding. Can fund one-to-one for learners flagged by struggle detection (D6). |
+
+### Why Live is ₹399 and one-to-one is ₹1,499
+
+The difference is whether the teacher is shared.
+
+| | Teacher cost per learner per month | Price | Works? |
+|---|---|---|---|
+| Live cohort, ~50 learners, 8 sessions | ~₹190 | ₹399 | Yes |
+| One to one, 2 sessions | ~₹1,200 | ₹1,499 | Thin, and honest |
+| One to one at the old ₹299 | ~₹1,200 | ₹299 | **Loses ₹900 a learner a month** |
+
+The previous ₹299 mentor add-on was not viable and is corrected here. It priced
+two hours of a teacher's month at ₹150 an hour, below what a competent
+mathematics teacher earns in a tier 2 city.
+
+**This is the one line in the model that does not improve with scale.** Every
+other margin gets better as inference costs fall; a teacher's hour does not. So
+the shared format carries the volume, and one-to-one stays small, expensive and
+supply-gated — or is funded by an institution for the learners who need it most.
 
 Institutional volume pricing:
 
@@ -165,9 +185,15 @@ is not.
 |---|---|---|---|
 | Institutional (NGO/CSR/gov) | 225,000 | ₹450/yr | ₹10.1 Cr |
 | Consumer, free tier | 264,000 | ₹0 | ₹0 |
-| Consumer Plus (4% of 275,000) | 11,000 | ₹799/yr | ₹0.9 Cr |
-| Mentor add-on (15% of Plus) | 1,650 | ₹3,588/yr | ₹0.6 Cr |
-| **Total** | **~500,000 learners** | | **~₹11.6 Cr (~$1.36M ARR)** |
+| Consumer Plus (60% of subscribers) | 6,600 | ₹799/yr | ₹0.5 Cr |
+| Consumer Live (35% of subscribers) | 3,850 | ₹3,999/yr | ₹1.5 Cr |
+| Consumer one to one (5% of subscribers) | 550 | ₹14,999/yr | ₹0.8 Cr |
+| **Total** | **~500,000 learners** | | **~₹13 Cr (~$1.53M ARR)** |
+
+Subscribers are 4% of the 275,000 reached directly, split 60 / 35 / 5 across the
+three paid tiers. The split is an assumption, not a measurement: most people who
+pay at all will take the cheapest paid tier, and one-to-one stays deliberately
+small because supply, not demand, is what limits it.
 
 ### Where the 4% comes from
 
