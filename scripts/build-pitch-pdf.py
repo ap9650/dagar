@@ -28,6 +28,7 @@ The addresses are printed on the page as well as being clickable, so they still
 work from a printout, a screenshot, or a viewer that strips annotations.
 """
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -130,6 +131,12 @@ def publish_web(count):
     """
     web = pathlib.Path("public/deck")
     web.mkdir(parents=True, exist_ok=True)
+
+    # Clear old slides first. Removing a slide used to leave the last JPEG
+    # behind, so the deck lost a page and the site still served the orphan.
+    for old in web.glob("*.jpg"):
+        old.unlink()
+
     total = 0
     for i in range(count):
         with Image.open(WORK / f"{i:02d}.png") as im:
@@ -140,6 +147,20 @@ def publish_web(count):
             rgb.save(path, quality=88, optimize=True)
             total += path.stat().st_size
     shutil.copy(OUT, web / OUT.name)
+
+    # The viewer's slide count is written here rather than typed into the HTML.
+    # It was hardcoded, and removing a slide left the page paging into a 404.
+    index = web / "index.html"
+    if index.exists():
+        html = index.read_text()
+        patched = re.sub(r"const TOTAL = \d+;", f"const TOTAL = {count};", html)
+        # The static count in the markup too, so the first paint before the
+        # script runs does not flash the wrong total.
+        patched = re.sub(r'id="count">\d+ / \d+<', f'id="count">1 / {count}<', patched)
+        if patched != html:
+            index.write_text(patched)
+            print(f"  viewer slide count set to {count}")
+
     print(f"wrote {web}/  ({count} slides, {total / 1_000_000:.1f} MB) "
           f"— deploy to publish at /deck")
 

@@ -117,7 +117,7 @@ def eval_pass_rate():
     if not summary.exists():
         raise SystemExit(
             "evals/latest.json is missing. Run `npm run eval` before building "
-            "the deck: slide 18 quotes the tutor's real score and will not "
+            "the deck: slide 17 quotes the tutor's real score and will not "
             "invent one."
         )
     run = json.loads(summary.read_text())
@@ -529,7 +529,7 @@ def s5_market(prs):
                 "learners who cannot pay, at ₹450 each. Families who can pay "
                 "subscribe for depth and fund the rest. The core lessons stay "
                 "free either way, and ₹450 is a floor set by cost: an active "
-                "learner costs about ₹370 a year. Tiers on slide 24.",
+                "learner costs about ₹370 a year. Tiers on slide 23.",
            "size": 10, "color": BODY, "line": 1.24}])
 
     source(s, SH - 0.72,
@@ -1758,111 +1758,7 @@ twenty learners have used the tutor. That is a start, not evidence.
 """)
 
 
-def s16_accessibility(prs):
-    """
-    Accessibility as an MVP constraint rather than a later phase.
-
-    The PRD's vision names disabled and neurodiverse learners in its first
-    paragraph. A product that says that and then schedules accessibility for
-    Phase 3 has written a sentence it does not mean, which is the whole reason
-    this is a slide rather than a footnote.
-
-    The amber rule is the one that lands with teachers, and it is guarded by a
-    test, so it is the example worth leading with.
-    """
-    # Plainer than the first version, which argued from our own PRD ("the vision
-    # names them in its first paragraph"). True, and it asks a room to take our
-    # document on trust. The simpler argument is the real one: access is cheap
-    # to build in and expensive to retrofit, so it is a foundation rather than a
-    # feature, and naming WCAG says which foundation.
-    s, y = slide_shell(prs, 16, "16 · Accessibility",
-                       "Accessibility is the base, not a later feature.",
-                       "No learner with a disability has used Dagar yet. We "
-                       "built to WCAG 2.1 AA anyway, because access designed in "
-                       "from the start costs almost nothing and access "
-                       "retrofitted costs a rebuild.")
-
-    # The rule teachers respond to, given the room it deserves.
-    box(s, M, y, CONTENT_W, 1.24, fill=WHITE, line=AMBER)
-    box(s, M, y + 0.2, 0.06, 0.84, fill=AMBER, shape=MSO_SHAPE.RECTANGLE)
-    text(s, M + 0.34, y + 0.18, CONTENT_W - 0.7, 0.96,
-         [{"t": "A wrong answer is amber. Red is only ever a system error.",
-           "size": 15, "bold": True, "color": INK, "space_after": 5},
-          {"t": "The smallest decision in the product and the one teachers "
-                "notice first. These learners have been told they are bad at "
-                "maths for years, and red is the colour of that message. Amber "
-                "says not yet, and it never appears without a next step beside "
-                "it: a hint, a worked example, or an invitation to try again. A "
-                "test fails the build if the two colours are ever confused.",
-           "size": 10.5, "color": BODY, "line": 1.28}])
-
-    items = [
-        ("WCAG 2.1 AA everywhere, AAA for body text",
-         "Every colour in the product is contrast-checked against that standard "
-         "before it is used. These are cheap LCD screens read outdoors at low "
-         "brightness to save battery, where grey on grey is not subtle, it is "
-         "invisible."),
-        ("Every target is at least 44 pixels",
-         "Including icon buttons. A thumb on a cracked screen is the input "
-         "device, and a 30-pixel target is a tax on the learner who can least "
-         "afford it."),
-        ("Colour is never the only signal",
-         "A filled day carries a tick, a rest day carries a dot, correct "
-         "carries a check and not quite carries its own word. Nothing on any "
-         "screen depends on telling two hues apart."),
-        ("Any step can be listened to",
-         "In either language, chosen separately from the interface. Reading is "
-         "a barrier for some learners even in their own language, and the "
-         "browser's own voice costs nothing to serve."),
-        ("Motion asks permission",
-         "Every animation sits behind prefers-reduced-motion. Under it a "
-         "celebration becomes a static badge rather than disappearing, because "
-         "the learner should lose the movement, not the moment."),
-        ("Keyboard reaches everything",
-         "Semantic HTML, real landmarks, an accessible name on every control, "
-         "and a visible focus ring. Text reflows at 200% zoom with no sideways "
-         "scroll."),
-    ]
-    cw = (CONTENT_W - 2 * 0.22) / 3
-    for i, (title, body) in enumerate(items):
-        col, row = i % 3, i // 3
-        card(s, M + col * (cw + 0.22), y + 1.42 + row * 1.34, cw, 1.22,
-             title, body, title_size=11.5, body_size=9.5)
-
-    notes(s, """
-LEAD WITH THE COLOUR
-It is the smallest thing on the slide and the one teachers respond to. Say the
-reason out loud: a learner who is already behind must never see the colour of
-danger because she made a sign error. Amber says not yet. Red says you failed.
-
-WHY THIS IS NOT PHASE 3, IN ONE SENTENCE
-Because you cannot add access to a product later without rebuilding it.
-Contrast, target size, focus order and an accessible name are almost free while
-a component is being written, and a rewrite once fifty screens exist. Every
-team that schedules accessibility for "later" is choosing the expensive version
-of the same work.
-
-AND BE HONEST THAT THE COHORT IS NOT THERE YET
-Nobody in the beta has told us they have a disability. We built to the standard
-anyway, because the alternative is discovering the gap when the first such
-learner arrives, at which point it is a rebuild rather than a fix. The PRD's
-vision names these learners, and a foundation is how you mean a sentence like
-that rather than merely writing it.
-
-WHAT WE HAVE NOT DONE
-No screen reader testing with an actual screen reader user. No audit against
-WCAG by anyone independent. The rules are followed and the tokens are
-contrast-checked, but nobody who relies on assistive technology has used Dagar
-yet, and that is the gap that matters most on this slide.
-
-THE AUDIO IS NOT A FEATURE FOR BLIND LEARNERS
-It helps them, but that is not why it exists. It is there for a learner who
-reads slowly in her own language, which is a much larger group and one nobody
-builds for.
-""")
-
-
-def s17_testing(prs):
+def s16_testing(prs):
     """
     Tests chosen by harm, and the story of being wrong about it.
 
@@ -1872,7 +1768,7 @@ def s17_testing(prs):
     different KIND of test rather than more of the same. A deck that only shows
     the number has not learned anything worth telling.
     """
-    s, y = slide_shell(prs, 17, "17 · How we tested",
+    s, y = slide_shell(prs, 16, "16 · How we tested",
                        "Chosen by harm, not by coverage.",
                        "1,743 automated tests. The interesting part is which "
                        "ones exist, and why one whole kind had to be invented "
@@ -1958,7 +1854,7 @@ more often anyway.
 """)
 
 
-def s18_evals(prs):
+def s17_evals(prs):
     """
     How we test the one part a unit test cannot reach.
 
@@ -1971,7 +1867,7 @@ def s18_evals(prs):
     can use, and it is the reason the set is built from real traffic rather
     than imagination. The harness is only how we know it.
     """
-    s, y = slide_shell(prs, 18, "18 · How we tested the tutor",
+    s, y = slide_shell(prs, 17, "17 · How we tested the tutor",
                        "The one part no unit test can reach.",
                        "Grading is arithmetic and a streak is a fold over dates. "
                        "The tutor is the differentiating claim, and it was the "
@@ -2070,7 +1966,7 @@ the quiz are for.
 """)
 
 
-def s20_users(prs):
+def s19_users(prs):
     """
     First-party evidence: what the people using it actually said.
 
@@ -2086,7 +1982,7 @@ def s20_users(prs):
     # The title used to say "one classroom, four days". 46 accounts include
     # teachers, a parent and people outside the class, so "one classroom" was
     # not true, and usage did not stop when the build did.
-    s, y = slide_shell(prs, 20, "20 · What real users said",
+    s, y = slide_shell(prs, 19, "19 · What real users said",
                        f"{S['learners_finished_lesson']} learners used it. {S['feedback_responses']} told us what they think.",
                        "Every response below came from a signed-in account that "
                        "had used Dagar. Nobody here is reacting to a demo.")
@@ -2196,7 +2092,7 @@ defaulting to Hindi by region rather than asking the child to choose.
 """)
 
 
-def s21_roadmap(prs):
+def s20_roadmap(prs):
     """
     What we build next, scored rather than asserted.
 
@@ -2210,7 +2106,7 @@ def s21_roadmap(prs):
     for it is behavioural (D28). A roadmap that just ranks the feature requests
     is a suggestion box with a Gantt chart.
     """
-    s, y = slide_shell(prs, 21, "21 · Roadmap",
+    s, y = slide_shell(prs, 20, "20 · Roadmap",
                        "Depth before breadth.",
                        "Impact, Confidence and Ease, each out of 10 and "
                        "averaged, on what learners tell us and on what we watch "
@@ -2237,7 +2133,7 @@ def s21_roadmap(prs):
          10, 10, 7, "NOW", PRIMARY),
         # Missing from the first draft and it should not have been. Practice
         # was the second loudest ask at 6 of 15, and the quiz-pool defect was
-        # already written down in slide 19's notes without being scheduled.
+        # already written down in slide 18's notes without being scheduled.
         ("More practice questions, and a wider quiz pool",
          f"Joint loudest too, {S['feedback_improve_most'].get('practice', 0)} of {S['feedback_responses']}. A chapter quiz is 8 questions and a "
          "retake is the same 8, so there is nothing new to come back for",
@@ -2390,19 +2286,19 @@ the item moves with it. Neither is a technical unknown.
 """)
 
 
-def s22_horizon(prs):
+def s21_horizon(prs):
     """
-    The long arc, in phases, at the altitude slide 21 deliberately avoids.
+    The long arc, in phases, at the altitude slide 20 deliberately avoids.
 
     Slide 21 is the next few weeks with scores attached. This one is the shape
     of the product over years, and it is drawn from the PRD's own phases rather
     than invented for the deck, so the two documents cannot drift.
 
-    The discipline is the same as slide 21's last row: no dates, and no
+    The discipline is the same as slide 20's last row: no dates, and no
     pretending a phase is scheduled when it is conditional. Each phase names
     the thing that has to be true before it starts.
     """
-    s, y = slide_shell(prs, 22, "22 · Long-term roadmap",
+    s, y = slide_shell(prs, 21, "21 · Long-term roadmap",
                        "One learner, solved properly, then repeated.",
                        "Three phases. Each one starts when the phase before it "
                        "has been proven, not when a date arrives.")
@@ -2480,7 +2376,7 @@ def s22_horizon(prs):
 WHY THERE ARE NO DATES
 Because we would be guessing, and a roadmap with invented dates is the fastest
 way to lose a room that has seen a few. Each phase names its precondition
-instead. Phase 2 starts when the depth work on slide 21 is done. Phase 3 starts
+instead. Phase 2 starts when the depth work on slide 20 is done. Phase 3 starts
 when Phase 2 has paying institutions and a reason to believe the model holds.
 
 THIS IS THE PRD, NOT A DECK INVENTION
@@ -2518,7 +2414,7 @@ the first two days.
 """)
 
 
-def s23_adoption(prs):
+def s22_adoption(prs):
     """
     How a learner actually gets in, and which channel we have proven.
 
@@ -2531,7 +2427,7 @@ def s23_adoption(prs):
     and service worker exist, `display: standalone` is set, and the parent route
     at /s/[token] genuinely resolves without a session.
     """
-    s, y = slide_shell(prs, 23, "23 · Adoption",
+    s, y = slide_shell(prs, 22, "22 · Adoption",
                        "Nothing to install, and nothing in the way.",
                        f"The hardest step in Indian edtech is the first one. "
                        f"Dagar removes the install, the app store and the "
@@ -2621,7 +2517,7 @@ is curriculum alignment at about 62%.
 """)
 
 
-def s24_money(prs):
+def s23_money(prs):
     """
     How this pays for itself without charging the people it is for.
 
@@ -2636,7 +2532,7 @@ def s24_money(prs):
     test-account purges null the attribution on `ai_calls`. Calling a model a
     measurement is exactly the drift D26 exists to catch.
     """
-    s, y = slide_shell(prs, 24, "24 · Monetisation",
+    s, y = slide_shell(prs, 23, "23 · Monetisation",
                        "Some pay. Some never will. Both get the same product.",
                        "The lessons stay free for everyone. Institutions fund "
                        "the learners who cannot pay, and families who can pay "
@@ -2719,7 +2615,7 @@ follows once H1 to H7 have data.
 WHAT WE COPIED FROM DUOLINGO, AND WHAT WE DID NOT
 The daily habit loop, and the principle that the free tier stays genuinely
 useful forever rather than being crippled to force conversion. Not the hearts,
-not the lives, not the leaderboard, for the reasons on slide 19.
+not the lives, not the leaderboard, for the reasons on slide 18.
 
 BE PRECISE THAT ₹370 IS MODELLED
 It is derived in MARKET_AND_PRICING.md from D11's cost targets and published
@@ -2772,7 +2668,7 @@ worst case implies.
 """)
 
 
-def s25_voices(prs):
+def s24_voices(prs):
     """
     The feedback itself: the numbers as bars, the words as they were typed.
 
@@ -2788,7 +2684,7 @@ def s25_voices(prs):
     # The title used to be "fifteen people had nothing to gain by answering",
     # which argues about the respondents' motives instead of showing what they
     # said. The feedback is the point, so let it be the headline.
-    s, y = slide_shell(prs, 25, "25 · In their words",
+    s, y = slide_shell(prs, 24, "24 · In their words",
                        "They told us it works, and what to fix.",
                        f"Every response came from inside the product, from an "
                        f"account that had used it, spelling left as typed. "
@@ -2903,7 +2799,7 @@ unprompted from a user.
 """)
 
 
-def s26_demo(prs):
+def s25_demo(prs):
     """
     The demo slide: what the attached recording shows, in the order it shows it.
 
@@ -2916,7 +2812,7 @@ def s26_demo(prs):
     the point being demonstrated as well as a convenience. The product speaks
     both, so the demo of it does too.
     """
-    s, y = slide_shell(prs, 26, "26 · Demo",
+    s, y = slide_shell(prs, 25, "25 · Demo",
                        "Five minutes, one learner's evening.",
                        f"The recording runs the loop end to end, from choosing a "
                        f"language to a finished lesson, narrated in English and "
@@ -2985,7 +2881,7 @@ the voice is generated.
 """)
 
 
-def s27_close(prs):
+def s26_close(prs):
     """
     The close. Bookends the cover rather than summarising the deck.
 
@@ -3001,7 +2897,7 @@ def s27_close(prs):
 
     box(s, M, 0.52, 0.34, 0.055, fill=PRIMARY, shape=MSO_SHAPE.RECTANGLE)
     text(s, M + 0.46, 0.42, 9.0, 0.3,
-         [{"t": "27 · THE ASK", "size": 10.5, "bold": True, "color": PRIMARY,
+         [{"t": "26 · THE ASK", "size": 10.5, "bold": True, "color": PRIMARY,
            "space_after": 0}])
 
     # 34, not 40: at 40 the second line ran to three lines and sat on the URL.
@@ -3046,7 +2942,7 @@ def s27_close(prs):
          [{"t": "Dagar  ·  A personal guide for every learner's journey",
            "size": 8.5, "color": MUTED}])
     text(s, SW - M - 2.0, SH - 0.44, 2.0, 0.24,
-         [{"t": "27", "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
+         [{"t": "26", "size": 8.5, "color": MUTED}], align=PP_ALIGN.RIGHT)
 
     notes(s, """
 DO NOT SUMMARISE THE DECK
@@ -3059,7 +2955,7 @@ THE ONE INSTRUCTION
 not a pilot, not a follow-up meeting. Everything about this product is judged
 by whether a twelve-year-old can use it unaided, and the fastest way to find
 out is to hand a phone over. No download and no account stands between a judge
-and that test, which is the whole point of slide 23.
+and that test, which is the whole point of slide 22.
 
 THE FOUR NUMBERS ARE THE ONLY CLAIM
 30 learners, 133 lessons finished, 761 questions answered, 15 of 15 saying it
@@ -3078,7 +2974,7 @@ faster with real learners in front of it than with anything else.
 """)
 
 
-def s19_tradeoffs(prs):
+def s18_tradeoffs(prs):
     """
     The gaps, as decisions.
 
@@ -3087,7 +2983,7 @@ def s19_tradeoffs(prs):
     a case for the product, and a retrospective on our own process belongs in
     the written document, not on a slide someone has ninety seconds to read.
     """
-    s, y = slide_shell(prs, 19, "19 · Trade-offs",
+    s, y = slide_shell(prs, 18, "18 · Trade-offs",
                        "The gaps were choices.",
                        "Four things you might expect to find and will not, and "
                        "the reason each one was left out.")
@@ -3115,7 +3011,7 @@ def s19_tradeoffs(prs):
          "missing is Dagar sending it to them unprompted, which needs Meta "
          "business approval and an opt-in from the parent's own phone."),
         # This card used to read "no evaluation set for the tutor yet". The set
-        # shipped (D27, slide 18), so leaving it would have been the deck
+        # shipped (D27, slide 17), so leaving it would have been the deck
         # claiming a gap that no longer exists, which is D26 in reverse.
         ("No lessons that keep working without internet",
          "Nothing is saved to the phone for use offline. It matters for these "
@@ -3187,10 +3083,10 @@ SLIDES = [cover, s2_vision, s3_problem, s4_validation, s5_market, s6_competition
           s7_persona, s8_solution, s9_mvp, s10_walkthrough,
           s11_bilingual, s12_intelligence, s13_architecture,
           s14_security, s15_tutor,
-          s16_accessibility, s17_testing, s18_evals,
-          s19_tradeoffs, s20_users, s21_roadmap,
-          s22_horizon, s23_adoption, s24_money, s25_voices,
-          s26_demo, s27_close]
+          s16_testing, s17_evals,
+          s18_tradeoffs, s19_users, s20_roadmap,
+          s21_horizon, s22_adoption, s23_money, s24_voices,
+          s25_demo, s26_close]
 
 
 def main() -> None:
