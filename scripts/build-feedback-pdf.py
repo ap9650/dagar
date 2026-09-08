@@ -21,6 +21,7 @@ bad rows removed is not evidence of anything.
 """
 import csv
 import pathlib
+import shutil
 from collections import Counter
 
 from reportlab.lib.colors import Color
@@ -228,6 +229,21 @@ def main():
     r.save()
     size = OUT.stat().st_size / 1000
     print(f"wrote {OUT}  ({len(rows)} responses, {size:.0f} KB)")
+    publish(OUT)
+
+
+def publish(pdf):
+    """Also into `public/reports/`, so the file has a URL as well as a path.
+
+    Copied by the build rather than by hand for the reason the deck learned the
+    hard way: a hand-copied asset is a stale asset waiting to happen, and the
+    hand-made copy of the build story sat five weeks out of date, still carrying
+    the product's old name, precisely because nothing rebuilt it.
+    """
+    web = pathlib.Path("public/reports")
+    web.mkdir(parents=True, exist_ok=True)
+    shutil.copy(pdf, web / pdf.name)
+    print(f"  → public/reports/{pdf.name}  — deploy to publish at /reports/{pdf.name}")
 
 
 if __name__ == "__main__":

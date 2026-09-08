@@ -202,7 +202,7 @@ Still deferred to a later phase, and named: screen-reader-optimised learning mod
 
 ---
 
-## 9. How we tested — 317 tests, chosen on harm
+## 9. How we tested — 1,743 tests, chosen on harm
 
 With four days and nine features you cannot test everything. We tested where **a bug is silent** — where the app keeps working and quietly does the wrong thing to a learner.
 
@@ -213,7 +213,7 @@ With four days and nine features you cannot test everything. We tested where **a
 3. **RLS boundaries** — integration tests that *attempt the violation* and assert the failure.
 4. **The demo journey** — one Playwright test walking sign-up → dashboard → lesson → tutor → practice → quiz → progress.
 
-**Current state: 317 tests across 23 files, all passing, plus the end-to-end journey.**
+**Current state: 1,743 tests across 54 files, all passing, plus the end-to-end journey.**
 
 Two testing lessons that cost us time and are worth recording:
 
@@ -321,7 +321,7 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 
 **Get it onto a real phone on day one.** Six genuine defects came from twenty minutes on an Android device — none of which any test caught, and several of which had shipped days earlier. A cheap phone in a real hand is the highest-yield testing tool in this project, and we used it too late.
 
-**Write the golden set before the prompt.** We tuned the tutor prompt several times with no evaluation harness. Every one of those edits was an act of faith. The harness exists now (D27, `docs/EVALS.md`), and building it settled the argument: 9 of the first 25 messages learners actually sent the tutor were not about mathematics at all, they were about the interface. We had been editing a prompt for a year-eight maths question that most learners were never asking.
+**Write the golden set before the prompt.** We tuned the tutor prompt several times with no evaluation harness. Every one of those edits was an act of faith. The harness exists now (D27, `docs/EVALS.md`), and building it settled the argument: 11 of the 36 messages learners actually sent the tutor were not about mathematics at all, they were about the interface. We had been editing a prompt for a year-eight maths question that most learners were never asking.
 
 **Verify by exercising the system, not by reading the code.** Twice we believed something worked because the code said so. The quiz-order bug survived correct unit tests and a correct implementation. Reading a policy is not testing a policy; running the query is.
 
@@ -329,4 +329,4 @@ An honest gap list is a stronger artefact than a silent one. Each of these was a
 
 ## 15. In one paragraph
 
-Dagar is a working, deployed, bilingual, accessible learning companion with real learner state behind it: mastery tracked per concept, practice that adapts, a tutor grounded in the exact lesson on screen, a parent loop that needs no parent account, and 317 passing tests concentrated on the code where a bug would be silent. It is one subject and three chapters, because four days buys one loop done properly rather than five done approximately. The architecture, the schema and the content model were all built so that widening it is authoring work — and the list of what we chose not to build, with the reason for each, is above rather than omitted.
+Dagar is a working, deployed, bilingual, accessible learning companion with real learner state behind it: mastery tracked per concept, practice that adapts, a tutor grounded in the exact lesson on screen, a parent loop that needs no parent account, and 1,743 passing tests concentrated on the code where a bug would be silent. It is one subject and three chapters, because four days buys one loop done properly rather than five done approximately. The architecture, the schema and the content model were all built so that widening it is authoring work — and the list of what we chose not to build, with the reason for each, is above rather than omitted.

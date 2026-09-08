@@ -10,6 +10,10 @@ buildathon, then put in front of a real Class 6 classroom and kept running.
 **[Watch the demo](https://dagar-ap19.vercel.app/demo-en.mp4)**
 ([हिंदी](https://dagar-ap19.vercel.app/demo-hi.mp4))
 
+**[How it was built](https://dagar-ap19.vercel.app/reports/Dagar-How-We-Built-It.pdf)** ·
+**[What users said](https://dagar-ap19.vercel.app/reports/Dagar-Feedback-Report.pdf)**
+— the build story and all 19 feedback responses, unedited
+
 ---
 
 ## The problem

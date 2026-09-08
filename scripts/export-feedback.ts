@@ -20,6 +20,10 @@
  *
  * `user_id` is exported as an 8-character prefix — enough to see that responses
  * came from distinct people, useless for identifying any of them.
+ *
+ * The structural controls above cannot reach the free-text boxes, and one
+ * respondent introduced himself by name and named a classmate. Both are
+ * children. See `redactNames` below.
  * ═══════════════════════════════════════════════════════════════════════════
  */
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -70,6 +74,43 @@ if (!rows?.length) {
   process.exit(0);
 }
 
+/**
+ * Children's names, typed into a free-text box, out of the exported files.
+ *
+ * ── WHY A LIST AND NOT A DETECTOR ───────────────────────────────────────────
+ * There is no reliable way to find a name in free text. A general detector
+ * would redact "Dagar", "Hindi" and half the maths vocabulary while still
+ * missing the next unusual spelling, and a redaction control you cannot trust
+ * is worse than none — it invites you to stop reading the text yourself.
+ *
+ * So this is an explicit, reviewed list. It is short because the corpus is 19
+ * responses that a person has read end to end. It lives here, not in a
+ * hand-edit of the CSV, because the CSV is regenerated: a hand-edit would put
+ * the names back on the next export, silently, into files that are published.
+ *
+ * ── HOW TO MAINTAIN IT ──────────────────────────────────────────────────────
+ * Read every new free-text response before publishing. Any name of a person
+ * goes here. Keep the initial: "P." reads as a redaction of a real person,
+ * "[redacted]" reads as though something was wrong with what they said.
+ *
+ * Only free text is passed through this. Nothing else in the export can hold a
+ * name, and running it over structured columns would corrupt them.
+ */
+const REDACT_NAMES: Record<string, string> = {
+  Purahan: "P.",
+  Atharv: "A.",
+};
+
+const redactNames = (text: string) =>
+  Object.entries(REDACT_NAMES).reduce(
+    // Word boundaries, so a name never eats a fragment of a longer word.
+    (out, [name, initial]) => out.replace(new RegExp(`\\b${name}\\b`, "gi"), initial),
+    text,
+  );
+
+/** The three boxes a respondent can type anything into. */
+const freeText = (value: string | null) => redactNames(value ?? "");
+
 const csvCell = (value: unknown) => {
   const text = value === null || value === undefined ? "" : String(value);
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
@@ -94,9 +135,9 @@ const csv = [
       r.respondent_role,
       r.understood,
       r.would_return,
-      r.improve_most ?? "",
-      r.worked_well ?? "",
-      r.confusing ?? "",
+      r.improve_most ?? "", // an enum, not a box — see `freeText`
+      freeText(r.worked_well),
+      freeText(r.confusing),
       r.locale,
       r.created_at.slice(0, 10),
       r.user_id.slice(0, 8), // a reference, not an identity
@@ -137,8 +178,8 @@ const quotes = rows
   .filter((r) => (r.worked_well?.trim().length ?? 0) > 0 || (r.confusing?.trim().length ?? 0) > 0)
   .map((r) => {
     const lines = [`**${r.respondent_role}** · understood: ${r.understood} · would use again: ${r.would_return}`];
-    if (r.worked_well?.trim()) lines.push(`- What worked: ${r.worked_well.trim()}`);
-    if (r.confusing?.trim()) lines.push(`- What confused them: ${r.confusing.trim()}`);
+    if (r.worked_well?.trim()) lines.push(`- What worked: ${freeText(r.worked_well).trim()}`);
+    if (r.confusing?.trim()) lines.push(`- What confused them: ${freeText(r.confusing).trim()}`);
     return lines.join("\n");
   });
 
