@@ -10,7 +10,7 @@ import { cn } from "@/lib/cn";
 import { Button } from "./Button";
 
 /**
- * Language picker — saathi-design § Language picker, D16.
+ * Language picker — dagar-design § Language picker, D16.
  *
  * The same component serves `/welcome` (first screen, before any account) and
  * `/settings` (SCREENS.md Flow 4). Do not fork it: a learner who taps the wrong

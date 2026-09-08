@@ -3,7 +3,7 @@
 **An AI learning companion for underserved learners.**
 Buildathon MVP · August 2026 · Built by Akriti Panwar
 
-Live product: **dagar-ap19.vercel.app** · Source: **github.com/ap9650/saathi**
+Live product: **dagar-ap19.vercel.app** · Source: **github.com/ap9650/dagar**
 
 <!-- pagebreak -->
 

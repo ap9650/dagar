@@ -3,7 +3,7 @@
 **Build slice:** 2.3 (tutor), plus hints used by 2.2
 **Implements:** D11 (cost, latency, safety), D16 (Hindi), D6 (struggle)
 **Depends on:** lesson screen (1.4) · `concept_mastery` (2.2)
-**Skill:** `saathi-ai` · **Design:** `saathi-design` → AI Tutor chat
+**Skill:** `dagar-ai` · **Design:** `dagar-design` → AI Tutor chat
 
 ---
 

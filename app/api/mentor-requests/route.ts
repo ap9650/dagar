@@ -113,7 +113,7 @@ export async function POST(request: Request) {
   }
 
   // `trigger` only — never the note, never the answers. A learner's free text
-  // does not belong in an events table we aggregate and read (saathi-security §5).
+  // does not belong in an events table we aggregate and read (dagar-security §5).
   await track("mentor_request_submitted", { trigger });
 
   return NextResponse.json({ ok: true, id: created.id, updated: false });

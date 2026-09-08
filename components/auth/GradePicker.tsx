@@ -15,7 +15,7 @@ const GRADES = [6, 7, 8] as const;
  *
  * Three tap targets and nothing else. No free-text age field, no school, no city,
  * no district. We never ask a minor for personal information, and what we do not
- * collect cannot leak (saathi-security §5).
+ * collect cannot leak (dagar-security §5).
  */
 export function GradePicker({ locale }: { locale: Locale }) {
   const t = useTranslations();

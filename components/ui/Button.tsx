@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Button — saathi-design § Buttons.
+ * Button — dagar-design § Buttons.
  *
  * 48px tall, full-width by default on mobile for primary actions. Minimum touch
  * target 44x44px everywhere, including icon buttons.

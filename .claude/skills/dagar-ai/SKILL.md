@@ -1,11 +1,11 @@
 ---
-name: saathi-ai
-description: Write or change Saathi's Claude-powered features — the AI Tutor, practice hints, worked explanations, and parent summaries. Use when editing anything under lib/ai/, writing or tuning a system prompt, adding curriculum grounding, streaming a tutor response, or debugging wrong/unsafe/off-topic AI output. Trigger on "AI tutor", "prompt", "hint", "explanation", "grounding", "the AI said something wrong".
+name: dagar-ai
+description: Write or change Dagar's Claude-powered features — the AI Tutor, practice hints, worked explanations, and parent summaries. Use when editing anything under lib/ai/, writing or tuning a system prompt, adding curriculum grounding, streaming a tutor response, or debugging wrong/unsafe/off-topic AI output. Trigger on "AI tutor", "prompt", "hint", "explanation", "grounding", "the AI said something wrong".
 ---
 
-# Saathi AI features
+# Dagar AI features
 
-Saathi is not a chatbot with a syllabus attached. The distinguishing claim in the
+Dagar is not a chatbot with a syllabus attached. The distinguishing claim in the
 PRD is **curriculum-aware, context-aware tutoring** — every AI call must earn that.
 
 ## The non-negotiables

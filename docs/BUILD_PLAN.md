@@ -87,13 +87,13 @@ Do this before breakfast if you can. Day 1 starts the moment it is done, **same 
 | 0.3 | Supabase project | Create at supabase.com → copy URL, anon key, service role key into `.env.local` |
 | 0.4 | Anthropic key | console.anthropic.com → `ANTHROPIC_API_KEY` in `.env.local` |
 | 0.5 | Git | `git init && git add -A && git commit -m "scaffold"` |
-| 0.6 | **First deploy** | ✅ **Done 30 Jul.** Live: **https://saathi-ap19.vercel.app** (scope `ap19`, project `saathi`). See below. |
+| 0.6 | **First deploy** | ✅ **Done 30 Jul.** Live at the time on **https://saathi-ap19.vercel.app** (scope `ap19`, project `saathi`). Both were renamed to `dagar` on 2 August — see below for the current URL. |
 
 ### Deployment facts (0.6, 30 Jul)
 
-**Live URL: https://saathi-ap19.vercel.app** — the stable production alias. Use this
+**Live URL: https://dagar-ap19.vercel.app** — the stable production alias. Use this
 one everywhere: the deck, Supabase redirect config, Google OAuth origins. The URL
-`vercel --prod` prints (`saathi-<hash>-ap19.vercel.app`) is **per-deployment** and
+`vercel --prod` prints (`dagar-<hash>-ap19.vercel.app`) is **per-deployment** and
 changes on every push; find the stable aliases with `vercel inspect <url>`.
 
 Env vars go in with `bash scripts/vercel-env.sh`, which pipes values from `.env.local`
@@ -114,15 +114,15 @@ Two things that cost time and would have cost more on demo day:
   `openssl rand -hex 32`. Check the others are real before a public deploy.
 
 **Prompts to run in Claude Code, in order:**
-> 1. Use the saathi-db skill. Write migrations 0001–0007 exactly per docs/DATA_MODEL.md, with RLS enabled and policies on every table. Then set up lib/supabase/{server,client,admin}.ts.
+> 1. Use the dagar-db skill. Write migrations 0001–0007 exactly per docs/DATA_MODEL.md, with RLS enabled and policies on every table. Then set up lib/supabase/{server,client,admin}.ts.
 
-> 2. Use the saathi-security skill. Produce docs/security/security-plan.md, add **proxy.ts** (Next 16 renamed middleware → proxy) for session-cookie refresh and an optimistic redirect only, and set up lib/security/ with rate limiting and input validation. **The real auth boundary is the (learn)/(parent) layout server components and every route handler — Next 16 docs explicitly say proxy must not be used as a session-management or authorization solution.**
+> 2. Use the dagar-security skill. Produce docs/security/security-plan.md, add **proxy.ts** (Next 16 renamed middleware → proxy) for session-cookie refresh and an optimistic redirect only, and set up lib/security/ with rate limiting and input validation. **The real auth boundary is the (learn)/(parent) layout server components and every route handler — Next 16 docs explicitly say proxy must not be used as a session-management or authorization solution.**
 
-> 3. Use the saathi-test skill. Set up Vitest and Playwright with the tests/unit, tests/integration and e2e folders, and add the test scripts to package.json.
+> 3. Use the dagar-test skill. Set up Vitest and Playwright with the tests/unit, tests/integration and e2e folders, and add the test scripts to package.json.
 
-> 4. Use the saathi-design skill. Put the colour, type and spacing tokens into tailwind.config.ts and app/globals.css, load Inter + Noto Sans Devanagari, and build the shared ui/ primitives (Button, Card, Input, ProgressBar, Badge) against them.
+> 4. Use the dagar-design skill. Put the colour, type and spacing tokens into tailwind.config.ts and app/globals.css, load Inter + Noto Sans Devanagari, and build the shared ui/ primitives (Button, Card, Input, ProgressBar, Badge) against them.
 
-> 5. Use the saathi-feature skill. Set up next-intl with en + hi locale files and the t(row, field, locale) helper for i18n jsonb resolution per D16. Every UI string goes through the dictionary from the very first screen — retrofitting hardcoded strings later is the expensive path.
+> 5. Use the dagar-feature skill. Set up next-intl with en + hi locale files and the t(row, field, locale) helper for i18n jsonb resolution per D16. Every UI string goes through the dictionary from the very first screen — retrofitting hardcoded strings later is the expensive path.
 
 Security and tests are scaffolded on Day 0 **on purpose**. Retrofitting either into
 a finished app costs more than building around them from the start.
@@ -138,15 +138,15 @@ the app remembers.**
 
 | # | Slice | Prompt |
 |---|---|---|
-| 1.1 | Auth + profiles | *Use the saathi-design and saathi-feature skills. Build the onboarding flow exactly as specified in docs/SCREENS.md Flow 1 — /welcome language picker, then /login (Google via Supabase OAuth primary, email fallback), then /onboarding/grade. Locale is chosen before there is a user row, so hold it in localStorage and write it to profiles.locale when the profile is created. Emit learner_registered.* **Spec: `docs/specs/auth-onboarding.md`** |
-| 1.1a | **Settings screen** | *Use the saathi-design and saathi-feature skills. Build /settings with the language toggle (same picker component as onboarding), grade, display name and sign-out. Small screen, but without it a learner who picks the wrong language at onboarding is stuck.* **Spec: `docs/specs/auth-onboarding.md`** |
-| 1.1b | PWA shell | *Use the saathi-feature skill. Add manifest.json with icons and display:standalone, a service worker for the app shell, and an Add-to-Home-Screen prompt per D15.* **Spec: `docs/specs/pwa-shell.md`** |
-| 1.2 | Seed content | *Use the saathi-content skill. Author Class 6 Fractions — 4 concepts, 4 micro-lessons, and a question bank with 2 questions per difficulty per concept. Verify every answer key.* |
-| 1.3 | Curriculum dashboard | *Use the saathi-design and saathi-feature skills. Build the curriculum dashboard as a **journey/path layout** per D17 (not a flat list): chapters for the learner's grade, visible you-are-here, lesson progress, and the recommended next lesson from lib/learning/adaptivity.ts.* **Spec: `docs/specs/curriculum-dashboard.md`** |
-| 1.4 | Micro-lesson screen | *Use the saathi-design and saathi-feature skills. Build the micro-lesson screen with KaTeX rendering, in-lesson progress dots (D17), mark-complete, lesson_started/lesson_completed events, and streak update.* **Spec: `docs/specs/micro-lesson.md`** |
-| 1.5 | Seed remaining 2 chapters | *Use the saathi-content skill. Author Class 7 Integers and Class 8 Solving Linear Equations to the same standard. Set `ncert_ref` on every chapter citing both NCERT editions per D1.* |
-| 1.6 | **Hindi content** | *Use the saathi-content skill. Translate **all three chapters — Classes 6, 7 and 8** — into the i18n jsonb with Claude, then verify every one by reading — NCERT maths terms, Arabic numerals, KaTeX intact. Never translate answer_value.* **Spec: `docs/specs/i18n.md`** |
-| 1.6b | **Hindi mechanical check** | *Use the saathi-content skill. Write `scripts/check-hindi.ts`: for every row with an `i18n.hi` entry, flag Devanagari numerals (१२३), KaTeX blocks that differ from the English source, Latin script mid-sentence, and missing NCERT maths terms. Print a table. Exit non-zero on any hit.* ~20 min. Catches everything mechanical so the Day 4 read-through is about **tone only**. |
+| 1.1 | Auth + profiles | *Use the dagar-design and dagar-feature skills. Build the onboarding flow exactly as specified in docs/SCREENS.md Flow 1 — /welcome language picker, then /login (Google via Supabase OAuth primary, email fallback), then /onboarding/grade. Locale is chosen before there is a user row, so hold it in localStorage and write it to profiles.locale when the profile is created. Emit learner_registered.* **Spec: `docs/specs/auth-onboarding.md`** |
+| 1.1a | **Settings screen** | *Use the dagar-design and dagar-feature skills. Build /settings with the language toggle (same picker component as onboarding), grade, display name and sign-out. Small screen, but without it a learner who picks the wrong language at onboarding is stuck.* **Spec: `docs/specs/auth-onboarding.md`** |
+| 1.1b | PWA shell | *Use the dagar-feature skill. Add manifest.json with icons and display:standalone, a service worker for the app shell, and an Add-to-Home-Screen prompt per D15.* **Spec: `docs/specs/pwa-shell.md`** |
+| 1.2 | Seed content | *Use the dagar-content skill. Author Class 6 Fractions — 4 concepts, 4 micro-lessons, and a question bank with 2 questions per difficulty per concept. Verify every answer key.* |
+| 1.3 | Curriculum dashboard | *Use the dagar-design and dagar-feature skills. Build the curriculum dashboard as a **journey/path layout** per D17 (not a flat list): chapters for the learner's grade, visible you-are-here, lesson progress, and the recommended next lesson from lib/learning/adaptivity.ts.* **Spec: `docs/specs/curriculum-dashboard.md`** |
+| 1.4 | Micro-lesson screen | *Use the dagar-design and dagar-feature skills. Build the micro-lesson screen with KaTeX rendering, in-lesson progress dots (D17), mark-complete, lesson_started/lesson_completed events, and streak update.* **Spec: `docs/specs/micro-lesson.md`** |
+| 1.5 | Seed remaining 2 chapters | *Use the dagar-content skill. Author Class 7 Integers and Class 8 Solving Linear Equations to the same standard. Set `ncert_ref` on every chapter citing both NCERT editions per D1.* |
+| 1.6 | **Hindi content** | *Use the dagar-content skill. Translate **all three chapters — Classes 6, 7 and 8** — into the i18n jsonb with Claude, then verify every one by reading — NCERT maths terms, Arabic numerals, KaTeX intact. Never translate answer_value.* **Spec: `docs/specs/i18n.md`** |
+| 1.6b | **Hindi mechanical check** | *Use the dagar-content skill. Write `scripts/check-hindi.ts`: for every row with an `i18n.hi` entry, flag Devanagari numerals (१२३), KaTeX blocks that differ from the English source, Latin script mid-sentence, and missing NCERT maths terms. Print a table. Exit non-zero on any hit.* ~20 min. Catches everything mechanical so the Day 4 read-through is about **tone only**. |
 
 **End-of-day check:** sign up as a Class 6 learner, complete a lesson, reload — progress persisted, streak = 1.
 
@@ -177,14 +177,14 @@ By end of day: **the full demo path works end to end.**
 
 | # | Slice | Prompt |
 |---|---|---|
-| 2.1 | Grading engine | *Use the saathi-feature skill. Build lib/learning/grading.ts per DECISIONS D3 — fraction/decimal/integer/mcq/expression equivalence. `2/4`, `1/2` and `0.5` all grade correct against `1/2`.* **Spec: `docs/specs/guided-practice.md`** |
-| 2.1b | **Grading tests** | *Use the saathi-test skill. Write Vitest unit tests for grading covering every answer_type, the equivalence cases, and the invalid inputs.* **Do not skip this one.** A grading bug fails silently and tells a learner they are wrong when they are right. **Spec: `docs/specs/guided-practice.md`** |
-| 2.1c | **Verify answer keys** | *Use the saathi-content skill. Write `scripts/verify-answer-keys.ts`: for every seeded question, send only the stem to Claude Haiku to solve cold, compare its answer to the stored `answer_value` through `lib/learning/grading.ts`, and print a table of disagreements. Never send the stored answer in the prompt.* Runs here, not Day 1, because it needs `grade()`. Review only what it flags. |
-| 2.2 | Guided practice | *Use the saathi-feature skill. Build guided practice: server-side grading, hint escalation, difficulty stepping (2 right up / 2 wrong down), instant feedback. Answer keys never reach the client.* **Spec: `docs/specs/guided-practice.md`** |
-| 2.3 | AI Tutor | *Use the saathi-ai skill. Build the AI Tutor: streaming Claude Sonnet 5, grounded in the current lesson body and concept mastery, hints before answers, persist both turns, emit ai_question_asked.* **Spec: `docs/specs/ai-tutor.md`** |
-| 2.4 | Mastery + chapter quiz | *Use the saathi-feature skill. Build lib/learning/mastery.ts per D5 and the chapter quiz: fixed set, no hints, mastery band on submit, recompute concept_mastery.* **Spec: `docs/specs/chapter-quiz.md`** |
-| 2.5 | Progress, streaks, milestones + **daily goal** | *Use the saathi-feature skill. Build the progress screen, lib/learning/streaks.ts per D7 (Asia/Kolkata, one grace day per rolling 7, server-side only), and lib/learning/milestones.ts per D7b — award server-side and idempotently, show earned and unearned, emit milestone_earned. Add the daily goal ring per D17 — same completion rule as the streak, closable in one session.* **Spec: `docs/specs/progress-streaks.md`** |
-| 2.6 | Struggle → mentor request | *Use the saathi-feature skill. Implement the three D6 struggle triggers and the mentor request flow capturing full learner context.* **Spec: `docs/specs/mentor-request.md`** |
+| 2.1 | Grading engine | *Use the dagar-feature skill. Build lib/learning/grading.ts per DECISIONS D3 — fraction/decimal/integer/mcq/expression equivalence. `2/4`, `1/2` and `0.5` all grade correct against `1/2`.* **Spec: `docs/specs/guided-practice.md`** |
+| 2.1b | **Grading tests** | *Use the dagar-test skill. Write Vitest unit tests for grading covering every answer_type, the equivalence cases, and the invalid inputs.* **Do not skip this one.** A grading bug fails silently and tells a learner they are wrong when they are right. **Spec: `docs/specs/guided-practice.md`** |
+| 2.1c | **Verify answer keys** | *Use the dagar-content skill. Write `scripts/verify-answer-keys.ts`: for every seeded question, send only the stem to Claude Haiku to solve cold, compare its answer to the stored `answer_value` through `lib/learning/grading.ts`, and print a table of disagreements. Never send the stored answer in the prompt.* Runs here, not Day 1, because it needs `grade()`. Review only what it flags. |
+| 2.2 | Guided practice | *Use the dagar-feature skill. Build guided practice: server-side grading, hint escalation, difficulty stepping (2 right up / 2 wrong down), instant feedback. Answer keys never reach the client.* **Spec: `docs/specs/guided-practice.md`** |
+| 2.3 | AI Tutor | *Use the dagar-ai skill. Build the AI Tutor: streaming Claude Sonnet 5, grounded in the current lesson body and concept mastery, hints before answers, persist both turns, emit ai_question_asked.* **Spec: `docs/specs/ai-tutor.md`** |
+| 2.4 | Mastery + chapter quiz | *Use the dagar-feature skill. Build lib/learning/mastery.ts per D5 and the chapter quiz: fixed set, no hints, mastery band on submit, recompute concept_mastery.* **Spec: `docs/specs/chapter-quiz.md`** |
+| 2.5 | Progress, streaks, milestones + **daily goal** | *Use the dagar-feature skill. Build the progress screen, lib/learning/streaks.ts per D7 (Asia/Kolkata, one grace day per rolling 7, server-side only), and lib/learning/milestones.ts per D7b — award server-side and idempotently, show earned and unearned, emit milestone_earned. Add the daily goal ring per D17 — same completion rule as the streak, closable in one session.* **Spec: `docs/specs/progress-streaks.md`** |
+| 2.6 | Struggle → mentor request | *Use the dagar-feature skill. Implement the three D6 struggle triggers and the mentor request flow capturing full learner context.* **Spec: `docs/specs/mentor-request.md`** |
 
 ### Content verification — both checks are green (31 Jul)
 
@@ -196,7 +196,7 @@ By end of day: **the full demo path works end to end.**
 The stored answer is never sent to the model — a model shown the answer agrees with
 it, which would make the whole check theatre.
 
-100% agreement is better than the 5–10% first-pass flag rate `saathi-content`
+100% agreement is better than the 5–10% first-pass flag rate `dagar-content`
 predicts, so both checks were **proved able to fail** before being believed:
 corrupting an integer key and an MCQ key was caught in each case, and each script
 exits non-zero.
@@ -209,17 +209,17 @@ exits non-zero.
 
 | # | Slice | Prompt |
 |---|---|---|
-| 3.1 | Parent link | *Use the saathi-feature skill. Build the 6-char parent link code flow and the read-only parent view per D2. Parent locale defaults to the learner's on claim and is switchable in the parent view (D16). Verify a parent cannot write and cannot read an unlinked student.* |
-| 3.2 | Notify layer | *Use the saathi-feature skill. Build lib/notify with the channel-agnostic sendParentSummary interface, a Twilio WhatsApp sandbox adapter, an in-app adapter, and an SMS stub documented as DLT-blocked.* |
-| 3.2b | **Reminder notifications** | *Use the saathi-feature skill. Web Push through the existing service worker: opt-in after a first lesson, one a day, skipped when the goal is already met, tapering after the first week. Encouraging copy only — no countdowns, no streak-loss language (D17b).* **Spec: `docs/specs/reminders.md`** |
-| 3.3 | Weekly summary | *Use the saathi-ai skill. Generate the weekly parent summary with Haiku 4.5 from real progress data — lead with any milestones earned that week (D7b) — in the **parent's** locale, delivered on a Vercel cron, with the tracking token for parent_summary_viewed.* |
+| 3.1 | Parent link | *Use the dagar-feature skill. Build the 6-char parent link code flow and the read-only parent view per D2. Parent locale defaults to the learner's on claim and is switchable in the parent view (D16). Verify a parent cannot write and cannot read an unlinked student.* |
+| 3.2 | Notify layer | *Use the dagar-feature skill. Build lib/notify with the channel-agnostic sendParentSummary interface, a Twilio WhatsApp sandbox adapter, an in-app adapter, and an SMS stub documented as DLT-blocked.* |
+| 3.2b | **Reminder notifications** | *Use the dagar-feature skill. Web Push through the existing service worker: opt-in after a first lesson, one a day, skipped when the goal is already met, tapering after the first week. Encouraging copy only — no countdowns, no streak-loss language (D17b).* **Spec: `docs/specs/reminders.md`** |
+| 3.3 | Weekly summary | *Use the dagar-ai skill. Generate the weekly parent summary with Haiku 4.5 from real progress data — lead with any milestones earned that week (D7b) — in the **parent's** locale, delivered on a Vercel cron, with the tracking token for parent_summary_viewed.* |
 | 3.4 | Metrics + health page | **PART DONE 31 Jul — page DEFERRED to 1–2 Aug.** Instrumentation is finished: `parent_summary_sent`, `dashboard_viewed` and `recommendation_clicked` now all emit (none of them did before, which made two PRD §12 metrics uncomputable). Still to build: a fail-closed admin guard (no admin role exists — `ADMIN_EMAILS` allowlist), the aggregation layer, and `/admin/metrics` itself. ~45–60 min. Wanted as a **PM clarity tool**, not a demo asset, so it may land after the deadline. |
-| 3.5 | AI logging + feedback | *Use the saathi-observe skill. Add lib/analytics/ai-log.ts writing one ai_calls row per model call (never failing the request), and a thumbs up/down control on every tutor response writing to tutor_feedback.* |
-| 3.6 | Security + RLS tests | *Use the saathi-security skill to review every route and table, then the saathi-test skill to write integration tests that attempt the RLS violations and assert they fail.* |
-| 3.7 | Hindi pass | *Use the saathi-design skill. Walk every screen in Hindi at 360px — Devanagari at 18px/1.75, no clipped buttons (Hindi runs 10–20% longer), no untranslated strings. Verify the tutor and the parent summary both reply in Hindi.* |
-| 3.8 | E2E + a11y + mobile | *Use the saathi-test skill for one Playwright test covering the demo path, then the saathi-ship skill gates 3 and 4.* |
+| 3.5 | AI logging + feedback | *Use the dagar-observe skill. Add lib/analytics/ai-log.ts writing one ai_calls row per model call (never failing the request), and a thumbs up/down control on every tutor response writing to tutor_feedback.* |
+| 3.6 | Security + RLS tests | *Use the dagar-security skill to review every route and table, then the dagar-test skill to write integration tests that attempt the RLS violations and assert they fail.* |
+| 3.7 | Hindi pass | *Use the dagar-design skill. Walk every screen in Hindi at 360px — Devanagari at 18px/1.75, no clipped buttons (Hindi runs 10–20% longer), no untranslated strings. Verify the tutor and the parent summary both reply in Hindi.* |
+| 3.8 | E2E + a11y + mobile | *Use the dagar-test skill for one Playwright test covering the demo path, then the dagar-ship skill gates 3 and 4.* |
 | 3.9 | **Draft the deck** | *~90 min, after feature freeze. Assemble from PRD §2/§3/§7, docs/architecture.png, MARKET_AND_PRICING.md, DECISIONS D12 and D14. Do not write new content — it already exists.* |
-| 3.10 | Demo data + deploy | *Use the saathi-ship skill. Seed demo accounts with realistic partial progress, run all gates, deploy to Vercel.* |
+| 3.10 | Demo data + deploy | *Use the dagar-ship skill. Seed demo accounts with realistic partial progress, run all gates, deploy to Vercel.* |
 
 ---
 
@@ -469,7 +469,7 @@ The build plan ends at deploy; the product doesn't. In priority order:
    diagram often does not need the inline fraction in prose at all.
 
 1. **Write the tutor golden set** (~30 min) — 20–30 real learner questions with a
-   rubric. *Use the saathi-observe skill.* Until this exists, every prompt edit is
+   rubric. *Use the dagar-observe skill.* Until this exists, every prompt edit is
    an untested deploy.
 1b. **"See their practice" — questions and answers for a supporting adult.**
    Decided 31 Jul as a wanted feature, deliberately deferred. A new screen off

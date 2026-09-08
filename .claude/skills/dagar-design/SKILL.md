@@ -1,7 +1,7 @@
 ---
-name: saathi-design
+name: dagar-design
 description: >
-  Enforces the Saathi design system on every UI component, page, screen and style
+  Enforces the Dagar design system on every UI component, page, screen and style
   decision. Always apply this skill when writing any frontend code — components,
   layouts, pages, CSS, Tailwind classes, or inline styles. Trigger when the user asks
   to build a page, component, UI, screen, layout, or anything visual. Also trigger on
@@ -10,7 +10,7 @@ description: >
   sizes that are not defined here.
 ---
 
-## Design System: Saathi
+## Design System: Dagar
 
 An adaptive learning companion for **learners aged 11–14**, most on a **shared,
 low-end Android phone**, many studying in a second language, many already behind
@@ -19,7 +19,7 @@ and low on confidence.
 Every UI decision must communicate: **warmth, encouragement, clarity, progress, and
 calm.** Never: punishment, ranking, pressure, or clutter.
 
-Saathi means *companion*. The interface should feel like one sitting beside you —
+Dagar means *companion*. The interface should feel like one sitting beside you —
 not a test being administered to you.
 
 ---
@@ -372,7 +372,7 @@ Hindi-medium learner is locked out at the front door.
 - Selected state: `#CCFBF1` fill with `#0F766E` border, plus a check icon —
   colour is never the only signal.
 - **No text above the picker** that requires reading either language to understand.
-  The Saathi wordmark is fine; a sentence of instructions is not.
+  The Dagar wordmark is fine; a sentence of instructions is not.
 - Reachable again from Settings, same component.
 
 ### Mentor request CTA

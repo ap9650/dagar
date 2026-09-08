@@ -3,7 +3,7 @@
 **Build slice:** 2.1 (grading), 2.1b (grading tests — **do not skip**), 2.2 (practice)
 **Implements:** D3 (grading + adaptivity), D5 (mastery), D6 (struggle), D7 (streak)
 **Depends on:** content seeded (1.2) · lesson screen (1.4)
-**Design:** `saathi-design` → Practice question, feedback states
+**Design:** `dagar-design` → Practice question, feedback states
 
 ---
 
@@ -130,7 +130,7 @@ Rate limit `POST /api/attempts` per learner to block a scripted loop.
 | **Learner submits blank** | Inline "Type an answer first". No attempt row is written — a blank must never count against mastery. |
 | **Double-submit** | Idempotent per `(question_id, submission)`. One attempt row, one mastery recompute. |
 | **Network fails after grading, before response** | On retry, the server must not write a second attempt. |
-| **Answer key wrong in seeded content** | Not a code bug — a content bug, and invisible from the app. This is why `saathi-content` requires verifying every key at authoring time. |
+| **Answer key wrong in seeded content** | Not a code bug — a content bug, and invisible from the app. This is why `dagar-content` requires verifying every key at authoring time. |
 | **Learner exhausts all hints and is still wrong** | Show the worked solution. Never leave them stuck with nothing left to try. |
 | **Fewer than 5 attempts on a concept** | Mastery shows "not enough attempts yet", not 0%. 0% reads as failure; "not started" is the truth. |
 | **All questions at a difficulty exhausted** | Serve from the adjacent difficulty rather than repeating immediately, and never show an empty practice screen. |

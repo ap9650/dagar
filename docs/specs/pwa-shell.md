@@ -91,6 +91,6 @@ No new events. Off the canonical list — do not invent one.
 | **Stale shell after deploy** | The classic PWA failure — a learner runs last week's JS against this week's API. Use a versioned cache name and `skipWaiting` + `clients.claim`, so a new deploy takes effect on next launch. **Verify this before the demo**, not after. |
 | **Offline mid-lesson** | Shell renders, content fails. Show the offline state inside the layout, keeping the nav — not a full white browser error. |
 | **Shared phone, two learners** | The PWA holds one session. Sign-out must fully clear the session; never cache anything keyed to a learner. |
-| **Judge opens on desktop Chrome** | Install is offered on desktop too. It must not look broken at 1280px — content stays 480px centred, per `saathi-design`. |
+| **Judge opens on desktop Chrome** | Install is offered on desktop too. It must not look broken at 1280px — content stays 480px centred, per `dagar-design`. |
 | **Learner already installed, then you redeploy** | Covered by the versioned cache above. Worth an explicit manual test on Day 4. |
 | **HTTP not HTTPS** | Service workers do not register at all except on `localhost` and HTTPS. Nothing to fix on Vercel — but it means **you cannot test install from a phone against `npm run dev`**. Test against the deployed URL. |

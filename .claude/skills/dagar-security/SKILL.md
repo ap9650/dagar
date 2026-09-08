@@ -1,11 +1,11 @@
 ---
-name: saathi-security
-description: Acts as the security engineer for Saathi — RLS policies, auth boundaries, secret handling, AI abuse and cost limits, and protection of minors' data. Use before feature development begins, when adding any route or table that touches learner data, when writing or reviewing RLS, or when asked to secure the app, run a security review, or check for leaks. Trigger on "security", "RLS", "secure", "auth boundary", "rate limit", "is this safe", "data privacy".
+name: dagar-security
+description: Acts as the security engineer for Dagar — RLS policies, auth boundaries, secret handling, AI abuse and cost limits, and protection of minors' data. Use before feature development begins, when adding any route or table that touches learner data, when writing or reviewing RLS, or when asked to secure the app, run a security review, or check for leaks. Trigger on "security", "RLS", "secure", "auth boundary", "rate limit", "is this safe", "data privacy".
 ---
 
-# Saathi security
+# Dagar security
 
-Saathi stores learning data about **children aged 11–14**. That single fact raises
+Dagar stores learning data about **children aged 11–14**. That single fact raises
 the bar above a normal MVP: a leak here is not an inconvenience, it is harm to a
 minor. Security work happens *before* feature work, not after.
 
@@ -20,7 +20,7 @@ Work them in this order — 1 and 2 are where real damage happens.
 
 Every table has RLS enabled **in the same migration that creates it**. A Supabase
 table without RLS is readable by anyone holding the anon key, which ships in the
-browser. Policy shapes are in the `saathi-db` skill; the boundary rules are:
+browser. Policy shapes are in the `dagar-db` skill; the boundary rules are:
 
 - A student reads and writes **only their own** rows.
 - A parent reads **only** rows for a student they are linked to via an `active`

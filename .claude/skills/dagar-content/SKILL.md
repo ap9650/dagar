@@ -1,9 +1,9 @@
 ---
-name: saathi-content
-description: Author and seed Saathi curriculum content — chapters, concepts, micro-lessons, and the practice/quiz question bank with canonical answers. Use when adding or editing curriculum, writing lesson bodies, building the question bank, tagging concepts, or running the seed script. Trigger on "add a chapter", "write lessons", "seed content", "question bank", "add practice questions".
+name: dagar-content
+description: Author and seed Dagar curriculum content — chapters, concepts, micro-lessons, and the practice/quiz question bank with canonical answers. Use when adding or editing curriculum, writing lesson bodies, building the question bank, tagging concepts, or running the seed script. Trigger on "add a chapter", "write lessons", "seed content", "question bank", "add practice questions".
 ---
 
-# Authoring Saathi curriculum content
+# Authoring Dagar curriculum content
 
 Content quality is the product. A wrong answer key or a lesson that drifts from
 NCERT undermines every AI feature built on top of it.
@@ -21,7 +21,7 @@ duplicates. Never put learner data in a seed file.
 
 NCERT is mid-rollout of **Ganita Prakash**; chapter numbers have shifted and Class 8's
 "Linear Equations in One Variable" no longer exists as a chapter (D1 has the full
-mapping). Both editions are in circulation, and Saathi's learners are the most likely
+mapping). Both editions are in circulation, and Dagar's learners are the most likely
 to still hold old stock.
 
 **Order concepts the way the textbook teaches them.** That sequence is stable across
@@ -35,7 +35,7 @@ parts of a whole → measuring with fractional units → fractions on the number
 → addition → subtraction
 ```
 
-Mapped to Saathi's four concepts:
+Mapped to Dagar's four concepts:
 
 | # | Concept slug | Covers |
 |---|---|---|

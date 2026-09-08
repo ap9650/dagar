@@ -21,7 +21,7 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
 
-# ── brand (saathi-design) ────────────────────────────────────────────────────
+# ── brand (dagar-design) ────────────────────────────────────────────────────
 PRIMARY = RGBColor(0x0F, 0x76, 0x6E)
 PRIMARY_STRONG = RGBColor(0x11, 0x5E, 0x59)
 PRIMARY_SOFT = RGBColor(0xCC, 0xFB, 0xF1)
@@ -43,10 +43,10 @@ CELEBRATE_BG = RGBColor(0xFF, 0xFB, 0xEB)
 FONT = "Arial"
 
 APP_URL = "dagar-ap19.vercel.app"
-# The repo is still named `saathi` on GitHub and this is deliberately the TRUE
+# The repo was renamed to `dagar` to match the product. This is deliberately the TRUE
 # url, not the aspirational one. A repo link on a slide that 404s in front of a
 # judge is worse than an old name. Rename the repo and change this together.
-REPO_URL = "github.com/ap9650/saathi"
+REPO_URL = "github.com/ap9650/dagar"
 
 SW, SH = 13.333, 7.5      # 16:9
 M = 0.62                  # side margin

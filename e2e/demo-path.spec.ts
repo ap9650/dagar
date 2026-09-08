@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 /**
- * The demo path — the single E2E test that matters (saathi-test skill).
+ * The demo path — the single E2E test that matters (dagar-test skill).
  *
  * "If that test is green, your demo works."
  *

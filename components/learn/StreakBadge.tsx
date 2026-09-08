@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { cn } from "@/lib/cn";
 
 /**
- * The streak flame — **always visible in the header** (saathi-design § Streak).
+ * The streak flame — **always visible in the header** (dagar-design § Streak).
  *
  * Duolingo is right that constant visibility is what makes a streak matter. What
  * Dagar does differently is the broken state: it reads "Start again today", never

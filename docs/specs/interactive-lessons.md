@@ -1,6 +1,6 @@
 # Spec — Interactive Lessons and Practice
 
-**Build slice:** 5.1 (lessons), 5.2 (practice) · **Implements:** D18 · **Depends on:** `micro-lesson.md`, `guided-practice.md`, `i18n.md`, `saathi-design`
+**Build slice:** 5.1 (lessons), 5.2 (practice) · **Implements:** D18 · **Depends on:** `micro-lesson.md`, `guided-practice.md`, `i18n.md`, `dagar-design`
 
 > **Why this exists.** A teacher of Classes 6–8 used Dagar on 2 Aug 2026 and said
 > the lessons are walls of text: her students cannot hold two paragraphs, and

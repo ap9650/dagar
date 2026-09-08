@@ -3,7 +3,7 @@
 **Build slice:** 1.4
 **Implements:** D17 (in-lesson progress), D7 (streak on completion), D7b (`first_lesson`)
 **Depends on:** dashboard (1.3) · content seeded (1.2)
-**Flow:** `SCREENS.md` Flow 2 · **Design:** `saathi-design` → Micro-lesson, In-lesson progress
+**Flow:** `SCREENS.md` Flow 2 · **Design:** `dagar-design` → Micro-lesson, In-lesson progress
 
 ---
 
@@ -13,7 +13,7 @@
 AI Tutor one tap away and practice at the end. This plus practice plus the tutor is
 **the product**; everything else is evidence for it.
 
-Structure per `saathi-content`: hook → explain → worked example → "you try" pointer
+Structure per `dagar-content`: hook → explain → worked example → "you try" pointer
 into practice.
 
 ---

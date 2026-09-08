@@ -45,7 +45,7 @@ export async function LessonProgress({
         })}
       </ol>
       {/* The number is not decoration. A bar alone is not readable to everyone
-          (saathi-design § Progress), and it is the only part a screen reader gets. */}
+          (dagar-design § Progress), and it is the only part a screen reader gets. */}
       <p className="text-caption text-muted">{t("stepOf", { step, total })}</p>
     </div>
   );

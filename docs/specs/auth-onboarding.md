@@ -3,7 +3,7 @@
 **Build slice:** 1.1 (auth + onboarding), 1.1a (settings)
 **Implements:** D2 (auth method), D16 (language first), D10 (accessibility)
 **Depends on:** migrations 0001 applied · next-intl configured (Day 0 prompt 5)
-**Flow:** `docs/SCREENS.md` Flow 1 · **Design:** `saathi-design` → Language picker, Buttons
+**Flow:** `docs/SCREENS.md` Flow 1 · **Design:** `dagar-design` → Language picker, Buttons
 
 ---
 

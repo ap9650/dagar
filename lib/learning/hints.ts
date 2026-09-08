@@ -43,7 +43,7 @@ export const HINT_TIERS = 3;
  * The first rung: the opening move of the worked solution, without the rest of it.
  *
  * Takes the first paragraph of `solution_md`. Seeded solutions are authored as a
- * METHOD (`saathi-content`), so the first paragraph is reliably the approach —
+ * METHOD (`dagar-content`), so the first paragraph is reliably the approach —
  * "first find 1/3 of ₹60", "this one runs backwards" — rather than the answer.
  *
  * Returns an empty string when there is nothing usable, and the caller falls

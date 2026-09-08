@@ -3,7 +3,7 @@
 **Build slice:** 2.5
 **Implements:** D5 (mastery), D7 (streaks), D7b (milestones), D17 (daily goal)
 **Depends on:** attempts and lesson completion writing (1.4, 2.2)
-**Design:** `saathi-design` → Progress, Streak, Daily goal ring, Milestone toast
+**Design:** `dagar-design` → Progress, Streak, Daily goal ring, Milestone toast
 
 ---
 

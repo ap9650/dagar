@@ -6,7 +6,7 @@ import { RegisterServiceWorker } from "@/components/RegisterServiceWorker";
 import "./globals.css";
 
 /**
- * Two font families, one per script (saathi-design). Every font byte is data the
+ * Two font families, one per script (dagar-design). Every font byte is data the
  * learner pays for, so both are subset and use `display: swap` — text renders
  * immediately in a fallback rather than leaving a blank screen on 4G.
  */

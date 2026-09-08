@@ -4,7 +4,7 @@
    Dagar design tokens — the single source of truth.
 
    Tailwind 4 is CSS-first: tokens live here in @theme, not in a config file.
-   Every value below is contrast-verified against the saathi-design skill.
+   Every value below is contrast-verified against the dagar-design skill.
 
    NEVER hardcode a colour, size or spacing value in a component. If a value you
    need is not here, it is not in the design system — go and read the skill.
@@ -207,7 +207,7 @@ body:lang(hi) {
 
 
 /* Celebration is the ONE place motion may be playful, and it is capped at 400ms
-   (saathi-design § Motion). Under reduced motion the toast still appears — it
+   (dagar-design § Motion). Under reduced motion the toast still appears — it
    just appears, rather than sliding. The reward is never removed, because the
    learners most affected by motion are named in the PRD vision. */
 @media (prefers-reduced-motion: no-preference) {
@@ -291,6 +291,6 @@ body:lang(hi) {
 }
 
 /* NOTE: there is deliberately no `prefers-color-scheme: dark` block.
-   Dark mode is out of scope for the MVP (saathi-design). The Next scaffold
+   Dark mode is out of scope for the MVP (dagar-design). The Next scaffold
    shipped one; it was removed because it would invert the app on any phone set
    to dark mode and silently break every contrast ratio verified above. */

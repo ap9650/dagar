@@ -1,9 +1,9 @@
 ---
-name: saathi-ship
-description: Pre-deploy verification and Vercel release for Saathi — secret leak check, RLS boundary check, accessibility pass, mobile check, env var sync, and deploy. Use before pushing to production, before a demo, or when asked to deploy, ship, release, or run a pre-flight check. Trigger on "deploy", "ship it", "push to vercel", "ready for demo", "pre-flight".
+name: dagar-ship
+description: Pre-deploy verification and Vercel release for Dagar — secret leak check, RLS boundary check, accessibility pass, mobile check, env var sync, and deploy. Use before pushing to production, before a demo, or when asked to deploy, ship, release, or run a pre-flight check. Trigger on "deploy", "ship it", "push to vercel", "ready for demo", "pre-flight".
 ---
 
-# Ship Saathi
+# Ship Dagar
 
 Run every gate. On a product handling minors' data with a live demo at the end, the
 expensive failures are all in gates 1–3.

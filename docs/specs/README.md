@@ -9,7 +9,7 @@ the result against.**
 DECISIONS.md   ── why we chose it        ─┐
 DATA_MODEL.md  ── what the schema is      │  upstream — specs REFERENCE these,
 SCREENS.md     ── what order screens go   │  never restate them
-saathi-design  ── what it looks like     ─┘
+dagar-design  ── what it looks like     ─┘
                           │
                           ▼
               docs/specs/<slice>.md
@@ -70,7 +70,7 @@ from it the first time a column is added, and nothing would catch the drift.
 ## Using a spec
 
 ```
-Use the saathi-feature and saathi-design skills.
+Use the dagar-feature and dagar-design skills.
 Build docs/specs/auth-onboarding.md. Every acceptance criterion must pass.
 ```
 

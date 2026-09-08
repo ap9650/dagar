@@ -1,6 +1,6 @@
 -- 0010_seed_slugs.sql — stable seed keys on lessons and questions
 --
--- WHY: `npm run seed` must be idempotent (saathi-content). `chapters` and
+-- WHY: `npm run seed` must be idempotent (dagar-content). `chapters` and
 -- `concepts` already have unique slugs to upsert on; `lessons` and `questions`
 -- had nothing, so a second seed run would have inserted a duplicate set of every
 -- lesson and question in the chapter.

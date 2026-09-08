@@ -42,7 +42,7 @@ import { EXIT_COOKIE } from "@/lib/exit";
  * Deleting an auth user needs the admin client, which bypasses RLS. The id is
  * taken from the SERVER SESSION and never from the request body — a learner can
  * only ever delete themselves, and there is no parameter to tamper with. That is
- * the same rule every other route follows (saathi-security §3).
+ * the same rule every other route follows (dagar-security §3).
  */
 export async function DELETE() {
   const auth = await requireAuth();

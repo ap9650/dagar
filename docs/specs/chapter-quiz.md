@@ -3,7 +3,7 @@
 **Build slice:** 2.4
 **Implements:** D5 (mastery bands), D7b (`chapter_mastered`)
 **Depends on:** grading engine (2.1) · content seeded (1.2)
-**Design:** `saathi-design` → Practice question, Progress
+**Design:** `dagar-design` → Practice question, Progress
 
 ---
 

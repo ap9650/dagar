@@ -35,7 +35,7 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 
 # The brand tokens and layout primitives are already correct in build-deck.py
-# and belong to `saathi-design`. Loading them by path rather than copying keeps
+# and belong to `dagar-design`. Loading them by path rather than copying keeps
 # ONE definition of the teal — two decks drifting apart on colour is exactly the
 # kind of thing nobody notices until both are on screen at once.
 _spec = importlib.util.spec_from_file_location("builddeck", "scripts/build-deck.py")

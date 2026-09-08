@@ -2,7 +2,7 @@ import { forwardRef, useId } from "react";
 import { cn } from "@/lib/cn";
 
 /**
- * Input — saathi-design § Practice question.
+ * Input — dagar-design § Practice question.
  *
  * 48px tall, 10px radius, focus ring is 3px primary-soft on a primary border.
  *

@@ -85,7 +85,7 @@ export async function DailyGoalRing({ goal }: { goal: DailyGoal }) {
           {goal.complete ? t("dailyGoalComplete") : t("dailyGoalTitle")}
         </h2>
         {/* Pair the ring with words, always: a ring alone is not readable to
-            everyone (saathi-design § Progress). */}
+            everyone (dagar-design § Progress). */}
         <p className="text-body-sm text-muted">
           {goal.complete
             ? t("dailyGoalDoneHelp")

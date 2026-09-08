@@ -3,7 +3,7 @@
 **Build slice:** 2.6
 **Implements:** D6 (triggers), D8 (capture only, no mentor UI), D8a (it says so)
 **Depends on:** attempts (2.2) · tutor (2.3)
-**Design:** `saathi-design` → mentor CTA (always dismissible)
+**Design:** `dagar-design` → mentor CTA (always dismissible)
 
 ---
 
@@ -71,7 +71,7 @@ Status enum `open → acknowledged → resolved` is changed manually in MVP.
 **accepts**. Showing or dismissing the CTA emits nothing (off the canonical list).
 
 Requests clustering on one concept usually mean a badly written lesson, not a hard
-concept. Check the lesson first (`saathi-observe`).
+concept. Check the lesson first (`dagar-observe`).
 
 ---
 

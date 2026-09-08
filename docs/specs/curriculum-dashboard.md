@@ -3,7 +3,7 @@
 **Build slice:** 1.3
 **Implements:** D1 (scope), D17 (journey layout, daily goal), D5 (mastery display)
 **Depends on:** profiles exist (1.1) · content seeded (1.2)
-**Flow:** `SCREENS.md` Flow 2 · **Design:** `saathi-design` → Journey layout, Daily goal ring, Streak
+**Flow:** `SCREENS.md` Flow 2 · **Design:** `dagar-design` → Journey layout, Daily goal ring, Streak
 
 ---
 

@@ -1,9 +1,9 @@
 ---
-name: saathi-analytics
-description: Instrument and verify Saathi product events and MVP success metrics. Use when adding event tracking to a feature, wiring a metric from the PRD success criteria, building the analytics/validation view, or checking whether a hypothesis is actually measurable. Trigger on "track this", "add an event", "analytics", "metric", "are we measuring X", "validation plan".
+name: dagar-analytics
+description: Instrument and verify Dagar product events and MVP success metrics. Use when adding event tracking to a feature, wiring a metric from the PRD success criteria, building the analytics/validation view, or checking whether a hypothesis is actually measurable. Trigger on "track this", "add an event", "analytics", "metric", "are we measuring X", "validation plan".
 ---
 
-# Saathi analytics
+# Dagar analytics
 
 The PRD's validation plan (§12) is a stated differentiator. It is worth nothing if
 the events don't fire. Instrumentation is part of the feature, not a follow-up.

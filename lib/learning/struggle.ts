@@ -15,7 +15,7 @@
  *
  * WHAT THIS IS NOT: a diagnosis. The CTA it drives is an offer — "want a person to
  * explain this?" — never "you are struggling", never a modal, always dismissible
- * (D6, saathi-design § Mentor request CTA). Detection being right matters far less
+ * (D6, dagar-design § Mentor request CTA). Detection being right matters far less
  * than the tone of what it triggers.
  */
 

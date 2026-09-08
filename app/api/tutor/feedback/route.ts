@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   }
 
   // `helpful` only. Never the message, never the learner's question — a
-  // learner's free text does not belong in an events table (saathi-security §5).
+  // learner's free text does not belong in an events table (dagar-security §5).
   await track("tutor_feedback_given", { helpful });
 
   return NextResponse.json({ ok: true });

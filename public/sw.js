@@ -1,5 +1,5 @@
 /**
- * Saathi service worker — APP SHELL ONLY.
+ * Dagar service worker — APP SHELL ONLY.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * WHAT THIS DELIBERATELY DOES NOT DO

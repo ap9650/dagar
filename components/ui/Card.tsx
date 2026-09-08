@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Card — saathi-design § Cards.
+ * Card — dagar-design § Cards.
  * White, 1px border, 14px radius, 16px padding. Shadow only on elevated
  * surfaces (toasts, sheets), never on a resting card.
  */

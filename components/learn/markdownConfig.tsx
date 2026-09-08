@@ -55,7 +55,7 @@ export const markdownComponents: Components = {
     <ol className="flex flex-col gap-sm list-decimal ps-xl" {...withoutNode(props)} />
   ),
   // The worked-example / key-rule panel: tinted surface with a 3px teal left
-  // border (saathi-design § Micro-lesson).
+  // border (dagar-design § Micro-lesson).
   blockquote: (props) => (
     <blockquote
       className="bg-surface border-s-[3px] border-primary rounded-e-(--radius-control) px-lg py-md text-body text-ink"

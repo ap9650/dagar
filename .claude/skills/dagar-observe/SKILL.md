@@ -1,9 +1,9 @@
 ---
-name: saathi-observe
-description: Post-deployment observability and AI evaluation for Saathi — logging AI calls, tracking cost and latency, building the health dashboard, writing tutor evals, and running LLM-as-judge quality checks. Use after the app is live, when investigating a cost spike or slow response, before changing an AI prompt, or when asked whether the tutor is any good. Trigger on "observability", "monitoring", "evals", "is the AI working", "cost spike", "why is it slow", "prompt regression", "judge".
+name: dagar-observe
+description: Post-deployment observability and AI evaluation for Dagar — logging AI calls, tracking cost and latency, building the health dashboard, writing tutor evals, and running LLM-as-judge quality checks. Use after the app is live, when investigating a cost spike or slow response, before changing an AI prompt, or when asked whether the tutor is any good. Trigger on "observability", "monitoring", "evals", "is the AI working", "cost spike", "why is it slow", "prompt regression", "judge".
 ---
 
-# Observing and evaluating Saathi in production
+# Observing and evaluating Dagar in production
 
 Two different questions, often confused:
 

@@ -79,7 +79,7 @@ correct in their place. Mixing them up in either direction is the error.
 | Struggling | **कोई बात नहीं, ये सबको मुश्किल लगता है** |
 | System error | **कुछ गड़बड़ हो गई। फिर से कोशिश करो?** |
 
-Never `असफल` or `आप असफल रहे`. The amber-not-red rule from `saathi-design` applies
+Never `असफल` or `आप असफल रहे`. The amber-not-red rule from `dagar-design` applies
 to words as much as to colour.
 
 ---

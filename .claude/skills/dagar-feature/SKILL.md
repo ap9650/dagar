@@ -1,9 +1,9 @@
 ---
-name: saathi-feature
-description: Build a Saathi feature slice end to end — schema, server logic, route handler, UI, analytics event, and accessibility pass. Use whenever implementing or extending a learner- or parent-facing feature (curriculum dashboard, micro-lesson, AI tutor, guided practice, chapter quiz, progress, streaks, parent view, mentor request). Trigger on "build the X feature", "add X screen", "implement guided practice", or any request to ship a vertical slice of Saathi.
+name: dagar-feature
+description: Build a Dagar feature slice end to end — schema, server logic, route handler, UI, analytics event, and accessibility pass. Use whenever implementing or extending a learner- or parent-facing feature (curriculum dashboard, micro-lesson, AI tutor, guided practice, chapter quiz, progress, streaks, parent view, mentor request). Trigger on "build the X feature", "add X screen", "implement guided practice", or any request to ship a vertical slice of Dagar.
 ---
 
-# Build a Saathi feature slice
+# Build a Dagar feature slice
 
 A feature is not done when it renders. It is done when it is persisted, tracked,
 accessible, and safe. Work the checklist in order — each step depends on the one above.
@@ -53,7 +53,7 @@ feature done.
 
 ## 6. Accessibility pass
 
-Run the checklist in `.claude/skills/saathi-ship/SKILL.md`. At minimum for a new
+Run the checklist in `.claude/skills/dagar-ship/SKILL.md`. At minimum for a new
 screen: reachable and operable by keyboard, visible focus, accessible names on
 every control, AA contrast, 44px touch targets.
 
@@ -71,7 +71,7 @@ from "first incomplete lesson".
 **Micro-lesson** — body is markdown with KaTeX. Render math server-side where you
 can. Completion fires `lesson_completed` **and** touches the streak.
 
-**AI Tutor** — see the `saathi-ai` skill. Stream the response. Persist both turns
+**AI Tutor** — see the `dagar-ai` skill. Stream the response. Persist both turns
 to `tutor_messages`. Check struggle rules (D6) after each turn.
 
 **Guided practice** — never send `answer_value` to the client. Difficulty steps per

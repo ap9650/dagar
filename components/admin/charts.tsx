@@ -10,7 +10,7 @@ import type { FunnelStage } from "@/lib/analytics/metrics";
  * establish that hand-rolled SVG is how this codebase draws things.
  *
  * ── EVERY CHART IS PAIRED WITH ITS NUMBER ───────────────────────────────────
- * A design-system rule (`saathi-design`, Progress) and an accessibility one.
+ * A design-system rule (`dagar-design`, Progress) and an accessibility one.
  * The bar is the shape of the answer; the number IS the answer. Nothing here
  * relies on a reader estimating a length, and nothing relies on colour alone.
  */

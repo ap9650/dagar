@@ -12,7 +12,7 @@ product. Lakshmi holds the app: a progress ring and a streak. Suresh holds a
 message, because he never opens the app at all, and the whole design of the
 parent loop follows from that.
 
-Palette is the product's own (saathi-design), so the deck and the app agree.
+Palette is the product's own (dagar-design), so the deck and the app agree.
 Drawn at 4x and downsampled, since PIL has no anti-aliasing on shapes.
 
     python3 scripts/gen-persona-illustration.py

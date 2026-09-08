@@ -192,7 +192,7 @@ export async function POST(
     console.error("[quiz/submit] struggle check failed:", error);
   }
 
-  // No PII, no free text: ids and numbers only (saathi-security §5).
+  // No PII, no free text: ids and numbers only (dagar-security §5).
   await track("quiz_submitted", {
     chapter_id: graded.chapterId,
     score: graded.score,

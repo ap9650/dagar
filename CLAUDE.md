@@ -82,7 +82,7 @@ Inventing a new event name off-list breaks the metrics.
 visible focus, 44px touch targets, `prefers-reduced-motion`. See `DECISIONS.md` D10.
 
 **Mobile-first.** Design at 360px, then scale up. Learners are on shared Android phones.
-Colours, type scale, spacing and component specs are in the `saathi-design` skill —
+Colours, type scale, spacing and component specs are in the `dagar-design` skill —
 load it before writing any UI. Never invent a colour or a font size.
 
 **Wrong answers are amber, not red.** Red is for system errors only. A learner who
@@ -113,9 +113,9 @@ npm run eval           # tutor golden set + LLM judge
 
 ## Skills
 
-`saathi-design` **load before any UI work** · `saathi-feature` build a vertical slice ·
-`saathi-db` migrations + RLS ·
-`saathi-content` curriculum authoring · `saathi-ai` tutor and prompts ·
-`saathi-security` RLS, secrets, minors' data · `saathi-test` vitest + playwright ·
-`saathi-analytics` events and metrics · `saathi-observe` post-deploy + AI evals ·
-`saathi-ship` pre-deploy gates + Vercel
+`dagar-design` **load before any UI work** · `dagar-feature` build a vertical slice ·
+`dagar-db` migrations + RLS ·
+`dagar-content` curriculum authoring · `dagar-ai` tutor and prompts ·
+`dagar-security` RLS, secrets, minors' data · `dagar-test` vitest + playwright ·
+`dagar-analytics` events and metrics · `dagar-observe` post-deploy + AI evals ·
+`dagar-ship` pre-deploy gates + Vercel

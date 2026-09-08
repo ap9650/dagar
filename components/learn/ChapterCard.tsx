@@ -77,7 +77,7 @@ export async function ChapterCard({
         </p>
 
         {/* Paired with the count above, never standing alone — a bar on its own
-            is not readable to everyone (saathi-design § Progress). */}
+            is not readable to everyone (dagar-design § Progress). */}
         <div className="h-1.5 rounded-full bg-surface overflow-hidden" aria-hidden>
           <div
             className={`h-full rounded-full ${finished ? "bg-correct" : "bg-primary"}`}

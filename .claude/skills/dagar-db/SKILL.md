@@ -1,9 +1,9 @@
 ---
-name: saathi-db
-description: Write and apply Supabase migrations and RLS policies for Saathi. Use when adding or altering tables, columns, indexes, views, or database functions, when writing or debugging row-level security, or when a query returns empty rows that should exist (almost always an RLS problem). Trigger on "add a table", "migration", "RLS", "policy", "why is this query empty", "supabase db push".
+name: dagar-db
+description: Write and apply Supabase migrations and RLS policies for Dagar. Use when adding or altering tables, columns, indexes, views, or database functions, when writing or debugging row-level security, or when a query returns empty rows that should exist (almost always an RLS problem). Trigger on "add a table", "migration", "RLS", "policy", "why is this query empty", "supabase db push".
 ---
 
-# Saathi database changes
+# Dagar database changes
 
 Schema and policy shape live in `docs/DATA_MODEL.md`. Read it before writing SQL —
 the table you need may already be specified.

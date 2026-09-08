@@ -1,9 +1,9 @@
 ---
-name: saathi-test
-description: Write and run tests for Saathi — Vitest unit tests for the learning engine, integration tests for route handlers and RLS, and Playwright end-to-end tests for the demo path. Use when adding tests, when a bug needs a regression test, before deploying, or when asked to verify, test, or check that something works. Trigger on "test", "write tests", "does this work", "verify", "regression", "playwright", "vitest".
+name: dagar-test
+description: Write and run tests for Dagar — Vitest unit tests for the learning engine, integration tests for route handlers and RLS, and Playwright end-to-end tests for the demo path. Use when adding tests, when a bug needs a regression test, before deploying, or when asked to verify, test, or check that something works. Trigger on "test", "write tests", "does this work", "verify", "regression", "playwright", "vitest".
 ---
 
-# Testing Saathi
+# Testing Dagar
 
 With three days and nine features, you cannot test everything. Test the things
 where **a bug is silent** — where the app keeps working and quietly does the wrong

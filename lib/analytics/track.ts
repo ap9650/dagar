@@ -126,7 +126,7 @@ export type AnonymousEventName = (typeof ANONYMOUS_EVENTS)[number];
 /**
  * Event properties.
  *
- * **No PII and no free text a learner typed** (saathi-security §5). A learner's
+ * **No PII and no free text a learner typed** (dagar-security §5). A learner's
  * question can contain anything — their name, their school, their WhatsApp
  * number — and none of it belongs in a table we aggregate and read. So props are
  * restricted at the type level to scalars, and there is a runtime scrub below

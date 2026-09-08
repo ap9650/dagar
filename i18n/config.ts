@@ -19,7 +19,7 @@ export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "en";
 
 /**
- * Each language is labelled in its own script (saathi-design § Language picker).
+ * Each language is labelled in its own script (dagar-design § Language picker).
  * Never "Hindi" written in English — a learner who cannot read English must still
  * recognise their option instantly.
  */

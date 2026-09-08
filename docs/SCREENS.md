@@ -3,7 +3,7 @@
 Every screen in the MVP, in the order a user meets them.
 
 **This document owns flow — what comes after what, and what state each screen needs.**
-It does not own appearance (that's the `saathi-design` skill) or rationale (that's
+It does not own appearance (that's the `dagar-design` skill) or rationale (that's
 `DECISIONS.md`). Each screen below points at both.
 
 If this file and `DECISIONS.md` disagree, **`DECISIONS.md` wins** and this file gets

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/cn";
 
 /**
- * ProgressBar — saathi-design § Progress.
+ * ProgressBar — dagar-design § Progress.
  *
  * "Always pair the visual with a number (`3 of 5 lessons`) — a ring alone is not
  * readable to everyone." The label is therefore required, not optional.
