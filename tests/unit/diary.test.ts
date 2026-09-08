@@ -10,6 +10,15 @@ import { EVENT_NAMES } from "@/lib/analytics/track";
  * back to a learner who is already behind, because a filter was dropped.
  */
 
+/**
+ * Every `buildDiary` call in this file MUST pass this clock.
+ *
+ * The diary only looks back seven days. Three tests once omitted it and used
+ * the real date instead, so they passed on the day they were written and
+ * started failing silently a week later, when the hardcoded August fixtures
+ * fell outside the window. A test that depends on today's date is a test with
+ * an expiry date on it.
+ */
 const NOW = new Date("2026-08-05T12:00:00Z");
 
 const ev = (name: string, props: unknown, created_at: string) => ({ name, props, created_at });
@@ -181,7 +190,7 @@ describe("what moved, across a lopsided week", () => {
       { name: "milestone_earned", props: { code: "first_lesson" }, created_at: at("05", 19) },
     ];
 
-    const diary = buildDiary(events);
+    const diary = buildDiary(events, NOW);
     const days = new Set(diary.map((e) => e.at.slice(0, 10)));
 
     expect(days.has("2026-08-04"), "Tuesday was pushed out by Wednesday").toBe(true);
@@ -198,7 +207,7 @@ describe("what moved, across a lopsided week", () => {
       { name: "milestone_earned", props: { code: "first_lesson" }, created_at: at("05", 12) },
     ];
 
-    const kinds = buildDiary(events).map((e) => e.kind);
+    const kinds = buildDiary(events, NOW).map((e) => e.kind);
     // The badge was earned FIRST, so recency alone would have dropped it.
     expect(kinds).toContain("badge");
   });
@@ -209,6 +218,6 @@ describe("what moved, across a lopsided week", () => {
       props: { lesson_id: `l-${i}` },
       created_at: at("05", 10 + i),
     }));
-    expect(buildDiary(events)).toHaveLength(3);
+    expect(buildDiary(events, NOW)).toHaveLength(3);
   });
 });
